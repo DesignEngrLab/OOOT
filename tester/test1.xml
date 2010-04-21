@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <tolerance>0</tolerance>
+  <bounds>
+    <ArrayOfDouble>
+      <double>0.4</double>
+      <double>INF</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>0.7</double>
+      <double>INF</double>
+    </ArrayOfDouble>
+  </bounds>
+  <x0>
+    <double>1500</double>
+    <double>1500</double>
+  </x0>
+  <f xsi:type="polynomialObjFn">
+    <Terms>
+      <string>x1^2</string>
+      <string>x2^2</string>
+     <string>-2*x1</string>
+      <string>-10*x2</string>
+      <string>26</string>
+    </Terms>
+  </f>
+  <h />
+  <g>
+    <inequality xsi:type="polynomialInequality">
+      <Terms>
+        <string>-x1</string>
+        <string>x2</string>
+      </Terms>
+    </inequality>
+  </g>
+  <convergeMethod xsi:type="convergenceBasic">
+    <kmax>2147483647</kmax>
+    <maxAge>2147483647</maxAge>
+    <deltaX>0.0001</deltaX>
+    <deltaF>0</deltaF>
+    <deltaGradF>0</deltaGradF>
+  </convergeMethod>
+</ProblemDefinition>

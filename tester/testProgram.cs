@@ -23,7 +23,7 @@ namespace testerNameSpace
             //opty.Add(new squaredExteriorPenalty(opty, 1.0));
             opty.Add(new linearExteriorPenalty(opty, 1.0));
 
-            ProblemDefinition pd = ProblemDefinition.openprobFromXml("test1.xml");
+            ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test1.xml");
             opty.Add(pd);
             SearchIO.defaultVerbosity= 5;
             Console.WriteLine("run...");
