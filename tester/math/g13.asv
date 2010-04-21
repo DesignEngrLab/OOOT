@@ -1,0 +1,20 @@
+function [f]=g13(x)
+%note that you can get the formulation of g13 from some
+%aritcles,such as
+%(1)TP Runarsson, X Yao 'Stochastic Ranking for Constrained Evolutionary Optimization'
+% IEEE TRANSACTIONS ON EVOLUTIONARY COMPUTATION, 2000 
+%
+%note that this article may be in the 'documents' directories,
+%x= [-1.7171    1.5957    1.8273    0.7636    0.7637]';
+%f=    0.0539;
+global functionAcount;
+functionAcount=functionAcount+1;
+
+if size(x,2)~=1,
+    error('x is a column vector ');
+end
+
+
+x1=x(1,1);x2=x(2,1);x3=x(3,1);x4=x(4,1);x5=x(5,1);
+
+f=exp(x1*x2*x3*x4*x5);

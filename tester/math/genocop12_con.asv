@@ -1,0 +1,47 @@
+function  [C,Ceq]=genocop12_con(x)
+%
+%reference:
+%note that you can get the formulation of genocop12_con from some
+%aritcles,such as
+%(1)Michalewicz ,Zbigniew ? (演化程序-遗传算法和数据编码的结合)
+%
+%algorithm:
+%below code is  edited according to 
+%(1)Michalewicz  ? (演化程序-遗传算法和数据编码的结合)
+%
+%solution:
+%The global minimum is ?
+%and f=?
+
+
+%Copyright:
+% programmers:oiltowater.
+% It comply with the GPL2.0
+% Copyright 2006  oiltowater 
+
+
+
+
+
+%change the row vector to a column vector.
+if size(x,1)==1,
+    x=x';
+end
+
+if size(x,1)~=2,
+    error('the length of x must be 2!');
+end
+
+
+x1=x(1,1);x2=x(2,1);
+
+Ceq=0;
+
+
+C(1,1)=A(1,:)*x;
+C(2,1)=A(2,:)*x;
+
+
+
+
+

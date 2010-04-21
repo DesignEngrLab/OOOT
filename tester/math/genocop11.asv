@@ -1,0 +1,48 @@
+function [f]=genocop11(x)
+%
+%reference:
+%note that you can get the formulation of genocop10 from some
+%aritcles,such as
+%(1)Michalewicz ,Zbigniew ? (演化程序-遗传算法和数据编码的结合)
+%
+%algorithm:
+%below code is  edited according to 
+%(1)Michalewicz  ? (演化程序-遗传算法和数据编码的结合)
+%
+%solution:
+%The global minimum is [ 0.0407    0.1477    0.7831    0.0014    0.4853
+%0.0007    0.0274    0.0180    0.0373    0.0968]'
+%and f=?
+
+
+%Copyright:
+% programmers:oiltowater.
+% It comply with the GPL2.0
+% Copyright 2006  oiltowater 
+
+
+
+
+%for get the number of evaluation of function
+global functionAcount;
+functionAcount=functionAcount+1;
+
+%change the row vector to a column vector.
+if size(x,1)==1,
+    x=x';
+end
+
+if size(x,1)~=6,
+    error('the length of x must be 6!');
+end
+
+
+x1=x(1,1);y1=x(2,1);y2=x(3,1);y3=x(4,1);
+y4=x(2,1);y5=x(3,1);y3=x(4,1);
+
+
+f=power(x1,0.6)+power(x2,0.6)-6*x1-4*x3+3*x4;
+
+f=-f;
+
+
