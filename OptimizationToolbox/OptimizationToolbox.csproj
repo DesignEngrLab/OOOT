@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OptimizationToolbox</RootNamespace>
+    <AssemblyName>OptimizationToolbox</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x64</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="StarMath, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Properties\StarMath.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DoubleCollectionConverter.cs" />
+    <Compile Include="Enumerators.cs" />
+    <Compile Include="equalToValue.cs" />
+    <Compile Include="Fundamental Classes\abstracts for f g and h.cs" />
+    <Compile Include="Fundamental Classes\convergenceClasses.cs" />
+    <Compile Include="Generator Methods\abstractGenerator.cs" />
+    <Compile Include="Generator Methods\DifferentialEvolution.cs" />
+    <Compile Include="Generator Methods\DiscreteSpaceDescriptor.cs" />
+    <Compile Include="Generator Methods\GeneticAlgorithmDouble.cs" />
+    <Compile Include="Generator Methods\SAPerturbation.cs" />
+    <Compile Include="lessThanGreaterThanConstant.cs" />
+    <Compile Include="LineSearch\ArithmeticMean.cs" />
+    <Compile Include="LineSearch\SQPSimpleHalver.cs" />
+    <Compile Include="LineSearch\DSCPowell.cs" />
+    <Compile Include="LineSearch\GoldenSection.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Generator Methods\GeneticAlgorithmBitString.cs" />
+    <Compile Include="Generator Methods\ParticleSwarm.cs" />
+    <Compile Include="Merit Functions\abstractMeritFunction.cs" />
+    <Compile Include="Merit Functions\linearExteriorPenalty.cs" />
+    <Compile Include="Merit Functions\linearExteriorPenaltyMax.cs" />
+    <Compile Include="Merit Functions\linearExteriorPenaltySum.cs" />
+    <Compile Include="Merit Functions\squaredExteriorPenalty.cs" />
+    <Compile Include="OptMethods\GradientBasedOptimization.cs" />
+    <Compile Include="OptMethods\GeneralizedReducedGradientActiveSet.cs" />
+    <Compile Include="OptMethods\GeneralizedReducedGradientSlack.cs" />
+    <Compile Include="OptMethods\NelderMead.cs" />
+    <Compile Include="OptMethods\SequentialQuadraticProgramming.cs" />
+    <Compile Include="OptMethods\SimulatedAnnealing.cs" />
+    <Compile Include="polynomialFunctions.cs" />
+    <Compile Include="ProblemDefinition.cs" />
+    <Compile Include="Prune Methods\abstractPrune.cs" />
+    <Compile Include="Prune Methods\PNPPS.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Prune Methods\Tournament.cs" />
+    <Compile Include="Prune Methods\Elitism.cs" />
+    <Compile Include="Prune Methods\MetropolisCriteria.cs" />
+    <Compile Include="Prune Methods\RandomPairwiseCompare.cs" />
+    <Compile Include="SearchDirection\abstractSearchDirection.cs" />
+    <Compile Include="SearchDirection\BFGSDirection.cs" />
+    <Compile Include="SearchDirection\FletcherReevesDirection.cs" />
+    <Compile Include="LineSearch\abstractLineSearch.cs" />
+    <Compile Include="OptMethods\abstractOptMethod.cs" />
+    <Compile Include="Fundamental Classes\slackSquaredEqualityFromInequality.cs" />
+    <Compile Include="SearchDirection\SteepestDescent.cs" />
+    <Compile Include="Fundamental Classes\abstractOptFunction.cs" />
+    <Compile Include="SearchIO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
