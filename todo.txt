@@ -1,0 +1,27 @@
+TO DO List
+""""""""""
+
++ check duplicate code and update
++ write other prune methods
+	-PNPPS needs to be converted to simple vector types
+	-how will multiple x and their function evalation be handled
+	
++ finish developing SQP code
+- Simulated Annealing
+	- geneartion - with Hustin move set
+	- temperature scheduling
+	- main loop
+	- how will it work with population based methods
+- GA code
+	- crossover
+	- mutation
+	- main loop
+- PSO code
+	- generation
+	- mainloop
+- Differential Evolultion
+	- generation
+	- mainloop - can it be same for GA and PSO?
+
+
+- more test functions 

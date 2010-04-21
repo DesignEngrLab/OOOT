@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationToolbox", "OptimizationToolbox\OptimizationToolbox.csproj", "{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tester", "tester\tester.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41478239-4F66-4097-8195-DD80FF745627}"
+	ProjectSection(SolutionItems) = preProject
+		todo.txt = todo.txt
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
