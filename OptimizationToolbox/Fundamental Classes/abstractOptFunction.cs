@@ -152,6 +152,7 @@ namespace OptimizationToolbox
         #endregion
         private Boolean same(double[] x)
         {
+            if ((x == null) || (xlast == null)) return false;
             return (StarMath.norm1(x, xlast)
                 < (x.GetLength(0) * double.Epsilon));
         }

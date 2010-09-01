@@ -96,7 +96,7 @@ namespace OptimizationToolbox
         }
         #endregion
         #region Constructor
-        public convergenceBasic(){}
+        public convergenceBasic() { }
         public convergenceBasic(BasicConvergenceTypes howConverge, int kmax, double deltaX, double deltaF,
                     double deltaGradF, int bestAge)
         {
@@ -127,6 +127,7 @@ namespace OptimizationToolbox
         public override Boolean converged(int k, double[] x, double f, double[] gradf)
         {
             Boolean result = false;
+            if (xlast == null) return result;
             findAgeOfBest(x);
             switch (this.convergeMethod)
             {
@@ -176,7 +177,7 @@ namespace OptimizationToolbox
 
         private void findAgeOfBest(double[] x)
         {
-            if (StarMath.norm1(x, xlast) <= deltaX) age++;
+            if ((xlast != null) && (StarMath.norm1(x, xlast) <= deltaX)) age++;
             else age = 0;
         }
 

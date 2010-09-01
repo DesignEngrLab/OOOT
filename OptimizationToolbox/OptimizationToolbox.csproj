@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -14,6 +14,10 @@
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,7 +41,7 @@
   <ItemGroup>
     <Reference Include="StarMath, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Properties\StarMath.dll</HintPath>
+      <HintPath>StarMath (compiled)\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -85,6 +89,7 @@
     <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="polynomialFunctions.cs" />
     <Compile Include="ProblemDefinition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Prune Methods\abstractPrune.cs" />
     <Compile Include="Prune Methods\PNPPS.cs">
       <SubType>Code</SubType>
@@ -103,9 +108,7 @@
     <Compile Include="Fundamental Classes\abstractOptFunction.cs" />
     <Compile Include="SearchIO.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

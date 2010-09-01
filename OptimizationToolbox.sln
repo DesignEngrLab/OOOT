@@ -1,14 +1,17 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41478239-4F66-4097-8195-DD80FF745627}"
+	ProjectSection(SolutionItems) = preProject
+		OptimizationToolbox\StarMath (compiled)\StarMath.dll = OptimizationToolbox\StarMath (compiled)\StarMath.dll
+		OptimizationToolbox\StarMath (compiled)\StarMath.pdb = OptimizationToolbox\StarMath (compiled)\StarMath.pdb
+		OptimizationToolbox\StarMath (compiled)\StarMath.XML = OptimizationToolbox\StarMath (compiled)\StarMath.XML
+		todo.txt = todo.txt
+	EndProjectSection
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationToolbox", "OptimizationToolbox\OptimizationToolbox.csproj", "{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tester", "tester\tester.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{41478239-4F66-4097-8195-DD80FF745627}"
-	ProjectSection(SolutionItems) = preProject
-		todo.txt = todo.txt
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
