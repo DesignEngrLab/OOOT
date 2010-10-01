@@ -21,12 +21,11 @@ namespace OptimizationToolbox
         double alphaStar;
 
         double[,] searchDirMatrix;
-        
+
         #region Constructor
         public PowellsMethodOptimization(double penaltyWeight)
         {
             this.ConstraintsSolvedWithPenalties = true;
-            this.penaltyWeight = penaltyWeight;
             this.searchDirMethod = new PowellsDirection();
             this.LineSearchMethodNeeded = true;
             this.searchDirMatrix = StarMath.makeIdentity(n);
@@ -60,8 +59,8 @@ namespace OptimizationToolbox
                 // use line search (arithmetic mean) to find alphaStar
                 alphaStar = lineSearchMethod.findAlphaStar(xk, dk);
                 xk = StarMath.add(xk, StarMath.multiply(alphaStar, dk));
-                SearchIO.output("iteration=" + k,3);
-                k++; 
+                SearchIO.output("iteration=" + k, 3);
+                k++;
                 fk = calc_f(xk);
                 if (fk < fStar)
                 {
@@ -70,7 +69,7 @@ namespace OptimizationToolbox
                 }
                 SearchIO.output("f = " + fk, 3);
             }
-            while (!convergeMethod.converged(k, xk, fk, gradF));
+            while (!convergeMethod.converged(k, fk, xk, gradF));
 
             return fStar;
         }

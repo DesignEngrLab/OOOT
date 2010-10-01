@@ -21,11 +21,9 @@ namespace OptimizationToolbox
         double alphaStar;
 
         #region Constructor
-        public GradientBasedOptimization(double penaltyWeight)
+        public GradientBasedOptimization()
         {
             this.ConstraintsSolvedWithPenalties = true;
-            this.penaltyWeight = penaltyWeight;
-
         }
         #endregion
 
@@ -56,8 +54,8 @@ namespace OptimizationToolbox
                 // use line search (arithmetic mean) to find alphaStar
                 alphaStar = lineSearchMethod.findAlphaStar(xk, dk);
                 xk = StarMath.add(xk, StarMath.multiply(alphaStar, dk));
-                SearchIO.output("iteration=" + k,3);
-                k++; 
+                SearchIO.output("iteration=" + k, 3);
+                k++;
                 fk = calc_f(xk);
                 if (fk < fStar)
                 {
@@ -66,7 +64,7 @@ namespace OptimizationToolbox
                 }
                 SearchIO.output("f = " + fk, 3);
             }
-            while (!convergeMethod.converged(k, xk, fk, gradF));
+            while (!convergeMethod.converged(k, fk, xk, gradF));
 
             return fStar;
         }

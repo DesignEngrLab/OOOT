@@ -121,7 +121,7 @@ namespace OptimizationToolbox
                 SearchIO.output("X = " + xk[0] + ", " + xk[1], 3);// + ", " + xk[2]
                 SearchIO.output("F(" + k.ToString() + ") = " + fk.ToString(), 3);
             }
-            while (!convergeMethod.converged(k, xk, fk, gradF));
+            while (!convergeMethod.converged(k, fk, xk, gradF));
             fStar = fk;
             xStar = xk;
             SearchIO.output("X* = " + xk[0] + ", " + xk[1], 2);

@@ -46,7 +46,7 @@ namespace OptimizationToolbox
         {
             this.Add(new SQPSimpleHalver(this, 0.25, 100));
             this.Add(new linearExteriorPenaltyMax(this, 1.0));
-            this.Add(new convergenceBasic(BasicConvergenceTypes.AndBetweenSetConditions, 5, 0.01, 0.01, 0.0, 0));
+            this.Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
         }
         #endregion
 
@@ -101,7 +101,7 @@ namespace OptimizationToolbox
                 SearchIO.output("----f = " + fk, 3);
                 SearchIO.output("---#active =" + active.Count, 3);
             }
-            while (!convergeMethod.converged(k, xk, fk, gradF));
+            while (!convergeMethod.converged(k, fk, xk, gradF));
             fStar = fk;
             xStar = (double[])xk.Clone();
             return fStar;

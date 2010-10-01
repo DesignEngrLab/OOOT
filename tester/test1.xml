@@ -33,7 +33,7 @@
       </Terms>
     </inequality>
   </g>
-  <convergeMethod xsi:type="convergenceBasic">
+  <convergeMethod xsi:type="MultipleANDConvergenceConditions">
     <kmax>2147483647</kmax>
     <maxAge>2147483647</maxAge>
     <deltaX>0.0001</deltaX>

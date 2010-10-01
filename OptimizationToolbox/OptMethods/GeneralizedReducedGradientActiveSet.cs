@@ -60,7 +60,7 @@ namespace OptimizationToolbox
         {
             this.Add(new ArithmeticMean(this,epsilon, 1, 100));
             this.Add(new FletcherReevesDirection());
-            this.Add(new convergenceBasic(BasicConvergenceTypes.AndBetweenSetConditions, 5, 0.01, 0.01, 0.0, 0));
+            this.Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
         }
         #endregion
 
@@ -161,7 +161,7 @@ namespace OptimizationToolbox
 
                 SearchIO.output("x(" + k.ToString() + ") = " + DoubleCollectionConverter.convert(xk) + " = " + fk.ToString("0.00"), 4);
             }
-            while (!convergeMethod.converged(k, xk, fk, gradF));
+            while (!convergeMethod.converged(k, fk, xk, gradF));
 
             fStar = fk;
             xStar = xk;

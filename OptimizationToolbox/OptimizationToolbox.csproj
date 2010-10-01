@@ -57,11 +57,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convergence Classes\abstractConvergenceClasses.cs" />
+    <Compile Include="Convergence Classes\DeltaXConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxIterationsConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxAgeConvergence.cs" />
+    <Compile Include="Convergence Classes\DeltaGradFConvergence.cs" />
+    <Compile Include="Convergence Classes\DeltaFConvergence.cs" />
+    <Compile Include="Convergence Classes\MultipleANDConvergenceConditions.cs" />
+    <Compile Include="Convergence Classes\NelderMeadConvergence.cs" />
     <Compile Include="DoubleCollectionConverter.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="equalToValue.cs" />
     <Compile Include="Fundamental Classes\abstracts for f g and h.cs" />
-    <Compile Include="Fundamental Classes\convergenceClasses.cs" />
     <Compile Include="Generator Methods\abstractGenerator.cs" />
     <Compile Include="Generator Methods\DifferentialEvolution.cs" />
     <Compile Include="Generator Methods\DiscreteSpaceDescriptor.cs" />
@@ -85,6 +92,7 @@
     <Compile Include="OptMethods\GeneralizedReducedGradientActiveSet.cs" />
     <Compile Include="OptMethods\GeneralizedReducedGradientSlack.cs" />
     <Compile Include="OptMethods\NelderMead.cs" />
+    <Compile Include="OptMethods\PowellsMethodOptimization.cs" />
     <Compile Include="OptMethods\SequentialQuadraticProgramming.cs" />
     <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="polynomialFunctions.cs" />
@@ -104,6 +112,7 @@
     <Compile Include="LineSearch\abstractLineSearch.cs" />
     <Compile Include="OptMethods\abstractOptMethod.cs" />
     <Compile Include="Fundamental Classes\slackSquaredEqualityFromInequality.cs" />
+    <Compile Include="SearchDirection\PowellsDirection.cs" />
     <Compile Include="SearchDirection\SteepestDescent.cs" />
     <Compile Include="Fundamental Classes\abstractOptFunction.cs" />
     <Compile Include="SearchIO.cs" />

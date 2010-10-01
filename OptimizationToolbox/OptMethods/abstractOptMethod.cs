@@ -40,8 +40,6 @@ namespace OptimizationToolbox
         protected int feasibleOuterLoopMax;
         protected int feasibleInnerLoopMax;
         protected double epsilon;
-        /* this is used to multiply the exterior penalty functions when constaints are used. */
-        protected double penaltyWeight = 0.0;
         #endregion
 
         #region Set-up function, Add. */

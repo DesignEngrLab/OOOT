@@ -8,29 +8,24 @@ namespace OptimizationToolbox
     {
         #region Fields
         double rho = 1;
-        double chi = 2.1;
-        double psi = 0.49;
-        double sigma = 0.53;
+        double chi = 2;
+        double psi = 0.5;
+        double sigma = 0.5;
         double initNewPointPercentage = 0.01;
-        double initNewPointAddition = 0.49;
-        SortedList<double, double[]> vertices = new SortedList<double, double[]>(new optimizeSort(optimize.minimize));
+        double initNewPointAddition = 0.5;
+        SortedList<double, IList<double>> vertices = new SortedList<double, IList<double>>(new optimizeSort(optimize.minimize));
         #endregion
 
 
         #region Constructor
-        public NelderMead() : this(true) { }
-        public NelderMead(Boolean defaultMethod)
-            : this(0.0001, 10, defaultMethod) { }
-        public NelderMead(double eps, double penaltyWeight, Boolean defaultMethod)
+        public NelderMead(Boolean defaultMethod = true, double eps = 0.0001)
         {
             this.ConstraintsSolvedWithPenalties = true;
             this.SearchDirectionMethodNeeded = false;
             this.LineSearchMethodNeeded = false;
             this.epsilon = eps;
-            this.penaltyWeight = penaltyWeight;
             if (defaultMethod)
-                this.Add(new convergenceBasic(BasicConvergenceTypes.OrBetweenSetConditions,
-                    500, 0.0, 0.0, 0.01, 10));
+                this.Add(new NelderMeadConvergence(500, 20, epsilon, 0.01));
         }
         #endregion
 
@@ -58,11 +53,7 @@ namespace OptimizationToolbox
                 vertices.Add(calc_f(y), y);
             }
 
-            double fave = double.PositiveInfinity;
-            ////while (!convergeMethod.converged(k, vertices.Values[0], vertices.Keys[0], getMaxes(vertices)))
-            ////while (!convergeMethod.converged(k, vertices.Values[n], fave, getMaxes(vertices)))
-            ////while (!convergeMethod.converged(k, vertices.Values[n], vertices.Keys[n], getMaxes(vertices)))
-            while (!convergeMethod.converged(k, vertices.Values[0], vertices.Keys[0], new double[0]))
+            while (!convergeMethod.converged(k, fStar, null, null, vertices.Values))
             {
                 #region Compute the REFLECTION POINT
                 // computing the average for each variable for n variables NOT n+1
@@ -75,9 +66,8 @@ namespace OptimizationToolbox
                         sumX += vertices.Values[j][dim];
                     Xm[dim] = sumX / n;
                 }
-                
-                double[] Xr = new double[n];
-                Xr = (double[])vertices.Values[n].Clone();
+
+                double[] Xr = CloneVertex(vertices.Values[n]);
                 for (int i = 0; i < n; i++)
                     Xr[i] = (1 + rho) * Xm[i] - rho * Xr[i];
                 double fXr = calc_f(Xr);
@@ -87,7 +77,7 @@ namespace OptimizationToolbox
                 if (fXr < vertices.Keys[0])
                 {
                     #region Compute the Expansion Point
-                    double[] Xe = (double[])vertices.Values[n].Clone();
+                    double[] Xe = CloneVertex(vertices.Values[n]);
                     for (int i = 0; i < n; i++)
                         Xe[i] = (1 + rho * chi) * Xm[i] - rho * chi * Xe[i];
                     double fXe = calc_f(Xe);
@@ -122,7 +112,7 @@ namespace OptimizationToolbox
                         #region if better than worst, do Outside Contraction
                         if (fXr < vertices.Keys[n])
                         {
-                            double[] Xc = (double[])vertices.Values[n].Clone();
+                            double[] Xc = CloneVertex(vertices.Values[n]);
                             for (int i = 0; i < n; i++)
                                 Xc[i] = (1 + rho * psi) * Xm[i] - rho * psi * Xc[i];
                             double fXc = calc_f(Xc);
@@ -139,7 +129,7 @@ namespace OptimizationToolbox
                             {
                                 for (int j = 1; j < n + 1; j++)
                                 {
-                                    double[] Xs = (double[])vertices.Values[j].Clone();
+                                    double[] Xs = CloneVertex(vertices.Values[j]);
                                     for (int i = 0; i < n; i++)
                                     {
                                         Xs[i] = vertices.Values[0][i]
@@ -156,7 +146,7 @@ namespace OptimizationToolbox
                         else
                         {
                             #region Compute Inside Contraction
-                            double[] Xcc = (double[])vertices.Values[n].Clone();
+                            double[] Xcc = CloneVertex(vertices.Values[n]);
                             for (int i = 0; i < n; i++)
                                 Xcc[i] = (1 - psi) * Xm[i] + psi * Xcc[i];
                             double fXcc = calc_f(Xcc);
@@ -173,7 +163,7 @@ namespace OptimizationToolbox
                             {
                                 for (int j = 1; j < n + 1; j++)
                                 {
-                                    double[] Xs = (double[])vertices.Values[j].Clone();
+                                    double[] Xs = CloneVertex(vertices.Values[j]);
                                     for (int i = 0; i < n; i++)
                                     {
                                         Xs[i] = vertices.Values[0][i]
@@ -190,23 +180,22 @@ namespace OptimizationToolbox
                     }
                 }
                 #endregion
-                fave = 0.0;
-                foreach (double d in vertices.Keys) 
-                   fave += d;
-                //fave += vertices.Keys[n];
-                //if (n > 1)
-                //    fave += vertices.Keys[n-1];
-                
+
                 k++;
                 SearchIO.output("iter. = " + k.ToString(), 2);
                 ////mattica SearchIO.output("Fitness = " + vertices.Keys[0].ToString(), 2);
                 SearchIO.output("Fitness = " + vertices.Keys[n].ToString(), 2);
-                
+
             } // END While Loop
-            xStar = vertices.Values[0];
+            xStar = (double[])vertices.Values[0];
             fStar = vertices.Keys[0];
             vertices.Clear();
             return fStar;
+        }
+
+        private double[] CloneVertex(IList<double> iList)
+        {
+            return (double[])((double[])vertices.Values[n]).Clone();
         }
 
         private double[] getMaxes(SortedList<double, double[]> vertices)
