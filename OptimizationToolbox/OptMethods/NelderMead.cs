@@ -8,11 +8,11 @@ namespace OptimizationToolbox
     {
         #region Fields
         double rho = 1;
-        double chi = 2;
-        double psi = 0.5;
-        double sigma = 0.5;
+        double chi = 2.1;
+        double psi = 0.49;
+        double sigma = 0.53;
         double initNewPointPercentage = 0.01;
-        double initNewPointAddition = 0.5;
+        double initNewPointAddition = 0.49;
         SortedList<double, double[]> vertices = new SortedList<double, double[]>(new optimizeSort(optimize.minimize));
         #endregion
 
@@ -58,8 +58,11 @@ namespace OptimizationToolbox
                 vertices.Add(calc_f(y), y);
             }
 
-
-            while (!convergeMethod.converged(k, vertices.Values[0], vertices.Keys[0], getMaxes(vertices)))
+            double fave = double.PositiveInfinity;
+            ////while (!convergeMethod.converged(k, vertices.Values[0], vertices.Keys[0], getMaxes(vertices)))
+            ////while (!convergeMethod.converged(k, vertices.Values[n], fave, getMaxes(vertices)))
+            ////while (!convergeMethod.converged(k, vertices.Values[n], vertices.Keys[n], getMaxes(vertices)))
+            while (!convergeMethod.converged(k, vertices.Values[0], vertices.Keys[0], new double[0]))
             {
                 #region Compute the REFLECTION POINT
                 // computing the average for each variable for n variables NOT n+1
@@ -72,7 +75,7 @@ namespace OptimizationToolbox
                         sumX += vertices.Values[j][dim];
                     Xm[dim] = sumX / n;
                 }
-
+                
                 double[] Xr = new double[n];
                 Xr = (double[])vertices.Values[n].Clone();
                 for (int i = 0; i < n; i++)
@@ -187,10 +190,18 @@ namespace OptimizationToolbox
                     }
                 }
                 #endregion
-
+                fave = 0.0;
+                foreach (double d in vertices.Keys) 
+                   fave += d;
+                //fave += vertices.Keys[n];
+                //if (n > 1)
+                //    fave += vertices.Keys[n-1];
+                
                 k++;
                 SearchIO.output("iter. = " + k.ToString(), 2);
-                SearchIO.output("Fitness = " + vertices.Keys[0].ToString(), 2);
+                ////mattica SearchIO.output("Fitness = " + vertices.Keys[0].ToString(), 2);
+                SearchIO.output("Fitness = " + vertices.Keys[n].ToString(), 2);
+                
             } // END While Loop
             xStar = vertices.Values[0];
             fStar = vertices.Keys[0];

@@ -50,12 +50,19 @@ namespace OptimizationToolbox
             if (function.GetType() == typeof(ProblemDefinition))
             {
                 ProblemDefinition pd = (ProblemDefinition)function;
-                g.Clear();
-                foreach (inequality gNew in pd.g)
-                    g.Add(gNew);
-                h.Clear();
-                foreach (equality hNew in pd.h)
-                    h.Add(hNew);
+                
+                if (pd.g != null)
+                {
+                    g.Clear();
+                    foreach (inequality gNew in pd.g)
+                        g.Add(gNew);
+                }
+                if (pd.h != null)
+                {
+                    h.Clear();
+                    foreach (equality hNew in pd.h)
+                        h.Add(hNew);
+                }
                 if (pd.f != null)
                 {
                     this.objfn = pd.f;
@@ -76,6 +83,20 @@ namespace OptimizationToolbox
                 if ((pd.xStart != null) && (pd.xStart.GetLength(0) > 0))
                     xStart = (double[])pd.xStart.Clone();
             }
+            //*Added in by Bill Patterson/////////////////////////////////////////
+            //else if (function.GetType().BaseType == typeof(double[][]))
+            //{
+            //    double[][] boundsCopy = function;
+            //    if (boundsCopy.GetLength(0) > 0) //&& (pd.bounds.GetLength(1) == 2))
+            //    for (int i = 0; i != pd.bounds.GetLength(0); i++)
+            //    {
+            //        if (function[i][0] > double.NegativeInfinity)
+            //            g.Add(new greaterThanConstant(pd.bounds[i][0], i));
+            //        if (function[i][1] < double.PositiveInfinity)
+            //            g.Add(new lessThanConstant(pd.bounds[i][1], i));
+            //    }
+            //}
+            //*End of Add in////////////////////////////////////////////
             else if (function.GetType().BaseType == typeof(inequality))
                 g.Add((inequality)function);
             else if (function.GetType().BaseType == typeof(equality))
