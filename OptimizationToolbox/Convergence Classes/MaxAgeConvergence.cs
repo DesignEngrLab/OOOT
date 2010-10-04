@@ -19,15 +19,14 @@ namespace OptimizationToolbox
             this.maxAge = maxAge;
             this.toleranceForSame = toleranceForSame;
         }
-        public override bool converged(int YInteger = int.MinValue, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, 
+        public override bool converged(int YInteger = int.MinValue, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null,
             IList<IList<double>> YJaggedDoubleArray = null)
         {
             var x = YDoubleArray1;
             if (x == null) throw new Exception("MaxAgeConvergence expected a 1-D array of doubles representing the decision vector, x.");
             findAgeOfBest(x);
-            var result = (age >= maxAge);
             xlast = x;
-            return result;
+            return (age >= maxAge);
         }
 
         private void findAgeOfBest(IList<double> x)

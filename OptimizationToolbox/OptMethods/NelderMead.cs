@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 
 namespace OptimizationToolbox
@@ -53,7 +54,7 @@ namespace OptimizationToolbox
                 vertices.Add(calc_f(y), y);
             }
 
-            while (!convergeMethod.converged(k, fStar, null, null, vertices.Values))
+            while (!convergeMethod.converged(k, vertices.Keys.Min(), null, null, vertices.Values))
             {
                 #region Compute the REFLECTION POINT
                 // computing the average for each variable for n variables NOT n+1

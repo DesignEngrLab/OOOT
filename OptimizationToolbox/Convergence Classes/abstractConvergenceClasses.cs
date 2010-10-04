@@ -4,7 +4,6 @@ using System.Xml.Serialization;
 
 namespace OptimizationToolbox
 {
-    [XmlInclude(typeof(MultipleANDConvergenceConditions))]
     public abstract class abstractConvergence
     {
         public abstract Boolean converged(int YInteger = int.MinValue, double YDouble = double.NaN,

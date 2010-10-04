@@ -27,7 +27,7 @@ namespace OptimizationToolbox
         protected abstractSearchDirection searchDirMethod;
         protected abstractLineSearch lineSearchMethod;
         protected abstractMeritFunction meritFunction;
-        protected abstractConvergence convergeMethod;
+        protected IList<abstractConvergence> convergeMethods = new List<abstractConvergence>();
         protected DiscreteSpaceDescriptor discreteSpace;
         protected Boolean ObjectiveFunctionNeeded = true;
         protected Boolean ConstraintsSolvedWithPenalties = false;
@@ -114,7 +114,7 @@ namespace OptimizationToolbox
             else if (function.GetType().BaseType == typeof(abstractMeritFunction))
                 meritFunction = (abstractMeritFunction)function;
             else if (function.GetType().BaseType == typeof(abstractConvergence))
-                convergeMethod = (abstractConvergence)function;
+                convergeMethods.Add((abstractConvergence)function);
             else if (function.GetType() == typeof(double[]))
                 xStart = (double[])function;
             else if (function.GetType() == typeof(DiscreteSpaceDescriptor))

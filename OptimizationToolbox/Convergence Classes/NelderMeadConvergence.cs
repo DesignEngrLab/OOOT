@@ -28,7 +28,7 @@ namespace OptimizationToolbox
         public override bool converged(int YInteger = int.MinValue, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<IList<double>> YJaggedDoubleArray = null)
         {
             var k = YInteger;
-            if (k <= 0) throw new Exception("NelderMeadConvergence expected a positive value for the first argument, YInteger");
+            if (k < 0) throw new Exception("NelderMeadConvergence expected a positive value for the first argument, YInteger");
             var f = YDouble;
             if (double.IsNaN(f))
                 throw new Exception("NelderMeadConvergence expected a double value (in the second argument, YDouble) "
@@ -39,9 +39,14 @@ namespace OptimizationToolbox
                     + " representing the current simplex of solutions.");
 
             if (k >= maxIterations) return true;
-
+            SearchIO.output("fbest = " + f, 5);
+            SearchIO.output("age = " + ageBest, 5);
             if (f == lastBestF) ageBest++;
-            else lastBestF = f;
+            else
+            {
+                lastBestF = f;
+                ageBest = 0;
+            }
             if (ageBest >= maxAge) return true;
 
             double maxSideLength = 0;
@@ -51,6 +56,7 @@ namespace OptimizationToolbox
                     var sideLengthSquared = StarMath.norm2(simplex[i], simplex[j], true);
                     if (maxSideLength < sideLengthSquared) maxSideLength = sideLengthSquared;
                 }
+            SearchIO.output("side length =" + Math.Sqrt(maxSideLength), 5);
             return (Math.Sqrt(maxSideLength) <= MinimumSideLength);
         }
     }

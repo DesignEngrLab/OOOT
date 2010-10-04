@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+<ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <tolerance>0</tolerance>
   <bounds>
     <ArrayOfDouble>
@@ -33,11 +34,4 @@
       </Terms>
     </inequality>
   </g>
-  <convergeMethod xsi:type="MultipleANDConvergenceConditions">
-    <kmax>2147483647</kmax>
-    <maxAge>2147483647</maxAge>
-    <deltaX>0.0001</deltaX>
-    <deltaF>0</deltaF>
-    <deltaGradF>0</deltaGradF>
-  </convergeMethod>
 </ProblemDefinition>
