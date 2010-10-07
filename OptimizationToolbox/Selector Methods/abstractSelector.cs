@@ -7,12 +7,14 @@ namespace OptimizationToolbox
 {
     public abstract class abstractSelector
     {
-        private readonly optimize direction;
+        protected readonly optimize direction;
+        protected readonly optimizeSort directionComparer;
         protected abstractSelector(optimize direction)
         {
             this.direction = direction;
+            directionComparer = new optimizeSort(direction, true);
         }
-        public abstract SortedList<double, double[]> selectCandidates(SortedList<double, double[]> candidates, double control = double.NaN);
+        public abstract void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double control = double.NaN);
 
         protected static List<int> makeRandomIntList(int size)
         {
@@ -23,11 +25,19 @@ namespace OptimizationToolbox
             return result;
         }
 
+
+        protected void sort(ref List<KeyValuePair<double, double[]>> candidates)
+        {
+            candidates = candidates.OrderBy(a => a.Key, new optimizeSort(direction, true)).ToList();
+        }
+        protected void randomizeList(ref List<KeyValuePair<double, double[]>> candidates)
+        {
+            var r = new Random();
+            candidates = candidates.OrderBy(a => r.NextDouble()).ToList();
+        }
         protected Boolean betterThan(double x, double y)
         {
-            if (x < y) return (direction == optimize.minimize);
-            if (x > y) return (direction == optimize.maximize);
-            return false;
+            return (1 == directionComparer.Compare(x, y));
         }
     }
 }

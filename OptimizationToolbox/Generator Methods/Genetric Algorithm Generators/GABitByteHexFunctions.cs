@@ -6,8 +6,8 @@ namespace OptimizationToolbox
 
     internal struct GABitByteHexLimits
     {
-        public long StartIndex;
-        public long EndIndex;
+        public int StartIndex;
+        public int EndIndex;
         public long MaxValue;
 
     }
@@ -17,13 +17,13 @@ namespace OptimizationToolbox
         internal static GABitByteHexLimits[] InitializeBitString(DiscreteSpaceDescriptor discreteSpaceDescriptor)
         {
             var result = new GABitByteHexLimits[discreteSpaceDescriptor.n];
-            long currentIndex = 0;
+            var currentIndex = 0;
             for (int i = 0; i < discreteSpaceDescriptor.n; i++)
             {
                 if (discreteSpaceDescriptor.VariableDescriptors[i].Discrete)
                 {
                     var maxValue = discreteSpaceDescriptor.MaxVariableSizes[i];
-                    var numberBits = (long)Math.Log(maxValue, 2);
+                    var numberBits = (int)(Math.Log(maxValue, 2))+1;
                     var endIndex = currentIndex + numberBits;
                     result[i] = new GABitByteHexLimits()
                                     {
@@ -38,7 +38,7 @@ namespace OptimizationToolbox
             return result;
         }
 
-        internal static int FindVariableIndex(GABitByteHexLimits[] limits, long i)
+        internal static int FindVariableIndex(GABitByteHexLimits[] limits, int i)
         {
             int result = 0;
             while (limits[result].StartIndex > i)
@@ -48,21 +48,11 @@ namespace OptimizationToolbox
             return result;
         }
 
-        internal static long FlipBit(long initValue, GABitByteHexLimits limits, long bitIndex)
+        internal static BitArray Encode(long value, int length)
         {
-            bitIndex -= limits.StartIndex;
-            BitArray b = Encode(initValue, limits.EndIndex - limits.StartIndex);
-            b.Set((int)bitIndex, !b[(int)bitIndex]);
-            return Decode(b, limits.MaxValue);
-        }
-        internal static BitArray Encode(long value, long length)
-        {
-            if (length > int.MaxValue)
-                throw new Exception("Currently BitArray can only have up to " + int.MaxValue +
-                                    "members (GABitByteHexFunctions in Encode function).");
-            var result = new BitArray((int)length);
+            var result = new BitArray(length);
             var denominator = (long)Math.Pow(2, length - 1);
-            for (int i = (int)length - 1; i >= 0; i--)
+            for (int i = length - 1; i >= 0; i--)
             {
                 if (value >= denominator)
                 {
@@ -87,18 +77,5 @@ namespace OptimizationToolbox
             return result;
         }
 
-
-        internal static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, long position,
-            long maxValue, out long c1Value, out long c2Value)
-        {
-            for (int i = (int)position; i < (int)c1BitArray.Count; i++)
-            {
-                var c1Temp = c1BitArray[i];
-                c1BitArray.Set(i, c2BitArray[i]);
-                c2BitArray.Set(i, c1Temp);
-            }
-            c1Value = Decode(c1BitArray, maxValue);
-            c2Value = Decode(c2BitArray, maxValue);
-        }
     }
 }

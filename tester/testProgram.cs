@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using OptimizationToolbox;
 using StarMathLib;
 
@@ -9,8 +10,8 @@ namespace testerNameSpace
     {
         static void Main(string[] args)
         {
-            makeAndSaveProblemDefinition();
-             readAndRunTest1();
+            //makeAndSaveProblemDefinition();
+            readAndRunTest1();
         }
 
         private static void makeAndSaveProblemDefinition()
@@ -19,10 +20,11 @@ namespace testerNameSpace
                          {
                              ConvergenceMethods = new List<abstractConvergence>()
                                                       {
-                                                          new MaxIterationsConvergence(1000),
-                                                          new NelderMeadConvergence(9999,20, 0.0000000001, 0.000001)
+            new MaxAgeConvergence(20, 0.000000001),
+            new MaxIterationsConvergence(500),
+            new MaxDistanceInPopulationConvergence(0.001)
                                                       }
-                                                   
+
                          };
             pd.saveProbToXml("../../testPD.xml");
         }
@@ -45,7 +47,9 @@ namespace testerNameSpace
             //opty.Add(new squaredExteriorPenalty(opty, 1.0));
             opty.Add(new squaredExteriorPenalty(opty, 1000.0));
             opty.Add(new DeltaXConvergence(0.001));
-            opty.Add(new NelderMeadConvergence(1000, 50, 0.00000001, 0.00000000));
+            opty.Add(new MaxAgeConvergence(20, 0.000000001));
+            opty.Add(new MaxIterationsConvergence(500));
+            opty.Add(new MaxDistanceInPopulationConvergence(0.001));
             var pd = ProblemDefinition.openprobFromXml("../../test1.xml");
             opty.Add(pd);
             SearchIO.verbosity = 5;

@@ -12,7 +12,7 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void generateCandidates(ref List<double[]> candidates, int numSamples = -1)
+        public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
         {
             //if (numSamples == -1) numSamples = MaxVariableSizes.Min();
             //Random rnd = new Random();
@@ -33,7 +33,7 @@ namespace OptimizationToolbox
             //    f[i] = optMethod.calc_f(GetVariableVector(CandidatesIndices[i]), true);
 
             //return DateTime.Now.Ticks - start;
-            candidates = new List<double[]>();
+           // candidates = new List<double[]>();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace OptimizationToolbox
                 vertices.Add(calc_f(y), y);
             }
 
-            while (notConverged(k, vertices.Keys.Min(), null, null, vertices.Values))
+            while (notConverged(k, vertices.Keys[0], vertices.Values[0], null, vertices.Values))
             {
                 #region Compute the REFLECTION POINT
                 // computing the average for each variable for n variables NOT n+1
@@ -190,24 +190,6 @@ namespace OptimizationToolbox
         private double[] CloneVertex(IList<double> iList)
         {
             return (double[])((double[])vertices.Values[n]).Clone();
-        }
-
-        private double[] getMaxes(SortedList<double, double[]> vertices)
-        {
-            double tempV, maxV;
-            double[] maxes = new double[n];
-
-            for (int dim = 0; dim < n; dim++)
-            {
-                maxV = double.NegativeInfinity;
-                for (int j = 1; j <= n; j++)
-                {
-                    tempV = Math.Abs(vertices.Values[j][dim] - vertices.Values[0][dim]);
-                    if (tempV > maxV) maxV = tempV;
-                }
-                maxes[dim] = maxV;
-            }
-            return maxes;
         }
     }
 }

@@ -12,11 +12,10 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void generateCandidates(ref List<double[]> candidates, int numSamples = -1)
+        public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
         {
-            Random rnd = new Random();
+            var rnd = new Random();
 
-            candidates = new List<double[]>();
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
             for (int i = 0; i < numSamples; i++)
             {
@@ -35,6 +34,7 @@ namespace OptimizationToolbox
                         if (double.IsInfinity(lb)) lb = -defaultRealBound;
                         x[j] = range * rnd.NextDouble() + lb;
                     }
+                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, x));
             }
         }
     }

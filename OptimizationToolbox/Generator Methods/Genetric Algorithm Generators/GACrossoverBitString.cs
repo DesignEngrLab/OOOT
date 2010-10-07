@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace OptimizationToolbox
@@ -10,7 +11,7 @@ namespace OptimizationToolbox
         private readonly GABitByteHexLimits[] limits;
         private readonly long bitStringLength;
         private readonly Random rnd;
-        public GACrossoverBitString(DiscreteSpaceDescriptor discreteSpaceDescriptor, double crossoverRate = 2)
+        public GACrossoverBitString(DiscreteSpaceDescriptor discreteSpaceDescriptor, double crossoverRate = 1.7)
             : base(discreteSpaceDescriptor)
         {
             this.crossoverRate = crossoverRate;
@@ -20,18 +21,17 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void generateCandidates(ref List<double[]> candidates, int populationSize = -1)
+        public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int targetPopNumber = -1)
         {
             /* if no population size is provided, then it is assumed that the population should
              * double from the current one. */
-            if (populationSize == -1) populationSize = candidates.Count;
-            else populationSize -= candidates.Count;
-            var newCandidates = new List<double[]>(populationSize);
+            if (targetPopNumber == -1) targetPopNumber = candidates.Count;
+            else targetPopNumber -= candidates.Count;
             var numNew = 0;
-            while (numNew < populationSize)
+            while (numNew < targetPopNumber)
             {
-                var child1 = (double[])candidates[(numNew++) % candidates.Count].Clone();
-                var child2 = (double[])candidates[(numNew++) % candidates.Count].Clone();
+                var child1 = (double[])candidates[(numNew++) % candidates.Count].Value.Clone();
+                var child2 = (double[])candidates[(numNew++) % candidates.Count].Value.Clone();
                 for (int i = 0; i < bitStringLength; i++)
                     if (rnd.NextDouble() < xRatePerBit)
                     {
@@ -53,13 +53,30 @@ namespace OptimizationToolbox
                         var c2BitArray = GABitByteHexFunctions.Encode(c2Value,
                                                                       limits[varIndex].EndIndex -
                                                                       limits[varIndex].StartIndex);
-                        GABitByteHexFunctions.CrossoverBitString(c1BitArray, c2BitArray,
+                        CrossoverBitString(c1BitArray, c2BitArray,
                             i - limits[varIndex].StartIndex, limits[varIndex].MaxValue, out c1Value, out c2Value);
                         child1[varIndex] = c2Value;
                         child2[varIndex] = c1Value;
                     }
+                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child1));
+                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child2));
 
             }
+        }
+
+
+
+        private static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, int position,
+            long maxValue, out long c1Value, out long c2Value)
+        {
+            for (int i = position; i < c1BitArray.Count; i++)
+            {
+                var c1Temp = c1BitArray[i];
+                c1BitArray.Set(i, c2BitArray[i]);
+                c2BitArray.Set(i, c1Temp);
+            }
+            c1Value = GABitByteHexFunctions.Decode(c1BitArray, maxValue);
+            c2Value = GABitByteHexFunctions.Decode(c2BitArray, maxValue);
         }
     }
 }

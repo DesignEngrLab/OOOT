@@ -5,37 +5,35 @@ namespace OptimizationToolbox
 {
     public class RandomPairwiseCompare : abstractSelector
     {
-        private Random rnd;
-        public RandomPairwiseCompare(optimize direction) : base( direction)
+        private readonly Random rnd;
+        public RandomPairwiseCompare(optimize direction)
+            : base(direction)
         {
             rnd = new Random();
         }
-        public override SortedList<double, double[]> selectCandidates(SortedList<double, double[]> candidates, double fractionToKeep = double.NaN)
+        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
-            KeyValuePair<double, double[]> t = candidates[0];
-            var randList = makeRandomIntList(candidates.Count);
+            randomizeList(ref candidates);
             while (candidates.Count > numKeep)
             {
-                if (betterThan(candidates.Keys[randList[0]], candidates.Keys[randList[1]]))
-                {
-                    var keepIndex = randList[0];
-                    candidates.RemoveAt(randList[1]);
-                    randList.RemoveAt(0);
-                    randList.RemoveAt(1);
-                    randList.Insert(randList.Count, keepIndex);
-                }
-                if (betterThan(candidates.Keys[randList[1]], candidates.Keys[randList[0]]))
-                {
-                    var keepIndex = randList[1];
-                    candidates.RemoveAt(randList[0]);
-                    randList.RemoveAt(0);
-                    randList.RemoveAt(1);
-                    randList.Insert(randList.Count, keepIndex);
+                var contestantA = candidates[0];
+                candidates.RemoveAt(0);
+                var contestantB = candidates[0];
+                candidates.RemoveAt(0);
+                if (betterThan(contestantA.Key, contestantB.Key))
+                    candidates.Add(contestantA);
+                else if (betterThan(contestantB.Key, contestantA.Key))
+                    candidates.Add(contestantB);
+                else
+                {   /* if it's a tie, add them both to the list, but in off-chance that this match is played
+                     * again, contestantB is added at a random location in the list. */
+                    candidates.Add(contestantA);
+                    candidates.Insert(rnd.Next(candidates.Count), contestantB);
                 }
             }
-            return candidates;
         }
+
     }
 }

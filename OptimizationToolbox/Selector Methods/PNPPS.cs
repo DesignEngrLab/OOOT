@@ -117,7 +117,7 @@ namespace OptimizationToolbox
 
 
         #region Prune - main function
-        public override SortedList<double, double[]> selectCandidates(SortedList<double, double[]> candidates, double control = double.NaN)
+        public override void selectCandidates(List<KeyValuePair<double, double[]>> candidates, double control = double.NaN)
         {
             double p = determineP(newQP);
             double[] bestCandidate = null;
@@ -272,5 +272,6 @@ namespace OptimizationToolbox
             }
         }
         #endregion
+
     }
 }

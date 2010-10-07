@@ -6,7 +6,7 @@ namespace OptimizationToolbox
 {
     [XmlInclude(typeof(DeltaFConvergence)),XmlInclude(typeof(DeltaGradFConvergence)),XmlInclude(typeof(DeltaXConvergence)),
     XmlInclude(typeof(MaxAgeConvergence)),XmlInclude(typeof(MaxIterationsConvergence)),XmlInclude(typeof(MaxTimeConvergence)),
-    XmlInclude(typeof(MultipleANDConvergenceConditions)),XmlInclude(typeof(NelderMeadConvergence))]
+    XmlInclude(typeof(MultipleANDConvergenceConditions)),XmlInclude(typeof(MaxDistanceInPopulationConvergence))]
     public abstract class abstractConvergence
     {
         public abstract Boolean converged(int YInteger = int.MinValue, double YDouble = double.NaN,

@@ -10,9 +10,16 @@ namespace OptimizationToolbox
      {
      }
 
-     public override SortedList<double, double[]> selectCandidates(SortedList<double, double[]> sortedList, double control = double.NaN)
+     public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double temperature = double.NaN)
      {
-         throw new NotImplementedException();
+         var oldCandidate = candidates[0];
+         var newCandidate = candidates[1];
+          if ((newCandidate.Key==oldCandidate.Key)||(betterThan(newCandidate.Key, oldCandidate.Key)))
+              candidates.Add(oldCandidate);
+         //else 
+         //{  
+
+         //}
      }
     }
 }

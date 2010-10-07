@@ -10,7 +10,7 @@ namespace OptimizationToolbox
      {
      }
 
-     public override SortedList<double, double[]> selectCandidates(SortedList<double, double[]> sortedList, double control = double.NaN)
+     public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double control = double.NaN)
      {
          throw new NotImplementedException();
      }

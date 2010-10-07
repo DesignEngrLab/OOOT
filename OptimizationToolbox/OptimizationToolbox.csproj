@@ -64,7 +64,6 @@
     </Compile>
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GABitByteHexFunctions.cs" />
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GAMutationBitString.cs" />
-    <Compile Include="Generator Methods\RandomSampling.cs" />
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverBitString.cs" />
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverRealInterpolator.cs">
       <SubType>Code</SubType>
@@ -75,11 +74,13 @@
     <Compile Include="Generator Methods\ParticleSwarm.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generator Methods\RandomSampling.cs" />
     <Compile Include="Generator Methods\SAPerturbation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="Selector Methods\abstractSelector.cs" />
+    <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
     <Compile Include="VariableDescriptor.cs" />
     <Compile Include="Convergence Classes\abstractConvergenceClasses.cs" />
     <Compile Include="Convergence Classes\MaxTimeConvergence.cs" />
@@ -89,7 +90,7 @@
     <Compile Include="Convergence Classes\DeltaGradFConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaFConvergence.cs" />
     <Compile Include="Convergence Classes\MultipleANDConvergenceConditions.cs" />
-    <Compile Include="Convergence Classes\NelderMeadConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxDistanceInPopulationConvergence.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
     <Compile Include="Objective Function Constraint Classes\abstracts for f g and h.cs" />
@@ -115,13 +116,9 @@
     <Compile Include="Objective Function Constraint Classes\polynomialFunctions.cs" />
     <Compile Include="ProblemDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selector Methods\PNPPS.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Selector Methods\Tournament.cs" />
     <Compile Include="Selector Methods\Elitism.cs" />
     <Compile Include="Selector Methods\MetropolisCriteria.cs" />
-    <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
     <Compile Include="SearchDirection\abstractSearchDirection.cs" />
     <Compile Include="SearchDirection\BFGSDirection.cs" />
     <Compile Include="SearchDirection\FletcherReevesDirection.cs" />

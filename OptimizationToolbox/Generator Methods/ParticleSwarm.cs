@@ -11,7 +11,7 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void generateCandidates(ref List<double[]> candidates, int number = -1)
+        public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int number = -1)
         {
             throw new NotImplementedException();
         }

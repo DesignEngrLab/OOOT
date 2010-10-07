@@ -2,14 +2,15 @@
 <ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <tolerance>0</tolerance>
   <ConvergenceMethods>
-    <abstractConvergence xsi:type="MaxIterationsConvergence">
-      <maxIterations>1000</maxIterations>
+    <abstractConvergence xsi:type="MaxAgeConvergence">
+      <toleranceForSame>1E-09</toleranceForSame>
+      <maxAge>20</maxAge>
     </abstractConvergence>
-    <abstractConvergence xsi:type="NelderMeadConvergence">
-      <MaxIterations>9999</MaxIterations>
-      <MaxAge>20</MaxAge>
-      <MinimumSideLength>1E-06</MinimumSideLength>
-      <toleranceForSame>1E-10</toleranceForSame>
+    <abstractConvergence xsi:type="MaxIterationsConvergence">
+      <maxIterations>500</maxIterations>
+    </abstractConvergence>
+    <abstractConvergence xsi:type="MaxDistanceInPopulationConvergence">
+      <MinimumSideLength>0.001</MinimumSideLength>
     </abstractConvergence>
   </ConvergenceMethods>
 </ProblemDefinition>

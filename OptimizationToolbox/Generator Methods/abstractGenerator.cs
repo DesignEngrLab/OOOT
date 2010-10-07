@@ -19,7 +19,7 @@ namespace OptimizationToolbox
         {
             this.discreteSpaceDescriptor = discreteSpaceDescriptor;
         }
-        public abstract void generateCandidates(ref List<double[]> candidates, int control = -1);
+        public abstract void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1);
     }
 
 

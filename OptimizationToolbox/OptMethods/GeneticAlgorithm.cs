@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OptimizationToolbox
@@ -11,7 +12,7 @@ namespace OptimizationToolbox
         public abstractGenerator crossoverGenerator { get; set; }
         public abstractGenerator mutationGenerator { get; set; }
         public abstractSelector fitnessSelector { get; set; }
-        private SortedList<double, double[]> population;
+        private List<KeyValuePair<double, double[]>> population;
         #endregion
 
         #region Constructor
@@ -24,12 +25,12 @@ namespace OptimizationToolbox
             RequiresLineSearchMethod = false;
             RequiresAnInitialPoint = false;
             RequiresDiscreteSpaceDescriptor = true;
-            population = new SortedList<double, double[]>(new optimizeSort(direction));
+            population = new List<KeyValuePair<double, double[]>>();
         }
         #endregion
 
-        public override void  Add(object function)
-{
+        public override void Add(object function)
+        {
             if (function.GetType() == typeof(SamplingGenerator))
                 initGenerator = (SamplingGenerator)function;
             else if (function.GetType() == typeof(GeneticCrossoverGenerator))
@@ -39,41 +40,47 @@ namespace OptimizationToolbox
             else if (function.GetType() == typeof(abstractSelector))
                 fitnessSelector = (abstractSelector)function;
 
- 	 base.Add(function);
-}
+            base.Add(function);
+        }
 
         protected override double run(out double[] xStar)
         {
-            List<double[]> newCandidates = new List<double[]>();
+            var population = new List<KeyValuePair<double, double[]>>();
             /* 1. make initial population and evaluate
              *    to ensure diversity, a latin hyper cube with Hammersley could be used.*/
-            initGenerator.generateCandidates(ref newCandidates, populationSize);
-            foreach (var c in newCandidates)
-            {
-                var f = objfn.calculate(c);
-                population.Add(f, c);
-            }
-            var aveF = population.Keys.Average();
+            initGenerator.generateCandidates(ref population, populationSize);
+            evaluate(population);
 
             /* 2. while not converged*/
-            while (notConverged(k, aveF, null, null, population.Values))
+            while (notConverged(k, double.NaN, population.Select(a => a.Key).ToList(), null, population.Select(a => a.Value).ToList()))
             {
                 /* 3. selection survivors*/
-                population = fitnessSelector.selectCandidates(population);
+                fitnessSelector.selectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
-                crossoverGenerator.generateCandidates(ref newCandidates, populationSize - population.Count);
+                crossoverGenerator.generateCandidates(ref population, populationSize);
                 /* 5. generate modifications to all with mutation */
-                mutationGenerator.generateCandidates(ref newCandidates);
-
+                mutationGenerator.generateCandidates(ref population);
                 /* 6. evaluate new members of population.*/
-                foreach (var c in newCandidates)
+                evaluate(population);
+            }
+            fStar = population.Min(c => c.Key);
+            xStar = (from candidate in population
+                     where (candidate.Key == fStar)
+                     select candidate.Value).First();
+            return fStar;
+        }
+
+        private void evaluate(List<KeyValuePair<double, double[]>> population)
+        {
+            foreach (var c in population)
+            {
+                if (double.IsNaN(c.Key))
                 {
-                    var f = objfn.calculate(c);
-                    population.Add(f, c);
+                    population.Remove(c);
+                    var f = objfn.calculate(c.Value);
+                    population.Add(new KeyValuePair<double, double[]>(f, c.Value));
                 }
             }
-            xStar = population.Values[0];
-            return population.Keys[0];
         }
     }
 }
