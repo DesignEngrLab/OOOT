@@ -16,13 +16,13 @@ namespace OptimizationToolbox
         readonly Boolean trackFeasibility;
         List<constraint> infeasibles;
         public double lastFeasAlpha, lastFeasAlpha4G, lastFeasAlpha4H;
- 
+
         protected abstractOptMethod optMethod;
         protected int k, kMax;
 
 
         #region Constructors
-        public abstractLineSearch(double epsilon, double stepSize, int kMax, 
+        public abstractLineSearch(double epsilon, double stepSize, int kMax,
             Boolean trackFeasibility = false)
         {
             this.epsilon = epsilon;
@@ -48,7 +48,7 @@ namespace OptimizationToolbox
 
             double alpha1 = findAlphaStar(x, dir);
             if ((alpha1 < epsilon) && allowNegAlpha)
-                alpha1 = findAlphaStar(x, StarMath.multiply(-1.0, dir));
+                alpha1 = -findAlphaStar(x, StarMath.multiply(-1.0, dir));
 
             this.stepSize = tempStepSize;
 

@@ -47,14 +47,15 @@ namespace testerNameSpace
             {
                 NelderMead opty = new NelderMead();
                 //NelderMead opty = new NelderMead();
-                opty.Add(new MaxAgeConvergence(20,0.000001));
-                opty.Add(new MaxIterationsConvergence(50000));
+                opty.Add(new MaxDistanceInPopulationConvergence(0.001));
+                opty.Add(new MaxAgeConvergence(2000000,0.000001));
+                opty.Add(new MaxIterationsConvergence(5000000));
                 // what is this for? System.Convert.ToInt32(Math.Pow(pd.xStart.GetLength(0), 1.15)), 1 * Math.Pow(10, -5));
                 opty.Add(new squaredExteriorPenalty(opty, 0 * Math.Pow(10, 5)));
                 //opty.Add(new linearExteriorPenalty(opty, 1.0));
 
                 opty.Add(pd);
-                SearchIO.verbosity = 1;
+                SearchIO.verbosity = 10;
                 Console.WriteLine("run...");
                 //double f = opty.run(x0, out xStar);
                 f = opty.Run(out xStar);

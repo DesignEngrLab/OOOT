@@ -73,7 +73,11 @@ namespace OptimizationToolbox
                 updateCharacteristics();
             }
         }
-        /// <summary>
+        public VariableDescriptor this[int i]
+        {
+            get { return VariableDescriptors[i]; }
+        }
+            /// <summary>
         /// Gets a value indicating whether [all discrete].
         /// </summary>
         /// <value><c>true</c> if [all discrete]; otherwise, <c>false</c>.</value>
