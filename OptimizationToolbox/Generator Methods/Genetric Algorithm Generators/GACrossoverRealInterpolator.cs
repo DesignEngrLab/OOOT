@@ -1,12 +1,11 @@
 ﻿using System;
-
 using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
-    public class SAPerturbation : abstractGenerator
+    public class GACrossoverRealInterpolator : GeneticCrossoverGenerator
     {
-        public SAPerturbation(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        public GACrossoverRealInterpolator(DiscreteSpaceDescriptor discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }
@@ -17,6 +16,3 @@ namespace OptimizationToolbox
         }
     }
 }
-
-
-// somehow want to get Hustin moveset moved about

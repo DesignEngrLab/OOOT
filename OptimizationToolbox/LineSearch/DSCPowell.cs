@@ -7,8 +7,8 @@ namespace OptimizationToolbox
     public class DSCPowell : abstractLineSearch
     {
         #region Constructors
-        public DSCPowell(abstractOptMethod optMethod, double epsilon, double stepSize, int kMax)
-            : base(optMethod, epsilon, stepSize,kMax) {  }
+        public DSCPowell(double epsilon, double stepSize, int kMax)
+            : base(epsilon, stepSize,kMax) {  }
         #endregion
         
 

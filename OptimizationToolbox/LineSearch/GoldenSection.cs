@@ -1,6 +1,5 @@
 ﻿using System;
 
-using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
@@ -10,8 +9,8 @@ namespace OptimizationToolbox
         const double golden38 = 1 - golden62;
 
         #region Constructors
-        public GoldenSection(abstractOptMethod optMethod, double epsilon, double stepSize, int kMax)
-            : base(optMethod, epsilon, stepSize, kMax) { }
+        public GoldenSection(double epsilon, double stepSize, int kMax)
+            : base(epsilon, stepSize, kMax) { }
         #endregion
 
         public override double findAlphaStar(double[] x, double[] dir)

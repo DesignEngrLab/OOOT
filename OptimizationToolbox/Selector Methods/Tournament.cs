@@ -4,12 +4,16 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
-    class Tournament : abstractPrune
+ public   class Tournament : abstractSelector
     {
-        public override SortedList<double, double[]> pruneCandidates(SortedList<double, double[]> oldPop)
-        {
-            throw new NotImplementedException();
-        }
+     public Tournament(optimize direction) : base(direction)
+     {
+     }
+
+     public override SortedList<double, double[]> selectCandidates(SortedList<double, double[]> sortedList, double control = double.NaN)
+     {
+         throw new NotImplementedException();
+     }
     }
 }
 

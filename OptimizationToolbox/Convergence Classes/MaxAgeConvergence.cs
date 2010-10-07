@@ -7,20 +7,20 @@ namespace OptimizationToolbox
     public class MaxAgeConvergence : abstractConvergence
     {
         #region Fields
-        int age = 0;
+        int age;
         IList<double> xlast;
-        readonly double toleranceForSame;
-        readonly int maxAge;
+        public double toleranceForSame { get; set; }
+        public int maxAge { get; set; }
         #endregion
 
 
+        public MaxAgeConvergence(){}
         public MaxAgeConvergence(int maxAge, double toleranceForSame)
         {
             this.maxAge = maxAge;
             this.toleranceForSame = toleranceForSame;
         }
-        public override bool converged(int YInteger = int.MinValue, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null,
-            IList<IList<double>> YJaggedDoubleArray = null)
+        public override bool converged(int YInteger = -2147483648, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var x = YDoubleArray1;
             if (x == null) throw new Exception("MaxAgeConvergence expected a 1-D array of doubles representing the decision vector, x.");

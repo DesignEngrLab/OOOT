@@ -7,8 +7,8 @@ namespace OptimizationToolbox
     public class ArithmeticMean : abstractLineSearch
     {
         #region Constructors
-        public ArithmeticMean(abstractOptMethod optMethod, double epsilon, double stepSize, int kMax)
-            : base(optMethod, epsilon, stepSize, kMax) { }
+        public ArithmeticMean(double epsilon, double stepSize, int kMax)
+            : base(epsilon, stepSize, kMax) { }
         #endregion
 
 

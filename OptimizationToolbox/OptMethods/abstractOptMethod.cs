@@ -27,74 +27,29 @@ namespace OptimizationToolbox
         protected abstractSearchDirection searchDirMethod;
         protected abstractLineSearch lineSearchMethod;
         protected abstractMeritFunction meritFunction;
-        protected IList<abstractConvergence> convergeMethods = new List<abstractConvergence>();
-        protected DiscreteSpaceDescriptor discreteSpace;
+        protected List<abstractConvergence> ConvergenceMethods = new List<abstractConvergence>();
+        protected DiscreteSpaceDescriptor discreteSpaceDescriptor;
+
         protected Boolean ObjectiveFunctionNeeded = true;
         protected Boolean ConstraintsSolvedWithPenalties = false;
         protected Boolean InequalitiesConvertedToEqualities = false;
-        protected Boolean SearchDirectionMethodNeeded = true;
-        protected Boolean LineSearchMethodNeeded = true;
-        protected Boolean FeasibleStartPointRequired = false;
-        protected Boolean DiscreteSpaceNeeded = false;
+        protected Boolean RequiresSearchDirectionMethod = true;
+        protected Boolean RequiresLineSearchMethod = true;
+        protected Boolean RequiresAnInitialPoint = true;
+        protected Boolean RequiresFeasibleStartPoint = false;
+        protected Boolean RequiresDiscreteSpaceDescriptor = false;
         protected double[] xStart;
+        protected double[] x;
         protected int feasibleOuterLoopMax;
         protected int feasibleInnerLoopMax;
         protected double epsilon;
         #endregion
 
         #region Set-up function, Add. */
-        public void Add(object function)
+        public virtual void Add(object function)
         {
             if (function.GetType() == typeof(ProblemDefinition))
-            {
-                ProblemDefinition pd = (ProblemDefinition)function;
-                
-                if (pd.g != null)
-                {
-                    g.Clear();
-                    foreach (inequality gNew in pd.g)
-                        g.Add(gNew);
-                }
-                if (pd.h != null)
-                {
-                    h.Clear();
-                    foreach (equality hNew in pd.h)
-                        h.Add(hNew);
-                }
-                if (pd.f != null)
-                {
-                    this.objfn = pd.f;
-                    if (lineSearchMethod != null) lineSearchMethod.optMethod = this;
-                }
-                if (pd.convergeMethod != null)
-                    this.convergeMethod = pd.convergeMethod;
-                if ((pd.tolerance > double.Epsilon) && (pd.tolerance < double.PositiveInfinity))
-                    this.epsilon = pd.tolerance;
-                if (pd.bounds.GetLength(0) > 0) //&& (pd.bounds.GetLength(1) == 2))
-                    for (int i = 0; i != pd.bounds.GetLength(0); i++)
-                    {
-                        if (pd.bounds[i][0] > double.NegativeInfinity)
-                            g.Add(new greaterThanConstant(pd.bounds[i][0], i));
-                        if (pd.bounds[i][1] < double.PositiveInfinity)
-                            g.Add(new lessThanConstant(pd.bounds[i][1], i));
-                    }
-                if ((pd.xStart != null) && (pd.xStart.GetLength(0) > 0))
-                    xStart = (double[])pd.xStart.Clone();
-            }
-            //*Added in by Bill Patterson/////////////////////////////////////////
-            //else if (function.GetType().BaseType == typeof(double[][]))
-            //{
-            //    double[][] boundsCopy = function;
-            //    if (boundsCopy.GetLength(0) > 0) //&& (pd.bounds.GetLength(1) == 2))
-            //    for (int i = 0; i != pd.bounds.GetLength(0); i++)
-            //    {
-            //        if (function[i][0] > double.NegativeInfinity)
-            //            g.Add(new greaterThanConstant(pd.bounds[i][0], i));
-            //        if (function[i][1] < double.PositiveInfinity)
-            //            g.Add(new lessThanConstant(pd.bounds[i][1], i));
-            //    }
-            //}
-            //*End of Add in////////////////////////////////////////////
+                readInProblemDefinition((ProblemDefinition)function);
             else if (function.GetType().BaseType == typeof(inequality))
                 g.Add((inequality)function);
             else if (function.GetType().BaseType == typeof(equality))
@@ -106,48 +61,117 @@ namespace OptimizationToolbox
             else if (function.GetType().BaseType == typeof(abstractLineSearch))
             {
                 lineSearchMethod = (abstractLineSearch)function;
-                if (lineSearchMethod.optMethod != this)
-                    lineSearchMethod.optMethod = this;
+                lineSearchMethod.SetOptimizationDetails(this);
             }
             else if (function.GetType().BaseType == typeof(abstractSearchDirection))
                 searchDirMethod = (abstractSearchDirection)function;
             else if (function.GetType().BaseType == typeof(abstractMeritFunction))
                 meritFunction = (abstractMeritFunction)function;
             else if (function.GetType().BaseType == typeof(abstractConvergence))
-                convergeMethods.Add((abstractConvergence)function);
+                ConvergenceMethods.Add((abstractConvergence)function);
             else if (function.GetType() == typeof(double[]))
                 xStart = (double[])function;
             else if (function.GetType() == typeof(DiscreteSpaceDescriptor))
-                discreteSpace = (DiscreteSpaceDescriptor)function;
+                discreteSpaceDescriptor = (DiscreteSpaceDescriptor)function;
             else throw (new Exception("Function, " + function.ToString() + ", not of known type (needs "
                 + "to inherit from inequality, equality, objectiveFunction, abstractLineSearch, " +
                 "or abstractSearchDirection)."));
         }
+
         #endregion
 
-        #region Initialize funtions
-        public Boolean initializeAndCheck(ref double[] x)
+        #region Initialize and Run funtions
+        public double Run(out double[] xStar)
         {
+            if (xStart != null) return Run(out xStar, xStart);
+            if (n > 0) return run(out xStar, null);
+            SearchIO.output("The number of variables was not set or determined from inputs.", 0);
+            xStar = null;
+            return double.PositiveInfinity;
+        }
+        public double Run(out double[] xStar, double[] xInit)
+        {
+            n = xInit.GetLength(0);
+            return run(out xStar, xInit);
+        }
+
+        public double Run(out double[] xStar, int NumberOfVariables)
+        {
+            n = NumberOfVariables;
+            return run(out xStar, null);
+        }
+        private double run(out double[] xStar, double[] xInit)
+        {
+            xStar = null;
             fStar = double.PositiveInfinity;
-            if ((x == null) && (n > 0))
+            // k = 0 --> iteration counter
+            k = 0;
+
+            if (ObjectiveFunctionNeeded && (objfn == null))
             {
-                x = new double[n];
-                Random randy = new Random();
-                for (int i = 0; i < n; i++)
-                    x[i] = 100.0 * randy.NextDouble();
+                SearchIO.output("No objective function specified.", 0);
+                return fStar;
             }
-            else if (x==null) return false;
-            if (!completelySetUp()) return false;
-            n = x.GetLength(0);
+            if (RequiresSearchDirectionMethod && (searchDirMethod == null))
+            {
+                // it'd be cool to use reflection to find all the possible implementations
+                // of the abstractSearchDirection class and present them at this time. 
+                // e.g. "Consider using SteepestDescent, BFGS, etc."
+            }
+            if (RequiresLineSearchMethod && (lineSearchMethod == null))
+            {
+                SearchIO.output("No line search method specified.", 0);
+                return fStar;
+            }
+            if (ConvergenceMethods.Count == 0)
+            {
+                SearchIO.output("No convergence method specified.", 0);
+                return fStar;
+            }
+            if (meritFunction == null)
+            {
+                SearchIO.output("No merit function specified.", 0);
+                return fStar;
+            }
+            if (RequiresDiscreteSpaceDescriptor && (discreteSpaceDescriptor == null))
+            {
+                SearchIO.output("No description of the discrete space is specified.", 0);
+                return fStar;
+            }
+            if (g.Count == 0) SearchIO.output("No inequalities specified.", 4);
+            if (h.Count == 0) SearchIO.output("No equalities specified.", 4);
+            if (ConstraintsSolvedWithPenalties && (h.Count + g.Count > 0))
+                SearchIO.output("Constsraints will be solved with exterior penalty function.", 4);
+            if (InequalitiesConvertedToEqualities && (g.Count > 0))
+                SearchIO.output(g.Count + " inequality constsraints will be converted to equality" +
+                    " constraints with the addition of " + g.Count + " slack variables.", 4);
+
+            if (RequiresAnInitialPoint)
+            {
+                if (xInit != null)
+                {
+                    xStart = (double[])xInit.Clone();
+                    x = (double[])xInit.Clone();
+                }
+                else if (xStart != null) x = (double[])xStart.Clone();
+                else
+                {
+                    // no? need a random start
+                    x = new double[n];
+                    var randy = new Random();
+                    for (int i = 0; i < n; i++)
+                        x[i] = 100.0 * randy.NextDouble();
+                }
+                if (RequiresFeasibleStartPoint && !feasible())
+                    if (!findFeasibleStartPoint()) return fStar;
+            }
             p = h.Count;
             q = g.Count;
             m = p;
 
-            if (FeasibleStartPointRequired && (!feasible(x))) return findFeasibleStartPoint(x);
-
             if (InequalitiesConvertedToEqualities && (q > 0))
             {
-                double[] xnew = new double[n + q];
+                var xnew = new double[n + q];
                 for (int i = 0; i != n; i++)
                     xnew[i] = x[i];
                 for (int i = n; i != n + q; i++)
@@ -162,8 +186,6 @@ namespace OptimizationToolbox
                 m = h.Count;
                 p = h.Count;
             }
-
-
             if (n <= m)
             {
                 if (n == m)
@@ -172,22 +194,18 @@ namespace OptimizationToolbox
                 else
                     SearchIO.output("There are more equality constraints than design variables " +
                         "(m > size). Therefore the problem is overconstrained.");
-                return false;
+                return fStar;
             }
 
-            return true;
+            return run(out xStar);
         }
-
-        private Boolean findFeasibleStartPoint(double[] x)
+        private Boolean findFeasibleStartPoint()
         {
-            double[] xlast = (double[])x.Clone();
             double average = StarMath.norm1(x) / x.GetLength(0);
             Random randNum = new Random();
-            List<int> varsToChange = new List<int>(n - m);
             // n-m variables can be changed
 
             double[,] gradH = calc_h_gradient(x);
-            double[,] invGradH = StarMath.inverse(gradH);
 
             for (int outerK = 0; outerK < feasibleOuterLoopMax; outerK++)
             {
@@ -197,19 +215,19 @@ namespace OptimizationToolbox
                     // gradA = calc_h_gradient(x, varsToChange);
                     // invGradH = StarMath.inverse(gradA);
                     //x = StarMath.subtract(x, StarMath.multiply(invGradH, calc_h_vector(x)));
-                    if (feasible(x)) return true;
+                    if (feasible()) return true;
                 }
                 for (int i = 0; i < n; i++)
                     x[i] += 2 * average * (randNum.NextDouble() - 0.5);
 
                 //gradA = calc_h_gradient(x);
                 //invGradH = StarMath.inverse(gradA);
-                if (feasible(x)) return true;
+                if (feasible()) return true;
             }
             return false;
         }
 
-        private Boolean feasible(double[] x)
+        private Boolean feasible()
         {
             foreach (equality a in h)
                 if (!a.feasible(x)) return false;
@@ -218,51 +236,8 @@ namespace OptimizationToolbox
             return true;
         }
 
-        private Boolean completelySetUp()
-        {
-            Boolean complete = true;
-            if (ObjectiveFunctionNeeded && (objfn == null))
-            {
-                SearchIO.output("No objective function specified.", 0);
-                complete = false;
-            }
-            if (SearchDirectionMethodNeeded && (searchDirMethod == null))
-            {
-                // it'd be cool to use reflection to find all the possible implementations
-                // of the abstractSearchDirection class and present them at this time. 
-                // e.g. "Consider using SteepestDescent, BFGS, etc."
-                SearchIO.output("No search direction method specified.", 0);
-                complete = false;
-            }
-            if (LineSearchMethodNeeded && (lineSearchMethod == null))
-            {
-                SearchIO.output("No line search method specified.", 0);
-                complete = false;
-            }
-            if (convergeMethod == null)
-            {
-                SearchIO.output("No convergence method specified.", 0);
-                complete = false;
-            } 
-            if (meritFunction == null)
-            {
-                SearchIO.output("No merit function specified.", 0);
-                complete = false;
-            }
-            if (DiscreteSpaceNeeded  && (discreteSpace == null))
-            {
-                SearchIO.output("No description of the discrete space is specified.", 0);
-                complete = false;
-            }
-            if (g.Count == 0) SearchIO.output("No inequalities specified.", 4);
-            if (h.Count == 0) SearchIO.output("No equalities specified.", 4);
-            if (ConstraintsSolvedWithPenalties && (h.Count + g.Count > 0))
-                SearchIO.output("Constsraints will be solved with exterior penalty function.", 4);
-            if (InequalitiesConvertedToEqualities && (g.Count > 0))
-                SearchIO.output(g.Count + " inequality constsraints will be converted to equality" +
-                    " constraints with the addition of " + g.Count + " slack variables.", 4);
-            return complete;
-        }
+
+        protected abstract double run(out double[] xStar);
         #endregion
 
         #region Calculate f, g, h helper functions
@@ -378,18 +353,59 @@ namespace OptimizationToolbox
         }
         #endregion
 
-        #region Create Problem Definition
+        #region from/to Problem Definition
+        private void readInProblemDefinition(ProblemDefinition pd)
+        {
+            if (pd.g != null)
+            {
+                g.Clear();
+                foreach (inequality gNew in pd.g)
+                    g.Add(gNew);
+            }
+            if (pd.h != null)
+            {
+                h.Clear();
+                foreach (equality hNew in pd.h)
+                    h.Add(hNew);
+            }
+            if (pd.f != null)
+                this.objfn = pd.f;
+            if (pd.ConvergenceMethods != null)
+                this.ConvergenceMethods = pd.ConvergenceMethods;
+            if ((pd.tolerance > double.Epsilon) && (pd.tolerance < double.PositiveInfinity))
+                this.epsilon = pd.tolerance;
+            if (pd.SpaceDescriptor != null)
+            {
+                this.discreteSpaceDescriptor = pd.SpaceDescriptor;
+                n = discreteSpaceDescriptor.n;
+            }
+            if ((pd.xStart != null) && (pd.xStart.GetLength(0) > 0))
+            {
+                xStart = (double[]) pd.xStart.Clone();
+                n = xStart.GetLength(0);
+            }
+        }
+
         public ProblemDefinition createProblemDefinition()
         {
-            ProblemDefinition pd = new ProblemDefinition();
-            pd.bounds = getBoundsFromLTandGTInequalities();
-            pd.convergeMethod = this.convergeMethod;
-            pd.f = this.objfn;
+            var pd = new ProblemDefinition();
+            pd.ConvergenceMethods = this.ConvergenceMethods;
+            pd.f = objfn;
             pd.g = new List<inequality>();
             foreach (inequality ineq in g)
-                if ((ineq.GetType() != typeof(lessThanConstant)) &&
-                    (ineq.GetType() != typeof(greaterThanConstant)))
-                    pd.g.Add(ineq);
+                if (ineq.GetType() == typeof(lessThanConstant))
+                {
+                    double ub = ((lessThanConstant)ineq).constant;
+                    int varIndex = ((lessThanConstant)ineq).index;
+                    pd.SpaceDescriptor.VariableDescriptors[varIndex].UpperBound = ub;
+                }
+                else if (ineq.GetType() == typeof(greaterThanConstant))
+                {
+                    double lb = ((greaterThanConstant)ineq).constant;
+                    int varIndex = ((greaterThanConstant)ineq).index;
+                    pd.SpaceDescriptor.VariableDescriptors[varIndex].UpperBound = lb;
+                }
+                else pd.g.Add(ineq);
             pd.h = new List<equality>();
             foreach (equality eq in h)
                 pd.h.Add(eq);
@@ -397,58 +413,17 @@ namespace OptimizationToolbox
             pd.xStart = this.xStart;
             return pd;
         }
-
-        private double[][] getBoundsFromLTandGTInequalities()
-        {
-            int numVar = Math.Max(n, this.xStart.GetLength(0));
-            foreach (inequality ineq in g)
-            {
-                if (ineq.GetType() == typeof(lessThanConstant))
-                {
-                    lessThanConstant lt = (lessThanConstant)ineq;
-                    numVar = Math.Max(numVar, lt.index);
-                }
-                else if (ineq.GetType() == typeof(greaterThanConstant))
-                {
-                    greaterThanConstant gt = (greaterThanConstant)ineq;
-                    numVar = Math.Max(numVar, gt.index);
-                }
-            }
-            double[][] bounds = new double[numVar][];
-            for (int i = 0; i != numVar; i++)
-            {
-                bounds[i] = new double[2];
-                bounds[i][0] = double.NegativeInfinity;
-                bounds[i][1] = double.PositiveInfinity;
-            }
-
-            foreach (inequality ineq in g)
-            {
-                if (ineq.GetType() == typeof(lessThanConstant))
-                {
-                    lessThanConstant lt = (lessThanConstant)ineq;
-                    bounds[lt.index][0] = lt.constant;
-                }
-                else if (ineq.GetType() == typeof(greaterThanConstant))
-                {
-                    greaterThanConstant gt = (greaterThanConstant)ineq;
-                    bounds[gt.index][0] = gt.constant;
-                }
-            }
-            return bounds;
-        }
-
         #endregion
 
-        #region Run
-        public double run(out double[] xStar)
-        { return this.run(xStart, out xStar); }
-        public double run(int n, out double[] xStar)
+        #region Convergence Main Function
+        protected Boolean notConverged(int YInteger = int.MinValue, double YDouble = double.NaN,
+               IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
-            this.n = n;
-            return this.run(xStart, out xStar);
+            foreach (var c in ConvergenceMethods)
+                if (c.converged(YInteger, YDouble, YDoubleArray1, YDoubleArray2, YJaggedDoubleArray))
+                    return false;
+            return true;
         }
-        public abstract double run(double[] x0, out double[] xStar);
         #endregion
     }
 }

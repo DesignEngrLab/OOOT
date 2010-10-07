@@ -15,7 +15,7 @@ namespace OptimizationToolbox
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
-        double[] xk, gradF, dk;
+        double[] gradF, dk;
 
         /* fk is the value of f(xk). */
         double fk;
@@ -38,72 +38,55 @@ namespace OptimizationToolbox
             : this(0.0001, defaultMethod) { }
         public SequentialQuadraticProgramming(double eps, Boolean defaultMethod)
         {
-            this.SearchDirectionMethodNeeded = false;
+            this.RequiresSearchDirectionMethod = false;
             this.epsilon = eps;
             if (defaultMethod) setUpDefaultMethods();
         }
         private void setUpDefaultMethods()
         {
-            this.Add(new SQPSimpleHalver(this, 0.25, 100));
+            this.Add(new SQPSimpleHalver(0.25, 100));
+            this.lineSearchMethod.SetOptimizationDetails(this);
             this.Add(new linearExteriorPenaltyMax(this, 1.0));
             this.Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
         }
         #endregion
 
         #region Main Function, run
-        /// <summary>
-        /// Runs from the specified x0.
-        /// </summary>
-        /// <param name="x0">The initial candidate, x0.</param>
-        /// <param name="xStar">The x-star candidate is returned as an out var.</param>
-        /// <returns>the value of the objective function at xStar.</returns>
-        public override double run(double[] x0, out double[] xStar)
+        protected override double run(out double[] xStar)
         {
-            #region Initialization
-            /* Initialize xStar so that something can be returned if the search crashes. */
-            if (x0 != null) xStar = (double[])x0.Clone();
-            else xStar = new double[0];
-            /* initialize and check is part of the abstract class. GRG requires a feasible start point
-             * so if none is found, we return infinity.*/
-            if (!initializeAndCheck(ref x0)) return fStar;
-            xk = (double[])x0.Clone();
             //evaluate f(x0)
-            fStar = fk = calc_f(xk);
+            fStar = fk = calc_f(x);
 
             // the search direction is initialized.
             dk = new double[n];
 
-            // k = 0 --> iteration counter
-            k = 0;
-            double initAlpha = 0.0;
+            double initAlpha;
             active.AddRange(h);
-            #endregion
-
 
             do
             {
-                gradF = calc_f_gradient(xk);
-                A = formulateActiveSetAndGradients(xk);
-                dk = calculateSQPSearchDirection(xk, gradF, A, out initAlpha);
+                gradF = calc_f_gradient(x);
+                A = formulateActiveSetAndGradients(x);
+                dk = calculateSQPSearchDirection(x, gradF, A, out initAlpha);
                 meritFunction.penaltyWeight = adjustMeritPenalty();
                 // this next function is not part of the regular SQP algorithm
                 // it's only intended to keep all the points in the positive space.
-                initAlpha = preventNegatives(xk, dk, initAlpha);
+                initAlpha = preventNegatives(x, dk, initAlpha);
                 //
 
-                alphaStar = lineSearchMethod.findAlphaStar(xk, dk, initAlpha);
-                xk = StarMath.add(xk, StarMath.multiply(alphaStar, dk));
+                alphaStar = lineSearchMethod.findAlphaStar(x, dk, initAlpha);
+                x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
                 SearchIO.output("iteration=" + k, 3);
                 SearchIO.output("--alpha=" + alphaStar, 3);
                 k++;
-                fk = calc_f(xk);
+                fk = calc_f(x);
 
                 SearchIO.output("----f = " + fk, 3);
                 SearchIO.output("---#active =" + active.Count, 3);
             }
-            while (!convergeMethod.converged(k, fk, xk, gradF));
+            while (notConverged(k, fk, x, gradF));
             fStar = fk;
-            xStar = (double[])xk.Clone();
+            xStar = (double[])x.Clone();
             return fStar;
         }
 

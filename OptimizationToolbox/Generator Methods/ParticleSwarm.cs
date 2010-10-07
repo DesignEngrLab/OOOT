@@ -6,10 +6,15 @@ namespace OptimizationToolbox
 {
     public class ParticleSwarm : abstractGenerator
     {
-        public override SortedList<double, double[]> generateCandidates(SortedList<double, double[]> oldPop)
+        public ParticleSwarm(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+            : base(discreteSpaceDescriptor)
+        {
+        }
+
+        public override void generateCandidates(ref List<double[]> candidates, int number = -1)
         {
             throw new NotImplementedException();
-        } 
+        }
     }
 }
 

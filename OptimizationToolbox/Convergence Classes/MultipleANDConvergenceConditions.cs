@@ -7,30 +7,61 @@ namespace OptimizationToolbox
     public class MultipleANDConvergenceConditions : abstractConvergence
     {
         #region Fields
-        readonly int maxIterations = int.MaxValue;
-        readonly int maxAge = int.MaxValue;
-        readonly double deltaX;
-        readonly double deltaF;
-        readonly double deltaGradF;
-        readonly double toleranceForSame;
+        int maxIterations = int.MaxValue;
+        int maxAge = int.MaxValue;
+        double deltaX = double.NaN;
+        double deltaF = double.NaN;
+        double deltaGradF = double.NaN;
+        double toleranceForSame = double.NegativeInfinity;
+        public int MaxIterations
+        {
+            get { return maxIterations; }
+            set { maxIterations = value; }
+        }
+        public double DeltaF
+        {
+            get { return deltaF; }
+            set { deltaF = value; }
+        }
+        public double DeltaX
+        {
+            get { return deltaX; }
+            set { deltaX = value; }
+        }
+        public double DeltaGradF
+        {
+            get { return deltaGradF; }
+            set { deltaGradF = value; }
+        }
+        public int MaxAge
+        {
+            get { return maxAge; }
+            set { maxAge = value; }
+        }
+        private double ToleranceForSame
+        {
+            get { return toleranceForSame; }
+            set { toleranceForSame = value; }
+        }
 
         int age = 0;
         IList<double> xlast;
         double flast;
         #endregion
         #region Constructor
+        public MultipleANDConvergenceConditions() { }
         public MultipleANDConvergenceConditions(int MaxIterations, double DeltaF, double DeltaX = double.NaN,
                     double DeltaGradF = double.NaN, int MaxAge = int.MinValue, double ToleranceForSame = double.NegativeInfinity)
         {
-            maxIterations = MaxIterations;
-            deltaF = DeltaF;
-            deltaX = DeltaX;
-            deltaGradF = DeltaGradF;
-            maxAge = MaxAge;
-            toleranceForSame = ToleranceForSame;
+            this.MaxIterations = MaxIterations;
+            this.DeltaF = DeltaF;
+            this.DeltaX = DeltaX;
+            this.DeltaGradF = DeltaGradF;
+            this.MaxAge = MaxAge;
+            this.ToleranceForSame = ToleranceForSame;
         }
         #endregion
-        public override bool converged(int YInteger = int.MinValue, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<IList<double>> YJaggedDoubleArray = null)
+        public override bool converged(int YInteger = -2147483648, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var k = YInteger;
             if (k < 0) throw new Exception("MultipleANDConvergenceConditions expected a positive value for the first argument, YInteger");

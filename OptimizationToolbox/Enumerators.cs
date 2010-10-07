@@ -16,8 +16,8 @@
  *     You should have received a copy of the GNU General Public License
  *     along with GraphSynth.  If not, see <http://www.gnu.org/licenses/>.
  *     
- *     Please find further details and contact information on GraphSynth
- *     at http://www.GraphSynth.com.
+ *     Please find further details and contact information at
+ *     http://OOOT.codeplex.com.
  *************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace OptimizationToolbox
     public class optimizeSort : IComparer<double>
     {
         /* an internal integer equal to the required sort direction. */
-        private int direction;
+        private readonly int direction;
         public optimizeSort(optimize direction)
         {
             this.direction = (int)direction;
@@ -41,13 +41,12 @@ namespace OptimizationToolbox
         public int Compare(double x, double y)
         {
             /* in order to avoid the collections from throwing an error, we make sure
-             * that only -1 or 1 is returned. If they are equal, we return 1. This makes
-             * newer items to the list appear before older items. It is slightly more
-             * efficient than returning -1 and conforms with the philosophy of always
-             * exploring/preferring new concepts. See: SA's Metropolis Criteria. */
-            if (x == y) return 1;
+             * that only -1 or 1 is returned. If they are equal, we return +1 (when
+             * minimizing). This makes newer items to the list appear before older items.
+             * It is slightly more efficient than returning -1 and conforms with the 
+             * philosophy of always exploring/preferring new concepts. See: SA's Metropolis Criteria. */
             if (x < y) return direction;
-            else return -1 * direction;
+            return -1 * direction;
         }
     }
 
@@ -64,5 +63,4 @@ namespace OptimizationToolbox
         Forward2,
         Central4
     };
-
-}
+    }

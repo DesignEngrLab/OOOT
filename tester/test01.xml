@@ -2,21 +2,20 @@
 <ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
                    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <tolerance>0</tolerance>
-  <ConvergenceMethods>
-    <abstractConvergence xsi:type="MaxIterationsConvergence">
-      <maxIterations>1000</maxIterations>
-    </abstractConvergence>
-    <abstractConvergence xsi:type="NelderMeadConvergence">
-      <MaxIterations>9999</MaxIterations>
-      <MaxAge>20</MaxAge>
-      <MinimumSideLength>1E-06</MinimumSideLength>
-      <toleranceForSame>1E-10</toleranceForSame>
-    </abstractConvergence>
-  </ConvergenceMethods>
-  <xStart>
+  <bounds>
+    <ArrayOfDouble>
+      <double>0.4</double>
+      <double>INF</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>0.7</double>
+      <double>INF</double>
+    </ArrayOfDouble>
+  </bounds>
+  <x0>
     <double>1500</double>
     <double>1500</double>
-  </xStart>
+  </x0>
   <f xsi:type="polynomialObjFn">
     <Terms>
       <string>x1^2</string>

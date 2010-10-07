@@ -8,8 +8,8 @@ namespace OptimizationToolbox
     {
         double gamma;
         #region Constructors
-        public SQPSimpleHalver(abstractOptMethod optMethod, double gamma, int kMax)
-            : base(optMethod, double.NaN, double.NaN, kMax)
+        public SQPSimpleHalver(double gamma, int kMax)
+            : base(double.NaN, double.NaN, kMax)
         {
             this.gamma = gamma;
         }

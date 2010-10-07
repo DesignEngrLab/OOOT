@@ -8,53 +8,46 @@ namespace OptimizationToolbox
     public class NelderMead : abstractOptMethod
     {
         #region Fields
-        double rho = 1;
-        double chi = 2;
-        double psi = 0.5;
-        double sigma = 0.5;
-        double initNewPointPercentage = 0.01;
-        double initNewPointAddition = 0.5;
-        SortedList<double, IList<double>> vertices = new SortedList<double, IList<double>>(new optimizeSort(optimize.minimize));
+        readonly double rho = 1;
+        readonly double chi = 2;
+        readonly double psi = 0.5;
+        readonly double sigma = 0.5;
+        readonly double initNewPointPercentage = 0.01;
+        readonly double initNewPointAddition = 0.5;
+        readonly SortedList<double, double[]> vertices = new SortedList<double, double[]>(new optimizeSort(optimize.minimize));
         #endregion
 
 
         #region Constructor
-        public NelderMead(Boolean defaultMethod = true, double eps = 0.0001)
+        public NelderMead()
         {
             this.ConstraintsSolvedWithPenalties = true;
-            this.SearchDirectionMethodNeeded = false;
-            this.LineSearchMethodNeeded = false;
-            this.epsilon = eps;
-            if (defaultMethod)
-                this.Add(new NelderMeadConvergence(500, 20, epsilon, 0.01));
+            this.RequiresSearchDirectionMethod = false;
+            this.RequiresLineSearchMethod = false;
+            this.RequiresAnInitialPoint = true;
+        }
+        public NelderMead(double rho, double chi, double psi, double sigma, double initNewPointPercentage = double.NaN, double initNewPointAddition=double.NaN)
+        {
+            this.rho = rho;
+            this.chi = chi;
+            this.psi = psi;
+            this.sigma = sigma;
+            if (!double.IsNaN(initNewPointPercentage)) this.initNewPointPercentage = initNewPointPercentage;
+            if (!double.IsNaN(initNewPointAddition)) this.initNewPointAddition = initNewPointAddition;
         }
         #endregion
-
-        public override double run(double[] x0, out double[] xStar)
+        protected override double run(out double[] xStar)
         {
-            #region Initialize the parameters for creating simplex
-            /* Initialize xStar so that something can be returned if the search crashes. */
-            if (x0 != null) xStar = (double[])x0.Clone();
-            else xStar = new double[0];
-            /* initialize and check is part of the abstract class. GRG requires a feasible start point
-             * so if none is found, we return infinity.*/
-            if (!initializeAndCheck(ref x0)) return fStar;
-            // k = 0 --> iteration counter
-            k = 0;
-
-            vertices.Add(calc_f(x0), x0);
-            #endregion
-
-
-            // Creating neighbors in each direction and evaluating them
+             vertices.Add(calc_f(x), x);
+             // Creating neighbors in each direction and evaluating them
             for (int i = 0; i < n; i++)
             {
-                double[] y = (double[])x0.Clone();
+                double[] y = (double[])x.Clone();
                 y[i] = (1 + initNewPointPercentage) * y[i] + initNewPointAddition;
                 vertices.Add(calc_f(y), y);
             }
 
-            while (!convergeMethod.converged(k, vertices.Keys.Min(), null, null, vertices.Values))
+            while (notConverged(k, vertices.Keys.Min(), null, null, vertices.Values))
             {
                 #region Compute the REFLECTION POINT
                 // computing the average for each variable for n variables NOT n+1

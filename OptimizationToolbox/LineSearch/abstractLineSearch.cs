@@ -13,21 +13,18 @@ namespace OptimizationToolbox
         protected double epsilon;
         protected double stepSize;
 
-        Boolean trackFeasibility;
+        readonly Boolean trackFeasibility;
         List<constraint> infeasibles;
         public double lastFeasAlpha, lastFeasAlpha4G, lastFeasAlpha4H;
  
-        public abstractOptMethod optMethod;
+        protected abstractOptMethod optMethod;
         protected int k, kMax;
 
 
         #region Constructors
-        public abstractLineSearch(abstractOptMethod optMethod, double epsilon, double stepSize, int kMax)
-            : this(optMethod, epsilon, stepSize, kMax, false) { }
-        public abstractLineSearch(abstractOptMethod optMethod, double epsilon, double stepSize, int kMax, 
-            Boolean trackFeasibility)
+        public abstractLineSearch(double epsilon, double stepSize, int kMax, 
+            Boolean trackFeasibility = false)
         {
-            this.optMethod = optMethod;
             this.epsilon = epsilon;
             this.stepSize = stepSize;
             this.kMax = kMax;
@@ -90,6 +87,11 @@ namespace OptimizationToolbox
                 return (ic.GetType() == typeof(inequality));
             }))
                 lastFeasAlpha4G = alpha;
+        }
+
+        internal void SetOptimizationDetails(abstractOptMethod optMethod)
+        {
+            this.optMethod = optMethod;
         }
     }
 }

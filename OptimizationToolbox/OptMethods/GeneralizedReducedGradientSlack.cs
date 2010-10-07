@@ -10,8 +10,8 @@ namespace OptimizationToolbox
         List<int> xcIndices;
         List<int> xdIndices;
 
-        double[] xk, xkLast, gradF, dk;
-        double fk, fStar, alphaStar;
+        double[] xkLast, gradF, dk;
+        double fk, alphaStar;
 
         double[,] gradH, gradHWRT_xc, gradHWRT_xd;
         double[,] invGradHWRT_xc;
@@ -37,7 +37,7 @@ namespace OptimizationToolbox
             {
                 double[] vars = new double[xcIndices.Count];
                 for (int i = 0; i < xcIndices.Count; i++)
-                    vars[i] = xk[xcIndices[i]];
+                    vars[i] = x[xcIndices[i]];
                 return vars;
             }
             set
@@ -45,7 +45,7 @@ namespace OptimizationToolbox
                 if ((xcIndices != null) && (xcIndices.Count != 0) &&
                     (xcIndices.Count == value.GetLength(0)))
                     for (int i = 0; i != xcIndices.Count; i++)
-                        xk[xcIndices[i]] = value[i];
+                        x[xcIndices[i]] = value[i];
             }
         }
 
@@ -56,7 +56,7 @@ namespace OptimizationToolbox
             {
                 double[] vars = new double[xdIndices.Count];
                 for (int i = 0; i < xdIndices.Count; i++)
-                    vars[i] = xk[xdIndices[i]];
+                    vars[i] = x[xdIndices[i]];
                 return vars;
             }
             set
@@ -64,30 +64,19 @@ namespace OptimizationToolbox
                 if ((xdIndices != null) && (xdIndices.Count != 0) &&
                     (xdIndices.Count == value.GetLength(0)))
                     for (int i = 0; i != xdIndices.Count; i++)
-                        xk[xdIndices[i]] = value[i];
+                        x[xdIndices[i]] = value[i];
             }
         }
         #endregion
 
         #region Main Function, run
-        public override double run(double[] x0, out double[] xStar)
+        protected override double run(out double[] xStar)
         {
             throw new NotImplementedException();
-            #region Initialization
-            /* Initialize xStar so that something can be returned if the search crashes. */
-            if (x0 != null) xStar = (double[])x0.Clone();
-            else xStar = new double[0];
-            /* initialize and check is part of the abstract class. GRG requires a feasible start point
-             * so if none is found, we return infinity.*/
-            if (!initializeAndCheck(ref x0)) return fStar;
-            xk = (double[])x0.Clone();
             //evaluate f(x0)
-            fStar = fk = calc_f(xk);
-            dk = new double[n];
-            // k = 0 --> iteration counter
-            k = 0;
-            #endregion
-
+            fStar = fk = calc_f(x);
+            //dk = new double[n];
+             
             /* this is the iteration counter for updating Xc it's compared with feasibleOuterLoopMax. */
             int outerFeasibleK;
             foreach (equality c in h)
@@ -96,35 +85,35 @@ namespace OptimizationToolbox
 
             do
             {
-                gradH = calc_h_gradient(xk);
+                gradH = calc_h_gradient(x);
                 divideGradH_intoXcAndXdParts();
                 invGradHWRT_xc = StarMath.inverseUpper(gradHWRT_xc);
-                gradF = objfn.gradient(xk);
+                gradF = objfn.gradient(x);
                 calculateReducedGradientSearchDirection();
 
                 // use line search (arithmetic mean) to find alphaStar
                 lineSearchMethod.lastFeasAlpha4G = 0.0;
-                lineSearchMethod.findAlphaStar(xk, dk);
+                lineSearchMethod.findAlphaStar(x, dk);
                 alphaStar = lineSearchMethod.lastFeasAlpha4G;
                 //alphaStar = lineSearchMethod.findAlphaStar(xk, dk, g);
 
-                xkLast = xk;
-                xk = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                xkLast = x;
+                x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
                 outerFeasibleK = 0;
                 while (!updateXc() && (++outerFeasibleK == feasibleOuterLoopMax))
                 {
                     alphaStar /= 2;
-                    xk = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                    x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
                 }
                 k++;
-                fk = objfn.calculate(xk);
-                SearchIO.output("X = " + xk[0] + ", " + xk[1], 3);// + ", " + xk[2]
+                fk = objfn.calculate(x);
+                SearchIO.output("X = " + x[0] + ", " + x[1], 3);// + ", " + xk[2]
                 SearchIO.output("F(" + k.ToString() + ") = " + fk.ToString(), 3);
             }
-            while (!convergeMethod.converged(k, fk, xk, gradF));
+            while (notConverged(k, fk, x, gradF));
             fStar = fk;
-            xStar = xk;
-            SearchIO.output("X* = " + xk[0] + ", " + xk[1], 2);
+            xStar = x;
+            SearchIO.output("X* = " + x[0] + ", " + x[1], 2);
             SearchIO.output("F* = " + fk.ToString(), 2);
             return fStar;
         }
@@ -209,7 +198,7 @@ namespace OptimizationToolbox
             for (int i = 0; i < m; i++)
                 dk[xcIndices[i]] = dir_Xc[i];
 
-            dk = searchDirMethod.find(xk, dk, fk);
+            dk = searchDirMethod.find(x, dk, fk);
 
         }
 
@@ -223,18 +212,18 @@ namespace OptimizationToolbox
                 dir_Xd[i] = dk[xdIndices[i]];
 
             xcOld = xc;
-            xc = StarMath.subtract(xcOld, StarMath.multiply(invGradHWRT_xc, calc_h_vector(xk)));
+            xc = StarMath.subtract(xcOld, StarMath.multiply(invGradHWRT_xc, calc_h_vector(x)));
             while (StarMath.norm1(xc, xcOld) / StarMath.norm1(xc) > iL_epsilon)
             {
-                gradHWRT_xc = calc_h_gradient(xk, xcIndices);
+                gradHWRT_xc = calc_h_gradient(x, xcIndices);
                 invGradHWRT_xc = StarMath.inverse(gradHWRT_xc);
                 if (++innerFeasibleK == feasibleInnerLoopMax) return false;
                 xcOld = xc;
-                xc = StarMath.subtract(xcOld, StarMath.multiply(invGradHWRT_xc, calc_h_vector(xk)));
+                xc = StarMath.subtract(xcOld, StarMath.multiply(invGradHWRT_xc, calc_h_vector(x)));
                 foreach (int i in this.xcIndices)
-                    if ((i >= n - q) && (xk[i] < 0))
+                    if ((i >= n - q) && (x[i] < 0))
                         /*then it's a slack variable that's gone negative and should simply be set to eps*/
-                        xk[i] = this.epsilon;
+                        x[i] = this.epsilon;
             }
             return true;
         }

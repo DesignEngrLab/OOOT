@@ -6,20 +6,21 @@ namespace OptimizationToolbox
 {
     public class DeltaFConvergence : abstractConvergence
     {
-        readonly double minDifference;
-        readonly double toleranceForSame;
+        public double minDifference { get; set; }
+        public double toleranceForSame { get; set; }
         IList<double> xlast;
         double flast;
 
 
         #region Constructor
+        public DeltaFConvergence(){}
         public DeltaFConvergence(double minDifference, double toleranceForSame = double.NegativeInfinity)
         {
             this.minDifference = minDifference;
             this.toleranceForSame = toleranceForSame;
         }
         #endregion
-        public override bool converged(int YInteger = int.MinValue, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<IList<double>> YJaggedDoubleArray = null)
+        public override bool converged(int YInteger = -2147483648, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var f = YDouble;
             if (double.IsNaN(f))

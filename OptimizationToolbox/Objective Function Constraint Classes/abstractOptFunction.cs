@@ -34,13 +34,10 @@ namespace OptimizationToolbox
         public double calculate(double[] x)
         {
             if (same(x)) return flast;
-            else
-            {
-                numEvals++;
-                flast = calc(x);
-                xlast = (double[])x.Clone();
-                return flast;
-            }
+            numEvals++;
+            flast = calc(x);
+            xlast = (double[])x.Clone();
+            return flast;
         }
         public double[] gradient(double[] x)
         {
@@ -53,7 +50,7 @@ namespace OptimizationToolbox
         public double[] gradient(double[] x, List<int> workingSet)
         {
             int size = workingSet.Count;
-            double[] grad = new double[size];
+            var grad = new double[size];
             for (int i = 0; i != size; i++)
                 grad[i] = deriv_wrt_xi(x, workingSet[i]);
             return grad;
@@ -91,8 +88,8 @@ namespace OptimizationToolbox
         #region finite difference
         private double calcCentral2(double[] x, int i)
         {
-            double[] xStep1 = (double[])x.Clone();
-            double[] xStep2 = (double[])x.Clone();
+            var xStep1 = (double[])x.Clone();
+            var xStep2 = (double[])x.Clone();
             xStep1[i] += h;
             xStep2[i] -= h;
             numEvals += 2;

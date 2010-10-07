@@ -20,7 +20,7 @@ namespace OptimizationToolbox
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
-        double[] xk, xkLast, gradF, dk;
+        double[] xkLast, gradF, dk;
 
         /* fk is the value of f(xk). */
         double fk;
@@ -58,7 +58,8 @@ namespace OptimizationToolbox
         }
         private void setUpDefaultMethods()
         {
-            this.Add(new ArithmeticMean(this,epsilon, 1, 100));
+            this.Add(new ArithmeticMean(epsilon, 1, 100));
+            this.lineSearchMethod.SetOptimizationDetails(this);
             this.Add(new FletcherReevesDirection());
             this.Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
         }
@@ -74,7 +75,7 @@ namespace OptimizationToolbox
             {
                 double[] vars = new double[xcIndices.Count];
                 for (int i = 0; i < xcIndices.Count; i++)
-                    vars[i] = xk[xcIndices[i]];
+                    vars[i] = x[xcIndices[i]];
                 return vars;
             }
             set
@@ -82,7 +83,7 @@ namespace OptimizationToolbox
                 if ((xcIndices != null) && (xcIndices.Count != 0) &&
                     (xcIndices.Count == value.GetLength(0)))
                     for (int i = 0; i != xcIndices.Count; i++)
-                        xk[xcIndices[i]] = value[i];
+                        x[xcIndices[i]] = value[i];
             }
         }
 
@@ -93,7 +94,7 @@ namespace OptimizationToolbox
             {
                 double[] vars = new double[xdIndices.Count];
                 for (int i = 0; i < xdIndices.Count; i++)
-                    vars[i] = xk[xdIndices[i]];
+                    vars[i] = x[xdIndices[i]];
                 return vars;
             }
             set
@@ -101,28 +102,17 @@ namespace OptimizationToolbox
                 if ((xdIndices != null) && (xdIndices.Count != 0) &&
                     (xdIndices.Count == value.GetLength(0)))
                     for (int i = 0; i != xdIndices.Count; i++)
-                        xk[xdIndices[i]] = value[i];
+                        x[xdIndices[i]] = value[i];
             }
         }
         #endregion
 
         #region Main Function, run
-        public override double run(double[] x0, out double[] xStar)
+        protected override double run(out double[] xStar)
         {
-            #region Initialization
-            /* Initialize xStar so that something can be returned if the search crashes. */
-            if (x0 != null) xStar = (double[])x0.Clone();
-            else xStar = new double[0];
-            /* initialize and check is part of the abstract class. GRG requires a feasible start point
-             * so if none is found, we return infinity.*/
-            if (!initializeAndCheck(ref x0)) return fStar;
-            xk = (double[])x0.Clone();
             //evaluate f(x0)
-            fStar = fk = calc_f(xk);
+            fStar = fk = calc_f(x);
             dk = new double[n];
-            // k = 0 --> iteration counter
-            k = 0;
-            #endregion
 
             /* this is the iteration counter for updating Xc it's compared with feasibleOuterLoopMax. */
             int outerFeasibleK;
@@ -133,8 +123,8 @@ namespace OptimizationToolbox
 
             do
             {
-                gradF = calc_f_gradient(xk);
-                formulateActiveSetAndGradients(xk, divideX);
+                gradF = calc_f_gradient(x);
+                formulateActiveSetAndGradients(x, divideX);
                 calculateReducedGradientSearchDirection();
 
                 /* whether or not the previous two lines of code reformulated Xc and Xd, we now
@@ -145,26 +135,26 @@ namespace OptimizationToolbox
                 divideX = false;
 
                 /* use line search (e.g. arithmetic mean) to find alphaStar */
-                alphaStar = lineSearchMethod.findAlphaStar(xk, dk);
+                alphaStar = lineSearchMethod.findAlphaStar(x, dk);
 
-                xkLast = xk;
-                xk = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                xkLast = x;
+                x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
                 outerFeasibleK = 0;
                 while (!updateXc() && (++outerFeasibleK <= feasibleOuterLoopMax))
                 {
                     alphaStar /= 2;
-                    xk = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                    x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
                     divideX = true;
                 }
                 k++;
-                fk = calc_f(xk);
+                fk = calc_f(x);
 
-                SearchIO.output("x(" + k.ToString() + ") = " + DoubleCollectionConverter.convert(xk) + " = " + fk.ToString("0.00"), 4);
+                SearchIO.output("x(" + k.ToString() + ") = " + StarMath.MakePrintString(x) + " = " + fk.ToString("0.00"), 4);
             }
-            while (!convergeMethod.converged(k, fk, xk, gradF));
+            while (notConverged(k, fk, x, gradF));
 
             fStar = fk;
-            xStar = xk;
+            xStar = x;
             return fStar;
         }
         #endregion
@@ -173,7 +163,7 @@ namespace OptimizationToolbox
         {
             /* this list is ordered from largest to smallest. We only want to introduce ONE new member 
              * into the active set. Which would be the first element (j.e.value) of this sorted list. */
-            SortedList<double, constraint> newInfeasibles 
+            SortedList<double, constraint> newInfeasibles
                 = new SortedList<double, constraint>(new optimizeSort(optimize.maximize));
 
             divideX = divideBool;
@@ -191,7 +181,7 @@ namespace OptimizationToolbox
                         divideX = true;
                     }
                 }
-                else newInfeasibles.Add(gVal, c); 
+                else newInfeasibles.Add(gVal, c);
             }
             /* only want to add one newInfeasible to the list of active. Hence the break statement. */
             foreach (KeyValuePair<double, constraint> kvp in newInfeasibles)
@@ -293,7 +283,7 @@ namespace OptimizationToolbox
             for (int i = 0; i < m; i++)
                 dk[xcIndices[i]] = dir_Xc[i];
 
-            dk = searchDirMethod.find(xk, dk, fk, divideX);
+            dk = searchDirMethod.find(x, dk, fk, divideX);
 
         }
 
@@ -307,14 +297,14 @@ namespace OptimizationToolbox
                 dir_Xd[i] = dk[xdIndices[i]];
 
             xcOld = xc;
-            xc = StarMath.subtract(xcOld, StarMath.multiply(invGradA_wrt_xc, calc_active_vector(xk)));
+            xc = StarMath.subtract(xcOld, StarMath.multiply(invGradA_wrt_xc, calc_active_vector(x)));
             while (StarMath.norm1(xc, xcOld) / StarMath.norm1(xc) > iL_epsilon)
             {
-                gradA_wrt_xc = calc_active_gradient(xk, xcIndices);
+                gradA_wrt_xc = calc_active_gradient(x, xcIndices);
                 invGradA_wrt_xc = StarMath.inverse(gradA_wrt_xc);
                 if (++innerFeasibleK == feasibleInnerLoopMax) return false;
                 xcOld = xc;
-                xc = StarMath.subtract(xcOld, StarMath.multiply(invGradA_wrt_xc, calc_active_vector(xk)));
+                xc = StarMath.subtract(xcOld, StarMath.multiply(invGradA_wrt_xc, calc_active_vector(x)));
             }
             return true;
         }

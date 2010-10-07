@@ -9,7 +9,7 @@ namespace OptimizationToolbox
     // this file needs to be updated. The original PNPPS in GraphSynth.Guidance
     // was improved, and differs from this in the retun type (candidate 
     // vs. array) - so I don't the two can be merged.
-    public class PNormProportionalPopulationSelection : abstractPrune
+    public class PNormProportionalPopulationSelection : abstractSelector
     {
         Random rnd = new Random();
         int fIndex;
@@ -61,7 +61,7 @@ namespace OptimizationToolbox
             : this(fIndex, sortDirection, alwaysKeepBest, Double.NaN, dontAdjust_PisGiven) { }
 
         public PNormProportionalPopulationSelection(int fIndex, optimize sortDirection, Boolean alwaysKeepBest,
-            double initialQorP, Boolean dontAdjust_PisGiven)
+            double initialQorP, Boolean dontAdjust_PisGiven) :base(sortDirection)
         {
             this.fIndex = fIndex;
             this.sortDirection = (int)sortDirection;
@@ -103,7 +103,7 @@ namespace OptimizationToolbox
             if (fractionKeep == 0) this.numKeep = 1;
             else this.numKeep = (int)Math.Ceiling(fractionKeep * candidates.Count);
             this.newQP = qp;
-            return pruneCandidates(candidates);
+            return selectCandidates(candidates);
         }
         public SortedList<double, double[]> pruneCandidates(int numKeep, SortedList<double, double[]> candidates)
         { return pruneCandidates(numKeep, double.NaN, candidates); }
@@ -111,13 +111,13 @@ namespace OptimizationToolbox
         {
             this.numKeep = numKeep;
             this.newQP = qp;
-            return pruneCandidates(candidates);
+            return selectCandidates(candidates);
         }
         #endregion
 
 
         #region Prune - main function
-        public override SortedList<double, double[]> pruneCandidates(SortedList<double, double[]> candidates)
+        public override SortedList<double, double[]> selectCandidates(SortedList<double, double[]> candidates, double control = double.NaN)
         {
             double p = determineP(newQP);
             double[] bestCandidate = null;
