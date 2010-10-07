@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <tolerance>0</tolerance>
+  <bounds>
+    <ArrayOfDouble>
+      <double>0.4</double>
+      <double>INF</double>
+    </ArrayOfDouble>
+    <ArrayOfDouble>
+      <double>0.7</double>
+      <double>INF</double>
+    </ArrayOfDouble>
+  </bounds>
+  <xStart>
+    <double>1500</double>
+    <double>1500</double>
+  </xStart>
+  <f xsi:type="polynomialObjFn">
+    <Terms>
+      <string>100*x1^4</string>
+      <string>-200*x1^2*x2</string>
+      <string>x1^2</string>
+      <string>-2*x1</string>
+      <string>100x2^2</string>
+      <string>1</string>
+    </Terms>
+  </f>
+  <convergeMethod xsi:type="convergenceBasic">
+    <kmax>2147483647</kmax>
+    <maxAge>2147483647</maxAge>
+    <deltaX>0.0001</deltaX>
+    <deltaF>0</deltaF>
+    <deltaGradF>0</deltaGradF>
+  </convergeMethod>
+</ProblemDefinition>

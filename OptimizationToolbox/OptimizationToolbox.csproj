@@ -79,6 +79,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
+    <Compile Include="OptMethods\PowellsMethodOptimization.cs" />
     <Compile Include="Selector Methods\abstractSelector.cs" />
     <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
     <Compile Include="VariableDescriptor.cs" />

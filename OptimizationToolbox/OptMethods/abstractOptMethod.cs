@@ -370,7 +370,7 @@ namespace OptimizationToolbox
             }
             if (pd.f != null)
                 this.objfn = pd.f;
-            if (pd.ConvergenceMethods != null)
+            if ((pd.ConvergenceMethods != null) &&(pd.ConvergenceMethods.Count>0))
                 this.ConvergenceMethods = pd.ConvergenceMethods;
             if ((pd.tolerance > double.Epsilon) && (pd.tolerance < double.PositiveInfinity))
                 this.epsilon = pd.tolerance;
