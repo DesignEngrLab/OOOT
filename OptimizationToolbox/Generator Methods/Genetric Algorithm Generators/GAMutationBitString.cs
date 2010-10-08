@@ -10,7 +10,7 @@ namespace OptimizationToolbox
         private readonly GABitByteHexLimits[] limits;
         private readonly long bitStringLength;
         private readonly Random rnd;
-        public GAMutationBitString(DiscreteSpaceDescriptor discreteSpaceDescriptor, double mutationRate = 0.01)
+        public GAMutationBitString(DesignSpaceDescription discreteSpaceDescriptor, double mutationRate = 0.1)
             : base(discreteSpaceDescriptor)
         {
             limits = GABitByteHexFunctions.InitializeBitString(discreteSpaceDescriptor);
@@ -21,7 +21,7 @@ namespace OptimizationToolbox
 
         public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
         {
-            for (int i = candidates.Count; i >= 0; i--)
+            for (int i = candidates.Count-1; i >= 0; i--)
             {
                 var candidate = candidates[i].Value;
                 var ChangeMade = false;
@@ -31,7 +31,8 @@ namespace OptimizationToolbox
                         ChangeMade = true;
                         int varIndex = GABitByteHexFunctions.FindVariableIndex(limits, j);
                         long valueIndex = VariableDescriptors[varIndex].PositionOf(candidate[varIndex]);
-                        candidate[varIndex] = FlipBit(valueIndex, limits[varIndex], j);
+                        valueIndex = FlipBit(valueIndex, limits[varIndex], j);
+                        candidate[varIndex] = VariableDescriptors[varIndex][valueIndex];
                     }
                 if (ChangeMade)
                 {

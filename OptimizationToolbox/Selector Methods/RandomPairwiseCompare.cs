@@ -16,7 +16,11 @@ namespace OptimizationToolbox
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
             randomizeList(ref candidates);
-            while (candidates.Count > numKeep)
+            /* maxLoops was created in the off chance that the population stagnates all at the same
+             * objective function value. It is unlikely that the process should exist on this account
+             * but it has happened. Ergo, we put in this condition so that the process doesn't hang here.*/
+           // int maxLoops = 3 * candidates.Count;
+            while ((candidates.Count > numKeep) )//&& (maxLoops-- > 0))
             {
                 var contestantA = candidates[0];
                 candidates.RemoveAt(0);

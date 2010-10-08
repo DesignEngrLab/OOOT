@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <tolerance>0</tolerance>
-  <bounds>
-    <ArrayOfDouble>
-      <double>0.4</double>
-      <double>INF</double>
-    </ArrayOfDouble>
-    <ArrayOfDouble>
-      <double>0.7</double>
-      <double>INF</double>
-    </ArrayOfDouble>
-  </bounds>
+
+  <SpaceDescriptor>
+    <VariableDescriptors>
+      <VariableDescriptor>
+        <LowerBound>-10000</LowerBound>
+        <UpperBound>10000</UpperBound>
+        <Delta>0.01</Delta>
+        <Size>2000001</Size>
+      </VariableDescriptor>
+      <VariableDescriptor>
+        <LowerBound>-10000</LowerBound>
+        <UpperBound>10000</UpperBound>
+        <Delta>0.01</Delta>
+        <Size>2000001</Size>
+      </VariableDescriptor>
+    </VariableDescriptors>
+  </SpaceDescriptor>
   <xStart>
     <double>1500</double>
     <double>1500</double>

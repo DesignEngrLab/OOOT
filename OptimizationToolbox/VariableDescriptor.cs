@@ -65,33 +65,24 @@ namespace OptimizationToolbox
 
 
         public VariableDescriptor(){}
-        public VariableDescriptor(double value = double.NaN)
-        {
-            Discrete = false;
-            //currentIndex = -1;
-            //realValue = value;
-        }
-        public VariableDescriptor(double LowerBound, double UpperBound, double value = double.NaN)
-            : this(value)
+
+        public VariableDescriptor(double LowerBound, double UpperBound)
+            : this()
         {
             lowerBound = LowerBound;
             upperBound = UpperBound;
         }
 
-        public VariableDescriptor(double LowerBound, double UpperBound, double Delta, double value = double.NaN)
+        public VariableDescriptor(double LowerBound, double UpperBound, double Delta)
+            :this (LowerBound, UpperBound)
         {
-            lowerBound = LowerBound;
-            upperBound = UpperBound;
             defineRemainingDiscreteValues(1 + (long)((UpperBound - LowerBound) / Delta), Delta);
-            //currentIndex = PositionOf(value);
         }
 
-        public VariableDescriptor(double LowerBound, double UpperBound, long Size, double value = double.NaN)
+        public VariableDescriptor(double LowerBound, double UpperBound, long Size)
+            : this(LowerBound, UpperBound)
         {
-            lowerBound = LowerBound;
-            upperBound = UpperBound;
             defineRemainingDiscreteValues(Size, (upperBound - lowerBound) / Size);
-            //currentIndex = PositionOf(value);
         }
 
         void defineRemainingDiscreteValues(long newSize, double newDelta)
@@ -110,11 +101,10 @@ namespace OptimizationToolbox
             Discrete = true;
         }
 
-        public VariableDescriptor(double[] Values, double value = double.NaN)
+        public VariableDescriptor(double[] Values)
         {
             values = Values;
             defineBasedOnValues();
-            //currentIndex = PositionOf(value);
         }
         void defineBasedOnValues()
         {
@@ -123,7 +113,6 @@ namespace OptimizationToolbox
             upperBound = Values.Max();
             delta = double.NaN;
             Discrete = true;
-            //realValue = double.NaN;
         }
 
         public double this[long position]
@@ -143,20 +132,5 @@ namespace OptimizationToolbox
             if (i - Math.Floor(i) / Delta < epsilon) return (long)i;
             return -1;
         }
-
-
-        // User-defined conversion from Digit to double
-        //public static implicit operator double(VariableDescriptor d)
-        //{
-        //    if (d.Discrete) return d.ValueAt(d.currentIndex);
-        //    return d.realValue;
-        //}
-
-        ////  User-defined conversion from double to Digit
-        //public static implicit operator VariableDescriptor(double d)
-        //{
-        //    return new VariableDescriptor(d);
-        //}
-
     }
 }

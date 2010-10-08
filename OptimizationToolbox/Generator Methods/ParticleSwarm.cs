@@ -6,7 +6,7 @@ namespace OptimizationToolbox
 {
     public class ParticleSwarm : abstractGenerator
     {
-        public ParticleSwarm(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        public ParticleSwarm(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }

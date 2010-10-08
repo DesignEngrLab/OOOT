@@ -5,7 +5,7 @@ namespace OptimizationToolbox
 {
     public class GACrossoverRealInterpolator : GeneticCrossoverGenerator
     {
-        public GACrossoverRealInterpolator(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        public GACrossoverRealInterpolator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }

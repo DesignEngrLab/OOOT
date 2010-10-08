@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convergence Classes\ToKnownBestConvergence.cs" />
     <Compile Include="Generator Methods\abstractGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -68,7 +69,7 @@
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverRealInterpolator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Generator Methods\LatinHyperCubeWithHammersley.cs">
+    <Compile Include="Generator Methods\LatinHyperCube.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Generator Methods\ParticleSwarm.cs">
@@ -95,7 +96,7 @@
     <Compile Include="Enumerators.cs" />
     <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
     <Compile Include="Objective Function Constraint Classes\abstracts for f g and h.cs" />
-    <Compile Include="DiscreteSpaceDescriptor.cs" />
+    <Compile Include="DesignSpaceDescription.cs" />
     <Compile Include="Objective Function Constraint Classes\lessThanGreaterThanConstant.cs" />
     <Compile Include="LineSearch\ArithmeticMean.cs" />
     <Compile Include="LineSearch\SQPSimpleHalver.cs" />

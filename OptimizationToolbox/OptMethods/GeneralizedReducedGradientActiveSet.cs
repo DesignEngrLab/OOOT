@@ -6,7 +6,7 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public class GeneralizedReducedGradientActiveSet : abstractOptMethod
+    public sealed class GeneralizedReducedGradientActiveSet : abstractOptMethod
     {
         #region Fields
         /* the following lists indicate what elements of x are decision variable,
@@ -45,23 +45,17 @@ namespace OptimizationToolbox
         #endregion
 
         #region Constructor
-        public GeneralizedReducedGradientActiveSet() : this(true) { }
-        public GeneralizedReducedGradientActiveSet(Boolean defaultMethod)
-            : this(0.0001, 0.0001, 500, 5, defaultMethod) { }
-        public GeneralizedReducedGradientActiveSet(double eps, double ILeps, int innerMax, int outerMax, Boolean defaultMethod)
+        public GeneralizedReducedGradientActiveSet()
+            : this(0.0001, 0.0001, 500, 5) { }
+        public GeneralizedReducedGradientActiveSet(double eps, double ILeps, int innerMax, int outerMax)
         {
             this.epsilon = eps;
             this.iL_epsilon = ILeps;
             feasibleInnerLoopMax = innerMax;
             feasibleOuterLoopMax = outerMax;
-            if (defaultMethod) setUpDefaultMethods();
-        }
-        private void setUpDefaultMethods()
-        {
-            this.Add(new ArithmeticMean(epsilon, 1, 100));
-            this.lineSearchMethod.SetOptimizationDetails(this);
-            this.Add(new FletcherReevesDirection());
-            this.Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
+            Add(new ArithmeticMean(epsilon, 1, 100));
+            lineSearchMethod.SetOptimizationDetails(this);
+            Add(new FletcherReevesDirection());
         }
         #endregion
 
@@ -151,7 +145,7 @@ namespace OptimizationToolbox
 
                 SearchIO.output("x(" + k.ToString() + ") = " + StarMath.MakePrintString(x) + " = " + fk.ToString("0.00"), 4);
             }
-            while (notConverged(k, fk, x, gradF));
+            while (notConverged(k, fk, x, gradF, new List<double[]>()));
 
             fStar = fk;
             xStar = x;

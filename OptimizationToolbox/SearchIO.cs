@@ -42,7 +42,7 @@ namespace OptimizationToolbox
                 case 1: message = message1; break;
                 case 2: message = message2; break;
                 case 3: message = message3; break;
-                case 4: message = message4; break;
+                default: message = message4; break;
             }
             if ((message != null) && (message.ToString() != ""))
                 Console.WriteLine(message);

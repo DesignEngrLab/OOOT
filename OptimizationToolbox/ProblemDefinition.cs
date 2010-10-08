@@ -9,7 +9,7 @@ namespace OptimizationToolbox
     {
         public string name;
         public double tolerance;
-        public DiscreteSpaceDescriptor SpaceDescriptor;
+        public DesignSpaceDescription SpaceDescriptor;
         public double[] xStart;
         public objectiveFunction f;
         public List<equality> h;
@@ -31,8 +31,8 @@ namespace OptimizationToolbox
             else if ((function.GetType().BaseType == typeof(abstractConvergence))
                 && (!ConvergenceMethods.Exists(c => (c.GetType().Equals(function.GetType())))))
                 ConvergenceMethods.Add((abstractConvergence)function);
-            else if (function.GetType() == typeof(DiscreteSpaceDescriptor))
-                SpaceDescriptor = (DiscreteSpaceDescriptor)function;
+            else if (function.GetType() == typeof(DesignSpaceDescription))
+                SpaceDescriptor = (DesignSpaceDescription)function;
             else if (function.GetType() == typeof(double[]))
                 xStart = (double[])function;
             else if (function.GetType() == typeof(double))
@@ -59,7 +59,7 @@ namespace OptimizationToolbox
             XmlSerializer probDeserializer = new XmlSerializer(typeof(ProblemDefinition));
             newDesignprob = (ProblemDefinition)probDeserializer.Deserialize(probReader);
             SearchIO.output(Path.GetFileName(filename) + " successfully loaded.");
-
+            newDesignprob.SpaceDescriptor.UpdateCharacteristics();
             if (newDesignprob.name == null)
                 newDesignprob.name = Path.GetFileNameWithoutExtension(filename);
 

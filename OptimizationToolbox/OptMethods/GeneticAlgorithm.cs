@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
@@ -12,35 +13,32 @@ namespace OptimizationToolbox
         public abstractGenerator crossoverGenerator { get; set; }
         public abstractGenerator mutationGenerator { get; set; }
         public abstractSelector fitnessSelector { get; set; }
-        private List<KeyValuePair<double, double[]>> population;
         #endregion
 
         #region Constructor
-        public GeneticAlgorithm(DiscreteSpaceDescriptor discreteSpaceDescriptor, int populationSize = 100, optimize direction = optimize.minimize)
+        public GeneticAlgorithm(int populationSize = 100, optimize direction = optimize.minimize)
         {
-            this.discreteSpaceDescriptor = discreteSpaceDescriptor;
+            this.spaceDescriptor = spaceDescriptor;
             this.populationSize = populationSize;
             ConstraintsSolvedWithPenalties = true;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;
             RequiresAnInitialPoint = false;
             RequiresDiscreteSpaceDescriptor = true;
-            population = new List<KeyValuePair<double, double[]>>();
         }
         #endregion
 
         public override void Add(object function)
         {
-            if (function.GetType() == typeof(SamplingGenerator))
+            if (typeof(SamplingGenerator).IsInstanceOfType(function))
                 initGenerator = (SamplingGenerator)function;
-            else if (function.GetType() == typeof(GeneticCrossoverGenerator))
+            else if (typeof(GeneticCrossoverGenerator).IsInstanceOfType(function))
                 crossoverGenerator = (GeneticCrossoverGenerator)function;
-            else if (function.GetType() == typeof(GeneticMutationGenerator))
+            else if (typeof(GeneticMutationGenerator).IsInstanceOfType(function))
                 mutationGenerator = (GeneticMutationGenerator)function;
-            else if (function.GetType() == typeof(abstractSelector))
+            else if (typeof(abstractSelector).IsInstanceOfType(function))
                 fitnessSelector = (abstractSelector)function;
-
-            base.Add(function);
+            else base.Add(function);
         }
 
         protected override double run(out double[] xStar)
@@ -48,37 +46,61 @@ namespace OptimizationToolbox
             var population = new List<KeyValuePair<double, double[]>>();
             /* 1. make initial population and evaluate
              *    to ensure diversity, a latin hyper cube with Hammersley could be used.*/
+            SearchIO.output("creating initial population", 4);
             initGenerator.generateCandidates(ref population, populationSize);
+            SearchIO.output("evaluating initial population", 4);
             evaluate(population);
 
-            /* 2. while not converged*/
-            while (notConverged(k, double.NaN, population.Select(a => a.Key).ToList(), null, population.Select(a => a.Value).ToList()))
+            do
             {
+                SearchIO.output(null, null, k, "iter = " + k,
+                                "*******************\n* Iteration: " + k + " *\n*******************");
                 /* 3. selection survivors*/
+                SearchIO.output("selecting from population  (current pop = " + population.Count + ").", 4);
+                SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)), 4);
                 fitnessSelector.selectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
+                SearchIO.output("generating new candidates (current pop = " + population.Count + ").", 4);
                 crossoverGenerator.generateCandidates(ref population, populationSize);
                 /* 5. generate modifications to all with mutation */
+                SearchIO.output("performing mutation (current pop = " + population.Count + ").", 4);
                 mutationGenerator.generateCandidates(ref population);
                 /* 6. evaluate new members of population.*/
+                SearchIO.output("evaluating new popluation members.", 4);
                 evaluate(population);
-            }
-            fStar = population.Min(c => c.Key);
-            xStar = (from candidate in population
-                     where (candidate.Key == fStar)
-                     select candidate.Value).First();
+                k++;
+                fStar = population.Min(c => c.Key);
+                xStar = (from candidate in population
+                         where (candidate.Key == fStar)
+                         select candidate.Value).First();
+                SearchIO.output("x* = " + StarMath.MakePrintString(xStar), 4);
+                SearchIO.output("f* = " + fStar, 4);
+            } while (notConverged(k, fStar, xStar, population.Select(a => a.Key).ToList(),
+                                  population.Select(a => a.Value).ToList()));
             return fStar;
         }
 
+        private double[] CalcPopulationStats(List<KeyValuePair<double, double[]>> population)
+        {
+            return new[]
+                       {
+                           (from c in population select c.Key).Min(),
+                           (from c in population select c.Key).Average(),
+                           (from c in population select c.Key).Max()
+                       };
+        }
+
+
         private void evaluate(List<KeyValuePair<double, double[]>> population)
         {
-            foreach (var c in population)
+            for (int i = population.Count - 1; i >= 0; i--)
             {
-                if (double.IsNaN(c.Key))
+                var candidate = population[i];
+                if (double.IsNaN(candidate.Key))
                 {
-                    population.Remove(c);
-                    var f = objfn.calculate(c.Value);
-                    population.Add(new KeyValuePair<double, double[]>(f, c.Value));
+                    population.RemoveAt(i);
+                    var f = calc_f(candidate.Value);
+                    population.Add(new KeyValuePair<double, double[]>(f, candidate.Value));
                 }
             }
         }

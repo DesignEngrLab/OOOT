@@ -1,4 +1,5 @@
-﻿using StarMathLib;
+﻿using System.Collections.Generic;
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
@@ -22,13 +23,11 @@ namespace OptimizationToolbox
         double[,] searchDirMatrix;
 
         #region Constructor
-        public PowellsMethodOptimization(double penaltyWeight)
+        public PowellsMethodOptimization()
         {
             this.ConstraintsSolvedWithPenalties = true;
             this.RequiresSearchDirectionMethod = false;
             this.RequiresLineSearchMethod = true;
-           // this.penaltyWeight = penaltyWeight;
-            this.k = 0;
         }
         #endregion
 
@@ -113,7 +112,7 @@ namespace OptimizationToolbox
                 SearchIO.output("f = " + fk, 3);
                 #endregion
             }
-            while (notConverged(k, fk,x));
+            while (notConverged(k, fk,x,null, new List<double[]>()));
 
             return fStar;
         }

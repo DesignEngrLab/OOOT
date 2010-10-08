@@ -84,7 +84,7 @@ namespace OptimizationToolbox
                 SearchIO.output("----f = " + fk, 3);
                 SearchIO.output("---#active =" + active.Count, 3);
             }
-            while (notConverged(k, fk, x, gradF));
+            while (notConverged(k, fk, x, gradF, new List<double[]>()));
             fStar = fk;
             xStar = (double[])x.Clone();
             return fStar;

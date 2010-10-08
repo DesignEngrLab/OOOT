@@ -14,7 +14,7 @@ namespace OptimizationToolbox
 
     internal static class GABitByteHexFunctions
     {
-        internal static GABitByteHexLimits[] InitializeBitString(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        internal static GABitByteHexLimits[] InitializeBitString(DesignSpaceDescription discreteSpaceDescriptor)
         {
             var result = new GABitByteHexLimits[discreteSpaceDescriptor.n];
             var currentIndex = 0;
@@ -23,7 +23,7 @@ namespace OptimizationToolbox
                 if (discreteSpaceDescriptor.VariableDescriptors[i].Discrete)
                 {
                     var maxValue = discreteSpaceDescriptor.MaxVariableSizes[i];
-                    var numberBits = (int)(Math.Log(maxValue, 2))+1;
+                    var numberBits = (int)(Math.Log(maxValue, 2)) + 1;
                     var endIndex = currentIndex + numberBits;
                     result[i] = new GABitByteHexLimits()
                                     {
@@ -40,12 +40,7 @@ namespace OptimizationToolbox
 
         internal static int FindVariableIndex(GABitByteHexLimits[] limits, int i)
         {
-            int result = 0;
-            while (limits[result].StartIndex > i)
-            {
-                result++;
-            }
-            return result;
+            return Array.FindIndex(limits, a => a.EndIndex > i);
         }
 
         internal static BitArray Encode(long value, int length)
@@ -56,9 +51,10 @@ namespace OptimizationToolbox
             {
                 if (value >= denominator)
                 {
-                    result[i] = true;
+                    result.Set(i, true);
                     value -= denominator;
                 }
+                else result.Set(i, false);
                 denominator /= 2;
             }
             return result;

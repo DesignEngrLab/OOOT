@@ -4,10 +4,10 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
-    public class RandomSampling : abstractGenerator
+    public class RandomSampling : SamplingGenerator
     {
         private const double defaultRealBound = 10000;
-        public RandomSampling(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        public RandomSampling(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-
 using System.Collections.Generic;
 using StarMathLib;
 
@@ -27,8 +26,8 @@ namespace OptimizationToolbox
         protected abstractSearchDirection searchDirMethod;
         protected abstractLineSearch lineSearchMethod;
         protected abstractMeritFunction meritFunction;
-        protected List<abstractConvergence> ConvergenceMethods = new List<abstractConvergence>();
-        protected DiscreteSpaceDescriptor discreteSpaceDescriptor;
+        public List<abstractConvergence> ConvergenceMethods = new List<abstractConvergence>();
+        protected DesignSpaceDescription spaceDescriptor;
 
         protected Boolean ObjectiveFunctionNeeded = true;
         protected Boolean ConstraintsSolvedWithPenalties = false;
@@ -48,31 +47,35 @@ namespace OptimizationToolbox
         #region Set-up function, Add. */
         public virtual void Add(object function)
         {
-            if (function.GetType() == typeof(ProblemDefinition))
+            if (typeof(ProblemDefinition).IsInstanceOfType(function))
                 readInProblemDefinition((ProblemDefinition)function);
-            else if (function.GetType().BaseType == typeof(inequality))
+            else if (typeof(inequality).IsInstanceOfType(function))
                 g.Add((inequality)function);
-            else if (function.GetType().BaseType == typeof(equality))
+            else if (typeof(equality).IsInstanceOfType(function))
                 h.Add((equality)function);
-            else if (function.GetType().BaseType == typeof(objectiveFunction))
-            {
+            else if (typeof(objectiveFunction).IsInstanceOfType(function))
                 objfn = (objectiveFunction)function;
-            }
-            else if (function.GetType().BaseType == typeof(abstractLineSearch))
+            else if (typeof(abstractLineSearch).IsInstanceOfType(function))
             {
                 lineSearchMethod = (abstractLineSearch)function;
                 lineSearchMethod.SetOptimizationDetails(this);
             }
-            else if (function.GetType().BaseType == typeof(abstractSearchDirection))
+            else if (typeof(abstractSearchDirection).IsInstanceOfType(function))
                 searchDirMethod = (abstractSearchDirection)function;
-            else if (function.GetType().BaseType == typeof(abstractMeritFunction))
+            else if (typeof(abstractMeritFunction).IsInstanceOfType(function))
                 meritFunction = (abstractMeritFunction)function;
-            else if (function.GetType().BaseType == typeof(abstractConvergence))
-                ConvergenceMethods.Add((abstractConvergence)function);
-            else if (function.GetType() == typeof(double[]))
+            else if (typeof(abstractConvergence).IsInstanceOfType(function))
+                if (ConvergenceMethods.Exists(a => a.GetType() == function.GetType()))
+                    throw new Exception("You are adding a convergence method of type " + function.GetType() +
+                                        "to the optimization method but one already exists of this same type.");
+                else ConvergenceMethods.Add((abstractConvergence)function);
+            else if (typeof(double[]).IsInstanceOfType(function))
                 xStart = (double[])function;
-            else if (function.GetType() == typeof(DiscreteSpaceDescriptor))
-                discreteSpaceDescriptor = (DiscreteSpaceDescriptor)function;
+            else if (typeof(DesignSpaceDescription).IsInstanceOfType(function))
+            {
+                spaceDescriptor = (DesignSpaceDescription) function;
+                n = spaceDescriptor.n;
+            }
             else throw (new Exception("Function, " + function.ToString() + ", not of known type (needs "
                 + "to inherit from inequality, equality, objectiveFunction, abstractLineSearch, " +
                 "or abstractSearchDirection)."));
@@ -133,7 +136,7 @@ namespace OptimizationToolbox
                 SearchIO.output("No merit function specified.", 0);
                 return fStar;
             }
-            if (RequiresDiscreteSpaceDescriptor && (discreteSpaceDescriptor == null))
+            if (RequiresDiscreteSpaceDescriptor && (spaceDescriptor == null))
             {
                 SearchIO.output("No description of the discrete space is specified.", 0);
                 return fStar;
@@ -357,31 +360,21 @@ namespace OptimizationToolbox
         private void readInProblemDefinition(ProblemDefinition pd)
         {
             if (pd.g != null)
-            {
-                g.Clear();
                 foreach (inequality gNew in pd.g)
-                    g.Add(gNew);
-            }
+                    Add(gNew);
             if (pd.h != null)
-            {
-                h.Clear();
                 foreach (equality hNew in pd.h)
-                    h.Add(hNew);
-            }
-            if (pd.f != null)
-                this.objfn = pd.f;
-            if ((pd.ConvergenceMethods != null) &&(pd.ConvergenceMethods.Count>0))
-                this.ConvergenceMethods = pd.ConvergenceMethods;
+                    Add(hNew);
+            if (pd.f != null) Add(pd.f);
+            if (pd.ConvergenceMethods != null) 
+                foreach (var cM in pd.ConvergenceMethods) 
+                    Add(cM);
             if ((pd.tolerance > double.Epsilon) && (pd.tolerance < double.PositiveInfinity))
                 this.epsilon = pd.tolerance;
-            if (pd.SpaceDescriptor != null)
-            {
-                this.discreteSpaceDescriptor = pd.SpaceDescriptor;
-                n = discreteSpaceDescriptor.n;
-            }
+            if (pd.SpaceDescriptor != null) Add(pd.SpaceDescriptor);
             if ((pd.xStart != null) && (pd.xStart.GetLength(0) > 0))
             {
-                xStart = (double[]) pd.xStart.Clone();
+                xStart = (double[])pd.xStart.Clone();
                 n = xStart.GetLength(0);
             }
         }
@@ -416,12 +409,18 @@ namespace OptimizationToolbox
         #endregion
 
         #region Convergence Main Function
+        public string ConvergenceDeclaredBy { get { return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0,20); } }
+        private int indexConverged;
         protected Boolean notConverged(int YInteger = int.MinValue, double YDouble = double.NaN,
                IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
-            foreach (var c in ConvergenceMethods)
-                if (c.converged(YInteger, YDouble, YDoubleArray1, YDoubleArray2, YJaggedDoubleArray))
+            for (indexConverged = 0; indexConverged < ConvergenceMethods.Count; indexConverged++)
+            {
+                if (ConvergenceMethods[indexConverged].converged(YInteger, YDouble, YDoubleArray1, YDoubleArray2,
+                                                                 YJaggedDoubleArray))
                     return false;
+            }
+            indexConverged = -1;
             return true;
         }
         #endregion

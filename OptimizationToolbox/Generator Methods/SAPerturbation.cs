@@ -6,7 +6,7 @@ namespace OptimizationToolbox
 {
     public class SAPerturbation : abstractGenerator
     {
-        public SAPerturbation(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        public SAPerturbation(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }

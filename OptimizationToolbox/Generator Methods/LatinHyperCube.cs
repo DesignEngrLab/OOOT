@@ -5,19 +5,26 @@ using System.Text;
 
 namespace OptimizationToolbox
 {
-    public class LatinHyperCubeWithHammersley : SamplingGenerator
+    public enum VariablesInScope
     {
-        public LatinHyperCubeWithHammersley(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        OnlyDiscrete,
+        OnlyReal,
+        BothDiscreteAndReal
+    } ;
+    public class LatinHyperCube : SamplingGenerator
+    {
+        private readonly VariablesInScope generateFor;
+        public LatinHyperCube(DesignSpaceDescription discreteSpaceDescriptor, VariablesInScope GenerateFor)
             : base(discreteSpaceDescriptor)
         {
+            generateFor = GenerateFor;
         }
 
         public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
         {
-            //if (numSamples == -1) numSamples = MaxVariableSizes.Min();
-            //Random rnd = new Random();
+            if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
+            Random rnd = new Random();
             //CandidatesIndices = new int[numSamples][];
-            //CandidateOutputs = new double[numSamples];
 
             //// the following is not correct - need to fix
             //// also what about the non-discrete variables and LHC?
@@ -33,7 +40,7 @@ namespace OptimizationToolbox
             //    f[i] = optMethod.calc_f(GetVariableVector(CandidatesIndices[i]), true);
 
             //return DateTime.Now.Ticks - start;
-           // candidates = new List<double[]>();
+            //candidates = new List<double[]>();
         }
     }
 }

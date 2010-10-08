@@ -4,27 +4,24 @@ using System.Xml.Serialization;
 
 namespace OptimizationToolbox
 {
-    public class DiscreteSpaceDescriptor
+    public class DesignSpaceDescription
     {
         #region Constructor
-        public DiscreteSpaceDescriptor() { }
-        public DiscreteSpaceDescriptor(IList<VariableDescriptor> VariableDescriptors)
+        public DesignSpaceDescription() { }
+        public DesignSpaceDescription(IEnumerable<VariableDescriptor> VariableDescriptors)
         {
-            n = VariableDescriptors.Count;
             this.VariableDescriptors = new List<VariableDescriptor>(VariableDescriptors);
+            UpdateCharacteristics();
         }
-        public DiscreteSpaceDescriptor(int n)
+        public DesignSpaceDescription(int n)
         {
-            this.n = n;
-            if (variableDescriptors == null)
-            {
-                variableDescriptors = new List<VariableDescriptor>(n);
-                for (int i = 0; i < n; i++) variableDescriptors.Add(new VariableDescriptor());
-            }
-            updateCharacteristics();
+            variableDescriptors = new List<VariableDescriptor>(n);
+            for (int i = 0; i < n; i++) variableDescriptors.Add(new VariableDescriptor());
+
+            UpdateCharacteristics();
         }
 
-        private void updateCharacteristics()
+        public void UpdateCharacteristics()
         {
             AllDiscrete = true;
             DiscreteVarIndices = new List<int>();
@@ -52,12 +49,13 @@ namespace OptimizationToolbox
         #endregion
 
         #region Properties
+
         /// <summary>
         /// Gets the number of dimensions, the length of x.
         /// </summary>
         /// <value>The n.</value>
         [XmlIgnore]
-        public int n { get; private set; }
+        public int n { get { return VariableDescriptors.Count; } }
 
         private List<VariableDescriptor> variableDescriptors;
         /// <summary>
@@ -70,14 +68,15 @@ namespace OptimizationToolbox
             set
             {
                 variableDescriptors = value;
-                updateCharacteristics();
+                UpdateCharacteristics();
             }
         }
         public VariableDescriptor this[int i]
         {
             get { return VariableDescriptors[i]; }
+            set { VariableDescriptors[i] = value; }
         }
-            /// <summary>
+        /// <summary>
         /// Gets a value indicating whether [all discrete].
         /// </summary>
         /// <value><c>true</c> if [all discrete]; otherwise, <c>false</c>.</value>

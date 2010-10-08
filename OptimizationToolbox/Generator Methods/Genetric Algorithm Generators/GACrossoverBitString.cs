@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
@@ -11,7 +12,7 @@ namespace OptimizationToolbox
         private readonly GABitByteHexLimits[] limits;
         private readonly long bitStringLength;
         private readonly Random rnd;
-        public GACrossoverBitString(DiscreteSpaceDescriptor discreteSpaceDescriptor, double crossoverRate = 1.7)
+        public GACrossoverBitString(DesignSpaceDescription discreteSpaceDescriptor, double crossoverRate = 1.7)
             : base(discreteSpaceDescriptor)
         {
             this.crossoverRate = crossoverRate;
@@ -30,9 +31,14 @@ namespace OptimizationToolbox
             var numNew = 0;
             while (numNew < targetPopNumber)
             {
-                var child1 = (double[])candidates[(numNew++) % candidates.Count].Value.Clone();
-                var child2 = (double[])candidates[(numNew++) % candidates.Count].Value.Clone();
-                for (int i = 0; i < bitStringLength; i++)
+                var parent1 = candidates[(numNew) % candidates.Count].Value;
+                var parent2 = candidates[(numNew+1) % candidates.Count].Value;
+                var child1 = (double[])parent1.Clone();
+                var child2 = (double[])parent2.Clone();
+                var ChangeMade = false;
+                for (int i = 1; i < bitStringLength; i++)
+                {
+                    ChangeMade = true;
                     if (rnd.NextDouble() < xRatePerBit)
                     {
                         int varIndex = GABitByteHexFunctions.FindVariableIndex(limits, i);
@@ -43,7 +49,7 @@ namespace OptimizationToolbox
                             var child1Tail = new double[tailLength];
                             Array.Copy(child1, varIndex + 1, child1Tail, 0, tailLength);
                             Array.Copy(child2, varIndex + 1, child1, varIndex + 1, tailLength);
-                            Array.Copy(child1Tail, 0, child1, varIndex + 1, tailLength);
+                            Array.Copy(child1Tail, 0, child2, varIndex + 1, tailLength);
                         }
                         var c1Value = VariableDescriptors[varIndex].PositionOf(child1[varIndex]);
                         var c1BitArray = GABitByteHexFunctions.Encode(c1Value,
@@ -54,13 +60,25 @@ namespace OptimizationToolbox
                                                                       limits[varIndex].EndIndex -
                                                                       limits[varIndex].StartIndex);
                         CrossoverBitString(c1BitArray, c2BitArray,
-                            i - limits[varIndex].StartIndex, limits[varIndex].MaxValue, out c1Value, out c2Value);
-                        child1[varIndex] = c2Value;
-                        child2[varIndex] = c1Value;
-                    }
-                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child1));
-                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child2));
+                                           i - limits[varIndex].StartIndex, limits[varIndex].MaxValue, out c1Value,
+                                           out c2Value);
+                        child1[varIndex] = VariableDescriptors[varIndex][c1Value];
+                        child2[varIndex] = VariableDescriptors[varIndex][c2Value];
 
+                        //if ((StarMath.norm1(child1, parent1) < 0.00000000001) ||
+                        //    (StarMath.norm1(child1, parent2) < 0.00000000001) ||
+                        //    (StarMath.norm1(child2, parent1) < 0.00000000001) ||
+                        //    (StarMath.norm1(child2, parent2) < 0.00000000001))
+                        //    SearchIO.output("good<+++")
+                        //else  SearchIO.output("good<+++");
+                    }
+                }
+                if (ChangeMade)
+                {
+                    numNew += 2;
+                    candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child1));
+                    candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child2));
+                }
             }
         }
 

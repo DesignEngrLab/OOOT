@@ -52,7 +52,7 @@ namespace OptimizationToolbox
              * minimizing). This makes newer items to the list appear before older items.
              * It is slightly more efficient than returning -1 and conforms with the 
              * philosophy of always exploring/preferring new concepts. See: SA's Metropolis Criteria. */
-            if (x <= y) return direction;
+            if (x < y) return direction;
             return -1 * direction;
         }
     }

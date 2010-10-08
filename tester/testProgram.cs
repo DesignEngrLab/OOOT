@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using StarMathLib;
 using OptimizationToolbox;
 
@@ -6,96 +7,125 @@ namespace testerNameSpace
 {
     partial class testProgram
     {
-        enum optMethodType { NelderMead, Powell, SQP, Default };
+
+
         static void Main(string[] args)
         {
-            ///SET METHOD TO TEST HERE-------------
-            optMethodType optMethod = optMethodType.Powell;
+            makeAndSaveProblemDefinition();
+            readInAndRunTest();
+        }
 
+        private static void makeAndSaveProblemDefinition()
+        {
+            var dsd = new DesignSpaceDescription(64);
+            for (int i = 0; i < 64; i++)
+                dsd[i] = new VariableDescriptor(-10000, 10000, 0.01);
+            var pd = new ProblemDefinition()
+            {
+                ConvergenceMethods = new List<abstractConvergence>()
+                                                      {
+            new MaxAgeConvergence(20, 0.000000001),
+            new MaxIterationsConvergence(500),
+            new MaxDistanceInPopulationConvergence(1)},
+                SpaceDescriptor = dsd
+
+            };
+            pd.saveProbToXml("../../testPD.xml");
+        }
+        /// <summary>
+        /// Mains the specified args.
+        /// </summary>
+        /// <param name="args">The args.</param>
+        static void readInAndRunTest()
+        {
             double[] xStar;
             double f;
             //SET TEST PROBLEM HERE----------------
             //These are unconstrained with a single minima of 0 at the origin, 
             //make sure to set  the penalty weight to zero
-            //ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test16variables.xml");
-            ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test64variables.xml");
+            ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test16variables.xml");
+            // ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test64variables.xml");
             //This is constrained 2-d problem
             //ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test1.xml");
 
             Console.WriteLine("setup...");
-            if (optMethod == optMethodType.Powell)
-            {
-                PowellsMethodOptimization opty = new PowellsMethodOptimization(1);
-                opty.Add(new MaxIterationsConvergence(100));
-                opty.Add(new DeltaFConvergence(0.00001));
-                opty.Add(new DeltaXConvergence(0.00001));
-
-                //opty.Add(new GoldenSection(opty, 0.001, 5, 100)); 
-                //opty.Add(new DSCPowell(0.0001, 5, 100));
-                opty.Add(new ArithmeticMean(0.00001, 5, 500));
-
-                opty.Add(new squaredExteriorPenalty(opty, 0 * Math.Pow(10, 5)));
-                //opty.Add(new linearExteriorPenalty(opty, 1.0));
-
-                opty.Add(pd);
-                SearchIO.verbosity = 5;
-                Console.WriteLine("run...");
-                //f = opty.run(pd.xStart, out xStar);
-                f = opty.Run(out xStar);
-            }
-            else if (optMethod == optMethodType.NelderMead)
-            {
-                NelderMead opty = new NelderMead();
-                //NelderMead opty = new NelderMead();
-                opty.Add(new MaxDistanceInPopulationConvergence(0.001));
-                opty.Add(new MaxAgeConvergence(2000000,0.000001));
-                opty.Add(new MaxIterationsConvergence(5000000));
-                // what is this for? System.Convert.ToInt32(Math.Pow(pd.xStart.GetLength(0), 1.15)), 1 * Math.Pow(10, -5));
-                opty.Add(new squaredExteriorPenalty(opty, 0 * Math.Pow(10, 5)));
-                //opty.Add(new linearExteriorPenalty(opty, 1.0));
-
-                opty.Add(pd);
-                SearchIO.verbosity = 10;
-                Console.WriteLine("run...");
-                //double f = opty.run(x0, out xStar);
-                f = opty.Run(out xStar);
-            }
-            else if (optMethod == optMethodType.SQP)
-            {
-                SequentialQuadraticProgramming opty = new SequentialQuadraticProgramming(true);
-                //opty.Add(new squaredExteriorPenalty(opty, 5 * Math.Pow(10, 5)));
-                //opty.Add(new linearExteriorPenalty(opty, 1.0));
-
-                opty.Add(new MaxIterationsConvergence(100));
-                opty.Add(new DeltaFConvergence(0.00001));
-                opty.Add(new DeltaXConvergence(0.00001));
-                opty.Add(pd);
-                SearchIO.verbosity = 5;
-                Console.WriteLine("run...");
-                //double f = opty.run(x0, out xStar);
-                f = opty.Run(out xStar);
-            }
-            else
-            {
-                GeneralizedReducedGradientActiveSet opty = new GeneralizedReducedGradientActiveSet(true);
-                //generalizedReducedGradientSlack opty = new generalizedReducedGradientSlack();
-                //GradientBasedUnconstrained opty = new GradientBasedUnconstrained(10);
-                opty.Add(new squaredExteriorPenalty(opty, 5 * Math.Pow(10, 5)));
-                //opty.Add(new linearExteriorPenalty(opty, 1.0));
-
-                opty.Add(pd);
-                SearchIO.verbosity = 5;
-                Console.WriteLine("run...");
-                //double f = opty.run(x0, out xStar);
-                f = opty.Run(out xStar);
-            }
-            //opty.Add(new SteepestDescent());
+            abstractOptMethod opty;
+            //opty = TestPowellsMethod(pd);
+            opty = TestNelderMeadsMethod(pd);
+            //opty = TestSQPMethod(pd);
+            //opty = TestGRGMethod(pd);
+            //opty = TestGeneticAlgorithm(pd);
+            opty.Add(new ToKnownBestConvergence(8, optimize.minimize));
+            f = opty.Run(out xStar);
+            Console.WriteLine("Convergence Declared by " + opty.ConvergenceDeclaredBy);
             Console.WriteLine("X* = " + StarMath.MakePrintString(xStar));
             Console.WriteLine("F* = " + f.ToString(), 1);
             Console.WriteLine("NumEvals = " + pd.f.numEvals);
 
             Console.ReadKey();
 
+        }
+
+        private static abstractOptMethod TestGeneticAlgorithm(ProblemDefinition pd)
+        {
+            SearchIO.verbosity = 5;
+            var opty = new GeneticAlgorithm();
+            opty.Add(pd);
+            opty.Add(new squaredExteriorPenalty(opty, 5));
+            opty.Add(new RandomSampling(pd.SpaceDescriptor));
+            opty.Add(new GAMutationBitString(pd.SpaceDescriptor));
+            opty.Add(new GACrossoverBitString(pd.SpaceDescriptor));
+            opty.Add(new RandomPairwiseCompare(optimize.minimize));
+            //opty.Add(new Elitism(optimize.minimize));
+
+            return opty;
+        }
+
+        private static abstractOptMethod TestGRGMethod(ProblemDefinition pd)
+        {
+            GeneralizedReducedGradientActiveSet opty = new GeneralizedReducedGradientActiveSet();
+            opty.Add(new squaredExteriorPenalty(opty, 10));
+            opty.Add(pd);
+
+            SearchIO.verbosity = 5;
+            Console.WriteLine("run...");
+
+            return opty;
+        }
+
+        private static abstractOptMethod TestSQPMethod(ProblemDefinition pd)
+        {
+            SequentialQuadraticProgramming opty = new SequentialQuadraticProgramming(true);
+            opty.Add(pd);
+
+            SearchIO.verbosity = 5;
+            Console.WriteLine("run...");
+
+            return opty;
+        }
+
+        private static abstractOptMethod TestNelderMeadsMethod(ProblemDefinition pd)
+        {
+            NelderMead opty = new NelderMead();
+            opty.Add(pd);
+            opty.Add(new squaredExteriorPenalty(opty, 10));
+
+            SearchIO.verbosity = 5;
+            Console.WriteLine("run...");
+            return opty;
+        }
+
+        private static abstractOptMethod TestPowellsMethod(ProblemDefinition pd)
+        {
+            PowellsMethodOptimization opty = new PowellsMethodOptimization();
+            opty.Add(pd);
+            opty.Add(new ArithmeticMean(0.00001, 5, 500));
+            opty.Add(new squaredExteriorPenalty(opty, 10));
+
+            SearchIO.verbosity = 5;
+            Console.WriteLine("run...");
+            //f = opty.run(pd.xStart, out xStar);
+            return opty;
         }
     }
 }

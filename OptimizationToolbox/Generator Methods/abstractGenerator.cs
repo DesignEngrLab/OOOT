@@ -6,7 +6,7 @@ namespace OptimizationToolbox
 {
     public abstract class abstractGenerator
     {
-        protected readonly DiscreteSpaceDescriptor discreteSpaceDescriptor;
+        protected readonly DesignSpaceDescription discreteSpaceDescriptor;
         protected int n { get { return discreteSpaceDescriptor.n; } }
         protected List<VariableDescriptor> VariableDescriptors { get { return discreteSpaceDescriptor.VariableDescriptors; } }
         protected List<int> DiscreteVarIndices { get { return discreteSpaceDescriptor.DiscreteVarIndices; } }
@@ -15,7 +15,7 @@ namespace OptimizationToolbox
         /// Initializes a new instance of the <see cref="abstractGenerator"/> class.
         /// </summary>
         /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
-        protected abstractGenerator(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        protected abstractGenerator(DesignSpaceDescription discreteSpaceDescriptor)
         {
             this.discreteSpaceDescriptor = discreteSpaceDescriptor;
         }
@@ -30,7 +30,7 @@ namespace OptimizationToolbox
 
     public abstract class SamplingGenerator : abstractGenerator
     {
-        protected SamplingGenerator(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        protected SamplingGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }
@@ -39,7 +39,7 @@ namespace OptimizationToolbox
 
     public abstract class GeneticCrossoverGenerator : abstractGenerator
     {
-        protected GeneticCrossoverGenerator(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        protected GeneticCrossoverGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }
@@ -47,7 +47,7 @@ namespace OptimizationToolbox
 
     public abstract class GeneticMutationGenerator : abstractGenerator
     {
-        protected GeneticMutationGenerator(DiscreteSpaceDescriptor discreteSpaceDescriptor)
+        protected GeneticMutationGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }
