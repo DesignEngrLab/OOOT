@@ -61,7 +61,7 @@ namespace OptimizationToolbox
             this.ToleranceForSame = ToleranceForSame;
         }
         #endregion
-        public override bool converged(int YInteger = -2147483648, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var k = YInteger;
             if (k < 0) throw new Exception("MultipleANDConvergenceConditions expected a positive value for the first argument, YInteger");

@@ -23,10 +23,20 @@ namespace OptimizationToolbox
         #region Constructor
         public GeneralizedReducedGradientSlack()
         {
-            this.InequalitiesConvertedToEqualities = true;
             this.iL_epsilon = this.epsilon = 0.0000001;
             feasibleOuterLoopMax = 5;
             feasibleInnerLoopMax = 500;
+
+            RequiresObjectiveFunction = true;
+            ConstraintsSolvedWithPenalties = false;
+            RequiresMeritFunction = false;
+            InequalitiesConvertedToEqualities = true;
+            RequiresSearchDirectionMethod = true;
+            RequiresLineSearchMethod = true;
+            RequiresAnInitialPoint = true;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = true;
+            RequiresDiscreteSpaceDescriptor = false;
         }
         #endregion
 

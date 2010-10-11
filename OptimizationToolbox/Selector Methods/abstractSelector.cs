@@ -36,8 +36,7 @@ namespace OptimizationToolbox
             candidates = candidates.OrderBy(a => r.NextDouble()).ToList();
         }
         protected Boolean betterThan(double x, double y)
-        {
-            return (1 != directionComparer.Compare(x, y));
-        }
+        { return directionComparer.BetterThan(x, y); }
+
     }
 }

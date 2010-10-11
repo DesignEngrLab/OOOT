@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using System.Linq;
 
 namespace OptimizationToolbox
 {
@@ -25,7 +26,6 @@ namespace OptimizationToolbox
         {
             AllDiscrete = true;
             DiscreteVarIndices = new List<int>();
-            CurrentIndices = new long[n];
             MaxVariableSizes = new long[n];
 
             for (var i = 0; i < n; i++)
@@ -95,12 +95,6 @@ namespace OptimizationToolbox
         [XmlIgnore]
         public long SizeOfSpace { get; private set; }
         /// <summary>
-        /// Gets the current indices.
-        /// </summary>
-        /// <value>The current indices.</value>
-        [XmlIgnore]
-        public long[] CurrentIndices { get; private set; }
-        /// <summary>
         /// Getsthe max variable sizes.
         /// </summary>
         /// <value>The max variable sizes.</value>
@@ -109,49 +103,39 @@ namespace OptimizationToolbox
         #endregion
 
         #region Getting Discrete Vectors with Indices
-        public double[] GetVariableVector(IList<int> Indices = null)
+        public double[] GetVariableVector(IList<long> Indices)
         {
-            if (Indices != null)
-            {
-                if (Indices.Count == n)
-                    for (var i = 0; i < n; i++)
-                        CurrentIndices[i] = Indices[i];
-                else if (Indices.Count == DiscreteVarIndices.Count)
-                {
-                    CurrentIndices = new long[n];
-                    foreach (var i in DiscreteVarIndices)
-                        CurrentIndices[i] = Indices[i];
-                }
-                else throw new Exception("Input Indices not of proper length.");
-            }
             var result = new double[n];
             for (var i = 0; i < n; i++)
-                result[i] = VariableDescriptors[i][CurrentIndices[i]];
+                result[i] = VariableDescriptors[i][Indices[i]];
             return result;
         }
 
-        private Boolean IncrementIndices(int IndicesIndex = 0)
+        public int[][] CreateNeighborChangeVectors()
         {
-            if (IndicesIndex == n) return false;
-            CurrentIndices[IndicesIndex]++;
-            if (CurrentIndices[IndicesIndex] >= MaxVariableSizes[IndicesIndex])
+            var result = new int[2*DiscreteVarIndices.Count][];
+            int k = 0;
+            foreach (var i in DiscreteVarIndices)
             {
-                CurrentIndices[IndicesIndex] = 0;
-                return IncrementIndices(IndicesIndex + 1);
+                var changeVector = new int[n];
+                changeVector[i] = -1;
+                result[k++]=changeVector;
+                changeVector = new int[n];
+                changeVector[i] = +1;
+                result[k++] = changeVector;
             }
-            else return true;
+            return result;
         }
 
-        private Boolean DecrementIndices(int IndicesIndex = 0)
+        public List<int> FindValidChanges(double[] candidate, int[][] changeVectors)
         {
-            if (IndicesIndex == n) return false;
-            CurrentIndices[IndicesIndex]--;
-            if (CurrentIndices[IndicesIndex] < 0)
-            {
-                CurrentIndices[IndicesIndex] = MaxVariableSizes[IndicesIndex] - 1;
-                return DecrementIndices(IndicesIndex + 1);
-            }
-            else return true;
+            var result = Enumerable.Range(0, changeVectors.GetLength(0)).ToList();
+            for (int i = 0; i < n; i++)
+                if (candidate[i] == VariableDescriptors[i].LowerBound)
+                    result.RemoveAll(a =>changeVectors[a][i] < 0);
+                else if (candidate[i] == VariableDescriptors[i].UpperBound)
+                    result.RemoveAll(a => changeVectors[a][i] > 0);
+            return result;
         }
         #endregion
     }

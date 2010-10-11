@@ -28,34 +28,7 @@ namespace OptimizationToolbox
 
     /* Enumerator for Search functions that have generality 
      * to either minimize or maximize (e.g. PNPPS, stochasticChoose). */
-    public enum optimize { minimize = -1, maximize = 1 };
-
-    public class optimizeSort : IComparer<double>
-    {
-        /* an internal integer equal to the required sort direction. */
-        private readonly int direction;
-        private readonly Boolean AllowEqualInSort;
-        /* if using with SortedList, set AllowEqualInSorting to false, otherwise
-         * it will crash when equal values are encountered. If using in Linq's 
-         * OrderBy then the equal is need (AllowEqualInSorting = true) otherwise
-         * the program will hang. */
-        public optimizeSort(optimize direction, Boolean AllowEqualInSort = false)
-        {
-            this.direction = (int)direction;
-            this.AllowEqualInSort = AllowEqualInSort;
-        }
-        public int Compare(double x, double y)
-        {
-            if (AllowEqualInSort && (x == y)) return 0;
-            /* in order to avoid the collections from throwing an error, we make sure
-             * that only -1 or 1 is returned. If they are equal, we return +1 (when
-             * minimizing). This makes newer items to the list appear before older items.
-             * It is slightly more efficient than returning -1 and conforms with the 
-             * philosophy of always exploring/preferring new concepts. See: SA's Metropolis Criteria. */
-            if (x < y) return direction;
-            return -1 * direction;
-        }
-    }
+    public enum optimize { minimize = -1, neither = 0, maximize = 1 };
 
     /* This enumerator is used primarily by the parameter tuning where suboptimization
      * functions (that derive from the Optimization Toolbox's abstractOptFunction) need

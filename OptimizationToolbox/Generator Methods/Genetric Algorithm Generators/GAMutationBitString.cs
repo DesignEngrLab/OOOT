@@ -19,7 +19,7 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
+        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
         {
             for (int i = candidates.Count-1; i >= 0; i--)
             {

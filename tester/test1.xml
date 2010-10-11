@@ -8,38 +8,30 @@
         <LowerBound>-10000</LowerBound>
         <UpperBound>10000</UpperBound>
         <Delta>0.01</Delta>
-        <Size>2000001</Size>
       </VariableDescriptor>
       <VariableDescriptor>
         <LowerBound>-10000</LowerBound>
         <UpperBound>10000</UpperBound>
         <Delta>0.01</Delta>
-        <Size>2000001</Size>
       </VariableDescriptor>
     </VariableDescriptors>
   </SpaceDescriptor>
- <!--  <ConvergenceMethods>
+  <ConvergenceMethods>
     <abstractConvergence xsi:type="ToKnownBestConvergence">
-      <toleranceForSame>1E-09</toleranceForSame>
-      <xBest>
-        <double>1500</double>
-        <double>700</double>
-      </xBest>
+      <fBest>8.5</fBest>
+      <direction>minimize</direction>
     </abstractConvergence>
    <abstractConvergence xsi:type="MaxAgeConvergence">
       <toleranceForSame>1E-09</toleranceForSame>
       <maxAge>200</maxAge>
     </abstractConvergence>
     <abstractConvergence xsi:type="MaxIterationsConvergence">
-      <maxIterations>500</maxIterations>
-    </abstractConvergence>
-    <abstractConvergence xsi:type="DeltaXConvergence">
-      <minDifference>0.00001</minDifference>
+      <maxIterations>5000000</maxIterations>
     </abstractConvergence>
    <abstractConvergence xsi:type="MaxDistanceInPopulationConvergence">
       <MinimumSideLength>0.00001</MinimumSideLength>
     </abstractConvergence>
-  </ConvergenceMethods>-->
+  </ConvergenceMethods>
   <xStart>
     <double>1500</double>
     <double>700</double>

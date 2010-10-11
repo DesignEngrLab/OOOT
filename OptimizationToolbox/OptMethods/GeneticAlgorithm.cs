@@ -16,14 +16,19 @@ namespace OptimizationToolbox
         #endregion
 
         #region Constructor
-        public GeneticAlgorithm(int populationSize = 100, optimize direction = optimize.minimize)
+        public GeneticAlgorithm(int populationSize = 100)
         {
-            this.spaceDescriptor = spaceDescriptor;
             this.populationSize = populationSize;
+
+            RequiresObjectiveFunction = true;
             ConstraintsSolvedWithPenalties = true;
+            RequiresMeritFunction = true;
+            InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;
             RequiresAnInitialPoint = false;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = true;
         }
         #endregion
@@ -47,7 +52,7 @@ namespace OptimizationToolbox
             /* 1. make initial population and evaluate
              *    to ensure diversity, a latin hyper cube with Hammersley could be used.*/
             SearchIO.output("creating initial population", 4);
-            initGenerator.generateCandidates(ref population, populationSize);
+            initGenerator.GenerateCandidates(ref population, populationSize);
             SearchIO.output("evaluating initial population", 4);
             evaluate(population);
 
@@ -61,10 +66,10 @@ namespace OptimizationToolbox
                 fitnessSelector.selectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
                 SearchIO.output("generating new candidates (current pop = " + population.Count + ").", 4);
-                crossoverGenerator.generateCandidates(ref population, populationSize);
+                crossoverGenerator.GenerateCandidates(ref population, populationSize);
                 /* 5. generate modifications to all with mutation */
                 SearchIO.output("performing mutation (current pop = " + population.Count + ").", 4);
-                mutationGenerator.generateCandidates(ref population);
+                mutationGenerator.GenerateCandidates(ref population);
                 /* 6. evaluate new members of population.*/
                 SearchIO.output("evaluating new popluation members.", 4);
                 evaluate(population);

@@ -19,7 +19,12 @@ namespace OptimizationToolbox
         {
             this.discreteSpaceDescriptor = discreteSpaceDescriptor;
         }
-        public abstract void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1);
+
+        public virtual void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
+        { throw new NotImplementedException("An override of GenerateOneCandidate (which takes a list of KeyValuePairs) was not created in class, " + this.GetType()); }
+        public virtual List<double[]> GenerateCandidates(double[] candidate, int control = -1)
+        { throw new NotImplementedException("An override of GenerateCandidates (which takes a single  candidate's double array and return a list of candidates)"+
+            " was not created in class, " + this.GetType()); }
     }
 
 

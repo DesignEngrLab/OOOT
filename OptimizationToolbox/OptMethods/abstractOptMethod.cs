@@ -29,14 +29,19 @@ namespace OptimizationToolbox
         public List<abstractConvergence> ConvergenceMethods = new List<abstractConvergence>();
         protected DesignSpaceDescription spaceDescriptor;
 
-        protected Boolean ObjectiveFunctionNeeded = true;
-        protected Boolean ConstraintsSolvedWithPenalties = false;
-        protected Boolean InequalitiesConvertedToEqualities = false;
-        protected Boolean RequiresSearchDirectionMethod = true;
-        protected Boolean RequiresLineSearchMethod = true;
-        protected Boolean RequiresAnInitialPoint = true;
-        protected Boolean RequiresFeasibleStartPoint = false;
-        protected Boolean RequiresDiscreteSpaceDescriptor = false;
+        /* The following Booleans should be set in the constructor of every optimization method. 
+         * Even if it seems redundant to do so, it is better to have them clearly indicated for each
+         * method. */
+        protected Boolean RequiresObjectiveFunction;
+        protected Boolean ConstraintsSolvedWithPenalties;
+        protected Boolean RequiresMeritFunction;
+        protected Boolean InequalitiesConvertedToEqualities;
+        protected Boolean RequiresSearchDirectionMethod;
+        protected Boolean RequiresLineSearchMethod;
+        protected Boolean RequiresAnInitialPoint;
+        protected Boolean RequiresConvergenceCriteria;
+        protected Boolean RequiresFeasibleStartPoint;
+        protected Boolean RequiresDiscreteSpaceDescriptor;
         protected double[] xStart;
         protected double[] x;
         protected int feasibleOuterLoopMax;
@@ -73,7 +78,7 @@ namespace OptimizationToolbox
                 xStart = (double[])function;
             else if (typeof(DesignSpaceDescription).IsInstanceOfType(function))
             {
-                spaceDescriptor = (DesignSpaceDescription) function;
+                spaceDescriptor = (DesignSpaceDescription)function;
                 n = spaceDescriptor.n;
             }
             else throw (new Exception("Function, " + function.ToString() + ", not of known type (needs "
@@ -110,7 +115,7 @@ namespace OptimizationToolbox
             // k = 0 --> iteration counter
             k = 0;
 
-            if (ObjectiveFunctionNeeded && (objfn == null))
+            if (RequiresObjectiveFunction && (objfn == null))
             {
                 SearchIO.output("No objective function specified.", 0);
                 return fStar;
@@ -126,12 +131,12 @@ namespace OptimizationToolbox
                 SearchIO.output("No line search method specified.", 0);
                 return fStar;
             }
-            if (ConvergenceMethods.Count == 0)
+            if (RequiresConvergenceCriteria && ConvergenceMethods.Count == 0)
             {
                 SearchIO.output("No convergence method specified.", 0);
                 return fStar;
             }
-            if (meritFunction == null)
+            if (RequiresMeritFunction && meritFunction == null)
             {
                 SearchIO.output("No merit function specified.", 0);
                 return fStar;
@@ -165,7 +170,7 @@ namespace OptimizationToolbox
                     for (int i = 0; i < n; i++)
                         x[i] = 100.0 * randy.NextDouble();
                 }
-                if (RequiresFeasibleStartPoint && !feasible())
+                if (RequiresFeasibleStartPoint && !feasible(x))
                     if (!findFeasibleStartPoint()) return fStar;
             }
             p = h.Count;
@@ -202,6 +207,11 @@ namespace OptimizationToolbox
 
             return run(out xStar);
         }
+
+
+        protected abstract double run(out double[] xStar);
+
+
         private Boolean findFeasibleStartPoint()
         {
             double average = StarMath.norm1(x) / x.GetLength(0);
@@ -218,19 +228,24 @@ namespace OptimizationToolbox
                     // gradA = calc_h_gradient(x, varsToChange);
                     // invGradH = StarMath.inverse(gradA);
                     //x = StarMath.subtract(x, StarMath.multiply(invGradH, calc_h_vector(x)));
-                    if (feasible()) return true;
+                    if (feasible(x)) return true;
                 }
                 for (int i = 0; i < n; i++)
                     x[i] += 2 * average * (randNum.NextDouble() - 0.5);
 
                 //gradA = calc_h_gradient(x);
                 //invGradH = StarMath.inverse(gradA);
-                if (feasible()) return true;
+                if (feasible(x)) return true;
             }
             return false;
         }
 
-        private Boolean feasible()
+
+
+        #endregion
+
+        #region Calculate f, g, h helper functions
+        protected Boolean feasible(double[] x)
         {
             foreach (equality a in h)
                 if (!a.feasible(x)) return false;
@@ -238,12 +253,6 @@ namespace OptimizationToolbox
                 if (!a.feasible(x)) return false;
             return true;
         }
-
-
-        protected abstract double run(out double[] xStar);
-        #endregion
-
-        #region Calculate f, g, h helper functions
         protected double[] calc_h_vector(double[] x)
         {
             double[] vals = new double[p];
@@ -366,8 +375,8 @@ namespace OptimizationToolbox
                 foreach (equality hNew in pd.h)
                     Add(hNew);
             if (pd.f != null) Add(pd.f);
-            if (pd.ConvergenceMethods != null) 
-                foreach (var cM in pd.ConvergenceMethods) 
+            if (pd.ConvergenceMethods != null)
+                foreach (var cM in pd.ConvergenceMethods)
                     Add(cM);
             if ((pd.tolerance > double.Epsilon) && (pd.tolerance < double.PositiveInfinity))
                 this.epsilon = pd.tolerance;
@@ -409,7 +418,7 @@ namespace OptimizationToolbox
         #endregion
 
         #region Convergence Main Function
-        public string ConvergenceDeclaredBy { get { return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0,20); } }
+        public string ConvergenceDeclaredBy { get { return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0, 20); } }
         private int indexConverged;
         protected Boolean notConverged(int YInteger = int.MinValue, double YDouble = double.NaN,
                IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)

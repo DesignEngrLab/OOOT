@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OptimizationToolbox</RootNamespace>
     <AssemblyName>OptimizationToolbox</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -41,9 +41,10 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath, Version=1.0.0.0, Culture=neutral, processorArchitecture=AMD64">
+    <Reference Include="StarMath, Version=1.0.10.901, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>StarMath (compiled)\StarMath.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -60,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Convergence Classes\ToKnownBestConvergence.cs" />
+    <Compile Include="Generator Methods\RandomNeighborGenerator.cs" />
+    <Compile Include="optimizeSort.cs" />
     <Compile Include="Generator Methods\abstractGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -75,13 +78,17 @@
     <Compile Include="Generator Methods\ParticleSwarm.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Generator Methods\ExhaustiveNeighborGenerator.cs" />
     <Compile Include="Generator Methods\RandomSampling.cs" />
-    <Compile Include="Generator Methods\SAPerturbation.cs">
+    <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptMethods\ExhaustiveSearch.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="OptMethods\PowellsMethodOptimization.cs" />
+    <Compile Include="OptMethods\HillClimbing.cs" />
     <Compile Include="Selector Methods\abstractSelector.cs" />
+    <Compile Include="Selector Methods\Elitism.cs" />
     <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
     <Compile Include="VariableDescriptor.cs" />
     <Compile Include="Convergence Classes\abstractConvergenceClasses.cs" />
@@ -119,7 +126,7 @@
     <Compile Include="ProblemDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Selector Methods\Tournament.cs" />
-    <Compile Include="Selector Methods\Elitism.cs" />
+    <Compile Include="Selector Methods\KeepSingleBest.cs" />
     <Compile Include="Selector Methods\MetropolisCriteria.cs" />
     <Compile Include="SearchDirection\abstractSearchDirection.cs" />
     <Compile Include="SearchDirection\BFGSDirection.cs" />

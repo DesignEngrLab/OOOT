@@ -20,7 +20,16 @@ namespace OptimizationToolbox
         #region Constructor
         public GradientBasedOptimization()
         {
-            this.ConstraintsSolvedWithPenalties = true;
+            RequiresObjectiveFunction = true;
+            ConstraintsSolvedWithPenalties = true;
+            RequiresMeritFunction = true;
+            InequalitiesConvertedToEqualities = false;
+            RequiresSearchDirectionMethod = true;
+            RequiresLineSearchMethod = true;
+            RequiresAnInitialPoint = true;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = false;
+            RequiresDiscreteSpaceDescriptor = false;
         }
         #endregion
 

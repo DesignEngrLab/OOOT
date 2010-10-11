@@ -56,6 +56,18 @@ namespace OptimizationToolbox
             Add(new ArithmeticMean(epsilon, 1, 100));
             lineSearchMethod.SetOptimizationDetails(this);
             Add(new FletcherReevesDirection());
+
+
+            RequiresObjectiveFunction = true;
+            ConstraintsSolvedWithPenalties = false;
+            RequiresMeritFunction = false;
+            InequalitiesConvertedToEqualities = false;
+            RequiresSearchDirectionMethod = true;
+            RequiresLineSearchMethod = true;
+            RequiresAnInitialPoint = true;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = true;
+            RequiresDiscreteSpaceDescriptor = false;
         }
         #endregion
 

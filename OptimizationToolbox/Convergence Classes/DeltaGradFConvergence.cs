@@ -12,7 +12,7 @@ namespace OptimizationToolbox
         {
             this.minDifference = minDifference;
         }
-        public override bool converged(int YInteger = -2147483648, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var gradf = YDoubleArray2;
             if (gradf == null)

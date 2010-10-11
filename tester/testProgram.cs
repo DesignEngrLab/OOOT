@@ -11,7 +11,7 @@ namespace testerNameSpace
 
         static void Main(string[] args)
         {
-            makeAndSaveProblemDefinition();
+           // makeAndSaveProblemDefinition();
             readInAndRunTest();
         }
 
@@ -43,19 +43,21 @@ namespace testerNameSpace
             //SET TEST PROBLEM HERE----------------
             //These are unconstrained with a single minima of 0 at the origin, 
             //make sure to set  the penalty weight to zero
-            ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test16variables.xml");
+           // ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test16variables.xml");
             // ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test64variables.xml");
             //This is constrained 2-d problem
-            //ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test1.xml");
+           ProblemDefinition pd = ProblemDefinition.openprobFromXml("../../test1.xml");
 
             Console.WriteLine("setup...");
             abstractOptMethod opty;
             //opty = TestPowellsMethod(pd);
-            opty = TestNelderMeadsMethod(pd);
+            //opty = TestNelderMeadsMethod(pd);
             //opty = TestSQPMethod(pd);
             //opty = TestGRGMethod(pd);
-            //opty = TestGeneticAlgorithm(pd);
-            opty.Add(new ToKnownBestConvergence(8, optimize.minimize));
+            // opty = TestGeneticAlgorithm(pd);
+           // opty = TestRHC(pd);
+            //opty = TestXHC(pd);
+            opty = TextExhaustiveSearch(pd);
             f = opty.Run(out xStar);
             Console.WriteLine("Convergence Declared by " + opty.ConvergenceDeclaredBy);
             Console.WriteLine("X* = " + StarMath.MakePrintString(xStar));
@@ -73,10 +75,10 @@ namespace testerNameSpace
             opty.Add(pd);
             opty.Add(new squaredExteriorPenalty(opty, 5));
             opty.Add(new RandomSampling(pd.SpaceDescriptor));
-            opty.Add(new GAMutationBitString(pd.SpaceDescriptor));
+            opty.Add(new GAMutationBitString(pd.SpaceDescriptor,0.4));
             opty.Add(new GACrossoverBitString(pd.SpaceDescriptor));
             opty.Add(new RandomPairwiseCompare(optimize.minimize));
-            //opty.Add(new Elitism(optimize.minimize));
+          //  opty.Add(new Elitism(optimize.minimize));
 
             return opty;
         }
@@ -86,6 +88,7 @@ namespace testerNameSpace
             GeneralizedReducedGradientActiveSet opty = new GeneralizedReducedGradientActiveSet();
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(pd);
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
 
             SearchIO.verbosity = 5;
             Console.WriteLine("run...");
@@ -97,6 +100,7 @@ namespace testerNameSpace
         {
             SequentialQuadraticProgramming opty = new SequentialQuadraticProgramming(true);
             opty.Add(pd);
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
 
             SearchIO.verbosity = 5;
             Console.WriteLine("run...");
@@ -121,11 +125,49 @@ namespace testerNameSpace
             opty.Add(pd);
             opty.Add(new ArithmeticMean(0.00001, 5, 500));
             opty.Add(new squaredExteriorPenalty(opty, 10));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
 
             SearchIO.verbosity = 5;
             Console.WriteLine("run...");
             //f = opty.run(pd.xStart, out xStar);
             return opty;
         }
+
+        private static abstractOptMethod TestRHC(ProblemDefinition pd)
+        {
+            var opty = new HillClimbing();
+            opty.Add(pd);
+            opty.Add(new squaredExteriorPenalty(opty, 10));
+            opty.Add(new RandomNeighborGenerator(pd.SpaceDescriptor));
+            opty.Add(new KeepSingleBest(optimize.minimize));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            SearchIO.verbosity = 5;
+            Console.WriteLine("run...");
+            //f = opty.run(pd.xStart, out xStar);
+            return opty;
+        }
+
+
+        private static abstractOptMethod TestXHC(ProblemDefinition pd)
+        {
+            var opty = new HillClimbing();
+            opty.Add(pd);
+            opty.Add(new squaredExteriorPenalty(opty, 10));
+            opty.Add(new ExhaustiveNeighborGenerator(pd.SpaceDescriptor));
+            opty.Add(new KeepSingleBest(optimize.minimize));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            SearchIO.verbosity = 5;
+            Console.WriteLine("run...");
+            //f = opty.run(pd.xStart, out xStar);
+            return opty;
+        }
+        private static abstractOptMethod TextExhaustiveSearch(ProblemDefinition pd)
+        {
+            var opty = new ExhaustiveSearch(pd.SpaceDescriptor, optimize.minimize);
+            opty.Add(pd);
+            opty.ConvergenceMethods.Clear();
+            return opty;
+        }
+
     }
 }

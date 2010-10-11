@@ -20,7 +20,7 @@ namespace OptimizationToolbox
             generateFor = GenerateFor;
         }
 
-        public override void generateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
+        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
             Random rnd = new Random();
