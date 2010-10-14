@@ -1,5 +1,27 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using StarMathLib;
 
 namespace OptimizationToolbox
@@ -9,47 +31,54 @@ namespace OptimizationToolbox
         #region Fields
         /* I usually object to such simple names for variables, but this 
          * follows the convention used in my course - ME392C at UT Austin. */
-        protected int n; /* the total number of design variables - the length of x. */
-        protected int m; /* the number of active constraints. */
-        protected int p; /* the number of equality constraints - length of h. */
-        protected int q; /* the number of inequality constraints - length of g. */
-        protected int k; /* the iteration counter. */
-        protected objectiveFunction objfn;
-        protected double fStar = double.PositiveInfinity; /*fStar is the optimum that is returned at the end of run. */
+        public int n { get; protected set; } /* the total number of design variables - the length of x. */
+        public int m { get; protected set; }  /* the number of active constraints. */
+        public int p { get; protected set; }  /* the number of equality constraints - length of h. */
+        public int q { get; protected set; }  /* the number of inequality constraints - length of g. */
+        public int k { get; protected set; }  /* the iteration counter. */
+        public objectiveFunction objfn { get; protected set; }
+        public double fStar { get; protected set; }  /*fStar is the optimum that is returned at the end of run. */
         /* 'active' is the set of Active Constraints. For simplicity all equality constraints 
          * are assumed to be active, and any additional g's that come and go in this active
          * set strategy. More importantly we want the gradient of A which is a m by n matrix. 
          * m is the # of active constraints and n is the # of variables. */
-        protected List<constraint> active = new List<constraint>();
-        public List<constraint> h = new List<constraint>();
-        public List<constraint> g = new List<constraint>();
-        protected abstractSearchDirection searchDirMethod;
-        protected abstractLineSearch lineSearchMethod;
-        protected abstractMeritFunction meritFunction;
-        public List<abstractConvergence> ConvergenceMethods = new List<abstractConvergence>();
-        protected DesignSpaceDescription spaceDescriptor;
+        public List<constraint> active { get; protected set; } 
+        public List<constraint> h { get; protected set; } 
+        public List<constraint> g { get; protected set; }
+        public abstractSearchDirection searchDirMethod { get; protected set; }
+        public abstractLineSearch lineSearchMethod { get; protected set; }
+        public abstractMeritFunction meritFunction { get; protected set; }
+        public List<abstractConvergence> ConvergenceMethods { get; protected set; } 
+        public DesignSpaceDescription spaceDescriptor { get; protected set; }
 
         /* The following Booleans should be set in the constructor of every optimization method. 
          * Even if it seems redundant to do so, it is better to have them clearly indicated for each
          * method. */
-        protected Boolean RequiresObjectiveFunction;
-        protected Boolean ConstraintsSolvedWithPenalties;
-        protected Boolean RequiresMeritFunction;
-        protected Boolean InequalitiesConvertedToEqualities;
-        protected Boolean RequiresSearchDirectionMethod;
-        protected Boolean RequiresLineSearchMethod;
-        protected Boolean RequiresAnInitialPoint;
-        protected Boolean RequiresConvergenceCriteria;
-        protected Boolean RequiresFeasibleStartPoint;
-        protected Boolean RequiresDiscreteSpaceDescriptor;
-        protected double[] xStart;
-        protected double[] x;
-        protected int feasibleOuterLoopMax;
-        protected int feasibleInnerLoopMax;
-        protected double epsilon;
+        public Boolean RequiresObjectiveFunction { get; protected set; }
+        public Boolean ConstraintsSolvedWithPenalties { get; protected set; }
+        public Boolean RequiresMeritFunction { get; protected set; }
+        public Boolean InequalitiesConvertedToEqualities { get; protected set; }
+        public Boolean RequiresSearchDirectionMethod { get; protected set; }
+        public Boolean RequiresLineSearchMethod { get; protected set; }
+        public Boolean RequiresAnInitialPoint { get; protected set; }
+        public Boolean RequiresConvergenceCriteria { get; protected set; }
+        public Boolean RequiresFeasibleStartPoint { get; protected set; }
+        public Boolean RequiresDiscreteSpaceDescriptor { get; protected set; }
+        public double[] xStart { get; protected set; }
+        public double[] x { get; protected set; }
+        public int feasibleOuterLoopMax { get; protected set; }
+        public int feasibleInnerLoopMax { get; protected set; }
         #endregion
 
-        #region Set-up function, Add. */
+        #region Set-up function, Add. 
+        protected abstractOptMethod()
+        {
+            g = new List<constraint>();
+            h = new List<constraint>();
+            active = new List<constraint>();
+            ConvergenceMethods = new List<abstractConvergence>();
+            fStar = double.PositiveInfinity;
+        }
         public virtual void Add(object function)
         {
             if (typeof(ProblemDefinition).IsInstanceOfType(function))
@@ -115,6 +144,12 @@ namespace OptimizationToolbox
             // k = 0 --> iteration counter
             k = 0;
 
+            if (n != spaceDescriptor.n)
+            {
+                SearchIO.output("Differing number of variables specified. From space description = " + spaceDescriptor.n
+                    + ", from x initial = " + n, 0);
+                return fStar;
+            }
             if (RequiresObjectiveFunction && (objfn == null))
             {
                 SearchIO.output("No objective function specified.", 0);
@@ -186,7 +221,7 @@ namespace OptimizationToolbox
                 {
                     double sSquared = g[i - n].calculate(x);
                     if (sSquared < 0) xnew[i] = Math.Sqrt(-sSquared);
-                    else xnew[i] = epsilon;
+                    else xnew[i] = 0;
                     h.Add(new slackSquaredEqualityFromInequality(g[i - n], i));
                 }
                 x = xnew;
@@ -198,10 +233,10 @@ namespace OptimizationToolbox
             {
                 if (n == m)
                     SearchIO.output("There are as many equality constraints as design variables " +
-                        "(m = size). Consider another approach. Optimization is not needed.");
+                        "(m = size). Consider another approach. Optimization is not needed.",0);
                 else
                     SearchIO.output("There are more equality constraints than design variables " +
-                        "(m > size). Therefore the problem is overconstrained.");
+                        "(m > size). Therefore the problem is overconstrained.",0);
                 return fStar;
             }
 
@@ -245,17 +280,33 @@ namespace OptimizationToolbox
         #endregion
 
         #region Calculate f, g, h helper functions
-        protected Boolean feasible(double[] x)
+        public double calc_f(double[] point, Boolean includeMeritPenalty = false)
         {
-            foreach (equality a in h)
-                if (!a.feasible(x)) return false;
-            foreach (inequality a in g)
-                if (!a.feasible(x)) return false;
-            return true;
+            if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
+                return objfn.calculate(point) + meritFunction.calcPenalty(point);
+            return objfn.calculate(point);
+        }
+
+        public double[] calc_f_gradient(double[] point, Boolean includeMeritPenalty = false)
+        {
+            var grad = new double[n];
+            for (int i = 0; i != n; i++)
+                grad[i] = objfn.deriv_wrt_xi(point, i);
+            if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
+                return StarMath.add(grad, meritFunction.calcGradientOfPenalty(point));
+            return grad;
+        }
+
+        protected Boolean feasible(double[] point)
+        {
+            if (h.Cast<equality>().Any(a => !a.feasible(point)))
+                return false;
+
+            return g.Cast<inequality>().All(a => a.feasible(point));
         }
         protected double[] calc_h_vector(double[] x)
         {
-            double[] vals = new double[p];
+            var vals = new double[p];
             for (int i = 0; i != p; i++)
                 vals[i] = h[i].calculate(x);
             return vals;
@@ -343,26 +394,6 @@ namespace OptimizationToolbox
             return vals;
         }
 
-        public double[] calc_f_gradient(double[] x)
-        { return calc_f_gradient(x, false); }
-        public double[] calc_f_gradient(double[] x, Boolean includeMeritPenalty)
-        {
-            double[] grad = new double[n];
-            for (int i = 0; i != n; i++)
-                grad[i] = objfn.deriv_wrt_xi(x, i);
-            if (this.ConstraintsSolvedWithPenalties || includeMeritPenalty)
-                return StarMath.add(grad, meritFunction.calcGradientOfPenalty(x));
-            else return grad;
-        }
-
-        public double calc_f(double[] point)
-        { return calc_f(point, false); }
-        public double calc_f(double[] point, Boolean includeMeritPenalty)
-        {
-            if (this.ConstraintsSolvedWithPenalties || includeMeritPenalty)
-                return objfn.calculate(point) + meritFunction.calcPenalty(point);
-            else return objfn.calculate(point);
-        }
         #endregion
 
         #region from/to Problem Definition
@@ -378,8 +409,6 @@ namespace OptimizationToolbox
             if (pd.ConvergenceMethods != null)
                 foreach (var cM in pd.ConvergenceMethods)
                     Add(cM);
-            if ((pd.tolerance > double.Epsilon) && (pd.tolerance < double.PositiveInfinity))
-                this.epsilon = pd.tolerance;
             if (pd.SpaceDescriptor != null) Add(pd.SpaceDescriptor);
             if ((pd.xStart != null) && (pd.xStart.GetLength(0) > 0))
             {
@@ -411,14 +440,21 @@ namespace OptimizationToolbox
             pd.h = new List<equality>();
             foreach (equality eq in h)
                 pd.h.Add(eq);
-            pd.tolerance = this.epsilon;
             pd.xStart = this.xStart;
             return pd;
         }
         #endregion
 
         #region Convergence Main Function
-        public string ConvergenceDeclaredBy { get { return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0, 20); } }
+        public string ConvergenceDeclaredBy
+        {
+            get
+            {
+                if (ConvergenceMethods.Count > 0)
+                    return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0, 20);
+                else return "";
+            }
+        }
         private int indexConverged;
         protected Boolean notConverged(int YInteger = int.MinValue, double YDouble = double.NaN,
                IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)

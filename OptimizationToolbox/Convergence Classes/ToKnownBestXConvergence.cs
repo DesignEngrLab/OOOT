@@ -21,24 +21,32 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public class MaxIterationsConvergence : abstractConvergence
+    public class ToKnownBestXConvergence : abstractConvergence
     {
-        public long maxIterations { get; set; }
+        public double minDifference { get; set; }
+        double[] xBest { get; set; }
 
 
-        public MaxIterationsConvergence() { }
-
-        public MaxIterationsConvergence(long maxIterations)
+        #region Constructor
+        public ToKnownBestXConvergence(){}
+        public ToKnownBestXConvergence(double[] xBest, double minDifference)
         {
-            this.maxIterations = maxIterations;
+            this.xBest = (double[]) xBest.Clone();
+            this.minDifference = minDifference;
         }
-        public override bool converged(long k = -1, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        #endregion
+
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
-            if (k < 0) throw new Exception("MaxIterationsConvergence expected a positive value for the first argument, YInteger");
-            return (k >= maxIterations);
+            var x = YDoubleArray1;
+            if (x == null)
+                throw new Exception("DeltaXConvergence expected a 1-D array of doubles (in the third argument, YDoubleArray1) "
+                    + " representing the current decision vector, x.");
+            return (StarMath.norm1(x, xBest) <= minDifference);
         }
     }
 }

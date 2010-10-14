@@ -1,20 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <tolerance>0</tolerance>
   <SpaceDescriptor>
     <VariableDescriptors>
-      <VariableDescriptor>
-        <LowerBound>-10000</LowerBound>
-        <UpperBound>10000</UpperBound>
-        <Delta>0.01</Delta>
-        <Size>2000001</Size>
-      </VariableDescriptor>
-      <VariableDescriptor>
-        <LowerBound>-10000</LowerBound>
-        <UpperBound>10000</UpperBound>
-        <Delta>0.01</Delta>
-        <Size>2000001</Size>
-      </VariableDescriptor>
       <VariableDescriptor>
         <LowerBound>-10000</LowerBound>
         <UpperBound>10000</UpperBound>
@@ -151,11 +138,20 @@
       <string>x16^2</string>
     </Terms>
   </f>
-  <convergeMethod xsi:type="convergenceBasic">
-    <kmax>2147483647</kmax>
-    <maxAge>2147483647</maxAge>
-    <deltaX>0.0001</deltaX>
-    <deltaF>0</deltaF>
-    <deltaGradF>0</deltaGradF>
-  </convergeMethod>
+  <ConvergenceMethods>
+    <abstractConvergence xsi:type="ToKnownBestConvergence">
+      <fBest>0.5</fBest>
+      <direction>minimize</direction>
+    </abstractConvergence>
+    <abstractConvergence xsi:type="MaxAgeConvergence">
+      <toleranceForSame>1E-09</toleranceForSame>
+      <maxAge>200</maxAge>
+    </abstractConvergence>
+    <abstractConvergence xsi:type="MaxIterationsConvergence">
+      <maxIterations>5000000</maxIterations>
+    </abstractConvergence>
+    <abstractConvergence xsi:type="MaxDistanceInPopulationConvergence">
+      <MinimumSideLength>0.00001</MinimumSideLength>
+    </abstractConvergence>
+  </ConvergenceMethods>
 </ProblemDefinition>

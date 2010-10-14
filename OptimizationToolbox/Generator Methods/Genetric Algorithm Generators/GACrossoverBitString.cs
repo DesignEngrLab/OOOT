@@ -1,7 +1,26 @@
-﻿using System;
-using System.Collections;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System;
 using System.Collections.Generic;
-using StarMathLib;
 
 namespace OptimizationToolbox
 {
@@ -9,14 +28,14 @@ namespace OptimizationToolbox
     {
         private readonly double crossoverRate;
         private readonly double xRatePerBit;
-        private readonly GABitByteHexLimits[] limits;
-        private readonly long bitStringLength;
+        private readonly BitByteHexLimits[] limits;
+        private readonly int bitStringLength;
         private readonly Random rnd;
         public GACrossoverBitString(DesignSpaceDescription discreteSpaceDescriptor, double crossoverRate = 1.7)
             : base(discreteSpaceDescriptor)
         {
             this.crossoverRate = crossoverRate;
-            limits = GABitByteHexFunctions.InitializeBitString(discreteSpaceDescriptor);
+            limits = BitByteHexFunctions.InitializeBitString(discreteSpaceDescriptor);
             bitStringLength = limits[n - 1].EndIndex;
             xRatePerBit = crossoverRate / bitStringLength;
             rnd = new Random();
@@ -41,7 +60,7 @@ namespace OptimizationToolbox
                     ChangeMade = true;
                     if (rnd.NextDouble() < xRatePerBit)
                     {
-                        int varIndex = GABitByteHexFunctions.FindVariableIndex(limits, i);
+                        int varIndex = BitByteHexFunctions.FindVariableIndex(limits, i);
                         if (varIndex + 1 < n)
                         {
                             /* switch the remaining double values. No need to encode/decode them.*/
@@ -52,14 +71,14 @@ namespace OptimizationToolbox
                             Array.Copy(child1Tail, 0, child2, varIndex + 1, tailLength);
                         }
                         var c1Value = VariableDescriptors[varIndex].PositionOf(child1[varIndex]);
-                        var c1BitArray = GABitByteHexFunctions.Encode(c1Value,
+                        var c1BitArray = BitByteHexFunctions.Encode(c1Value,
                                                                       limits[varIndex].EndIndex -
                                                                       limits[varIndex].StartIndex);
                         var c2Value = VariableDescriptors[varIndex].PositionOf(child2[varIndex]);
-                        var c2BitArray = GABitByteHexFunctions.Encode(c2Value,
+                        var c2BitArray = BitByteHexFunctions.Encode(c2Value,
                                                                       limits[varIndex].EndIndex -
                                                                       limits[varIndex].StartIndex);
-                        CrossoverBitString(c1BitArray, c2BitArray,
+                        BitByteHexFunctions.CrossoverBitString(c1BitArray, c2BitArray,
                                            i - limits[varIndex].StartIndex, limits[varIndex].MaxValue, out c1Value,
                                            out c2Value);
                         child1[varIndex] = VariableDescriptors[varIndex][c1Value];
@@ -83,18 +102,5 @@ namespace OptimizationToolbox
         }
 
 
-
-        private static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, int position,
-            long maxValue, out long c1Value, out long c2Value)
-        {
-            for (int i = position; i < c1BitArray.Count; i++)
-            {
-                var c1Temp = c1BitArray[i];
-                c1BitArray.Set(i, c2BitArray[i]);
-                c2BitArray.Set(i, c1Temp);
-            }
-            c1Value = GABitByteHexFunctions.Decode(c1BitArray, maxValue);
-            c2Value = GABitByteHexFunctions.Decode(c2BitArray, maxValue);
-        }
     }
 }

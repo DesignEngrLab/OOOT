@@ -25,44 +25,33 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
-    public class GAMutationBitString : GeneticMutationGenerator
+    public class BitStringNeighborGenerator : abstractGenerator
     {
-        private readonly double mRatePerBit;
         private readonly BitByteHexLimits[] limits;
         private readonly int bitStringLength;
         private readonly Random rnd;
-        public GAMutationBitString(DesignSpaceDescription discreteSpaceDescriptor, double mutationRate = 0.1)
+        public BitStringNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
             limits = BitByteHexFunctions.InitializeBitString(discreteSpaceDescriptor);
             bitStringLength = limits[n - 1].EndIndex;
-            mRatePerBit = mutationRate / bitStringLength;
             rnd = new Random();
         }
-
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
+        public override List<double[]> GenerateCandidates(double[] candidate, int numToCreate = -1)
         {
-            for (int i = candidates.Count-1; i >= 0; i--)
+            var newCands = new List<double[]>();
+            if (numToCreate == -1) numToCreate = 1;
+            while (numToCreate-- > 0)
             {
-                var candidate = candidates[i].Value;
-                var ChangeMade = false;
-                for (int j = 0; j < bitStringLength; j++)
-                    if (rnd.NextDouble() < mRatePerBit)
-                    {
-                        ChangeMade = true;
-                        int varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
-                        long valueIndex = VariableDescriptors[varIndex].PositionOf(candidate[varIndex]);
-                        valueIndex = BitByteHexFunctions.FlipBit(valueIndex, limits[varIndex], j);
-                        candidate[varIndex] = VariableDescriptors[varIndex][valueIndex];
-                    }
-                if (ChangeMade)
-                {
-                    candidates.RemoveAt(i);
-                    candidates.Add(new KeyValuePair<double, double[]>(double.NaN, candidate));
-                }
+                var result = (double[])candidate.Clone();
+                var j = rnd.Next(bitStringLength);
+                int varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
+                long valueIndex = VariableDescriptors[varIndex].PositionOf(result[varIndex]);
+                valueIndex = BitByteHexFunctions.FlipBit(valueIndex, limits[varIndex], j);
+                result[varIndex] = VariableDescriptors[varIndex][valueIndex];
+                newCands.Add(result);
             }
+            return newCands;
         }
-
-
     }
 }

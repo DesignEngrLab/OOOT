@@ -1,4 +1,25 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System;
 
 using System.Collections.Generic;
 using StarMathLib;
@@ -8,7 +29,7 @@ namespace OptimizationToolbox
     /// <summary>
     /// 
     /// </summary>
-    public class SequentialQuadraticProgramming : abstractOptMethod
+    public sealed class SequentialQuadraticProgramming : abstractOptMethod
     {
         #region Fields
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
@@ -33,17 +54,19 @@ namespace OptimizationToolbox
         #endregion
 
         #region Constructor
-        public SequentialQuadraticProgramming() : this(true) { }
-        public SequentialQuadraticProgramming(Boolean defaultMethod)
-            : this(0.0001, defaultMethod) { }
-        public SequentialQuadraticProgramming(double eps, Boolean defaultMethod)
+        public SequentialQuadraticProgramming()
         {
-            this.RequiresSearchDirectionMethod = false;
-            this.epsilon = eps;
-            if (defaultMethod) setUpDefaultMethods();
-        }
-        private void setUpDefaultMethods()
-        {
+            RequiresObjectiveFunction = true;
+            ConstraintsSolvedWithPenalties = false;
+            RequiresMeritFunction = true;
+            InequalitiesConvertedToEqualities = false;
+            RequiresSearchDirectionMethod = false;
+            RequiresLineSearchMethod = true;
+            RequiresAnInitialPoint = true;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = false;
+            RequiresDiscreteSpaceDescriptor = false;
+
             this.Add(new SQPSimpleHalver(0.25, 100));
             this.lineSearchMethod.SetOptimizationDetails(this);
             this.Add(new linearExteriorPenaltyMax(this, 1.0));
@@ -67,7 +90,7 @@ namespace OptimizationToolbox
             {
                 gradF = calc_f_gradient(x);
                 A = formulateActiveSetAndGradients(x);
-                dk = calculateSQPSearchDirection(x, gradF, A, out initAlpha);
+                dk = calculateSQPSearchDirection(x, out initAlpha);
                 meritFunction.penaltyWeight = adjustMeritPenalty();
                 // this next function is not part of the regular SQP algorithm
                 // it's only intended to keep all the points in the positive space.
@@ -92,13 +115,13 @@ namespace OptimizationToolbox
 
         private double adjustMeritPenalty()
         {
-            double temp = 0.0;
-            foreach (double a in lambdas)
-                temp += Math.Abs(a);
-            return temp;
-            if (temp < meritFunction.penaltyWeight)
+            double weight = StarMath.norm1(lambdas);
+
+            /* what is the point of the next condition? is it a correct step when one is still in the
+             * infeasible region? */
+            if (weight < meritFunction.penaltyWeight)
                 return 2 * meritFunction.penaltyWeight;
-            else return temp;
+             return weight;
         }
 
         private double preventNegatives(double[] xk, double[] dk, double initAlpha)
@@ -154,13 +177,10 @@ namespace OptimizationToolbox
         /// <param name="A">The A.</param>
         /// <param name="initAlpha">The init alpha.</param>
         /// <returns></returns>
-        private double[] calculateSQPSearchDirection(double[] xk, double[] gradF, double[,] A,
-            out double initAlpha)
+        private double[] calculateSQPSearchDirection(double[] xk, out double initAlpha)
         {
-
-            SearchIO.output("xk = [" + xk[0] + ", " + xk[1] + "]", 6);
             activeVals = calc_active_vector(xk);
-            double[] dir = null;
+            double[] dir;
             double[,] At = StarMath.transpose(A);
             double[,] invAAt = StarMath.inverse(StarMath.multiply(A, At));
             double[,] AtinvAAt = StarMath.multiply(At, invAAt);
@@ -168,10 +188,7 @@ namespace OptimizationToolbox
             double[,] invJ = StarMath.makeIdentity(n);
 
             // double[,] P = StarMath.subtract(StarMath.makeIdentity(n), AtinvAAtA);
-            if (this.searchDirMethod != null)
-            {
 
-            }
             double[,] P = StarMath.multiply(invJ,
                 StarMath.subtract(StarMath.multiply(AtinvAAt, A), StarMath.makeIdentity(n)));
             //double[,] Q = StarMath.multiply(invJ,

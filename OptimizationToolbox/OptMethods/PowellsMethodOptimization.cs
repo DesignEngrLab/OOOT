@@ -1,4 +1,25 @@
-﻿using System.Collections.Generic;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System.Collections.Generic;
 using StarMathLib;
 
 namespace OptimizationToolbox
@@ -9,7 +30,7 @@ namespace OptimizationToolbox
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
-        double[] dk, dconj, xl;
+        double[] dk;
 
         /* fk is the value of f(xk). */
         double fk;
@@ -25,9 +46,16 @@ namespace OptimizationToolbox
         #region Constructor
         public PowellsMethodOptimization()
         {
-            this.ConstraintsSolvedWithPenalties = true;
-            this.RequiresSearchDirectionMethod = false;
-            this.RequiresLineSearchMethod = true;
+            RequiresObjectiveFunction = true;
+            ConstraintsSolvedWithPenalties = true;
+            RequiresMeritFunction = true;
+            InequalitiesConvertedToEqualities = false;
+            RequiresSearchDirectionMethod = false;
+            RequiresLineSearchMethod = true;
+            RequiresAnInitialPoint = true;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = false;
+            RequiresDiscreteSpaceDescriptor = false;
         }
         #endregion
 
@@ -40,7 +68,6 @@ namespace OptimizationToolbox
             //evaluate f(x0)
             fStar = fk = calc_f(x);
             dk = new double[n];
-            dconj = new double[n];
             #endregion
 
             do
@@ -51,7 +78,7 @@ namespace OptimizationToolbox
                 Start by leaving the first conjugate direction as the nth coord direction
                  
                  * For each conjStep sweep from newest conjugate step all the way back around
-                 and then research in that same conjugate direction but starting with 
+                 and then re-search in that same conjugate direction but starting with 
                  the new point arrived at after searching the other directions in between.
                  
                  * Then Powell's method says that direction created by joining the two local line
@@ -62,41 +89,39 @@ namespace OptimizationToolbox
                  * to the coordinate directions*/
 
                 #region Generate and search Conjugate directions
-                this.searchDirMatrix = StarMath.makeIdentity(n);
-                for (int conjStep = 0; conjStep < n; conjStep++)
+                searchDirMatrix = StarMath.makeIdentity(n);
+                for (var conjStep = 0; conjStep < n; conjStep++)
                 {
-                    for (int row = 0; row < n; row++)
-                        dconj[row] = 0;
+                    var dconj = new double[n];
                     if (conjStep == 0)
-                        searchDirColumn = n-1;
+                        searchDirColumn = n - 1;
                     else
                         searchDirColumn = conjStep - 1;
                     //Search n+1 directions
-                    for (int searchDirNum = 0; searchDirNum < n + 1; searchDirNum++)
+                    for (var i = 0; i < n + 1; i++)
                     {
                         dk = StarMath.GetColumn(searchDirColumn, searchDirMatrix);
                         // use line search (arithmetic mean) to find alphaStar
                         alphaStar = lineSearchMethod.findAlphaStar(x, dk, true);
-                        xl = StarMath.multiply(alphaStar, dk);
+                     var   xl = StarMath.multiply(alphaStar, dk);
                         x = StarMath.add(x, xl);
-                        if (searchDirNum > 0)
+                        if (i > 0)
                             dconj = StarMath.add(dconj, xl);
                         searchDirColumn++;
-                        if (searchDirColumn > n-1)
-                            searchDirColumn = 0;
+                        if (searchDirColumn == n) searchDirColumn = 0;
                     }
                     StarMath.SetColumn(conjStep, searchDirMatrix, dconj);
                 }
                 #endregion
 
                 #region Finally search along all the conjugate directions now in the matrix
-                for (int searchDirNum = 0; searchDirNum < n; searchDirNum++)
+                for (var searchDirNum = 0; searchDirNum < n; searchDirNum++)
                 {
                     dk = StarMath.GetColumn(searchDirNum, searchDirMatrix);
                     // use line search (arithmetic mean) to find alphaStar
                     alphaStar = lineSearchMethod.findAlphaStar(x, dk, true);
-                    xl = StarMath.multiply(alphaStar, dk);
-                    x = StarMath.add(x, xl);
+                  
+                    x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
                 }
                 #endregion
 
@@ -112,7 +137,7 @@ namespace OptimizationToolbox
                 SearchIO.output("f = " + fk, 3);
                 #endregion
             }
-            while (notConverged(k, fk,x,null, new List<double[]>()));
+            while (notConverged(k, fk, x, null, new List<double[]>()));
 
             return fStar;
         }

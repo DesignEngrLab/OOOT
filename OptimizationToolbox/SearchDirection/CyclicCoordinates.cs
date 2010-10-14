@@ -20,25 +20,36 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
-using System.Collections.Generic;
+using StarMathLib;
+
 
 namespace OptimizationToolbox
 {
-    public class MaxIterationsConvergence : abstractConvergence
+    public class CyclicCoordinates : abstractSearchDirection
     {
-        public long maxIterations { get; set; }
+        private int counter = 0;
+        private double[] xLast;
+        private int n;
 
-
-        public MaxIterationsConvergence() { }
-
-        public MaxIterationsConvergence(long maxIterations)
+        public CyclicCoordinates(int n)
         {
-            this.maxIterations = maxIterations;
+            this.n = n;
         }
-        public override bool converged(long k = -1, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+
+        public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false)
         {
-            if (k < 0) throw new Exception("MaxIterationsConvergence expected a positive value for the first argument, YInteger");
-            return (k >= maxIterations);
+            if (counter == 0) xLast = (double[])x.Clone();
+            else if (counter == x.GetLength(0))
+            {
+                counter = 0;
+                return StarMath.normalize(StarMath.subtract(x, xLast));
+            }
+
+            var d = new double[x.GetLength(0)];
+            d[counter] = 1;
+            counter++;
+            return d;
         }
+
     }
 }

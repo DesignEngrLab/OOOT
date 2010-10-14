@@ -1,4 +1,25 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
@@ -41,12 +62,15 @@ namespace OptimizationToolbox
             candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
             while (notConverged(k++, candidates[0].Key, candidates[0].Value))
             {
-                SearchIO.output(k + ": f = " + candidates[0].Key);
-                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value));
+                SearchIO.output(k + ": f = " + candidates[0].Key, 5);
+                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 5);
                 var neighbors = neighborGenerator.GenerateCandidates(candidates[0].Value);
                 foreach (var neighbor in neighbors)
-                    if (feasible(neighbor))
-                        candidates.Add(new KeyValuePair<double, double[]>(calc_f(neighbor), neighbor));
+                {
+                    var f = calc_f(neighbor, (meritFunction != null));
+                    if (meritFunction != null || feasible(neighbor))
+                        candidates.Add(new KeyValuePair<double, double[]>(f, neighbor));
+                }
                 selector.selectCandidates(ref candidates);
             }
             xStar = candidates[0].Value;

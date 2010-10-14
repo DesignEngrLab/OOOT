@@ -19,26 +19,27 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
 using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
-    public class MaxIterationsConvergence : abstractConvergence
+    public abstract class abstractSimulatedAnnealingCoolingSchedule
     {
-        public long maxIterations { get; set; }
+        protected int samplesThusFar;
+        protected readonly int samplesInGeneration;
+        protected abstractOptMethod optMethod;
 
-
-        public MaxIterationsConvergence() { }
-
-        public MaxIterationsConvergence(long maxIterations)
+        protected abstractSimulatedAnnealingCoolingSchedule(int samplesInGeneration)
         {
-            this.maxIterations = maxIterations;
+            this.samplesInGeneration = samplesInGeneration;
         }
-        public override bool converged(long k = -1, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        public void SetOptimizationDetails(abstractOptMethod OptMethod)
         {
-            if (k < 0) throw new Exception("MaxIterationsConvergence expected a positive value for the first argument, YInteger");
-            return (k >= maxIterations);
+            optMethod = OptMethod;
         }
+
+        internal abstract double SetInitialTemperature();
+        internal abstract double UpdateTemperature(double temperature, List<KeyValuePair<double, double[]>> candidates);
     }
 }
+

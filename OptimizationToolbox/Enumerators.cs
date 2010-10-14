@@ -1,6 +1,6 @@
 ﻿/*************************************************************************
- *     This file includes definitions for fundamental enumerators and the
- *     Comparer used throughout OOOT. 
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
@@ -14,10 +14,10 @@
  *     GNU General Public License for more details.
  *  
  *     You should have received a copy of the GNU General Public License
- *     along with GraphSynth.  If not, see <http://www.gnu.org/licenses/>.
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
  *     
- *     Please find further details and contact information at
- *     http://OOOT.codeplex.com.
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
 using System.Collections.Generic;

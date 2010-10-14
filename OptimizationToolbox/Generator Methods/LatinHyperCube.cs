@@ -1,4 +1,25 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,28 +40,58 @@ namespace OptimizationToolbox
         {
             generateFor = GenerateFor;
         }
-
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
+        public override List<double[]> GenerateCandidates(double[] candidate, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
             Random rnd = new Random();
-            //CandidatesIndices = new int[numSamples][];
+            var data = new List<double>[n];
 
-            //// the following is not correct - need to fix
-            //// also what about the non-discrete variables and LHC?
-            //for (int j = 0; j < n; j++)
-            //{
-            //    sampleIndices[j] = new List<int>();
-            //    for (int i = 0; i < numSamples; i++)
-            //        sampleIndices[j].Insert(rnd.Next(sampleIndices[j].Count), i);
-            //}
-            //long start = DateTime.Now.Ticks;
-            //double[] f = new double[numSamples];
-            //for (int i = 0; i < numSamples; i++)
-            //    f[i] = optMethod.calc_f(GetVariableVector(CandidatesIndices[i]), true);
+            // the following is not correct - need to fix
+            // also what about the non-discrete variables and LHC?
+            for (int j = 0; j < n; j++)
+            {
+                var varVals = new List<double>();
+                if (discreteSpaceDescriptor.DiscreteVarIndices.Contains(j) && generateFor != VariablesInScope.OnlyReal)
+                {
+                    varVals = new List<double>();
+                    for (int i = 0; i < numSamples; i++)
+                    {
+                        int effectiveIndex = (int)(Math.Round(((double)i * VariableDescriptors[j].Size) / numSamples));
+                        varVals.Add(VariableDescriptors[j][effectiveIndex]);
+                    }
+                }
+                else if (!discreteSpaceDescriptor.DiscreteVarIndices.Contains(j) &&
+                   generateFor != VariablesInScope.OnlyDiscrete)
+                {
+                    var delta = (VariableDescriptors[j].UpperBound - VariableDescriptors[j].LowerBound);
+                    if (double.IsInfinity(delta))
+                        throw new Exception("The bounds on the " + j + "(th) variable must not be at infinity for" +
+                                            "performing Latin Hypercube sampling.");
+                    delta /= numSamples;
+                    var lb = VariableDescriptors[j].LowerBound;
+                    varVals = new List<double>();
+                    for (int i = 0; i < numSamples; i++) varVals.Add(lb + i * delta);
+                }
+                else for (int i = 0; i < numSamples; i++) varVals.Add(double.NaN);
+                varVals = varVals.OrderBy(a => rnd.NextDouble()).ToList();
+                data[j] = varVals;
+            }
+            var candidates = new List<double[]>(numSamples);
+            for (int i = 0; i < numSamples; i++)
+            {
+                var point = new double[n];
+                for (int j = 0; j < n; j++)
+                    point[j] = data[j][i];
+                candidates.Add(point);
+            }
+            return candidates;
+        }
 
-            //return DateTime.Now.Ticks - start;
-            //candidates = new List<double[]>();
+        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
+        {
+            List<double[]> candVectors = GenerateCandidates(null, numSamples);
+            foreach (var candVector in candVectors)
+                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, candVector));
         }
     }
 }

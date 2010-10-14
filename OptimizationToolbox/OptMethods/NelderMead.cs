@@ -1,3 +1,24 @@
+/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +42,19 @@ namespace OptimizationToolbox
         #region Constructor
         public NelderMead()
         {
-            this.ConstraintsSolvedWithPenalties = true;
-            this.RequiresSearchDirectionMethod = false;
-            this.RequiresLineSearchMethod = false;
-            this.RequiresAnInitialPoint = true;
+            RequiresObjectiveFunction = true;
+            ConstraintsSolvedWithPenalties = true;
+            RequiresMeritFunction = true;
+            InequalitiesConvertedToEqualities = false;
+            RequiresSearchDirectionMethod = false;
+            RequiresLineSearchMethod = false;
+            RequiresAnInitialPoint = true;
+            RequiresConvergenceCriteria = true;
+            RequiresFeasibleStartPoint = false;
+            RequiresDiscreteSpaceDescriptor = false;
         }
-        public NelderMead(double rho, double chi, double psi, double sigma, double initNewPointPercentage = double.NaN, double initNewPointAddition=double.NaN)
+        public NelderMead(double rho, double chi, double psi, double sigma, double initNewPointPercentage = double.NaN, double initNewPointAddition = double.NaN)
+            : this()
         {
             this.rho = rho;
             this.chi = chi;
@@ -38,8 +66,8 @@ namespace OptimizationToolbox
         #endregion
         protected override double run(out double[] xStar)
         {
-             vertices.Add(calc_f(x), x);
-             // Creating neighbors in each direction and evaluating them
+            vertices.Add(calc_f(x), x);
+            // Creating neighbors in each direction and evaluating them
             for (int i = 0; i < n; i++)
             {
                 double[] y = (double[])x.Clone();

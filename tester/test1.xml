@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ProblemDefinition xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <tolerance>0</tolerance>
   <SpaceDescriptor>
     <VariableDescriptors>
       <VariableDescriptor>
@@ -17,9 +16,9 @@
     </VariableDescriptors>
   </SpaceDescriptor>
   <ConvergenceMethods>
-    <abstractConvergence xsi:type="ToKnownBestConvergence">
-      <fBest>8.5</fBest>
-      <direction>minimize</direction>
+    <abstractConvergence xsi:type="ToKnownBestFConvergence">
+      <fBest>8.0</fBest>
+      <positiveTolerance>0.5</positiveTolerance>
     </abstractConvergence>
    <abstractConvergence xsi:type="MaxAgeConvergence">
       <toleranceForSame>1E-09</toleranceForSame>

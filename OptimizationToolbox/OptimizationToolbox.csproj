@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OptimizationToolbox</RootNamespace>
     <AssemblyName>OptimizationToolbox</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>
     </StartupObject>
@@ -41,8 +41,7 @@
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath, Version=1.0.10.901, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="StarMath">
       <HintPath>StarMath (compiled)\StarMath.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -60,16 +59,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Convergence Classes\ToKnownBestConvergence.cs" />
+    <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
+    <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
+    <Compile Include="Generator Methods\BitStringNeighborGenerator.cs" />
     <Compile Include="Generator Methods\RandomNeighborGenerator.cs" />
     <Compile Include="optimizeSort.cs" />
     <Compile Include="Generator Methods\abstractGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Generator Methods\Genetric Algorithm Generators\GABitByteHexFunctions.cs" />
+    <Compile Include="Generator Methods\BitByteHexFunctions.cs" />
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GAMutationBitString.cs" />
     <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverBitString.cs" />
-    <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverRealInterpolator.cs">
+    <Compile Include="Generator Methods\Genetric Algorithm Generators\GADifferentialEvolutionCrossover.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Generator Methods\LatinHyperCube.cs">
@@ -83,11 +84,18 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Simulated Annealing Scheduling Routines\LundyMees.cs" />
+    <Compile Include="Simulated Annealing Scheduling Routines\SangiovanniVincentelli.cs" />
+    <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />
+    <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="OptMethods\ExhaustiveSearch.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="OptMethods\PowellsMethodOptimization.cs" />
     <Compile Include="OptMethods\HillClimbing.cs" />
+    <Compile Include="SearchDirection\PowellsMethod.cs" />
+    <Compile Include="SearchDirection\CyclicCoordinates.cs" />
     <Compile Include="Selector Methods\abstractSelector.cs" />
+    <Compile Include="Selector Methods\P-norm Proportional Selection.cs" />
     <Compile Include="Selector Methods\Elitism.cs" />
     <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
     <Compile Include="VariableDescriptor.cs" />
@@ -121,11 +129,9 @@
     <Compile Include="OptMethods\GeneralizedReducedGradientSlack.cs" />
     <Compile Include="OptMethods\NelderMead.cs" />
     <Compile Include="OptMethods\SequentialQuadraticProgramming.cs" />
-    <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="Objective Function Constraint Classes\polynomialFunctions.cs" />
     <Compile Include="ProblemDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selector Methods\Tournament.cs" />
     <Compile Include="Selector Methods\KeepSingleBest.cs" />
     <Compile Include="Selector Methods\MetropolisCriteria.cs" />
     <Compile Include="SearchDirection\abstractSearchDirection.cs" />
@@ -138,9 +144,7 @@
     <Compile Include="Objective Function Constraint Classes\abstractOptFunction.cs" />
     <Compile Include="SearchIO.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Prune Methods\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

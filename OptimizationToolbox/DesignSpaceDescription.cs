@@ -1,4 +1,25 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using System.Linq;
@@ -111,30 +132,93 @@ namespace OptimizationToolbox
             return result;
         }
 
-        public int[][] CreateNeighborChangeVectors()
+        /// <summary>
+        /// Creates the neighbor change vectors. There will at least the minimum specified, 
+        /// and the process will stop after this max is reached although there may be significantly
+        /// more which are created to keep the changes symmetric. This is probably one of the
+        /// craziest little functions I've ever written but there is a method to it madness.
+        /// As opposed to the simplest approach which is +/-1 step in each direction, it seems
+        /// beneficial to have more transitions that can be made. And as opposed to increasing
+        /// these sizes linearly (e.g. +/-1, +/-2, +/-3, ...), it seems better to have them
+        /// increase logarithmically. Here the steps are 1,3,7,20,55,etc. The idea is to move
+        /// in the closest integers to the natural log. As if in base-e. This is shown to
+        /// be optimal from a simple paper I read in science some years ago:
+        /// http://www.americanscientist.org/issues/pub/third-base/3
+        /// The function starts at points e^0 (or 1) away and makes the primary changes,
+        /// {(-1,0), (+1,0), (0,-1), (0,+1)}, and then goes on to e^1 rounded to the closest
+        /// integer {(-3,0), (+3,0), (0,-3), (0,+3)}. But then it goes back to fill out the 
+        /// higher order changes at the lower levels {(-1,-1), (+1,-1), (-1,+1), (+1,+1)}.
+        /// It then jumps to the next exponent for a new set of primary changes, and then
+        /// again drops back to populate the higher level changes of lower levels.
+        /// </summary>
+        /// <param name="minimumNeighbors">The minimum neighbors.</param>
+        /// <returns></returns>
+        public int[][] CreateNeighborChangeVectors(int minimumNeighbors)
         {
-            var result = new int[2*DiscreteVarIndices.Count][];
-            int k = 0;
-            foreach (var i in DiscreteVarIndices)
+            /* the main data structure here is a List of Lists of Lists of arrays.
+             * Why not just make it one List of arrays since, in the end, the whole thing
+             * is condensed to this anyway? The reason is that we need to keep track of the 
+             * transitions for a particular step size in order to create the next set. That
+             * is, the CreateNewChangeVectorsBasedOnLast requires this. There may be an easier
+             * way to write that function but this may be most efficent. So, the first list is
+             * indexed by stepSize, the inner lists by the number of nonzeros in the transitions 
+             * (e.g. (1,0,0) is a transition in the first of these lists, and (0,-1,1) is a trans-
+             * tion in the second list. The third list is simply the number of symmetric transitions
+             * found at that step size for that many non-zeros. There are two for each binary possibilty
+             * to ensure symmetry - for every positive step there is a corresponding one negative step. */
+            var transitions = new List<List<List<int[]>>>();
+            var exponent = 0;
+            do
             {
-                var changeVector = new int[n];
-                changeVector[i] = -1;
-                result[k++]=changeVector;
-                changeVector = new int[n];
-                changeVector[i] = +1;
-                result[k++] = changeVector;
-            }
-            return result;
+                var tempExp = exponent;
+                do
+                {
+                    var stepSize = (int)(Math.Round(Math.Exp(tempExp)));
+                    var lastChanges = new List<int[]> { new int[n] };
+                    if (transitions.Count <= tempExp)
+                        transitions.Add(new List<List<int[]>>());
+                    else lastChanges = transitions[tempExp][transitions[tempExp].Count - 1];
+                    transitions[tempExp].Add(CreateNewChangeVectorsBasedOnLast(lastChanges, stepSize));
+                    minimumNeighbors -= transitions[tempExp][transitions[tempExp].Count - 1].Count;
+                } while ((--tempExp >= 0) && (minimumNeighbors > 0));
+                exponent++;
+            } while (minimumNeighbors > 0);
+            var transitionsCombined = new List<int[]>();
+            foreach (var sizeLists in transitions)
+                foreach (var degreeLists in sizeLists)
+                    transitionsCombined.AddRange(degreeLists);
+            return transitionsCombined.ToArray();
         }
+
+        private List<int[]> CreateNewChangeVectorsBasedOnLast(List<int[]> lastChanges, int stepSize)
+        {
+            var changes = new List<int[]>();
+            foreach (var baseVector in lastChanges)
+            {
+                var firstAffectiveNewIndex = Array.FindLastIndex(baseVector, a => (a != 0)) + 1;
+                foreach (var i in DiscreteVarIndices)
+                    if (i >= firstAffectiveNewIndex)
+                    {
+                        var changeVector = (int[])baseVector.Clone();
+                        changeVector[i] = -stepSize;
+                        changes.Add(changeVector);
+                        changeVector = (int[])baseVector.Clone();
+                        changeVector[i] = stepSize;
+                        changes.Add(changeVector);
+                    }
+            }
+            return changes;
+        }
+
 
         public List<int> FindValidChanges(double[] candidate, int[][] changeVectors)
         {
             var result = Enumerable.Range(0, changeVectors.GetLength(0)).ToList();
             for (int i = 0; i < n; i++)
-                if (candidate[i] == VariableDescriptors[i].LowerBound)
-                    result.RemoveAll(a =>changeVectors[a][i] < 0);
-                else if (candidate[i] == VariableDescriptors[i].UpperBound)
-                    result.RemoveAll(a => changeVectors[a][i] > 0);
+            {
+                result.RemoveAll(a => ((candidate[i] + changeVectors[a][i]) < VariableDescriptors[i].LowerBound));
+                result.RemoveAll(a => ((candidate[i] + changeVectors[a][i]) > VariableDescriptors[i].UpperBound));
+            }
             return result;
         }
         #endregion
