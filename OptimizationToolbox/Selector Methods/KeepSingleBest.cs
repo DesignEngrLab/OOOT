@@ -19,9 +19,8 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OptimizationToolbox
 {
@@ -32,14 +31,14 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double control = double.NaN)
+        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+                                              double control = double.NaN)
         {
-            double bestF ;
-            if (direction == optimize.maximize) bestF = candidates.Select(a =>a.Key).Max();
-            else bestF = candidates.Select(a =>a.Key).Min();
+            double bestF;
+            if (direction == optimize.maximize) bestF = candidates.Select(a => a.Key).Max();
+            else bestF = candidates.Select(a => a.Key).Min();
             candidates.RemoveAll(a => a.Key != bestF);
             if (candidates.Count > 1) candidates = candidates.Take(1).ToList();
         }
-
     }
 }

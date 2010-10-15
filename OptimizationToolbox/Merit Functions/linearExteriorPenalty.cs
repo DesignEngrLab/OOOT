@@ -21,19 +21,22 @@
  *************************************************************************/
 using System;
 
-
 namespace OptimizationToolbox
 {
-   public class linearExteriorPenalty:abstractMeritFunction
+    public class linearExteriorPenalty : abstractMeritFunction
     {
         #region Constructor
-       public linearExteriorPenalty(abstractOptMethod optMethod, double penaltyWeight)
-            : base(optMethod, penaltyWeight) { }
+
+        public linearExteriorPenalty(abstractOptMethod optMethod, double penaltyWeight)
+            : base(optMethod, penaltyWeight)
+        {
+        }
+
         #endregion
 
         public override double calcPenalty(double[] point)
         {
-            double sum = 0.0;
+            var sum = 0.0;
             double temp;
 
             foreach (constraint c in optMethod.h)
@@ -49,29 +52,30 @@ namespace OptimizationToolbox
             sum *= penaltyWeight;
             return sum;
         }
+
         public override double[] calcGradientOfPenalty(double[] point)
         {
-            int n = point.GetLength(0);
-            double[] grad = new double[n];
-            double temp;
-            for (int i = 0; i != n; i++)
+            var n = point.GetLength(0);
+            var grad = new double[n];
+            for (var i = 0; i != n; i++)
             {
-                double sum = 0.0;
+                var sum = 0.0;
+                double temp;
                 foreach (constraint c in optMethod.h)
                 {
                     temp = c.calculate(point);
                     if (temp < 0.0)
                         sum -= c.deriv_wrt_xi(point, i);
-                    if (temp>0.0)
-                    sum += c.deriv_wrt_xi(point, i);
+                    if (temp > 0.0)
+                        sum += c.deriv_wrt_xi(point, i);
                 }
                 foreach (constraint c in optMethod.g)
                 {
                     temp = c.calculate(point);
                     if (temp > 0.0)
-                        sum +=  c.deriv_wrt_xi(point, i);
+                        sum += c.deriv_wrt_xi(point, i);
                 }
-                grad[i] =  penaltyWeight * sum;
+                grad[i] = penaltyWeight * sum;
             }
             return grad;
         }

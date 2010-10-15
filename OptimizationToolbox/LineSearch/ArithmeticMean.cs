@@ -26,23 +26,27 @@ namespace OptimizationToolbox
     public class ArithmeticMean : abstractLineSearch
     {
         #region Constructors
+
         public ArithmeticMean(double epsilon, double stepSize, int kMax)
-            : base(epsilon, stepSize, kMax) { }
+            : base(epsilon, stepSize, kMax)
+        {
+        }
+
         #endregion
-
-
 
         public override double findAlphaStar(double[] x, double[] dir)
         {
-            double alphaLow = 0.0;
-            double fLow = calcF(x, alphaLow, dir);
-            double alphaHigh = stepSize;
-            double fHigh = calcF(x, alphaHigh, dir);
-            double alphaMid, alphaNew, fMid, fNew, fMax;
-            double step = stepSize;
+            var alphaLow = 0.0;
+            var fLow = calcF(x, alphaLow, dir);
+            var alphaHigh = stepSize;
+            var fHigh = calcF(x, alphaHigh, dir);
+            double alphaMid, fMid;
+            var step = stepSize;
 
-            k = 1;  //so that this local k corresponds to # of f'n evals (starting at 0)
+            k = 1; //so that this local k corresponds to # of f'n evals (starting at 0)
+
             #region Setting up Brackets Phase
+
             if (fHigh <= fLow)
             {
                 // these two lines are just to set up alphaMid and fMid so that the while loop will correctly
@@ -80,14 +84,17 @@ namespace OptimizationToolbox
                     k++;
                 } while ((fLow < fMid) && (k < kMax));
             }
+
             #endregion
+
             #region Arithmetic Mean to reduce bracket
-            alphaNew = (alphaLow + alphaMid + alphaHigh) / 3;
-            fNew = calcF(x, alphaNew, dir);
+
+            var alphaNew = (alphaLow + alphaMid + alphaHigh) / 3;
+            var fNew = calcF(x, alphaNew, dir);
             k++;
             do
             {
-                fMax = Math.Max(fLow, Math.Max(fNew, Math.Max(fMid, fHigh)));
+                var fMax = Math.Max(fLow, Math.Max(fNew, Math.Max(fMid, fHigh)));
                 // find the largest of the four values
                 if ((fLow == fMax) ||
                     ((fNew == fMax) && (alphaNew < alphaMid)) ||
@@ -95,12 +102,14 @@ namespace OptimizationToolbox
                 {
                     // then remove alphaLow 
                     if (alphaNew < alphaMid)
-                    { //alphaLow moves up to alphaNew, alphaMid, alphaHigh stay the same
+                    {
+                        //alphaLow moves up to alphaNew, alphaMid, alphaHigh stay the same
                         alphaLow = alphaNew;
                         fLow = fNew;
                     }
                     else
-                    { //alphaLow moves up to alphaMid,alphaNew changes to alphaMid, alphaHigh stays
+                    {
+                        //alphaLow moves up to alphaMid,alphaNew changes to alphaMid, alphaHigh stays
                         alphaLow = alphaMid;
                         fLow = fMid;
                         alphaMid = alphaNew;
@@ -110,12 +119,14 @@ namespace OptimizationToolbox
                 else //else highest two alpha create fMax, so remove alpahHigh
                 {
                     if (alphaNew > alphaMid)
-                    { //alphaHigh moves down to alphaNew, alphaMid, alphaLow stay the same
+                    {
+                        //alphaHigh moves down to alphaNew, alphaMid, alphaLow stay the same
                         alphaHigh = alphaNew;
                         fHigh = fNew;
                     }
                     else
-                    { //alphaHigh moves down to alphaMid,alphaNew changes to alphaMid, alphaLow stays
+                    {
+                        //alphaHigh moves down to alphaMid,alphaNew changes to alphaMid, alphaLow stays
                         alphaHigh = alphaMid;
                         fHigh = fMid;
                         alphaMid = alphaNew;
@@ -125,11 +136,12 @@ namespace OptimizationToolbox
                 alphaNew = (alphaLow + alphaMid + alphaHigh) / 3;
                 fNew = calcF(x, alphaNew, dir);
                 k++;
-            }
-            while ((Math.Abs(alphaNew - alphaMid) > epsilon) && (k < kMax));
+            } while ((Math.Abs(alphaNew - alphaMid) > epsilon) && (k < kMax));
+
             #endregion
-           if (fMid < fNew) return  alphaMid;
-            else return alphaNew;
+
+            if (fMid < fNew) return alphaMid;
+            return alphaNew;
         }
     }
 }

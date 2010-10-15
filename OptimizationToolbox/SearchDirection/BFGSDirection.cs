@@ -22,42 +22,42 @@
 using System;
 using StarMathLib;
 
-
 namespace OptimizationToolbox
 {
     public class BFGSDirection : abstractSearchDirection
     {
-        double[,] T;
-        double[,] u ;
-        double[,] IMinusT ;
-        double[,] invH ;
-        double[,] invHLast ;
-        double[] xLast ;
-        double[] gradFLast ;
-        double[] dir ;
-        double magDir;
-        private double minimumAlpha;
+        private readonly double minimumAlpha;
+        private double[,] IMinusT;
+        private double[,] T;
+        private double[] dir;
+        private double[] gradFLast;
+        private double[,] invH;
+        private double[,] invHLast;
         private int itersToReset;
+        private double magDir;
+        private double[,] u;
+        private double[] xLast;
 
         public BFGSDirection(double minimumAlpha = 0.001, int itersToReset = -1)
         {
             this.minimumAlpha = minimumAlpha;
             this.itersToReset = itersToReset;
         }
+
         public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, bool reset = false)
         {
             /* if a TRUE is sent to reset, then we call a simple steepestDescent function. */
             if (reset || (itersToReset-- == 0) || ((Math.Abs(initAlpha) > 0) && (Math.Abs(initAlpha) <= minimumAlpha))
                 || (invHLast == null) || (xLast == null) || (gradFLast == null))
-                return steepestDescentReset(x, gradf, f);
+                return steepestDescentReset(x, gradf);
 
             /* I could write a bunch of comments here on what these terms mean, but it would 
              * really require a lot of symoblic math. Basically, invH is the approximation of 
              * the inverse Hessian that starts out as the identity matrix. For the rest of
              * the terms consult an optimization textbook...like the one I'm writing ever so
              * slowly. */
-            double[] diffX = StarMath.subtract(x, xLast);
-            double[] diffGradF = StarMath.subtract(gradf, gradFLast);
+            var diffX = StarMath.subtract(x, xLast);
+            var diffGradF = StarMath.subtract(gradf, gradFLast);
             T = StarMath.multiplyVectorsIntoAMatrix(diffX, diffGradF);
             T = StarMath.multiply((1 / StarMath.multiplyDot(diffX, diffGradF)), T);
 
@@ -67,7 +67,7 @@ namespace OptimizationToolbox
             IMinusT = StarMath.subtract(StarMath.makeIdentity(T.GetLength(0)), T);
 
             invH = StarMath.add(StarMath.multiply(IMinusT,
-                StarMath.multiply(invHLast, IMinusT)), u);
+                                                  StarMath.multiply(invHLast, IMinusT)), u);
             dir = StarMath.multiply(invH, gradf);
 
             gradFLast = (double[])gradf.Clone();
@@ -76,27 +76,20 @@ namespace OptimizationToolbox
             magDir = StarMath.norm2(dir);
             if (magDir == 0) return gradf;
             /* if the gradient of f is all zeros, then simply return it. */
-            else
-            {
-                dir = StarMath.multiply((-1.0 / magDir), gradf);
-                return dir;
-            }
+            dir = StarMath.multiply((-1.0 / magDir), gradf);
+            return dir;
         }
 
 
-        private double[] steepestDescentReset(double[] x, double[] gradf, double f)
+        private double[] steepestDescentReset(double[] x, double[] gradf)
         {
             gradFLast = (double[])gradf.Clone();
-            xLast = (double[])x.Clone();
             invHLast = StarMath.makeIdentity(x.GetLength(0));
             magDir = StarMath.norm2(gradf);
             if (magDir == 0) return gradf;
             /* if the gradient of f is all zeros, then simply return it. */
-            else
-            {
-                dir = StarMath.multiply((-1.0 / magDir), gradf);
-                return dir;
-            }
+            dir = StarMath.multiply((-1.0 / magDir), gradf);
+            return dir;
         }
     }
 }

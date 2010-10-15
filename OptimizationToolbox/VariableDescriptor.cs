@@ -31,20 +31,61 @@ namespace OptimizationToolbox
         private const double epsilon = 0.00000001;
         /* both real and discrete numbers can have both upper and lower limits.
          * Discrete require values less than infinity, but for reals, it may be infinity. */
+
+        /* the following three are only for discrete numbers. */
+        private double delta = double.NaN;
         private double lowerBound = double.NegativeInfinity;
+
+        private long size = long.MinValue;
+        private double upperBound = double.PositiveInfinity;
+
+        private double[] values;
+
+        //private double realValue;
+        //private long currentIndex;
+
+
+        public VariableDescriptor()
+        {
+        }
+
+        public VariableDescriptor(double LowerBound, double UpperBound)
+            : this()
+        {
+            lowerBound = LowerBound;
+            upperBound = UpperBound;
+        }
+
+        public VariableDescriptor(double LowerBound, double UpperBound, double Delta)
+            : this(LowerBound, UpperBound)
+        {
+            defineRemainingDiscreteValues(1 + (long)((UpperBound - LowerBound) / Delta), Delta);
+        }
+
+        public VariableDescriptor(double LowerBound, double UpperBound, long Size)
+            : this(LowerBound, UpperBound)
+        {
+            defineRemainingDiscreteValues(Size, (upperBound - lowerBound) / Size);
+        }
+
+        public VariableDescriptor(double[] Values)
+        {
+            values = Values;
+            defineBasedOnValues();
+        }
+
         public double LowerBound
         {
             get { return lowerBound; }
             set { lowerBound = value; }
         }
-        private double upperBound = double.PositiveInfinity;
+
         public double UpperBound
         {
             get { return upperBound; }
             set { upperBound = value; }
         }
-        /* the following three are only for discrete numbers. */
-        private double delta = double.NaN;
+
         public double Delta
         {
             get { return delta; }
@@ -54,7 +95,7 @@ namespace OptimizationToolbox
                 defineRemainingDiscreteValues(1 + (long)((upperBound - lowerBound) / delta), delta);
             }
         }
-        private long size = long.MinValue;
+
         public long Size
         {
             get { return size; }
@@ -64,7 +105,7 @@ namespace OptimizationToolbox
                 defineRemainingDiscreteValues(size, (upperBound - lowerBound) / size);
             }
         }
-        private double[] values;
+
         public double[] Values
         {
             get { return values; }
@@ -76,37 +117,23 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether this <see cref="VariableDescriptor"/> is discrete.
+        ///   Gets or sets a value indicating whether this <see cref = "VariableDescriptor" /> is discrete.
         /// </summary>
         /// <value><c>true</c> if discrete; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public Boolean Discrete { get; private set; }
-        //private double realValue;
-        //private long currentIndex;
 
-
-        public VariableDescriptor(){}
-
-        public VariableDescriptor(double LowerBound, double UpperBound)
-            : this()
+        public double this[long position]
         {
-            lowerBound = LowerBound;
-            upperBound = UpperBound;
+            get
+            {
+                if (!Discrete) return double.NaN;
+                if (Values != null) return Values[position];
+                return LowerBound + position * Delta;
+            }
         }
 
-        public VariableDescriptor(double LowerBound, double UpperBound, double Delta)
-            :this (LowerBound, UpperBound)
-        {
-            defineRemainingDiscreteValues(1 + (long)((UpperBound - LowerBound) / Delta), Delta);
-        }
-
-        public VariableDescriptor(double LowerBound, double UpperBound, long Size)
-            : this(LowerBound, UpperBound)
-        {
-            defineRemainingDiscreteValues(Size, (upperBound - lowerBound) / Size);
-        }
-
-        void defineRemainingDiscreteValues(long newSize, double newDelta)
+        private void defineRemainingDiscreteValues(long newSize, double newDelta)
         {
             size = newSize;
             delta = newDelta;
@@ -122,12 +149,7 @@ namespace OptimizationToolbox
             Discrete = true;
         }
 
-        public VariableDescriptor(double[] Values)
-        {
-            values = Values;
-            defineBasedOnValues();
-        }
-        void defineBasedOnValues()
+        private void defineBasedOnValues()
         {
             size = Values.GetLength(0);
             lowerBound = Values.Min();
@@ -136,20 +158,11 @@ namespace OptimizationToolbox
             Discrete = true;
         }
 
-        public double this[long position]
-        {
-            get
-            {
-                if (!Discrete) return double.NaN;
-                if (Values != null) return Values[position];
-                return LowerBound + position * Delta;
-            }
-        }
         public long PositionOf(double value)
         {
             if (!Discrete) return -1;
             if (Values != null) return Array.IndexOf(Values, value);
-            double i = (value - LowerBound) / Delta;
+            var i = (value - LowerBound) / Delta;
             if (i - Math.Floor(i) / Delta < epsilon) return (long)i;
             return -1;
         }

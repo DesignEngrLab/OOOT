@@ -28,24 +28,29 @@ namespace OptimizationToolbox
     public class ToKnownBestXConvergence : abstractConvergence
     {
         public double minDifference { get; set; }
-        double[] xBest { get; set; }
-
+        private double[] xBest { get; set; }
 
         #region Constructor
-        public ToKnownBestXConvergence(){}
+
+        public ToKnownBestXConvergence()
+        {
+        }
+
         public ToKnownBestXConvergence(double[] xBest, double minDifference)
         {
-            this.xBest = (double[]) xBest.Clone();
+            this.xBest = (double[])xBest.Clone();
             this.minDifference = minDifference;
         }
+
         #endregion
 
-        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null,
+                                       IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var x = YDoubleArray1;
             if (x == null)
                 throw new Exception("DeltaXConvergence expected a 1-D array of doubles (in the third argument, YDoubleArray1) "
-                    + " representing the current decision vector, x.");
+                                    + " representing the current decision vector, x.");
             return (StarMath.norm1(x, xBest) <= minDifference);
         }
     }

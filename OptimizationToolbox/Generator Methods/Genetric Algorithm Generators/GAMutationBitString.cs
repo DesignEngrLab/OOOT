@@ -20,17 +20,17 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
     public class GAMutationBitString : GeneticMutationGenerator
     {
-        private readonly double mRatePerBit;
-        private readonly BitByteHexLimits[] limits;
         private readonly int bitStringLength;
+        private readonly BitByteHexLimits[] limits;
+        private readonly double mRatePerBit;
         private readonly Random rnd;
+
         public GAMutationBitString(DesignSpaceDescription discreteSpaceDescriptor, double mutationRate = 0.1)
             : base(discreteSpaceDescriptor)
         {
@@ -42,16 +42,16 @@ namespace OptimizationToolbox
 
         public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
         {
-            for (int i = candidates.Count-1; i >= 0; i--)
+            for (var i = candidates.Count - 1; i >= 0; i--)
             {
                 var candidate = candidates[i].Value;
                 var ChangeMade = false;
-                for (int j = 0; j < bitStringLength; j++)
+                for (var j = 0; j < bitStringLength; j++)
                     if (rnd.NextDouble() < mRatePerBit)
                     {
                         ChangeMade = true;
-                        int varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
-                        long valueIndex = VariableDescriptors[varIndex].PositionOf(candidate[varIndex]);
+                        var varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
+                        var valueIndex = VariableDescriptors[varIndex].PositionOf(candidate[varIndex]);
                         valueIndex = BitByteHexFunctions.FlipBit(valueIndex, limits[varIndex], j);
                         candidate[varIndex] = VariableDescriptors[varIndex][valueIndex];
                     }
@@ -62,7 +62,5 @@ namespace OptimizationToolbox
                 }
             }
         }
-
-
     }
 }

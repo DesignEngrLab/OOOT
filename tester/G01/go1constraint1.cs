@@ -1,5 +1,4 @@
-﻿using System;
-using OptimizationToolbox;
+﻿using OptimizationToolbox;
 
 namespace tester.G01
 {

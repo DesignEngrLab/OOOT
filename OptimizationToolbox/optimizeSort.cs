@@ -22,23 +22,26 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace OptimizationToolbox
 {
     public class optimizeSort : IComparer<double>
     {
         /* an internal integer equal to the required sort direction. */
-        private readonly int direction;
         private readonly Boolean AllowEqualInSort;
+        private readonly int direction;
         /* if using with SortedList, set AllowEqualInSorting to false, otherwise
          * it will crash when equal values are encountered. If using in Linq's 
          * OrderBy then the equal is need (AllowEqualInSorting = true) otherwise
          * the program will hang. */
+
         public optimizeSort(optimize direction, Boolean AllowEqualInSort = false)
         {
             this.direction = (int)direction;
             this.AllowEqualInSort = AllowEqualInSort;
         }
+
+        #region IComparer<double> Members
+
         public int Compare(double x, double y)
         {
             if (AllowEqualInSort && (x == y)) return 0;
@@ -50,6 +53,8 @@ namespace OptimizationToolbox
             if (direction * x < direction * y) return 1;
             return -1;
         }
+
+        #endregion
 
         public Boolean BetterThan(double x, double y)
         {

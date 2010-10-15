@@ -29,26 +29,27 @@ namespace OptimizationToolbox
     public abstract class abstractOptMethod
     {
         #region Fields
+
         /* I usually object to such simple names for variables, but this 
          * follows the convention used in my course - ME392C at UT Austin. */
         public int n { get; protected set; } /* the total number of design variables - the length of x. */
-        public int m { get; protected set; }  /* the number of active constraints. */
-        public int p { get; protected set; }  /* the number of equality constraints - length of h. */
-        public int q { get; protected set; }  /* the number of inequality constraints - length of g. */
-        public int k { get; protected set; }  /* the iteration counter. */
+        public int m { get; protected set; } /* the number of active constraints. */
+        public int p { get; protected set; } /* the number of equality constraints - length of h. */
+        public int q { get; protected set; } /* the number of inequality constraints - length of g. */
+        public int k { get; protected set; } /* the iteration counter. */
         public objectiveFunction objfn { get; protected set; }
-        public double fStar { get; protected set; }  /*fStar is the optimum that is returned at the end of run. */
+        public double fStar { get; protected set; } /*fStar is the optimum that is returned at the end of run. */
         /* 'active' is the set of Active Constraints. For simplicity all equality constraints 
          * are assumed to be active, and any additional g's that come and go in this active
          * set strategy. More importantly we want the gradient of A which is a m by n matrix. 
          * m is the # of active constraints and n is the # of variables. */
-        public List<constraint> active { get; protected set; } 
-        public List<constraint> h { get; protected set; } 
+        public List<constraint> active { get; protected set; }
+        public List<constraint> h { get; protected set; }
         public List<constraint> g { get; protected set; }
         public abstractSearchDirection searchDirMethod { get; protected set; }
         public abstractLineSearch lineSearchMethod { get; protected set; }
         public abstractMeritFunction meritFunction { get; protected set; }
-        public List<abstractConvergence> ConvergenceMethods { get; protected set; } 
+        public List<abstractConvergence> ConvergenceMethods { get; protected set; }
         public DesignSpaceDescription spaceDescriptor { get; protected set; }
 
         /* The following Booleans should be set in the constructor of every optimization method. 
@@ -68,9 +69,11 @@ namespace OptimizationToolbox
         public double[] x { get; protected set; }
         public int feasibleOuterLoopMax { get; protected set; }
         public int feasibleInnerLoopMax { get; protected set; }
+
         #endregion
 
-        #region Set-up function, Add. 
+        #region Set-up function, Add.
+
         protected abstractOptMethod()
         {
             g = new List<constraint>();
@@ -79,6 +82,7 @@ namespace OptimizationToolbox
             ConvergenceMethods = new List<abstractConvergence>();
             fStar = double.PositiveInfinity;
         }
+
         public virtual void Add(object function)
         {
             if (typeof(ProblemDefinition).IsInstanceOfType(function))
@@ -110,14 +114,16 @@ namespace OptimizationToolbox
                 spaceDescriptor = (DesignSpaceDescription)function;
                 n = spaceDescriptor.n;
             }
-            else throw (new Exception("Function, " + function.ToString() + ", not of known type (needs "
-                + "to inherit from inequality, equality, objectiveFunction, abstractLineSearch, " +
-                "or abstractSearchDirection)."));
+            else
+                throw (new Exception("Function, " + function + ", not of known type (needs "
+                                     + "to inherit from inequality, equality, objectiveFunction, abstractLineSearch, " +
+                                     "or abstractSearchDirection)."));
         }
 
         #endregion
 
         #region Initialize and Run funtions
+
         public double Run(out double[] xStar)
         {
             if (xStart != null) return Run(out xStar, xStart);
@@ -126,6 +132,7 @@ namespace OptimizationToolbox
             xStar = null;
             return double.PositiveInfinity;
         }
+
         public double Run(out double[] xStar, double[] xInit)
         {
             n = xInit.GetLength(0);
@@ -137,6 +144,7 @@ namespace OptimizationToolbox
             n = NumberOfVariables;
             return run(out xStar, null);
         }
+
         private double run(out double[] xStar, double[] xInit)
         {
             xStar = null;
@@ -147,7 +155,7 @@ namespace OptimizationToolbox
             if (n != spaceDescriptor.n)
             {
                 SearchIO.output("Differing number of variables specified. From space description = " + spaceDescriptor.n
-                    + ", from x initial = " + n, 0);
+                                + ", from x initial = " + n, 0);
                 return fStar;
             }
             if (RequiresObjectiveFunction && (objfn == null))
@@ -187,7 +195,7 @@ namespace OptimizationToolbox
                 SearchIO.output("Constsraints will be solved with exterior penalty function.", 4);
             if (InequalitiesConvertedToEqualities && (g.Count > 0))
                 SearchIO.output(g.Count + " inequality constsraints will be converted to equality" +
-                    " constraints with the addition of " + g.Count + " slack variables.", 4);
+                                " constraints with the addition of " + g.Count + " slack variables.", 4);
 
             if (RequiresAnInitialPoint)
             {
@@ -202,7 +210,7 @@ namespace OptimizationToolbox
                     // no? need a random start
                     x = new double[n];
                     var randy = new Random();
-                    for (int i = 0; i < n; i++)
+                    for (var i = 0; i < n; i++)
                         x[i] = 100.0 * randy.NextDouble();
                 }
                 if (RequiresFeasibleStartPoint && !feasible(x))
@@ -215,11 +223,11 @@ namespace OptimizationToolbox
             if (InequalitiesConvertedToEqualities && (q > 0))
             {
                 var xnew = new double[n + q];
-                for (int i = 0; i != n; i++)
+                for (var i = 0; i != n; i++)
                     xnew[i] = x[i];
-                for (int i = n; i != n + q; i++)
+                for (var i = n; i != n + q; i++)
                 {
-                    double sSquared = g[i - n].calculate(x);
+                    var sSquared = g[i - n].calculate(x);
                     if (sSquared < 0) xnew[i] = Math.Sqrt(-sSquared);
                     else xnew[i] = 0;
                     h.Add(new slackSquaredEqualityFromInequality(g[i - n], i));
@@ -233,10 +241,10 @@ namespace OptimizationToolbox
             {
                 if (n == m)
                     SearchIO.output("There are as many equality constraints as design variables " +
-                        "(m = size). Consider another approach. Optimization is not needed.",0);
+                                    "(m = size). Consider another approach. Optimization is not needed.", 0);
                 else
                     SearchIO.output("There are more equality constraints than design variables " +
-                        "(m > size). Therefore the problem is overconstrained.",0);
+                                    "(m > size). Therefore the problem is overconstrained.", 0);
                 return fStar;
             }
 
@@ -249,23 +257,23 @@ namespace OptimizationToolbox
 
         private Boolean findFeasibleStartPoint()
         {
-            double average = StarMath.norm1(x) / x.GetLength(0);
-            Random randNum = new Random();
+            var average = StarMath.norm1(x) / x.GetLength(0);
+            var randNum = new Random();
             // n-m variables can be changed
 
-            double[,] gradH = calc_h_gradient(x);
+            //double[,] gradH = calc_h_gradient(x);
 
-            for (int outerK = 0; outerK < feasibleOuterLoopMax; outerK++)
+            for (var outerK = 0; outerK < feasibleOuterLoopMax; outerK++)
             {
                 SearchIO.output("looking for feasible start point (attempt #" + outerK, 4);
-                for (int innerK = 0; innerK < feasibleOuterLoopMax; innerK++)
+                for (var innerK = 0; innerK < feasibleOuterLoopMax; innerK++)
                 {
                     // gradA = calc_h_gradient(x, varsToChange);
                     // invGradH = StarMath.inverse(gradA);
                     //x = StarMath.subtract(x, StarMath.multiply(invGradH, calc_h_vector(x)));
                     if (feasible(x)) return true;
                 }
-                for (int i = 0; i < n; i++)
+                for (var i = 0; i < n; i++)
                     x[i] += 2 * average * (randNum.NextDouble() - 0.5);
 
                 //gradA = calc_h_gradient(x);
@@ -275,11 +283,10 @@ namespace OptimizationToolbox
             return false;
         }
 
-
-
         #endregion
 
         #region Calculate f, g, h helper functions
+
         public double calc_f(double[] point, Boolean includeMeritPenalty = false)
         {
             if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
@@ -290,7 +297,7 @@ namespace OptimizationToolbox
         public double[] calc_f_gradient(double[] point, Boolean includeMeritPenalty = false)
         {
             var grad = new double[n];
-            for (int i = 0; i != n; i++)
+            for (var i = 0; i != n; i++)
                 grad[i] = objfn.deriv_wrt_xi(point, i);
             if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
                 return StarMath.add(grad, meritFunction.calcGradientOfPenalty(point));
@@ -304,99 +311,110 @@ namespace OptimizationToolbox
 
             return g.Cast<inequality>().All(a => a.feasible(point));
         }
-        protected double[] calc_h_vector(double[] x)
+
+        protected double[] calc_h_vector(double[] point)
         {
             var vals = new double[p];
-            for (int i = 0; i != p; i++)
-                vals[i] = h[i].calculate(x);
+            for (var i = 0; i != p; i++)
+                vals[i] = h[i].calculate(point);
             return vals;
         }
-        protected double[] calc_h_vector(double[] x, List<int> workingSet)
+
+        protected double[] calc_h_vector(double[] point, List<int> workingSet)
         {
-            int workSetLength = workingSet.Count;
-            double[] vals = new double[workSetLength];
-            for (int i = 0; i != workSetLength; i++)
-                vals[i] = h[workingSet[i]].calculate(x);
+            var workSetLength = workingSet.Count;
+            var vals = new double[workSetLength];
+            for (var i = 0; i != workSetLength; i++)
+                vals[i] = h[workingSet[i]].calculate(point);
             return vals;
         }
-        protected double[,] calc_h_gradient(double[] x)
+
+        protected double[,] calc_h_gradient(double[] point)
         {
-            double[,] result = new double[p, n];
-            for (int i = 0; i != p; i++)
-                for (int j = 0; j != n; j++)
-                    result[i, j] = h[i].deriv_wrt_xi(x, j);
-            return result;
-        }
-        protected double[,] calc_h_gradient(double[] x, List<int> Indices)
-        {
-            int size = Indices.Count;
-            double[,] result = new double[p, size];
-            for (int i = 0; i != p; i++)
-                for (int j = 0; j != size; j++)
-                    result[i, j] = h[i].deriv_wrt_xi(x, Indices[j]);
+            var result = new double[p, n];
+            for (var i = 0; i != p; i++)
+                for (var j = 0; j != n; j++)
+                    result[i, j] = h[i].deriv_wrt_xi(point, j);
             return result;
         }
 
-        protected double[] calc_g_vector(double[] x)
+        protected double[,] calc_h_gradient(double[] point, List<int> Indices)
         {
-            double[] vals = new double[q];
-            for (int i = 0; i != q; i++)
-                vals[i] = g[i].calculate(x);
+            var size = Indices.Count;
+            var result = new double[p, size];
+            for (var i = 0; i != p; i++)
+                for (var j = 0; j != size; j++)
+                    result[i, j] = h[i].deriv_wrt_xi(point, Indices[j]);
+            return result;
+        }
+
+        protected double[] calc_g_vector(double[] point)
+        {
+            var vals = new double[q];
+            for (var i = 0; i != q; i++)
+                vals[i] = g[i].calculate(point);
             return vals;
         }
-        protected double[] calc_g_vector(double[] x, List<int> workingSet)
+
+        protected double[] calc_g_vector(double[] point, List<int> workingSet)
         {
-            int workSetLength = workingSet.Count;
-            double[] vals = new double[workSetLength];
-            for (int i = 0; i != workSetLength; i++)
-                vals[i] = g[workingSet[i]].calculate(x);
+            var workSetLength = workingSet.Count;
+            var vals = new double[workSetLength];
+            for (var i = 0; i != workSetLength; i++)
+                vals[i] = g[workingSet[i]].calculate(point);
             return vals;
         }
-        protected double[,] calc_g_gradient(double[] x)
+
+        protected double[,] calc_g_gradient(double[] point)
         {
-            double[,] result = new double[q, n];
-            for (int i = 0; i != q; i++)
-                for (int j = 0; j != n; j++)
-                    result[i, j] = g[i].deriv_wrt_xi(x, j);
+            var result = new double[q, n];
+            for (var i = 0; i != q; i++)
+                for (var j = 0; j != n; j++)
+                    result[i, j] = g[i].deriv_wrt_xi(point, j);
             return result;
         }
-        protected double[,] calc_g_gradient(double[] x, List<int> Indices)
+
+        protected double[,] calc_g_gradient(double[] point, List<int> Indices)
         {
-            int size = Indices.Count;
-            double[,] result = new double[q, size];
-            for (int i = 0; i != q; i++)
-                for (int j = 0; j != size; j++)
-                    result[i, j] = g[Indices[i]].deriv_wrt_xi(x, Indices[j]);
+            var size = Indices.Count;
+            var result = new double[q, size];
+            for (var i = 0; i != q; i++)
+                for (var j = 0; j != size; j++)
+                    result[i, j] = g[Indices[i]].deriv_wrt_xi(point, Indices[j]);
             return result;
         }
-        protected double[,] calc_active_gradient(double[] x)
+
+        protected double[,] calc_active_gradient(double[] point)
         {
-            double[,] result = new double[m, n];
-            for (int i = 0; i != m; i++)
-                for (int j = 0; j != n; j++)
-                    result[i, j] = active[i].deriv_wrt_xi(x, j);
+            var result = new double[m, n];
+            for (var i = 0; i != m; i++)
+                for (var j = 0; j != n; j++)
+                    result[i, j] = active[i].deriv_wrt_xi(point, j);
             return result;
         }
-        protected double[,] calc_active_gradient(double[] x, List<int> Indices)
+
+        protected double[,] calc_active_gradient(double[] point, List<int> Indices)
         {
-            int size = Indices.Count;
-            double[,] result = new double[m, size];
-            for (int i = 0; i != m; i++)
-                for (int j = 0; j != size; j++)
-                    result[i, j] = active[i].deriv_wrt_xi(x, Indices[j]);
+            var size = Indices.Count;
+            var result = new double[m, size];
+            for (var i = 0; i != m; i++)
+                for (var j = 0; j != size; j++)
+                    result[i, j] = active[i].deriv_wrt_xi(point, Indices[j]);
             return result;
         }
-        protected double[] calc_active_vector(double[] x)
+
+        protected double[] calc_active_vector(double[] point)
         {
-            double[] vals = new double[m];
-            for (int i = 0; i != m; i++)
-                vals[i] = active[i].calculate(x);
+            var vals = new double[m];
+            for (var i = 0; i != m; i++)
+                vals[i] = active[i].calculate(point);
             return vals;
         }
 
         #endregion
 
         #region from/to Problem Definition
+
         private void readInProblemDefinition(ProblemDefinition pd)
         {
             if (pd.g != null)
@@ -419,45 +437,51 @@ namespace OptimizationToolbox
 
         public ProblemDefinition createProblemDefinition()
         {
-            var pd = new ProblemDefinition();
-            pd.ConvergenceMethods = this.ConvergenceMethods;
-            pd.f = objfn;
-            pd.g = new List<inequality>();
+            var pd = new ProblemDefinition
+                         {
+                             ConvergenceMethods = ConvergenceMethods,
+                             f = objfn,
+                             g = new List<inequality>(),
+                             h = new List<equality>()
+                         };
             foreach (inequality ineq in g)
                 if (ineq.GetType() == typeof(lessThanConstant))
                 {
-                    double ub = ((lessThanConstant)ineq).constant;
-                    int varIndex = ((lessThanConstant)ineq).index;
+                    var ub = ((lessThanConstant)ineq).constant;
+                    var varIndex = ((lessThanConstant)ineq).index;
                     pd.SpaceDescriptor.VariableDescriptors[varIndex].UpperBound = ub;
                 }
                 else if (ineq.GetType() == typeof(greaterThanConstant))
                 {
-                    double lb = ((greaterThanConstant)ineq).constant;
-                    int varIndex = ((greaterThanConstant)ineq).index;
+                    var lb = ((greaterThanConstant)ineq).constant;
+                    var varIndex = ((greaterThanConstant)ineq).index;
                     pd.SpaceDescriptor.VariableDescriptors[varIndex].UpperBound = lb;
                 }
                 else pd.g.Add(ineq);
-            pd.h = new List<equality>();
             foreach (equality eq in h)
                 pd.h.Add(eq);
-            pd.xStart = this.xStart;
+            pd.xStart = xStart;
             return pd;
         }
+
         #endregion
 
         #region Convergence Main Function
+
+        private int indexConverged;
+
         public string ConvergenceDeclaredBy
         {
             get
             {
-                if (ConvergenceMethods.Count > 0)
-                    return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0, 20);
-                else return "";
+                if (ConvergenceMethods.Count <= 0)return "";
+                return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0, 20);
             }
         }
-        private int indexConverged;
+
         protected Boolean notConverged(int YInteger = int.MinValue, double YDouble = double.NaN,
-               IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+                                       IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null,
+                                       IList<double[]> YJaggedDoubleArray = null)
         {
             for (indexConverged = 0; indexConverged < ConvergenceMethods.Count; indexConverged++)
             {
@@ -468,6 +492,7 @@ namespace OptimizationToolbox
             indexConverged = -1;
             return true;
         }
+
         #endregion
     }
 }

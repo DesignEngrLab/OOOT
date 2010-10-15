@@ -24,33 +24,39 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using StarMathLib;
 
-
 namespace OptimizationToolbox
 {
     public abstract class abstractOptFunction
     {
-        private double h = 0.05;
+        private readonly double h = 0.05;
         protected differentiate findDerivBy = differentiate.Analytic;
-        private double[] xlast;
-        [XmlIgnore]
-        public int numEvals = 0;
 
         private double flast;
+        [XmlIgnore]
+        public int numEvals;
+        private double[] xlast;
 
         #region Constructors
-        public abstractOptFunction() { }
-        public abstractOptFunction(differentiate d, double h)
+
+        protected abstractOptFunction()
         {
-            this.findDerivBy = d;
+        }
+
+        protected abstractOptFunction(differentiate d, double h)
+        {
+            findDerivBy = d;
             this.h = h;
         }
-        public abstractOptFunction(differentiate d)
+
+        protected abstractOptFunction(differentiate d)
         {
-            this.findDerivBy = d;
+            findDerivBy = d;
         }
+
         #endregion
 
         #region Public Functions to execute equation
+
         public double calculate(double[] x)
         {
             if (same(x)) return flast;
@@ -59,26 +65,29 @@ namespace OptimizationToolbox
             xlast = (double[])x.Clone();
             return flast;
         }
+
         public double[] gradient(double[] x)
         {
-            int n = x.GetLength(0);
-            double[] grad = new double[n];
-            for (int i = 0; i != n; i++)
+            var n = x.GetLength(0);
+            var grad = new double[n];
+            for (var i = 0; i != n; i++)
                 grad[i] = deriv_wrt_xi(x, i);
             return grad;
         }
+
         public double[] gradient(double[] x, List<int> workingSet)
         {
-            int size = workingSet.Count;
+            var size = workingSet.Count;
             var grad = new double[size];
-            for (int i = 0; i != size; i++)
+            for (var i = 0; i != size; i++)
                 grad[i] = deriv_wrt_xi(x, workingSet[i]);
             return grad;
         }
+
         #endregion
 
-
         #region Functions to Override in derived classes
+
         protected abstract double calc(double[] x);
 
         public virtual double deriv_wrt_xi(double[] x, int i)
@@ -103,9 +112,11 @@ namespace OptimizationToolbox
             }
             return double.NaN;
         }
+
         #endregion
 
         #region finite difference
+
         private double calcCentral2(double[] x, int i)
         {
             var xStep1 = (double[])x.Clone();
@@ -118,7 +129,7 @@ namespace OptimizationToolbox
 
         private double calcForward1(double[] x, int i)
         {
-            double[] xStep1 = (double[])x.Clone();
+            var xStep1 = (double[])x.Clone();
             xStep1[i] += h;
             numEvals++;
             return (calc(xStep1) - calculate(x)) / h;
@@ -126,7 +137,7 @@ namespace OptimizationToolbox
 
         private double calcBack1(double[] x, int i)
         {
-            double[] xStep1 = (double[])x.Clone();
+            var xStep1 = (double[])x.Clone();
             xStep1[i] -= h;
             numEvals++;
             return (calculate(x) - calc(xStep1)) / h;
@@ -134,46 +145,48 @@ namespace OptimizationToolbox
 
         private double calcBack2(double[] x, int i)
         {
-            double[] xStep1 = (double[])x.Clone();
+            var xStep1 = (double[])x.Clone();
             xStep1[i] -= h;
 
-            double[] xStep2 = (double[])x.Clone();
+            var xStep2 = (double[])x.Clone();
             xStep2[i] -= 2 * h;
             numEvals += 2;
             return (calc(xStep2) - 4 * calc(xStep1) + 3 * calculate(x)) / (2 * h);
         }
+
         private double calcForward2(double[] x, int i)
         {
-            double[] xStep1 = (double[])x.Clone();
+            var xStep1 = (double[])x.Clone();
             xStep1[i] += h;
 
-            double[] xStep2 = (double[])x.Clone();
+            var xStep2 = (double[])x.Clone();
             xStep2[i] += 2 * h;
             numEvals += 2;
             return (-3 * calculate(x) + 4 * calc(xStep1) - calc(xStep2)) / (2 * h);
         }
+
         private double calcCentral4(double[] x, int i)
         {
-            double[] forStep1 = (double[])x.Clone();
+            var forStep1 = (double[])x.Clone();
             forStep1[i] += h;
-            double[] forStep2 = (double[])x.Clone();
+            var forStep2 = (double[])x.Clone();
             forStep2[i] += 2 * h;
-            double[] backStep1 = (double[])x.Clone();
+            var backStep1 = (double[])x.Clone();
             backStep1[i] -= h;
-            double[] backStep2 = (double[])x.Clone();
+            var backStep2 = (double[])x.Clone();
             backStep2[i] -= 2 * h;
             numEvals += 4;
             return (calc(backStep2) - 8 * calc(backStep1)
-                + 8 * calc(forStep1) - calc(forStep2)) / (12 * h);
+                    + 8 * calc(forStep1) - calc(forStep2)) / (12 * h);
         }
+
         #endregion
+
         private Boolean same(double[] x)
         {
             if ((x == null) || (xlast == null)) return false;
             return (StarMath.norm1(x, xlast)
-                < (x.GetLength(0) * double.Epsilon));
+                    < (x.GetLength(0) * double.Epsilon));
         }
-
-
     }
 }

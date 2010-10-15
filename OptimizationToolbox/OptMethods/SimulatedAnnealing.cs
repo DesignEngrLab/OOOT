@@ -20,6 +20,7 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System.Collections.Generic;
+using System.Linq;
 using StarMathLib;
 
 namespace OptimizationToolbox
@@ -31,6 +32,7 @@ namespace OptimizationToolbox
         public abstractSelector selector { get; set; }
 
         #region Constructor
+
         public SimulatedAnnealing(optimize direction)
         {
             RequiresObjectiveFunction = true;
@@ -46,6 +48,7 @@ namespace OptimizationToolbox
 
             selector = new MetropolisCriteria(direction);
         }
+
         #endregion
 
         public override void Add(object function)
@@ -64,25 +67,21 @@ namespace OptimizationToolbox
         {
             var candidates = new List<KeyValuePair<double, double[]>>();
             candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
-            double temperature = scheduler.SetInitialTemperature();
+            var temperature = scheduler.SetInitialTemperature();
             while (notConverged(k++, candidates[0].Key, candidates[0].Value))
             {
                 SearchIO.output(k + ": f = " + candidates[0].Key, 5);
                 SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 5);
                 var neighbors = neighborGenerator.GenerateCandidates(candidates[0].Value);
-                foreach (var neighbor in neighbors)
-                {
-                    var f = calc_f(neighbor, (meritFunction != null));
-                    if (meritFunction != null || feasible(neighbor))
-                        candidates.Add(new KeyValuePair<double, double[]>(f, neighbor));
-                }
+                candidates.AddRange(from neighbor in neighbors
+                                    let f = calc_f(neighbor, (meritFunction != null))
+                                    where meritFunction != null || feasible(neighbor)
+                                    select new KeyValuePair<double, double[]>(f, neighbor));
                 temperature = scheduler.UpdateTemperature(temperature, candidates);
                 selector.selectCandidates(ref candidates, temperature);
             }
             xStar = candidates[0].Value;
             return candidates[0].Key;
         }
-
     }
 }
-

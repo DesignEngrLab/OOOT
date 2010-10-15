@@ -21,24 +21,29 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using System.Linq;
+using System.Xml.Serialization;
 
 namespace OptimizationToolbox
 {
     public class DesignSpaceDescription
     {
         #region Constructor
-        public DesignSpaceDescription() { }
+
+        public DesignSpaceDescription()
+        {
+        }
+
         public DesignSpaceDescription(IEnumerable<VariableDescriptor> VariableDescriptors)
         {
             this.VariableDescriptors = new List<VariableDescriptor>(VariableDescriptors);
             UpdateCharacteristics();
         }
+
         public DesignSpaceDescription(int n)
         {
             variableDescriptors = new List<VariableDescriptor>(n);
-            for (int i = 0; i < n; i++) variableDescriptors.Add(new VariableDescriptor());
+            for (var i = 0; i < n; i++) variableDescriptors.Add(new VariableDescriptor());
 
             UpdateCharacteristics();
         }
@@ -67,20 +72,25 @@ namespace OptimizationToolbox
             foreach (var varIndex in DiscreteVarIndices)
                 SizeOfSpace *= VariableDescriptors[varIndex].Size;
         }
+
         #endregion
 
         #region Properties
 
+        private List<VariableDescriptor> variableDescriptors;
+
         /// <summary>
-        /// Gets the number of dimensions, the length of x.
+        ///   Gets the number of dimensions, the length of x.
         /// </summary>
         /// <value>The n.</value>
         [XmlIgnore]
-        public int n { get { return VariableDescriptors.Count; } }
+        public int n
+        {
+            get { return VariableDescriptors.Count; }
+        }
 
-        private List<VariableDescriptor> variableDescriptors;
         /// <summary>
-        /// Gets or sets the variable descriptors.
+        ///   Gets or sets the variable descriptors.
         /// </summary>
         /// <value>The variable descriptors.</value>
         public List<VariableDescriptor> VariableDescriptors
@@ -92,38 +102,45 @@ namespace OptimizationToolbox
                 UpdateCharacteristics();
             }
         }
+
         public VariableDescriptor this[int i]
         {
             get { return VariableDescriptors[i]; }
             set { VariableDescriptors[i] = value; }
         }
+
         /// <summary>
-        /// Gets a value indicating whether [all discrete].
+        ///   Gets a value indicating whether [all discrete].
         /// </summary>
         /// <value><c>true</c> if [all discrete]; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public Boolean AllDiscrete { get; private set; }
+
         /// <summary>
-        /// Gets the discrete var indices.
+        ///   Gets the discrete var indices.
         /// </summary>
         /// <value>The discrete var indices.</value>
         [XmlIgnore]
         public List<int> DiscreteVarIndices { get; private set; }
+
         /// <summary>
-        /// Gets the size of space.
+        ///   Gets the size of space.
         /// </summary>
         /// <value>The size of space.</value>
         [XmlIgnore]
         public long SizeOfSpace { get; private set; }
+
         /// <summary>
-        /// Getsthe max variable sizes.
+        ///   Getsthe max variable sizes.
         /// </summary>
         /// <value>The max variable sizes.</value>
         [XmlIgnore]
         public long[] MaxVariableSizes { get; private set; }
+
         #endregion
 
         #region Getting Discrete Vectors with Indices
+
         public double[] GetVariableVector(IList<long> Indices)
         {
             var result = new double[n];
@@ -133,25 +150,25 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Creates the neighbor change vectors. There will at least the minimum specified, 
-        /// and the process will stop after this max is reached although there may be significantly
-        /// more which are created to keep the changes symmetric. This is probably one of the
-        /// craziest little functions I've ever written but there is a method to it madness.
-        /// As opposed to the simplest approach which is +/-1 step in each direction, it seems
-        /// beneficial to have more transitions that can be made. And as opposed to increasing
-        /// these sizes linearly (e.g. +/-1, +/-2, +/-3, ...), it seems better to have them
-        /// increase logarithmically. Here the steps are 1,3,7,20,55,etc. The idea is to move
-        /// in the closest integers to the natural log. As if in base-e. This is shown to
-        /// be optimal from a simple paper I read in science some years ago:
-        /// http://www.americanscientist.org/issues/pub/third-base/3
-        /// The function starts at points e^0 (or 1) away and makes the primary changes,
-        /// {(-1,0), (+1,0), (0,-1), (0,+1)}, and then goes on to e^1 rounded to the closest
-        /// integer {(-3,0), (+3,0), (0,-3), (0,+3)}. But then it goes back to fill out the 
-        /// higher order changes at the lower levels {(-1,-1), (+1,-1), (-1,+1), (+1,+1)}.
-        /// It then jumps to the next exponent for a new set of primary changes, and then
-        /// again drops back to populate the higher level changes of lower levels.
+        ///   Creates the neighbor change vectors. There will at least the minimum specified, 
+        ///   and the process will stop after this max is reached although there may be significantly
+        ///   more which are created to keep the changes symmetric. This is probably one of the
+        ///   craziest little functions I've ever written but there is a method to it madness.
+        ///   As opposed to the simplest approach which is +/-1 step in each direction, it seems
+        ///   beneficial to have more transitions that can be made. And as opposed to increasing
+        ///   these sizes linearly (e.g. +/-1, +/-2, +/-3, ...), it seems better to have them
+        ///   increase logarithmically. Here the steps are 1,3,7,20,55,etc. The idea is to move
+        ///   in the closest integers to the natural log. As if in base-e. This is shown to
+        ///   be optimal from a simple paper I read in science some years ago:
+        ///   http://www.americanscientist.org/issues/pub/third-base/3
+        ///   The function starts at points e^0 (or 1) away and makes the primary changes,
+        ///   {(-1,0), (+1,0), (0,-1), (0,+1)}, and then goes on to e^1 rounded to the closest
+        ///   integer {(-3,0), (+3,0), (0,-3), (0,+3)}. But then it goes back to fill out the 
+        ///   higher order changes at the lower levels {(-1,-1), (+1,-1), (-1,+1), (+1,+1)}.
+        ///   It then jumps to the next exponent for a new set of primary changes, and then
+        ///   again drops back to populate the higher level changes of lower levels.
         /// </summary>
-        /// <param name="minimumNeighbors">The minimum neighbors.</param>
+        /// <param name = "minimumNeighbors">The minimum neighbors.</param>
         /// <returns></returns>
         public int[][] CreateNeighborChangeVectors(int minimumNeighbors)
         {
@@ -184,13 +201,14 @@ namespace OptimizationToolbox
                 exponent++;
             } while (minimumNeighbors > 0);
             var transitionsCombined = new List<int[]>();
-            foreach (var sizeLists in transitions)
-                foreach (var degreeLists in sizeLists)
-                    transitionsCombined.AddRange(degreeLists);
+            foreach (var degreeLists in transitions.SelectMany(sizeLists => sizeLists))
+            {
+                transitionsCombined.AddRange(degreeLists);
+            }
             return transitionsCombined.ToArray();
         }
 
-        private List<int[]> CreateNewChangeVectorsBasedOnLast(List<int[]> lastChanges, int stepSize)
+        private List<int[]> CreateNewChangeVectorsBasedOnLast(IEnumerable<int[]> lastChanges, int stepSize)
         {
             var changes = new List<int[]>();
             foreach (var baseVector in lastChanges)
@@ -214,13 +232,14 @@ namespace OptimizationToolbox
         public List<int> FindValidChanges(double[] candidate, int[][] changeVectors)
         {
             var result = Enumerable.Range(0, changeVectors.GetLength(0)).ToList();
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
             {
                 result.RemoveAll(a => ((candidate[i] + changeVectors[a][i]) < VariableDescriptors[i].LowerBound));
                 result.RemoveAll(a => ((candidate[i] + changeVectors[a][i]) > VariableDescriptors[i].UpperBound));
             }
             return result;
         }
+
         #endregion
     }
 }

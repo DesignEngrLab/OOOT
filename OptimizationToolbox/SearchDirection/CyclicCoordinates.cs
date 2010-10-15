@@ -22,19 +22,12 @@
 using System;
 using StarMathLib;
 
-
 namespace OptimizationToolbox
 {
     public class CyclicCoordinates : abstractSearchDirection
     {
-        private int counter = 0;
+        private int counter;
         private double[] xLast;
-        private int n;
-
-        public CyclicCoordinates(int n)
-        {
-            this.n = n;
-        }
 
         public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false)
         {
@@ -50,6 +43,5 @@ namespace OptimizationToolbox
             counter++;
             return d;
         }
-
     }
 }

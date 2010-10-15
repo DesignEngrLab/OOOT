@@ -19,20 +19,22 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
-using System.Collections.Generic;
-
-
 namespace OptimizationToolbox
 {
-
     /* Enumerator for Search functions that have generality 
      * to either minimize or maximize (e.g. PNPPS, stochasticChoose). */
-    public enum optimize { minimize = -1, neither = 0, maximize = 1 };
+
+    public enum optimize
+    {
+        minimize = -1,
+        neither = 0,
+        maximize = 1
+    } ;
 
     /* This enumerator is used primarily by the parameter tuning where suboptimization
      * functions (that derive from the Optimization Toolbox's abstractOptFunction) need
      * to determine how derivatives will be calculated. */
+
     public enum differentiate
     {
         Analytic,
@@ -42,5 +44,5 @@ namespace OptimizationToolbox
         Back2,
         Forward2,
         Central4
-    };
+    } ;
 }

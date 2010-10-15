@@ -21,20 +21,19 @@
  *************************************************************************/
 using StarMathLib;
 
-
 namespace OptimizationToolbox
 {
     public class FletcherReevesDirection : abstractSearchDirection
     {
-        double[] dirLast = null; //last search direction
-        double[] dir = null;
-        double magGradF; //the magnitude of the current gradient of f
-        double magGradFLast; //the magnitude of the last gradient of f
+        private double[] dir;
+        private double[] dirLast; //last search direction
+        private double magGradF; //the magnitude of the current gradient of f
+        private double magGradFLast; //the magnitude of the last gradient of f
 
-        public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, bool reset=false)
+        public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, bool reset = false)
         {
             /* if a TRUE is sent to reset, then we call a simple steepestDescent function. */
-            if (reset) return steepestDescentReset(x, gradf, f);
+            if (reset) return steepestDescentReset(gradf);
 
             /* calc the magnitude of the new gradient, magGradF. This is used several
              * times so in order to minimize time, calc it once and save it. */
@@ -47,7 +46,7 @@ namespace OptimizationToolbox
             /* add the inertia from the last direction - if there was a last dir, dirLast */
             if ((magGradFLast != 0.0) && (dirLast != null))
                 dir = StarMath.add(dir, StarMath.multiply((magGradF / magGradFLast), dirLast));
-            
+
             /* we no longer need magGradFLast, so we write over it with the new value. */
             magGradFLast = magGradF;
 
@@ -57,25 +56,20 @@ namespace OptimizationToolbox
             /* again, it's possible that it'll be all zeros. This happens when dirLast is in 
              * the exact opposite direction as dir. In such a case, forget the inertia idea,
              * and just use steepestDescent. */
-            if (magGradF == 0) return steepestDescentReset(x, gradf, f);
-            else
-            {
-                dir = (StarMath.multiply((1.0 / magGradF), dir));
-                dirLast = (double[])dir.Clone();
-                return dir;
-            }
+            if (magGradF == 0) return steepestDescentReset(gradf);
+            dir = (StarMath.multiply((1.0 / magGradF), dir));
+            dirLast = (double[])dir.Clone();
+            return dir;
         }
-        private double[] steepestDescentReset(double[] x, double[] gradf, double f)
+
+        private double[] steepestDescentReset(double[] gradf)
         {
             magGradFLast = magGradF = StarMath.norm2(gradf);
             if (magGradF == 0) return gradf;
             /* if the gradient of f is all zeros, then simply return it. */
-            else
-            {
-                dir = StarMath.multiply((-1.0 / magGradF), gradf);
-                dirLast = (double[])dir.Clone();
-                return dir;
-            }
+            dir = StarMath.multiply((-1.0 / magGradF), gradf);
+            dirLast = (double[])dir.Clone();
+            return dir;
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿/*************************************************************************
+﻿using System.Collections.Generic;
+using System.Linq;
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -19,9 +21,6 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
-using System.Linq;
-using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
@@ -32,13 +31,13 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double fractionToKeep = double.NaN)
+        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+                                              double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
             sort(ref candidates);
             candidates = candidates.Take(numKeep).ToList();
         }
-
     }
 }

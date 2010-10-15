@@ -19,41 +19,42 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
 
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using StarMathLib;
 
 namespace OptimizationToolbox
 {
     /// <summary>
-    /// 
     /// </summary>
     public sealed class SequentialQuadraticProgramming : abstractOptMethod
     {
         #region Fields
+
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
-        double[] gradF, dk;
-
-        /* fk is the value of f(xk). */
-        double fk;
-
-        /* alphaStar is what is returned by the line search (1-D) search method. It is used
-         * to update xk. */
-        double alphaStar;
 
         /* A is the gradient of the active constraints as an m by n matrix. */
-        double[,] A;
-        double[] activeVals;
+        private double[,] A;
+        private double[] activeVals;
+        private double alphaStar;
+        private double[] dk;
+
+        /* fk is the value of f(xk). */
+        private double fk;
+        private double[] gradF;
 
         /* Lagrange multipliers for active constraints. */
-        double[] lambdas;
+        private double[] lambdas;
+
         #endregion
 
         #region Constructor
+
         public SequentialQuadraticProgramming()
         {
             RequiresObjectiveFunction = true;
@@ -67,14 +68,16 @@ namespace OptimizationToolbox
             RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = false;
 
-            this.Add(new SQPSimpleHalver(0.25, 100));
-            this.lineSearchMethod.SetOptimizationDetails(this);
-            this.Add(new linearExteriorPenaltyMax(this, 1.0));
-            this.Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
+            Add(new SQPSimpleHalver(0.25, 100));
+            lineSearchMethod.SetOptimizationDetails(this);
+            Add(new linearExteriorPenaltyMax(this, 1.0));
+            Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
         }
+
         #endregion
 
         #region Main Function, run
+
         protected override double run(out double[] xStar)
         {
             //evaluate f(x0)
@@ -83,13 +86,13 @@ namespace OptimizationToolbox
             // the search direction is initialized.
             dk = new double[n];
 
-            double initAlpha;
             active.AddRange(h);
 
             do
             {
                 gradF = calc_f_gradient(x);
                 A = formulateActiveSetAndGradients(x);
+                double initAlpha;
                 dk = calculateSQPSearchDirection(x, out initAlpha);
                 meritFunction.penaltyWeight = adjustMeritPenalty();
                 // this next function is not part of the regular SQP algorithm
@@ -106,8 +109,7 @@ namespace OptimizationToolbox
 
                 SearchIO.output("----f = " + fk, 3);
                 SearchIO.output("---#active =" + active.Count, 3);
-            }
-            while (notConverged(k, fk, x, gradF, new List<double[]>()));
+            } while (notConverged(k, fk, x, gradF, new List<double[]>()));
             fStar = fk;
             xStar = (double[])x.Clone();
             return fStar;
@@ -115,42 +117,43 @@ namespace OptimizationToolbox
 
         private double adjustMeritPenalty()
         {
-            double weight = StarMath.norm1(lambdas);
+            var weight = StarMath.norm1(lambdas);
 
             /* what is the point of the next condition? is it a correct step when one is still in the
              * infeasible region? */
             if (weight < meritFunction.penaltyWeight)
                 return 2 * meritFunction.penaltyWeight;
-             return weight;
+            return weight;
         }
 
-        private double preventNegatives(double[] xk, double[] dk, double initAlpha)
+        private static double preventNegatives(IList<double> xk, double[] dk, double initAlpha)
         {
-            for (int i = 0; i < dk.GetLength(0); i++)
+            for (var i = 0; i < dk.GetLength(0); i++)
                 if (dk[i] < 0)
                     initAlpha = Math.Min(initAlpha, -xk[i] / dk[i]);
             return initAlpha;
         }
+
         #endregion
 
         /// <summary>
-        /// Formulates the active set and gradients.
+        ///   Formulates the active set and gradients.
         /// </summary>
-        /// <param name="xk">The xk.</param>
+        /// <param name = "xk">The xk.</param>
         /// <returns>the gradient of the active constraints as an m by n matrix.</returns>
         private double[,] formulateActiveSetAndGradients(double[] xk)
         {
             /* this list is ordered from largest to smallest. We only want to introduce ONE new member 
              * into the active set. Which would be the first element (i.e.value) of this sorted list. */
 
-            SortedList<double, constraint> newInfeasibles
+            var newInfeasibles
                 = new SortedList<double, constraint>(new optimizeSort(optimize.maximize));
 
             /* this foreach loop can remove any number of g's from the active set, and puts
              * any newly violated g's into the sorted list newInfeasbles. */
             foreach (inequality c in g)
             {
-                double gVal = c.calculate(xk);
+                var gVal = c.calculate(xk);
                 if (gVal < 0.0)
                 {
                     if (active.Contains(c)) active.Remove(c);
@@ -159,45 +162,41 @@ namespace OptimizationToolbox
                     newInfeasibles.Add(gVal, c);
             }
             /* only want to add one newInfeasible to the list of active. Hence the break statement. */
-            foreach (KeyValuePair<double, constraint> kvp in newInfeasibles)
-                if (!active.Contains(kvp.Value))
-                {
-                    active.Add(kvp.Value);
-                    break;
-                }
+            foreach (var kvp in newInfeasibles.Where(kvp => !active.Contains(kvp.Value)))
+            {
+                active.Add(kvp.Value);
+                break;
+            }
             m = active.Count;
             return calc_active_gradient(xk);
         }
 
         /// <summary>
-        /// Calculates the SQP search direction.
+        ///   Calculates the SQP search direction.
         /// </summary>
-        /// <param name="xk">The xk.</param>
-        /// <param name="gradF">The grad F.</param>
-        /// <param name="A">The A.</param>
-        /// <param name="initAlpha">The init alpha.</param>
+        /// <param name = "xk">The xk.</param>
+        /// <param name = "initAlpha">The init alpha.</param>
         /// <returns></returns>
         private double[] calculateSQPSearchDirection(double[] xk, out double initAlpha)
         {
             activeVals = calc_active_vector(xk);
-            double[] dir;
-            double[,] At = StarMath.transpose(A);
-            double[,] invAAt = StarMath.inverse(StarMath.multiply(A, At));
-            double[,] AtinvAAt = StarMath.multiply(At, invAAt);
-            double[,] J = StarMath.makeIdentity(n);
-            double[,] invJ = StarMath.makeIdentity(n);
+            var At = StarMath.transpose(A);
+            var invAAt = StarMath.inverse(StarMath.multiply(A, At));
+            var AtinvAAt = StarMath.multiply(At, invAAt);
+            //double[,] J = StarMath.makeIdentity(n);
+            var invJ = StarMath.makeIdentity(n);
 
             // double[,] P = StarMath.subtract(StarMath.makeIdentity(n), AtinvAAtA);
 
-            double[,] P = StarMath.multiply(invJ,
-                StarMath.subtract(StarMath.multiply(AtinvAAt, A), StarMath.makeIdentity(n)));
+            var P = StarMath.multiply(invJ,
+                                      StarMath.subtract(StarMath.multiply(AtinvAAt, A), StarMath.makeIdentity(n)));
             //double[,] Q = StarMath.multiply(invJ,
             //        StarMath.multiply(AtinvAAt, StarMath.multiply(A,
             //        StarMath.multiply(J, StarMath.multiply(invAtA, At)))));
-            double[,] Q = AtinvAAt;
-            double[] dirMin = StarMath.multiply(P, gradF);
-            double[] dirCC = StarMath.multiply(Q, activeVals);
-            dir = StarMath.subtract(dirMin, dirCC);
+            var Q = AtinvAAt;
+            var dirMin = StarMath.multiply(P, gradF);
+            var dirCC = StarMath.multiply(Q, activeVals);
+            var dir = StarMath.subtract(dirMin, dirCC);
 
             lambdas = StarMath.multiply(invAAt, StarMath.subtract(
                 activeVals, StarMath.multiply(A, gradF)));

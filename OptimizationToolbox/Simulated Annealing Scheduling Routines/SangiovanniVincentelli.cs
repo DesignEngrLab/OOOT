@@ -27,10 +27,11 @@ namespace OptimizationToolbox
 {
     public class SACoolingSangiovanniVincentelli : abstractSimulatedAnnealingCoolingSchedule
     {
-        private readonly double lambda;
         private const int initialSamples = 100;
         private const double initProbabilityForThreeSigma = 0.99;
+        private readonly double lambda;
         private double[] objectiveValues;
+
         public SACoolingSangiovanniVincentelli(int samplesInGeneration, double lambda = 0.7)
             : base(samplesInGeneration)
         {
@@ -42,9 +43,9 @@ namespace OptimizationToolbox
             var LHC = new LatinHyperCube(optMethod.spaceDescriptor, VariablesInScope.OnlyDiscrete);
             var initCandidates = LHC.GenerateCandidates(null, initialSamples);
             objectiveValues = new double[initialSamples];
-            for (int j = 0; j < initialSamples; j++)
+            for (var j = 0; j < initialSamples; j++)
             {
-                for (int i = 0; i < optMethod.n; i++)
+                for (var i = 0; i < optMethod.n; i++)
                     if (!optMethod.spaceDescriptor.DiscreteVarIndices.Contains(i))
                         initCandidates[j][i] = optMethod.xStart[i];
                 objectiveValues[j] = optMethod.calc_f(initCandidates[j], true);
@@ -58,17 +59,10 @@ namespace OptimizationToolbox
         internal override double UpdateTemperature(double temperature, List<KeyValuePair<double, double[]>> candidates)
         {
             objectiveValues[samplesThusFar++] = candidates[0].Key;
-            if (samplesThusFar >= samplesInGeneration)
-            {
-                samplesThusFar = 0;
-                var stdev = StarMath.standardDeviation(objectiveValues);
-                return temperature * Math.Exp(-1 * lambda * temperature / stdev);
-            }
-            else return temperature;
+            if (samplesThusFar < samplesInGeneration) return temperature;
+            samplesThusFar = 0;
+            var stdev = StarMath.standardDeviation(objectiveValues);
+            return temperature * Math.Exp(-1 * lambda * temperature / stdev);
         }
-
-
     }
-
 }
-

@@ -30,20 +30,21 @@ namespace OptimizationToolbox
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
-        double[] dk;
+        private double alphaStar;
+        private double[] dk;
 
         /* fk is the value of f(xk). */
-        double fk;
+        private double fk;
 
 
         /* alphaStar is what is returned by the line search (1-D) search method. It is used
          * to update xk. */
-        double alphaStar;
-        int searchDirColumn;
+        private int searchDirColumn;
         //Each column represents a potential search direction
-        double[,] searchDirMatrix;
+        private double[,] searchDirMatrix;
 
         #region Constructor
+
         public PowellsMethodOptimization()
         {
             RequiresObjectiveFunction = true;
@@ -57,17 +58,20 @@ namespace OptimizationToolbox
             RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = false;
         }
+
         #endregion
 
-
         #region Main Function, run
+
         protected override double run(out double[] xStar)
         {
             #region Initialization
+
             xStar = null;
             //evaluate f(x0)
             fStar = fk = calc_f(x);
             dk = new double[n];
+
             #endregion
 
             do
@@ -89,6 +93,7 @@ namespace OptimizationToolbox
                  * to the coordinate directions*/
 
                 #region Generate and search Conjugate directions
+
                 searchDirMatrix = StarMath.makeIdentity(n);
                 for (var conjStep = 0; conjStep < n; conjStep++)
                 {
@@ -103,7 +108,7 @@ namespace OptimizationToolbox
                         dk = StarMath.GetColumn(searchDirColumn, searchDirMatrix);
                         // use line search (arithmetic mean) to find alphaStar
                         alphaStar = lineSearchMethod.findAlphaStar(x, dk, true);
-                     var   xl = StarMath.multiply(alphaStar, dk);
+                        var xl = StarMath.multiply(alphaStar, dk);
                         x = StarMath.add(x, xl);
                         if (i > 0)
                             dconj = StarMath.add(dconj, xl);
@@ -112,20 +117,24 @@ namespace OptimizationToolbox
                     }
                     StarMath.SetColumn(conjStep, searchDirMatrix, dconj);
                 }
+
                 #endregion
 
                 #region Finally search along all the conjugate directions now in the matrix
+
                 for (var searchDirNum = 0; searchDirNum < n; searchDirNum++)
                 {
                     dk = StarMath.GetColumn(searchDirNum, searchDirMatrix);
                     // use line search (arithmetic mean) to find alphaStar
                     alphaStar = lineSearchMethod.findAlphaStar(x, dk, true);
-                  
+
                     x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
                 }
+
                 #endregion
 
                 #region Output, Check if fstar should be updated, Increment k
+
                 SearchIO.output("iteration=" + k, 3);
                 k++;
                 fk = calc_f(x);
@@ -135,16 +144,13 @@ namespace OptimizationToolbox
                     xStar = (double[])x.Clone();
                 }
                 SearchIO.output("f = " + fk, 3);
+
                 #endregion
-            }
-            while (notConverged(k, fk, x, null, new List<double[]>()));
+            } while (notConverged(k, fk, x, null, new List<double[]>()));
 
             return fStar;
         }
 
-
         #endregion
-
-
     }
 }

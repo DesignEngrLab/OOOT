@@ -20,16 +20,16 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
     public class BitStringNeighborGenerator : abstractGenerator
     {
-        private readonly BitByteHexLimits[] limits;
         private readonly int bitStringLength;
+        private readonly BitByteHexLimits[] limits;
         private readonly Random rnd;
+
         public BitStringNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
@@ -37,6 +37,7 @@ namespace OptimizationToolbox
             bitStringLength = limits[n - 1].EndIndex;
             rnd = new Random();
         }
+
         public override List<double[]> GenerateCandidates(double[] candidate, int numToCreate = -1)
         {
             var newCands = new List<double[]>();
@@ -45,8 +46,8 @@ namespace OptimizationToolbox
             {
                 var result = (double[])candidate.Clone();
                 var j = rnd.Next(bitStringLength);
-                int varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
-                long valueIndex = VariableDescriptors[varIndex].PositionOf(result[varIndex]);
+                var varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
+                var valueIndex = VariableDescriptors[varIndex].PositionOf(result[varIndex]);
                 valueIndex = BitByteHexFunctions.FlipBit(valueIndex, limits[varIndex], j);
                 result[varIndex] = VariableDescriptors[varIndex][valueIndex];
                 newCands.Add(result);

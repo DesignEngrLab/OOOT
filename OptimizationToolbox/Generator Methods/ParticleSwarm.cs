@@ -19,8 +19,8 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
 
+using System;
 using System.Collections.Generic;
 
 namespace OptimizationToolbox
@@ -38,7 +38,6 @@ namespace OptimizationToolbox
         }
     }
 }
-
 
 //function [x,fval,gfx,output]=hPSO(fitnessfun,nvars,options,varargin)
 //%Syntax: [x,fval,gfx,output]=hPSO(fitnessfun,nvars,options,varargin)
@@ -157,21 +156,21 @@ namespace OptimizationToolbox
 
 //% For each flight
 //for j=2:flights
-    
+
 //    % Estimate the velocities
 //    r1=rand(popul,size(space,1));
 //    r2=rand(popul,size(space,1));
 //    v=v*w+c1*r1.*(p-pop)+c2*r2.*(P-pop);
 //    v=max(v,-ones(popul,1)*maxv');
 //    v=min(v,ones(popul,1)*maxv');
-    
+
 //    % Add the velocities to the population 
 //    pop=pop+v;
-    
+
 //    % Drag the particles into the search space
 //    pop=min(pop,ones(popul,1)*space(:,2)');
 //    pop=max(pop,ones(popul,1)*space(:,1)');
-    
+
 //    % Hill climb search for the new population
 //    pnew=p;
 //    fxipnew=fxip;
@@ -185,27 +184,27 @@ namespace OptimizationToolbox
 //    pnew=max(pnew,ones(popul,1)*space(:,1)');
 //    fxi=feval(fitnessfun,pop,varargin{:});
 //    fxipnew=feval(fitnessfun,pnew,varargin{:});
-    
+
 //    % Min(fxi,fxip)
 //    s=find(fxi<fxip);
 //    p(s,:)=pop(s,:);
 //    fxip(s)=fxi(s);
-    
+
 //    % Min(fxipnew,fxip);
 //    s=find(fxipnew<fxip);
 //    p(s,:)=pnew(s,:);
 //    fxip(s)=fxipnew(s);
-    
+
 //    % Isolate the best solution
 //    [Y,I]=min(fxip);
 //    gfx(j,:)=[Y p(I,:)];
 //    P=ones(popul,1)*p(I,:);
-    
+
 //    % Show the progress
 //    if Show>1 & rem(j,Show)==0
 //        fprintf('  %4.0f           %8.4f           %4.0f\n',j,gfx(j,1),StallFli);
 //    end
-    
+
 //    % Termination conditions
 //    if gfx(j,1)==gfx(j-1,1)
 //        StallFli = StallFli+1;

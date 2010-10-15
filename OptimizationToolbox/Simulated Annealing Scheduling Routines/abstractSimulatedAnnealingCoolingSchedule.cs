@@ -25,14 +25,15 @@ namespace OptimizationToolbox
 {
     public abstract class abstractSimulatedAnnealingCoolingSchedule
     {
-        protected int samplesThusFar;
         protected readonly int samplesInGeneration;
         protected abstractOptMethod optMethod;
+        protected int samplesThusFar;
 
         protected abstractSimulatedAnnealingCoolingSchedule(int samplesInGeneration)
         {
             this.samplesInGeneration = samplesInGeneration;
         }
+
         public void SetOptimizationDetails(abstractOptMethod OptMethod)
         {
             optMethod = OptMethod;
@@ -42,4 +43,3 @@ namespace OptimizationToolbox
         internal abstract double UpdateTemperature(double temperature, List<KeyValuePair<double, double[]>> candidates);
     }
 }
-

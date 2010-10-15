@@ -26,23 +26,32 @@ namespace OptimizationToolbox
 {
     public class MaxTimeConvergence : abstractConvergence
     {
-        public TimeSpan maxTime { get; set; }
-        readonly DateTime startTime;
+        private readonly DateTime startTime;
 
         #region Constructor
-        public MaxTimeConvergence(){}
+
+        public MaxTimeConvergence()
+        {
+        }
+
         public MaxTimeConvergence(TimeSpan maxTime)
         {
             this.maxTime = maxTime;
             startTime = DateTime.Now;
         }
+
         public MaxTimeConvergence(DateTime timeToStop)
         {
             startTime = DateTime.Now;
             maxTime = timeToStop - startTime;
         }
+
         #endregion
-        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+
+        public TimeSpan maxTime { get; set; }
+
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null,
+                                       IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             return ((DateTime.Now - startTime) >= maxTime);
         }

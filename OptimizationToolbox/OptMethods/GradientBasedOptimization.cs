@@ -29,16 +29,15 @@ namespace OptimizationToolbox
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
-        double[] gradF, dk;
+        private double alphaStar;
+        private double[] dk;
 
         /* fk is the value of f(xk). */
-        double fk;
-
-        /* alphaStar is what is returned by the line search (1-D) search method. It is used
-         * to update xk. */
-        double alphaStar;
+        private double fk;
+        private double[] gradF;
 
         #region Constructor
+
         public GradientBasedOptimization()
         {
             RequiresObjectiveFunction = true;
@@ -52,10 +51,11 @@ namespace OptimizationToolbox
             RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = false;
         }
+
         #endregion
 
-
         #region Main Function, run
+
         protected override double run(out double[] xStar)
         {
             /* this is just to overcome a small issue with the compiler. It thinks that xStar will
@@ -67,10 +67,10 @@ namespace OptimizationToolbox
             do
             {
                 gradF = calc_f_gradient(x);
-                dk = this.searchDirMethod.find(x, gradF, fk, ref alphaStar);
+                dk = searchDirMethod.find(x, gradF, fk, ref alphaStar);
 
                 // use line search (arithmetic mean) to find alphaStar
-                alphaStar = lineSearchMethod.findAlphaStar(x, dk,true);
+                alphaStar = lineSearchMethod.findAlphaStar(x, dk, true);
                 x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
                 SearchIO.output("iteration=" + k, 3);
                 k++;
@@ -81,15 +81,14 @@ namespace OptimizationToolbox
                     xStar = (double[])x.Clone();
                 }
                 SearchIO.output("f = " + fk, 3);
-            }
-            while (notConverged(k, fk, x, gradF));
+            } while (notConverged(k, fk, x, gradF));
 
             return fStar;
         }
 
-
         #endregion
 
-
+        /* alphaStar is what is returned by the line search (1-D) search method. It is used
+         * to update xk. */
     }
 }

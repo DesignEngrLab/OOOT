@@ -26,11 +26,11 @@ namespace OptimizationToolbox
 {
     public class RandomNeighborGenerator : abstractGenerator
     {
-        readonly Random r;
-        readonly int[][] changeVectors;
-        int changeVectorIndex;
+        private readonly int[][] changeVectors;
+        private readonly Random r;
+        private int changeVectorIndex;
 
-        public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int maxNumNeighbors=250)
+        public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int maxNumNeighbors = 250)
             : base(discreteSpaceDescriptor)
         {
             r = new Random();
@@ -43,14 +43,14 @@ namespace OptimizationToolbox
             var changes = discreteSpaceDescriptor.FindValidChanges(neighbor, changeVectors);
             var z = r.Next(changes.Count);
             changeVectorIndex = changes[z];
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
                 if (changeVectors[changeVectorIndex][i] != 0)
                 {
                     var valueIndex = VariableDescriptors[i].PositionOf(neighbor[i]);
                     valueIndex += changeVectors[changeVectorIndex][i];
                     neighbor[i] = VariableDescriptors[i][valueIndex];
                 }
-            return new List<double[]>() { neighbor };
+            return new List<double[]> { neighbor };
         }
     }
 }

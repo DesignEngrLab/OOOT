@@ -26,22 +26,22 @@ namespace OptimizationToolbox
 {
     public class GACrossoverBitString : GeneticCrossoverGenerator
     {
-        private readonly double crossoverRate;
-        private readonly double xRatePerBit;
-        private readonly BitByteHexLimits[] limits;
         private readonly int bitStringLength;
+        private readonly BitByteHexLimits[] limits;
         private readonly Random rnd;
+        private readonly double xRatePerBit;
+
         public GACrossoverBitString(DesignSpaceDescription discreteSpaceDescriptor, double crossoverRate = 1.7)
             : base(discreteSpaceDescriptor)
         {
-            this.crossoverRate = crossoverRate;
             limits = BitByteHexFunctions.InitializeBitString(discreteSpaceDescriptor);
             bitStringLength = limits[n - 1].EndIndex;
             xRatePerBit = crossoverRate / bitStringLength;
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int targetPopNumber = -1)
+        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+                                                int targetPopNumber = -1)
         {
             /* if no population size is provided, then it is assumed that the population should
              * double from the current one. */
@@ -51,16 +51,16 @@ namespace OptimizationToolbox
             while (numNew < targetPopNumber)
             {
                 var parent1 = candidates[(numNew) % candidates.Count].Value;
-                var parent2 = candidates[(numNew+1) % candidates.Count].Value;
+                var parent2 = candidates[(numNew + 1) % candidates.Count].Value;
                 var child1 = (double[])parent1.Clone();
                 var child2 = (double[])parent2.Clone();
                 var ChangeMade = false;
-                for (int i = 1; i < bitStringLength; i++)
+                for (var i = 1; i < bitStringLength; i++)
                 {
-                    ChangeMade = true;
                     if (rnd.NextDouble() < xRatePerBit)
                     {
-                        int varIndex = BitByteHexFunctions.FindVariableIndex(limits, i);
+                        ChangeMade = true;
+                        var varIndex = BitByteHexFunctions.FindVariableIndex(limits, i);
                         if (varIndex + 1 < n)
                         {
                             /* switch the remaining double values. No need to encode/decode them.*/
@@ -72,24 +72,18 @@ namespace OptimizationToolbox
                         }
                         var c1Value = VariableDescriptors[varIndex].PositionOf(child1[varIndex]);
                         var c1BitArray = BitByteHexFunctions.Encode(c1Value,
-                                                                      limits[varIndex].EndIndex -
-                                                                      limits[varIndex].StartIndex);
+                                                                    limits[varIndex].EndIndex -
+                                                                    limits[varIndex].StartIndex);
                         var c2Value = VariableDescriptors[varIndex].PositionOf(child2[varIndex]);
                         var c2BitArray = BitByteHexFunctions.Encode(c2Value,
-                                                                      limits[varIndex].EndIndex -
-                                                                      limits[varIndex].StartIndex);
+                                                                    limits[varIndex].EndIndex -
+                                                                    limits[varIndex].StartIndex);
                         BitByteHexFunctions.CrossoverBitString(c1BitArray, c2BitArray,
-                                           i - limits[varIndex].StartIndex, limits[varIndex].MaxValue, out c1Value,
-                                           out c2Value);
+                                                               i - limits[varIndex].StartIndex,
+                                                               limits[varIndex].MaxValue, out c1Value,
+                                                               out c2Value);
                         child1[varIndex] = VariableDescriptors[varIndex][c1Value];
                         child2[varIndex] = VariableDescriptors[varIndex][c2Value];
-
-                        //if ((StarMath.norm1(child1, parent1) < 0.00000000001) ||
-                        //    (StarMath.norm1(child1, parent2) < 0.00000000001) ||
-                        //    (StarMath.norm1(child2, parent1) < 0.00000000001) ||
-                        //    (StarMath.norm1(child2, parent2) < 0.00000000001))
-                        //    SearchIO.output("good<+++")
-                        //else  SearchIO.output("good<+++");
                     }
                 }
                 if (ChangeMade)
@@ -100,7 +94,5 @@ namespace OptimizationToolbox
                 }
             }
         }
-
-
     }
 }

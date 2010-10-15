@@ -19,7 +19,6 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
@@ -29,14 +28,17 @@ namespace OptimizationToolbox
     public class GeneticAlgorithm : abstractOptMethod
     {
         #region Fields
+
         private readonly int populationSize;
         public abstractGenerator initGenerator { get; set; }
         public abstractGenerator crossoverGenerator { get; set; }
         public abstractGenerator mutationGenerator { get; set; }
         public abstractSelector fitnessSelector { get; set; }
+
         #endregion
 
         #region Constructor
+
         public GeneticAlgorithm(int populationSize = 100)
         {
             this.populationSize = populationSize;
@@ -52,6 +54,7 @@ namespace OptimizationToolbox
             RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = true;
         }
+
         #endregion
 
         public override void Add(object function)
@@ -79,7 +82,7 @@ namespace OptimizationToolbox
 
             do
             {
-                SearchIO.output(null, null, k, "iter = " + k,
+                SearchIO.output("", "", k, "iter = " + k,
                                 "*******************\n* Iteration: " + k + " *\n*******************");
                 /* 3. selection survivors*/
                 SearchIO.output("selecting from population  (current pop = " + population.Count + ").", 4);
@@ -106,7 +109,7 @@ namespace OptimizationToolbox
             return fStar;
         }
 
-        private double[] CalcPopulationStats(List<KeyValuePair<double, double[]>> population)
+        private static double[] CalcPopulationStats(IEnumerable<KeyValuePair<double, double[]>> population)
         {
             return new[]
                        {
@@ -117,9 +120,9 @@ namespace OptimizationToolbox
         }
 
 
-        private void evaluate(List<KeyValuePair<double, double[]>> population)
+        private void evaluate(IList<KeyValuePair<double, double[]>> population)
         {
-            for (int i = population.Count - 1; i >= 0; i--)
+            for (var i = population.Count - 1; i >= 0; i--)
             {
                 var candidate = population[i];
                 if (double.IsNaN(candidate.Key))
@@ -132,4 +135,3 @@ namespace OptimizationToolbox
         }
     }
 }
-

@@ -18,7 +18,7 @@
   <ConvergenceMethods>
     <abstractConvergence xsi:type="ToKnownBestFConvergence">
       <fBest>8.0</fBest>
-      <positiveTolerance>0.5</positiveTolerance>
+      <positiveTolerance>0.05</positiveTolerance>
     </abstractConvergence>
    <abstractConvergence xsi:type="MaxAgeConvergence">
       <toleranceForSame>1E-09</toleranceForSame>

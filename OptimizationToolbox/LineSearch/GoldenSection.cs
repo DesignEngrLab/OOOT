@@ -25,27 +25,32 @@ namespace OptimizationToolbox
 {
     public class GoldenSection : abstractLineSearch
     {
-        const double golden62 = 0.61803398874989484820458683436564;
-        const double golden38 = 1 - golden62;
+        private const double golden62 = 0.61803398874989484820458683436564;
+        private const double golden38 = 1 - golden62;
 
         #region Constructors
+
         public GoldenSection(double epsilon, double stepSize, int kMax)
-            : base(epsilon, stepSize, kMax) { }
+            : base(epsilon, stepSize, kMax)
+        {
+        }
+
         #endregion
 
         public override double findAlphaStar(double[] x, double[] dir)
         {
-            double alphaLow = 0.0;
-            double alphaHigh = stepSize;
-            double alpha1 = golden38 * alphaHigh;
-            double alpha2 = golden62 * alphaHigh;
+            var alphaLow = 0.0;
+            var alphaHigh = stepSize;
+            var alpha1 = golden38 * alphaHigh;
+            var alpha2 = golden62 * alphaHigh;
 
-            double fLow = calcF(x, alphaLow, dir);
-            double fHigh = calcF(x, alphaHigh, dir);
-            double f2 = calcF(x, alpha2, dir);
-            double f1 = double.NaN;
+            var fLow = calcF(x, alphaLow, dir);
+            var fHigh = calcF(x, alphaHigh, dir);
+            var f2 = calcF(x, alpha2, dir);
+            var f1 = double.NaN;
 
             #region Setting up Bracket
+
             /* not sure this has been published before, but borrowing the concept from DSC, what the
              * following while-loop is doing is to check if the three points are decreasing, if so
              * we define a new alphaHigh - in the GS-proportion so that the old alpahHigh can become
@@ -61,21 +66,21 @@ namespace OptimizationToolbox
                 fHigh = calcF(x, alphaHigh, dir);
             }
             if (double.IsNaN(f1)) f1 = calcF(x, alpha1, dir);
+
             #endregion
 
             /* the number -2.078086921235 in the following formula is the 1/ln(golden62).
              * Since each new iteration (or function evaluations) will effectively reduce the
              * space by 62%, we can a priori determine the number of iterations that need to be
              * called. In this way, GS is the most robust, but perhaps not the most efficent. */
-            kMax = (int)Math.Ceiling(-2.078086921235 * (Math.Log(epsilon, Math.E)-
-                Math.Log(alphaHigh, Math.E)));
+            kMax = (int)Math.Ceiling(-2.078086921235 * (Math.Log(epsilon, Math.E) -
+                                                       Math.Log(alphaHigh, Math.E)));
 
             for (k = 0; k <= kMax; k++)
             {
                 if (f1 < f2)
                 {
                     alphaHigh = alpha2;
-                    fHigh = f2;
                     alpha2 = alpha1;
                     f2 = f1;
                     alpha1 = golden38 * (alphaHigh - alphaLow) + alphaLow;
@@ -86,7 +91,6 @@ namespace OptimizationToolbox
                 else
                 {
                     alphaLow = alpha1;
-                    fLow = f1;
                     alpha1 = alpha2;
                     f1 = f2;
                     alpha2 = golden62 * (alphaHigh - alphaLow) + alphaLow;
@@ -94,7 +98,7 @@ namespace OptimizationToolbox
                 }
             }
             if (f1 < f2) return alpha1;
-            else return alpha2;
+            return alpha2;
         }
     }
 }

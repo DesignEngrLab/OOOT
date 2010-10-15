@@ -21,10 +21,11 @@
  *************************************************************************/
 namespace OptimizationToolbox
 {
-    class slackSquaredEqualityFromInequality : equality
+    internal class slackSquaredEqualityFromInequality : equality
     {
-        int slackIndex;
-        abstractOptFunction formerIneq;
+        private readonly abstractOptFunction formerIneq;
+        private readonly int slackIndex;
+
         public slackSquaredEqualityFromInequality(abstractOptFunction formerIneq, int slackIndex)
         {
             this.formerIneq = formerIneq;
@@ -42,7 +43,7 @@ namespace OptimizationToolbox
             // (see calculate above), meaning the derivative is 2xi
             if (i == slackIndex) return 2.0 * x[i];
 
-            else return formerIneq.deriv_wrt_xi(x, i);
+            return formerIneq.deriv_wrt_xi(x, i);
         }
     }
 }

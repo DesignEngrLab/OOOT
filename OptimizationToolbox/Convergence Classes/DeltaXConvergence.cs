@@ -27,24 +27,30 @@ namespace OptimizationToolbox
 {
     public class DeltaXConvergence : abstractConvergence
     {
-        public double minDifference { get; set; }
-        IList<double> xlast;
-
+        private IList<double> xlast;
 
         #region Constructor
-        public DeltaXConvergence(){}
+
+        public DeltaXConvergence()
+        {
+        }
+
         public DeltaXConvergence(double minDifference)
         {
             this.minDifference = minDifference;
         }
+
         #endregion
 
-        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        public double minDifference { get; set; }
+
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null,
+                                       IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var x = YDoubleArray1;
             if (x == null)
                 throw new Exception("DeltaXConvergence expected a 1-D array of doubles (in the third argument, YDoubleArray1) "
-                    + " representing the current decision vector, x.");
+                                    + " representing the current decision vector, x.");
             if ((xlast == null) || (StarMath.norm1(x, xlast) > minDifference))
             {
                 xlast = x;

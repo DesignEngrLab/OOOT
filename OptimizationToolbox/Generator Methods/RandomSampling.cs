@@ -29,6 +29,7 @@ namespace OptimizationToolbox
     {
         private const double defaultRealBound = 10000;
         private readonly Random rnd;
+
         public RandomSampling(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
@@ -38,14 +39,15 @@ namespace OptimizationToolbox
         public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
-            for (int i = 0; i < numSamples; i++)
+            for (var i = 0; i < numSamples; i++)
                 candidates.Add(new KeyValuePair<double, double[]>(double.NaN, makeOneRandomCandidate()));
         }
+
         public override List<double[]> GenerateCandidates(double[] candidate, int numSamples = -1)
         {
-           var candidates = new List<double[]>();
-             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
-            for (int i = 0; i < numSamples; i++)
+            var candidates = new List<double[]>();
+            if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
+            for (var i = 0; i < numSamples; i++)
                 candidates.Add(makeOneRandomCandidate());
             return candidates;
         }
@@ -53,7 +55,7 @@ namespace OptimizationToolbox
         private double[] makeOneRandomCandidate()
         {
             var x = new double[n];
-            for (int j = 0; j < n; j++)
+            for (var j = 0; j < n; j++)
                 if (discreteSpaceDescriptor.DiscreteVarIndices.Contains(j))
                 {
                     var index = rnd.Next((int)MaxVariableSizes[j]);

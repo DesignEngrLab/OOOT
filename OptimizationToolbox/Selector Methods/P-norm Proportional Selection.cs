@@ -27,26 +27,29 @@ namespace OptimizationToolbox
 {
     public class PNormProportionalSelection : abstractSelector
     {
+        private readonly Boolean alwaysKeepBest;
         private readonly Random rnd;
-        readonly Boolean alwaysKeepBest;
-        public PNormProportionalSelection(optimize direction, Boolean AlwaysKeepBest, double Q=0.5)
+
+        public PNormProportionalSelection(optimize direction, Boolean AlwaysKeepBest, double Q = 0.5)
             : base(direction)
         {
             rnd = new Random();
             alwaysKeepBest = AlwaysKeepBest;
             this.Q = Q;
         }
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double fractionToKeep = double.NaN)
+
+        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+                                              double fractionToKeep = double.NaN)
         {
             var survivors = new List<KeyValuePair<double, double[]>>();
             if (alwaysKeepBest)
-        {
-            double bestF;
-            if (direction == optimize.maximize) bestF = candidates.Select(a => a.Key).Max();
-            else bestF = candidates.Select(a => a.Key).Min();
-            survivors.Add(candidates.Find(a => a.Key != bestF));
-            candidates.Remove(survivors[0]);
-        }
+            {
+                double bestF;
+                if (direction == optimize.maximize) bestF = candidates.Select(a => a.Key).Max();
+                else bestF = candidates.Select(a => a.Key).Min();
+                survivors.Add(candidates.Find(a => a.Key != bestF));
+                candidates.Remove(survivors[0]);
+            }
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
 
@@ -60,40 +63,45 @@ namespace OptimizationToolbox
             candidates = survivors;
         }
 
-        private static int findIndex(double p, double[] probabilities)
+        private static int findIndex(double p, IList<double> probabilities)
         {
-            int i = 0;
+            var i = 0;
             while (p > 0) p -= probabilities[i++];
             return i;
         }
 
-        private double[] makeProbabilites(List<KeyValuePair<double, double[]>> candidates)
+        private double[] makeProbabilites(IList<KeyValuePair<double, double[]>> candidates)
         {
             var length = candidates.Count;
             var result = new double[length];
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
                 result[i] = Math.Pow(candidates[i].Key, p);
             var sum = result.Sum();
-            for (int i = 0; i < length; i++)
+            for (var i = 0; i < length; i++)
                 result[i] /= sum;
             return result;
         }
 
         #region Converting Between Q and P
-        const double maxP = 40;
-        const double minP = 0.025;
-        const double maxQ = 1.0;
-        const double minQ = 0.0;
+
+        private const double maxP = 40;
+        private const double minP = 0.025;
+        private const double maxQ = 1.0;
+        private const double minQ = 0.0;
         /* after some empirical testing, I have settled on 40 and 1/40 as the highest and lowest
          * values for p. Since, on the generic level, the objective function may be any value, one
          * should be careful not to choose something too high as to go out of the range of a double (10e300). 
          * For example, for an f0=1million, a p greater than 51 will  cause an error. */
+
         /// <summary>
-        /// v is the power that q is raised to convert it to p.
+        ///   v is the power that q is raised to convert it to p.
         /// </summary>
-        readonly double v = Math.Log((1 - minP) / (maxP - minP)) / -0.693147180559945;
+        private readonly double v = Math.Log((1 - minP) / (maxP - minP)) / -0.693147180559945;
 
         private double p;
+
+        private double q;
+
         public double P
         {
             get { return p; }
@@ -106,7 +114,6 @@ namespace OptimizationToolbox
             }
         }
 
-        private double q;
         public double Q
         {
             get { return q; }
@@ -130,8 +137,9 @@ namespace OptimizationToolbox
 
 
             SearchIO.output("", "", "", "q=" + q + ",p=" + p,
-                "q = " + q + " changed to p = " + p);
+                            "q = " + q + " changed to p = " + p);
         }
+
         private void determineQfromP()
         {
             if (Math.Abs(p) <= minP)
@@ -143,8 +151,9 @@ namespace OptimizationToolbox
 
 
             SearchIO.output("", "", "", "p=" + p + ",q=" + q,
-                "p = " + p + " changed to q = " + q);
+                            "p = " + p + " changed to q = " + q);
         }
+
         #endregion
     }
 }

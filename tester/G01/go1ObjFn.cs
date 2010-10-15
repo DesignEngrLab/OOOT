@@ -1,5 +1,4 @@
-﻿using System;
-using OptimizationToolbox;
+﻿using OptimizationToolbox;
 
 namespace tester.G01
 {
@@ -50,22 +49,22 @@ namespace tester.G01
 
 
  f=5*sum(x(1:4,1))-5*sum(x(1:4,1).*x(1:4,1))-sum(x(5:13,1)); */
-    class go1ObjFn : objectiveFunction
+
+    internal class go1ObjFn : objectiveFunction
     {
-
-
         protected override double calc(double[] x)
         {
-            double f = 5 * (x[0] + x[1] + x[2] + x[3]);
+            var f = 5 * (x[0] + x[1] + x[2] + x[3]);
             f -= 5 * (x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]);
-            for (int i = 4; i < 13; i++)
+            for (var i = 4; i < 13; i++)
                 f -= x[i];
             return f;
         }
+
         public override double deriv_wrt_xi(double[] x, int i)
         {
             if (i >= 4) return -1;
-            else return 5 - 10 * x[i];
+            return 5 - 10 * x[i];
         }
     }
 }

@@ -26,14 +26,16 @@ namespace OptimizationToolbox
 {
     public class MetropolisCriteria : abstractSelector
     {
-        private Random rnd;
+        private readonly Random rnd;
+
         public MetropolisCriteria(optimize direction)
             : base(direction)
         {
             rnd = new Random();
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double temperature = double.NaN)
+        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+                                              double temperature = double.NaN)
         {
             var fOld = candidates[0].Key;
             var fNew = candidates[1].Key;

@@ -21,22 +21,35 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
-using StarMathLib;
 
 namespace OptimizationToolbox
 {
     public class ToKnownBestFConvergence : abstractConvergence
     {
-        public double fBest { get; set; }
-        private double posTolerance = double.PositiveInfinity;
         private double negTolerance = double.PositiveInfinity;
-        public double positiveTolerance { get { return posTolerance; } set { posTolerance = value; } }
-        public double negativeTolerance { get { return negTolerance; } set { negTolerance = value; } }
+        private double posTolerance = double.PositiveInfinity;
+        public double fBest { get; set; }
 
+        public double positiveTolerance
+        {
+            get { return posTolerance; }
+            set { posTolerance = value; }
+        }
+
+        public double negativeTolerance
+        {
+            get { return negTolerance; }
+            set { negTolerance = value; }
+        }
 
         #region Constructor
-        public ToKnownBestFConvergence() { }
-        public ToKnownBestFConvergence(double fBest, double positiveTolerance, double negativeTolerance = double.PositiveInfinity)
+
+        public ToKnownBestFConvergence()
+        {
+        }
+
+        public ToKnownBestFConvergence(double fBest, double positiveTolerance,
+                                       double negativeTolerance = double.PositiveInfinity)
         {
             this.fBest = fBest;
             this.positiveTolerance = positiveTolerance;
@@ -44,14 +57,15 @@ namespace OptimizationToolbox
         }
 
         #endregion
-        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+
+        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null,
+                                       IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
         {
             var f = YDouble;
             if (double.IsNaN(f))
                 throw new Exception("ToKnownBestConvergence expected a double (in the second argument, YDouble) "
-                    + " representing the objective function.");
+                                    + " representing the objective function.");
             return ((f < fBest + Math.Abs(positiveTolerance)) && (f > fBest - Math.Abs(negativeTolerance)));
-
         }
     }
 }

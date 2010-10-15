@@ -27,12 +27,15 @@ namespace OptimizationToolbox
     public class RandomPairwiseCompare : abstractSelector
     {
         private readonly Random rnd;
+
         public RandomPairwiseCompare(optimize direction)
             : base(direction)
         {
             rnd = new Random();
         }
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates, double fractionToKeep = double.NaN)
+
+        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+                                              double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
@@ -40,7 +43,7 @@ namespace OptimizationToolbox
             /* maxLoops was created in the off chance that the population stagnates all at the same
              * objective function value. It is unlikely that the process should exist on this account
              * but it has happened. Ergo, we put in this condition so that the process doesn't hang here.*/
-            int maxLoops = 3 * candidates.Count;
+            var maxLoops = 3 * candidates.Count;
             while ((candidates.Count > numKeep) && (maxLoops-- > 0))
             {
                 var contestantA = candidates[0];
@@ -52,7 +55,8 @@ namespace OptimizationToolbox
                 else if (betterThan(contestantB.Key, contestantA.Key))
                     candidates.Add(contestantB);
                 else
-                {   /* if it's a tie, add them both to the list, but in off-chance that this match is played
+                {
+                    /* if it's a tie, add them both to the list, but in off-chance that this match is played
                      * again, contestantB is added at a random location in the list. */
                     candidates.Add(contestantA);
                     candidates.Insert(rnd.Next(candidates.Count), contestantB);

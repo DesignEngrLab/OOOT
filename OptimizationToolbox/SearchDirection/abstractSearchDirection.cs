@@ -21,15 +21,15 @@
  *************************************************************************/
 using System;
 
-
 namespace OptimizationToolbox
 {
     public abstract class abstractSearchDirection
     {
         public abstract double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false);
+
         public virtual double[] find(double[] x, double[] gradf, double f, Boolean reset = false)
         {
-            double dummy = double.NaN;
+            var dummy = double.NaN;
             return find(x, gradf, f, ref dummy, reset);
         }
     }

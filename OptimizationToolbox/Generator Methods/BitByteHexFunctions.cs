@@ -24,13 +24,11 @@ using System.Collections;
 
 namespace OptimizationToolbox
 {
-
     internal struct BitByteHexLimits
     {
-        public int StartIndex;
         public int EndIndex;
         public long MaxValue;
-
+        public int StartIndex;
     }
 
     internal static class BitByteHexFunctions
@@ -39,14 +37,14 @@ namespace OptimizationToolbox
         {
             var result = new BitByteHexLimits[discreteSpaceDescriptor.n];
             var currentIndex = 0;
-            for (int i = 0; i < discreteSpaceDescriptor.n; i++)
+            for (var i = 0; i < discreteSpaceDescriptor.n; i++)
             {
                 if (discreteSpaceDescriptor.VariableDescriptors[i].Discrete)
                 {
                     var maxValue = discreteSpaceDescriptor.MaxVariableSizes[i];
                     var numberBits = (int)(Math.Log(maxValue, 2)) + 1;
                     var endIndex = currentIndex + numberBits;
-                    result[i] = new BitByteHexLimits()
+                    result[i] = new BitByteHexLimits
                                     {
                                         StartIndex = currentIndex,
                                         EndIndex = endIndex,
@@ -68,7 +66,7 @@ namespace OptimizationToolbox
         {
             var result = new BitArray(length);
             var denominator = (long)Math.Pow(2, length - 1);
-            for (int i = length - 1; i >= 0; i--)
+            for (var i = length - 1; i >= 0; i--)
             {
                 if (value >= denominator)
                 {
@@ -85,7 +83,7 @@ namespace OptimizationToolbox
         {
             long result = 0;
             long factor = 1;
-            for (int i = 0; i < b.Count; i++)
+            for (var i = 0; i < b.Count; i++)
             {
                 if (b[i]) result += factor;
                 factor *= 2;
@@ -95,30 +93,26 @@ namespace OptimizationToolbox
         }
 
 
-
-       internal static long FlipBit(long initValue, BitByteHexLimits limits, int bitIndex)
+        internal static long FlipBit(long initValue, BitByteHexLimits limits, int bitIndex)
         {
             bitIndex -= limits.StartIndex;
-            BitArray b = BitByteHexFunctions.Encode(initValue, limits.EndIndex - limits.StartIndex);
+            var b = Encode(initValue, limits.EndIndex - limits.StartIndex);
             b.Set(bitIndex, !b[bitIndex]);
-            return BitByteHexFunctions.Decode(b, limits.MaxValue);
+            return Decode(b, limits.MaxValue);
         }
 
 
-
-
-       internal static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, int position,
-           long maxValue, out long c1Value, out long c2Value)
-       {
-           for (int i = position; i < c1BitArray.Count; i++)
-           {
-               var c1Temp = c1BitArray[i];
-               c1BitArray.Set(i, c2BitArray[i]);
-               c2BitArray.Set(i, c1Temp);
-           }
-           c1Value = BitByteHexFunctions.Decode(c1BitArray, maxValue);
-           c2Value = BitByteHexFunctions.Decode(c2BitArray, maxValue);
-       }
-
+        internal static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, int position,
+                                                long maxValue, out long c1Value, out long c2Value)
+        {
+            for (var i = position; i < c1BitArray.Count; i++)
+            {
+                var c1Temp = c1BitArray[i];
+                c1BitArray.Set(i, c2BitArray[i]);
+                c2BitArray.Set(i, c1Temp);
+            }
+            c1Value = Decode(c1BitArray, maxValue);
+            c2Value = Decode(c2BitArray, maxValue);
+        }
     }
 }

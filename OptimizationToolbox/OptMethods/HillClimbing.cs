@@ -19,7 +19,6 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
@@ -32,6 +31,7 @@ namespace OptimizationToolbox
         public abstractSelector selector { get; set; }
 
         #region Constructor
+
         public HillClimbing()
         {
             RequiresObjectiveFunction = true;
@@ -45,6 +45,7 @@ namespace OptimizationToolbox
             RequiresFeasibleStartPoint = true;
             RequiresDiscreteSpaceDescriptor = true;
         }
+
         #endregion
 
         public override void Add(object function)
@@ -62,21 +63,17 @@ namespace OptimizationToolbox
             candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
             while (notConverged(k++, candidates[0].Key, candidates[0].Value))
             {
-                SearchIO.output(k + ": f = " + candidates[0].Key, 5);
-                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 5);
+                SearchIO.output(k + ": f = " + candidates[0].Key, 4);
+                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 4);
                 var neighbors = neighborGenerator.GenerateCandidates(candidates[0].Value);
-                foreach (var neighbor in neighbors)
-                {
-                    var f = calc_f(neighbor, (meritFunction != null));
-                    if (meritFunction != null || feasible(neighbor))
-                        candidates.Add(new KeyValuePair<double, double[]>(f, neighbor));
-                }
+                candidates.AddRange(from neighbor in neighbors
+                                    let f = calc_f(neighbor, (meritFunction != null))
+                                    where meritFunction != null || feasible(neighbor)
+                                    select new KeyValuePair<double, double[]>(f, neighbor));
                 selector.selectCandidates(ref candidates);
             }
             xStar = candidates[0].Value;
             return candidates[0].Key;
         }
-
     }
 }
-

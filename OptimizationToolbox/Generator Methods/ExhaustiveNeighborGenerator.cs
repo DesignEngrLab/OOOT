@@ -21,18 +21,15 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using StarMathLib;
 
 namespace OptimizationToolbox
 {
     public class ExhaustiveNeighborGenerator : abstractGenerator
     {
-        readonly Random r;
-        readonly int[][] changeVectors;
+        private readonly int[][] changeVectors;
+        private readonly Random r;
 
-        public ExhaustiveNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int maxNumNeighbors=250)
+        public ExhaustiveNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int maxNumNeighbors = 250)
             : base(discreteSpaceDescriptor)
         {
             r = new Random();
@@ -52,7 +49,7 @@ namespace OptimizationToolbox
             foreach (var changeVectorIndex in changeVectorIndices)
             {
                 var neighbor = (double[])current.Clone();
-                for (int i = 0; i < n; i++)
+                for (var i = 0; i < n; i++)
                     if (changeVectors[changeVectorIndex][i] != 0)
                     {
                         var valueIndex = VariableDescriptors[i].PositionOf(neighbor[i]);

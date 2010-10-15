@@ -25,19 +25,15 @@ namespace OptimizationToolbox
 {
     public class ExhaustiveSearch : abstractOptMethod
     {
-        private readonly DesignSpaceDescription spaceDescription;
-        private readonly optimize direction;
-        private optimizeSort comparer;
-        private long[] CurrentIndices;
         private const long timePreditionIndex = 1000;
 
         #region Constructor
+
         public ExhaustiveSearch(DesignSpaceDescription SpaceDescription, optimize direction)
         {
             spaceDescription = SpaceDescription;
             if (!SpaceDescription.AllDiscrete)
                 throw new Exception("Exhaustive Search can only be used when Space is all discrete");
-            this.direction = direction;
             comparer = new optimizeSort(direction);
             RequiresObjectiveFunction = false;
             ConstraintsSolvedWithPenalties = false;
@@ -50,7 +46,12 @@ namespace OptimizationToolbox
             RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = true;
         }
+
         #endregion
+
+        private readonly optimizeSort comparer;
+        private readonly DesignSpaceDescription spaceDescription;
+        private long[] CurrentIndices;
 
         protected override double run(out double[] xStar)
         {
@@ -79,10 +80,9 @@ namespace OptimizationToolbox
             double span = (DateTime.Now - startTime).Ticks;
             span /= timePreditionIndex;
             span *= spaceDescription.SizeOfSpace;
-            DateTime endTime = startTime + new TimeSpan((long)span);
-            SearchIO.output("Predicted time for the process to end:\n" + endTime,1);
+            var endTime = startTime + new TimeSpan((long)span);
+            SearchIO.output("Predicted time for the process to end:\n" + endTime,0);
         }
-
 
 
         private Boolean IncrementIndices(int IndicesIndex = 0)
@@ -94,9 +94,7 @@ namespace OptimizationToolbox
                 CurrentIndices[IndicesIndex] = 0;
                 return IncrementIndices(IndicesIndex + 1);
             }
-            else return true;
+            return true;
         }
-
     }
 }
-

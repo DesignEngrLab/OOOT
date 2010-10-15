@@ -22,7 +22,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace OptimizationToolbox
 {
@@ -32,36 +31,39 @@ namespace OptimizationToolbox
         OnlyReal,
         BothDiscreteAndReal
     } ;
+
     public class LatinHyperCube : SamplingGenerator
     {
         private readonly VariablesInScope generateFor;
+
         public LatinHyperCube(DesignSpaceDescription discreteSpaceDescriptor, VariablesInScope GenerateFor)
             : base(discreteSpaceDescriptor)
         {
             generateFor = GenerateFor;
         }
+
         public override List<double[]> GenerateCandidates(double[] candidate, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
-            Random rnd = new Random();
+            var rnd = new Random();
             var data = new List<double>[n];
 
             // the following is not correct - need to fix
             // also what about the non-discrete variables and LHC?
-            for (int j = 0; j < n; j++)
+            for (var j = 0; j < n; j++)
             {
                 var varVals = new List<double>();
                 if (discreteSpaceDescriptor.DiscreteVarIndices.Contains(j) && generateFor != VariablesInScope.OnlyReal)
                 {
                     varVals = new List<double>();
-                    for (int i = 0; i < numSamples; i++)
+                    for (var i = 0; i < numSamples; i++)
                     {
-                        int effectiveIndex = (int)(Math.Round(((double)i * VariableDescriptors[j].Size) / numSamples));
+                        var effectiveIndex = (int)(Math.Round(((double)i * VariableDescriptors[j].Size) / numSamples));
                         varVals.Add(VariableDescriptors[j][effectiveIndex]);
                     }
                 }
                 else if (!discreteSpaceDescriptor.DiscreteVarIndices.Contains(j) &&
-                   generateFor != VariablesInScope.OnlyDiscrete)
+                         generateFor != VariablesInScope.OnlyDiscrete)
                 {
                     var delta = (VariableDescriptors[j].UpperBound - VariableDescriptors[j].LowerBound);
                     if (double.IsInfinity(delta))
@@ -70,17 +72,17 @@ namespace OptimizationToolbox
                     delta /= numSamples;
                     var lb = VariableDescriptors[j].LowerBound;
                     varVals = new List<double>();
-                    for (int i = 0; i < numSamples; i++) varVals.Add(lb + i * delta);
+                    for (var i = 0; i < numSamples; i++) varVals.Add(lb + i * delta);
                 }
-                else for (int i = 0; i < numSamples; i++) varVals.Add(double.NaN);
+                else for (var i = 0; i < numSamples; i++) varVals.Add(double.NaN);
                 varVals = varVals.OrderBy(a => rnd.NextDouble()).ToList();
                 data[j] = varVals;
             }
             var candidates = new List<double[]>(numSamples);
-            for (int i = 0; i < numSamples; i++)
+            for (var i = 0; i < numSamples; i++)
             {
                 var point = new double[n];
-                for (int j = 0; j < n; j++)
+                for (var j = 0; j < n; j++)
                     point[j] = data[j][i];
                 candidates.Add(point);
             }
@@ -89,7 +91,7 @@ namespace OptimizationToolbox
 
         public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
         {
-            List<double[]> candVectors = GenerateCandidates(null, numSamples);
+            var candVectors = GenerateCandidates(null, numSamples);
             foreach (var candVector in candVectors)
                 candidates.Add(new KeyValuePair<double, double[]>(double.NaN, candVector));
         }
