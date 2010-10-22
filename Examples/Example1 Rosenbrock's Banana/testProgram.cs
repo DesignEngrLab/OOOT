@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using OptimizationToolbox;
 using StarMathLib;
+using tester;
 
 namespace testerNameSpace
 {
@@ -45,7 +46,7 @@ namespace testerNameSpace
                                                       {
                                                           new MaxAgeConvergence(20, 0.000000001),
                                                           new MaxIterationsConvergence(500),
-                                                          new MaxDistanceInPopulationConvergence(1)
+                                                          new MaxSpanInPopulationConvergence(1)
                                                       },
                              SpaceDescriptor = dsd
                          };
@@ -94,7 +95,7 @@ namespace testerNameSpace
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new RandomNeighborGenerator(pd.SpaceDescriptor, 100));
             opty.Add(new SACoolingSangiovanniVincentelli(100));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
             return opty;
         }
 
@@ -109,29 +110,17 @@ namespace testerNameSpace
             //opty.Add(new BFGSDirection());
             //opty.Add(new PowellMethod(pd.SpaceDescriptor.n, 0.001, 6));
             opty.Add(new ArithmeticMean(0.0001, 0.1, 100));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
             return opty;
         }
 
-        private static abstractOptMethod TestGeneticAlgorithm(ProblemDefinition pd)
-        {
-            var opty = new GeneticAlgorithm();
-            opty.Add(pd);
-            opty.Add(new squaredExteriorPenalty(opty, 50));
-            opty.Add(new LatinHyperCube(pd.SpaceDescriptor, VariablesInScope.BothDiscreteAndReal));
-            opty.Add(new GAMutationBitString(pd.SpaceDescriptor, 0.4));
-            opty.Add(new GACrossoverBitString(pd.SpaceDescriptor));
-            opty.Add(new RandomPairwiseCompare(optimize.minimize));
-            //  opty.Add(new Elitism(optimize.minimize));
-            return opty;
-        }
 
         private static abstractOptMethod TestGRGMethod(ProblemDefinition pd)
         {
             var opty = new GeneralizedReducedGradientActiveSet();
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(pd);
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
             return opty;
         }
 
@@ -140,7 +129,7 @@ namespace testerNameSpace
             var opty = new SequentialQuadraticProgramming();
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(pd);
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
             return opty;
         }
 
@@ -152,16 +141,6 @@ namespace testerNameSpace
             return opty;
         }
 
-        private static abstractOptMethod TestPowellsMethod(ProblemDefinition pd)
-        {
-            var opty = new PowellsMethodOptimization();
-            opty.Add(pd);
-            opty.Add(new ArithmeticMean(0.00001, 5, 500));
-            opty.Add(new squaredExteriorPenalty(opty, 10));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
-            return opty;
-        }
-
         private static abstractOptMethod TestRHC(ProblemDefinition pd)
         {
             var opty = new HillClimbing();
@@ -169,7 +148,7 @@ namespace testerNameSpace
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new RandomNeighborGenerator(pd.SpaceDescriptor));
             opty.Add(new KeepSingleBest(optimize.minimize));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
             return opty;
         }
 
@@ -181,7 +160,7 @@ namespace testerNameSpace
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new ExhaustiveNeighborGenerator(pd.SpaceDescriptor));
             opty.Add(new KeepSingleBest(optimize.minimize));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxDistanceInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
             return opty;
         }
 
@@ -192,5 +171,9 @@ namespace testerNameSpace
             opty.ConvergenceMethods.Clear();
             return opty;
         }
+    }
+
+    internal class lessThanManifoldVolume
+    {
     }
 }

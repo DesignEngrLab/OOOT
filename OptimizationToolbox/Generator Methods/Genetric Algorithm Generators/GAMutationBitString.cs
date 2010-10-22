@@ -51,9 +51,9 @@ namespace OptimizationToolbox
                     {
                         ChangeMade = true;
                         var varIndex = BitByteHexFunctions.FindVariableIndex(limits, j);
-                        var valueIndex = VariableDescriptors[varIndex].PositionOf(candidate[varIndex]);
+                        var valueIndex = discreteSpaceDescriptor[varIndex].PositionOf(candidate[varIndex]);
                         valueIndex = BitByteHexFunctions.FlipBit(valueIndex, limits[varIndex], j);
-                        candidate[varIndex] = VariableDescriptors[varIndex][valueIndex];
+                        candidate[varIndex] = discreteSpaceDescriptor[varIndex][valueIndex];
                     }
                 if (ChangeMade)
                 {

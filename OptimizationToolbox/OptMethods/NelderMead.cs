@@ -80,7 +80,7 @@ namespace OptimizationToolbox
                 vertices.Add(calc_f(y), y);
             }
 
-            while (notConverged(k, vertices.Keys[0], vertices.Values[0], null, vertices.Values))
+            while (notConverged(k, objfn.numEvals, vertices.Keys[0], vertices.Values[0], vertices.Values, null))
             {
                 #region Compute the REFLECTION POINT
 

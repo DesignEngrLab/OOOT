@@ -24,8 +24,17 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// The abstract generator class is used for all discrete problems. The generator
+    /// creates new solutions. Either by adding to the input list or by simply writing over
+    /// it.
+    /// </summary>
     public abstract class abstractGenerator
     {
+        /// <summary>
+        /// The discreteSpaceDescriptor is of type DesignSpaceDescription and includes the
+        /// details (VariableDescriptors) for all variables in the system.
+        /// </summary>
         protected readonly DesignSpaceDescription discreteSpaceDescriptor;
 
         /// <summary>
@@ -37,26 +46,39 @@ namespace OptimizationToolbox
             this.discreteSpaceDescriptor = discreteSpaceDescriptor;
         }
 
+        /// <summary>
+        /// Gets the number of dimensions (length of the decision vector, x).
+        /// </summary>
+        /// <value>The n.</value>
         protected int n
         {
             get { return discreteSpaceDescriptor.n; }
         }
 
-        protected List<VariableDescriptor> VariableDescriptors
-        {
-            get { return discreteSpaceDescriptor.VariableDescriptors; }
-        }
 
+        /// <summary>
+        /// Gets the indices for the discrete variables in x.
+        /// </summary>
+        /// <value>The discrete var indices.</value>
         protected List<int> DiscreteVarIndices
         {
             get { return discreteSpaceDescriptor.DiscreteVarIndices; }
         }
 
+        /// <summary>
+        /// Gets the maximum variable sizes.
+        /// </summary>
+        /// <value>The max variable sizes.</value>
         protected long[] MaxVariableSizes
         {
             get { return discreteSpaceDescriptor.MaxVariableSizes; }
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="control">The control.</param>
         public virtual void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
         {
             throw new NotImplementedException(
@@ -64,6 +86,12 @@ namespace OptimizationToolbox
                 GetType());
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="control">The control.</param>
+        /// <returns></returns>
         public virtual List<double[]> GenerateCandidates(double[] candidate, int control = -1)
         {
             throw new NotImplementedException(
@@ -73,6 +101,11 @@ namespace OptimizationToolbox
     }
 
 
+    /// <summary>
+    /// The Sampling Generator abstract class is used to indicate which generators are used for initial creation of points.
+    /// These could also be used for simple design space exploration as in design of experiments. One may consider writing
+    /// additional types like OFAT (one factor at a time), Full-Factorial, Fractional-Factorial, Box-Bencken, etc.
+    /// </summary>
     public abstract class SamplingGenerator : abstractGenerator
     {
         protected SamplingGenerator(DesignSpaceDescription discreteSpaceDescriptor)
@@ -82,16 +115,32 @@ namespace OptimizationToolbox
     }
 
 
+    /// <summary>
+    /// The crossover abstract class is simply used by the genetic algorithm to recognize which generators are to be
+    /// used for crossover (as opposed to for initial sampling or mutation).
+    /// </summary>
     public abstract class GeneticCrossoverGenerator : abstractGenerator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneticCrossoverGenerator"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected GeneticCrossoverGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }
     }
 
+    /// <summary>
+    /// The mutation abstract class is simply used by the genetic algorithm to recognize which generators are to be
+    /// used for mutation (as opposed to for initial sampling or crossover). 
+    /// </summary>
     public abstract class GeneticMutationGenerator : abstractGenerator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneticMutationGenerator"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected GeneticMutationGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {

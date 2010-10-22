@@ -74,7 +74,7 @@ namespace OptimizationToolbox
             var probDeserializer = new XmlSerializer(typeof(ProblemDefinition));
             var newDesignprob = (ProblemDefinition)probDeserializer.Deserialize(probReader);
             SearchIO.output(Path.GetFileName(filename) + " successfully loaded.");
-            newDesignprob.SpaceDescriptor.UpdateCharacteristics();
+            //newDesignprob.SpaceDescriptor.UpdateCharacteristics();
             if (newDesignprob.name == null)
                 newDesignprob.name = Path.GetFileNameWithoutExtension(filename);
 

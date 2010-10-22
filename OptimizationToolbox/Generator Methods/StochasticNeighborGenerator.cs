@@ -57,9 +57,9 @@ namespace OptimizationToolbox
             for (var i = 0; i < n; i++)
                 if (changeVectors[changeVectorIndex][i] != 0)
                 {
-                    var valueIndex = VariableDescriptors[i].PositionOf(neighbor[i]);
+                    var valueIndex = discreteSpaceDescriptor[i].PositionOf(neighbor[i]);
                     valueIndex += changeVectors[changeVectorIndex][i];
-                    neighbor[i] = VariableDescriptors[i][valueIndex];
+                    neighbor[i] = discreteSpaceDescriptor[i][valueIndex];
                 }
             return new List<double[]> { neighbor };
         }

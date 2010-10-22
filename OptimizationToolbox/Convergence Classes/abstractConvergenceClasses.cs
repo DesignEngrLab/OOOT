@@ -25,16 +25,31 @@ using System.Xml.Serialization;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// The abstract class that all convergence criteria must inherit from. There is one Boolean function
+    /// that is returned from the class, called "converged", which takes up to five arguments.
+    /// </summary>
     [XmlInclude(typeof(DeltaFConvergence)), XmlInclude(typeof(DeltaGradFConvergence)),
-     XmlInclude(typeof(DeltaXConvergence)),
-     XmlInclude(typeof(MaxAgeConvergence)), XmlInclude(typeof(MaxIterationsConvergence)),
-     XmlInclude(typeof(MaxTimeConvergence)),
-     XmlInclude(typeof(ToKnownBestFConvergence)), XmlInclude(typeof(ToKnownBestXConvergence)),
-     XmlInclude(typeof(MultipleANDConvergenceConditions)), XmlInclude(typeof(MaxDistanceInPopulationConvergence))]
+     XmlInclude(typeof(DeltaXConvergence)), XmlInclude(typeof(MaxAgeConvergence)),
+    XmlInclude(typeof(MaxFnEvalsConvergence)), XmlInclude(typeof(MaxIterationsConvergence)),
+    XmlInclude(typeof(MaxSpanInPopulationConvergence)), XmlInclude(typeof(MaxTimeConvergence)),
+     XmlInclude(typeof(ToKnownBestFConvergence)), XmlInclude(typeof(ToKnownBestXConvergence))]
     public abstract class abstractConvergence
     {
-        public abstract Boolean converged(long YInteger, double YDouble = double.NaN,
-                                          IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null,
-                                          IList<double[]> YJaggedDoubleArray = null);
+        /// <summary>
+        /// Has the optimization algorithm converged? Each criteria that overrides this is OR'ed together
+        /// that means only one critieria needs to return true.
+        /// </summary>
+        /// <param name="iteration">The number of iterations.</param>
+        /// <param name="numFnEvals">The number of function evaluations.</param>
+        /// <param name="fBest">The best f.</param>
+        /// <param name="xBest">The best x.</param>
+        /// <param name="population">The population of candidates.</param>
+        /// <param name="gradF">The gradient of F.</param>
+        /// <returns>
+        /// true or false - has the process converged?
+        /// </returns>
+        public abstract Boolean converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
+                                          IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null);
     }
 }

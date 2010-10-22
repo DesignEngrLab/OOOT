@@ -39,7 +39,7 @@ namespace OptimizationToolbox
             var currentIndex = 0;
             for (var i = 0; i < discreteSpaceDescriptor.n; i++)
             {
-                if (discreteSpaceDescriptor.VariableDescriptors[i].Discrete)
+                if (discreteSpaceDescriptor[i].Discrete)
                 {
                     var maxValue = discreteSpaceDescriptor.MaxVariableSizes[i];
                     var numberBits = (int)(Math.Log(maxValue, 2)) + 1;
@@ -88,7 +88,7 @@ namespace OptimizationToolbox
                 if (b[i]) result += factor;
                 factor *= 2;
             }
-            if (result > maxValue) return result - maxValue;
+            if (result >= maxValue) return result - maxValue;
             return result;
         }
 

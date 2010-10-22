@@ -60,7 +60,7 @@
     <Compile Include="testProgram.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\OptimizationToolbox\OptimizationToolbox.csproj">
+    <ProjectReference Include="..\..\OptimizationToolbox\OptimizationToolbox.csproj">
       <Project>{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}</Project>
       <Name>OptimizationToolbox</Name>
     </ProjectReference>

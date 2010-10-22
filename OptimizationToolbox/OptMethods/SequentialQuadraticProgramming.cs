@@ -71,7 +71,7 @@ namespace OptimizationToolbox
             Add(new SQPSimpleHalver(0.25, 100));
             lineSearchMethod.SetOptimizationDetails(this);
             Add(new linearExteriorPenaltyMax(this, 1.0));
-            Add(new MultipleANDConvergenceConditions(5, 0.01, 0.01));
+            Add(new DeltaFConvergence(0.001, 0.0000001));
         }
 
         #endregion
@@ -109,7 +109,7 @@ namespace OptimizationToolbox
 
                 SearchIO.output("----f = " + fk, 3);
                 SearchIO.output("---#active =" + active.Count, 3);
-            } while (notConverged(k, fk, x, gradF, new List<double[]>()));
+            } while (notConverged(k, objfn.numEvals, fk, x,null, gradF));
             fStar = fk;
             xStar = (double[])x.Clone();
             return fStar;

@@ -57,7 +57,7 @@ namespace OptimizationToolbox
              * the exact opposite direction as dir. In such a case, forget the inertia idea,
              * and just use steepestDescent. */
             if (magGradF == 0) return steepestDescentReset(gradf);
-            dir = (StarMath.multiply((1.0 / magGradF), dir));
+            dir = (StarMath.divide(dir, magGradF));
             dirLast = (double[])dir.Clone();
             return dir;
         }

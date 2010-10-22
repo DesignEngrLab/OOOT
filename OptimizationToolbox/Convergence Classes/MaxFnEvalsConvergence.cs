@@ -27,35 +27,35 @@ namespace OptimizationToolbox
     /// <summary>
     /// Given a value Kmax, this criteria will return true if the process reaches this many iterations.
     /// </summary>
-    public class MaxIterationsConvergence : abstractConvergence
+    public class MaxFnEvalsConvergence : abstractConvergence
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxIterationsConvergence"/> class.
         /// </summary>
-        public MaxIterationsConvergence()
+        public MaxFnEvalsConvergence()
         {
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxIterationsConvergence"/> class.
         /// </summary>
-        /// <param name="maxIterations">The max iterations.</param>
-        public MaxIterationsConvergence(long maxIterations)
+        /// <param name="maxFunctionEvaluations">The max function evaluations.</param>
+        public MaxFnEvalsConvergence(long maxFunctionEvaluations)
         {
-            this.maxIterations = maxIterations;
+            this.maxFunctionEvaluations = maxFunctionEvaluations;
         }
 
         /// <summary>
-        /// Gets or sets the maximum number of iterations.
+        /// Gets or sets the maximum number of function evaluations.
         /// </summary>
-        /// <value>The max iterations.</value>
-        public long maxIterations { get; set; }
+        /// <value>The max function evaluations.</value>
+        public long maxFunctionEvaluations { get; set; }
 
         /// <summary>
-        /// Given a value Kmax, this criteria will return true if the process reaches this many iterations.
+        /// Given a value Kmax, this criteria will return true if the process reaches this many function evaluations.
         /// </summary>
-        /// <param name="iteration">The number of iterations.</param>
-        /// <param name="numFnEvals">The number of function evaluations (not used).</param>
+        /// <param name="iteration">The number of iterations (not used).</param>
+        /// <param name="numFnEvals">The number of function evaluations</param>
         /// <param name="fBest">The best f (not used).</param>
         /// <param name="xBest">The best x (not used).</param>
         /// <param name="population">The population of candidates (not used).</param>
@@ -63,12 +63,12 @@ namespace OptimizationToolbox
         /// <returns>
         /// true or false - has the process converged?
         /// </returns>
-        public override bool converged(long iteration, long numFnEvals, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
+        public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
-            if (iteration < 0)
+            if (numFnEvals < 0)
                 throw new Exception(
                     "MaxIterationsConvergence expected a positive value for the first argument, YInteger");
-            return (iteration >= maxIterations);
+            return (numFnEvals >= maxFunctionEvaluations);
         }
     }
 }

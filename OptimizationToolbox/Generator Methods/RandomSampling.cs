@@ -59,13 +59,13 @@ namespace OptimizationToolbox
                 if (discreteSpaceDescriptor.DiscreteVarIndices.Contains(j))
                 {
                     var index = rnd.Next((int)MaxVariableSizes[j]);
-                    x[j] = discreteSpaceDescriptor.VariableDescriptors[j][index];
+                    x[j] = discreteSpaceDescriptor[j][index];
                 }
                 else
                 {
-                    var range = VariableDescriptors[j].UpperBound - VariableDescriptors[j].LowerBound;
+                    var range = discreteSpaceDescriptor[j].UpperBound - discreteSpaceDescriptor[j].LowerBound;
                     if (double.IsInfinity(range)) range = 2 * defaultRealBound;
-                    var lb = VariableDescriptors[j].LowerBound;
+                    var lb = discreteSpaceDescriptor[j].LowerBound;
                     if (double.IsInfinity(lb)) lb = -defaultRealBound;
                     x[j] = range * rnd.NextDouble() + lb;
                 }

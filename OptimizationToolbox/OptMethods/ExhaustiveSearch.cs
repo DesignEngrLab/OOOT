@@ -61,7 +61,7 @@ namespace OptimizationToolbox
             x = spaceDescription.GetVariableVector(CurrentIndices);
             xStar = x;
             if (feasible(x)) fStar = calc_f(x);
-            while (notConverged(k++, fStar, xStar) && IncrementIndices())
+            while (notConverged(k++,objfn.numEvals, fStar, xStar) && IncrementIndices())
             {
                 if (k == timePreditionIndex) performTimePrediction(startTime);
                 x = spaceDescription.GetVariableVector(CurrentIndices);

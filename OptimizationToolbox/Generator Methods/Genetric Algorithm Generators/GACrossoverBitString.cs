@@ -70,11 +70,11 @@ namespace OptimizationToolbox
                             Array.Copy(child2, varIndex + 1, child1, varIndex + 1, tailLength);
                             Array.Copy(child1Tail, 0, child2, varIndex + 1, tailLength);
                         }
-                        var c1Value = VariableDescriptors[varIndex].PositionOf(child1[varIndex]);
+                        var c1Value = discreteSpaceDescriptor[varIndex].PositionOf(child1[varIndex]);
                         var c1BitArray = BitByteHexFunctions.Encode(c1Value,
                                                                     limits[varIndex].EndIndex -
                                                                     limits[varIndex].StartIndex);
-                        var c2Value = VariableDescriptors[varIndex].PositionOf(child2[varIndex]);
+                        var c2Value = discreteSpaceDescriptor[varIndex].PositionOf(child2[varIndex]);
                         var c2BitArray = BitByteHexFunctions.Encode(c2Value,
                                                                     limits[varIndex].EndIndex -
                                                                     limits[varIndex].StartIndex);
@@ -82,8 +82,8 @@ namespace OptimizationToolbox
                                                                i - limits[varIndex].StartIndex,
                                                                limits[varIndex].MaxValue, out c1Value,
                                                                out c2Value);
-                        child1[varIndex] = VariableDescriptors[varIndex][c1Value];
-                        child2[varIndex] = VariableDescriptors[varIndex][c2Value];
+                        child1[varIndex] = discreteSpaceDescriptor[varIndex][c1Value];
+                        child2[varIndex] = discreteSpaceDescriptor[varIndex][c2Value];
                     }
                 }
                 if (ChangeMade)

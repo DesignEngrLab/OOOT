@@ -31,6 +31,10 @@ namespace OptimizationToolbox
     {
         private readonly List<constraint> infeasibles;
         private readonly Boolean trackFeasibility;
+        /// <summary>
+        /// the tolerance value, epsilon is used to distinguish values of alpha. It is part
+        /// of the convergence for the line search.
+        /// </summary>
         protected double epsilon;
         protected int k, kMax;
         public double lastFeasAlpha, lastFeasAlpha4G, lastFeasAlpha4H;

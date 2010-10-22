@@ -1,0 +1,498 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="OptimizationToolbox.abstractOptMethod" Collapsed="true">
+    <Position X="2.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ICIAKyCAEBCIQAAAAgABgQRQQREIEEAI02BAIIEUQAI=</HashCode>
+      <FileName>OptMethods\abstractOptMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.ExhaustiveSearch" Collapsed="true">
+    <Position X="2.75" Y="4.5" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.646" Y="1.437" />
+        <Point X="2.646" Y="4.846" />
+        <Point X="2.75" Y="4.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgEAAAIAABCAAAIAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>OptMethods\ExhaustiveSearch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GeneralizedReducedGradientActiveSet" Collapsed="true">
+    <Position X="2.75" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>JAAAAgAAAAgAAAAABCAACBAQAAEACAOEAAAABAAggAI=</HashCode>
+      <FileName>OptMethods\GeneralizedReducedGradientActiveSet.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.SimulatedAnnealing" Collapsed="true">
+    <Position X="4.5" Y="5.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" ManuallyRouted="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.659" Y="1.437" />
+        <Point X="2.659" Y="5.4" />
+        <Point X="5.25" Y="5.4" />
+        <Point X="5.25" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAgCAAAAEAAAAAAAAAAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>OptMethods\SimulatedAnnealing.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GeneralizedReducedGradientSlack" Collapsed="true">
+    <Position X="2.75" Y="3" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.646" Y="1.437" />
+        <Point X="2.646" Y="3.312" />
+        <Point X="2.75" Y="3.312" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>JgAAAgAAAAgIQAAABCAACBAAAAAACAEAAhAAAAAggAI=</HashCode>
+      <FileName>OptMethods\GeneralizedReducedGradientSlack.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GeneticAlgorithm" Collapsed="true">
+    <Position X="6.25" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" ManuallyRouted="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.646" Y="1.437" />
+        <Point X="2.646" Y="5.4" />
+        <Point X="6.938" Y="5.4" />
+        <Point X="6.938" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAgAAAAAAQAAAAAAAAAAAAAIABAAAAIQAAAQAACA=</HashCode>
+      <FileName>OptMethods\GeneticAlgorithm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GradientBasedOptimization" Collapsed="true">
+    <Position X="2.75" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.646" Y="1.437" />
+        <Point X="2.646" Y="1.875" />
+        <Point X="2.75" Y="1.875" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAAAgAI=</HashCode>
+      <FileName>OptMethods\GradientBasedOptimization.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.HillClimbing" Collapsed="true">
+    <Position X="2.75" Y="5.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.646" Y="1.437" />
+        <Point X="2.646" Y="5.4" />
+        <Point X="3.5" Y="5.4" />
+        <Point X="3.5" Y="5.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAIAAgCAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>OptMethods\HillClimbing.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.NelderMead" Collapsed="true">
+    <Position X="4.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAEAAAADQAAAxQAAAAAAAAAA=</HashCode>
+      <FileName>OptMethods\NelderMead.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.SequentialQuadraticProgramming" Collapsed="true">
+    <Position X="2.75" Y="2.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractOptMethod" FixedToPoint="true">
+      <Path>
+        <Point X="3.5" Y="1.062" />
+        <Point X="3.5" Y="1.437" />
+        <Point X="2.646" Y="1.437" />
+        <Point X="2.646" Y="2.625" />
+        <Point X="2.75" Y="2.625" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAkAAAAAgAAACAAAAIAAAAAkAAACIAAAgAI=</HashCode>
+      <FileName>OptMethods\SequentialQuadraticProgramming.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.abstractSelector" Collapsed="true">
+    <Position X="3" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gABAAAABAIAAIAAAAAAAAAAAEAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Selector Methods\abstractSelector.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.Elitism" Collapsed="true">
+    <Position X="3.5" Y="9" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSelector" FixedFromPoint="true">
+      <Path>
+        <Point X="3.25" Y="7.812" />
+        <Point X="3.25" Y="9.346" />
+        <Point X="3.5" Y="9.346" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Selector Methods\Elitism.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.KeepSingleBest" Collapsed="true">
+    <Position X="3.5" Y="8.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSelector" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="3.25" Y="7.812" />
+        <Point X="3.25" Y="8.562" />
+        <Point X="3.5" Y="8.562" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Selector Methods\KeepSingleBest.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.MetropolisCriteria" Collapsed="true">
+    <Position X="3.5" Y="9.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSelector" FixedFromPoint="true">
+      <Path>
+        <Point X="3.25" Y="7.812" />
+        <Point X="3.25" Y="10.096" />
+        <Point X="3.5" Y="10.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Selector Methods\MetropolisCriteria.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.PNormProportionalSelection" Collapsed="true">
+    <Position X="3.5" Y="10.5" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSelector" FixedFromPoint="true">
+      <Path>
+        <Point X="3.25" Y="7.812" />
+        <Point X="3.25" Y="10.846" />
+        <Point X="3.5" Y="10.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CAA0AAAAAIAAAAAAIAAAAFAAAAAAAAAAAHAAAADwAAA=</HashCode>
+      <FileName>Selector Methods\P-norm Proportional Selection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.RandomPairwiseCompare" Collapsed="true">
+    <Position X="3.5" Y="11.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSelector" FixedFromPoint="true">
+      <Path>
+        <Point X="3.25" Y="7.812" />
+        <Point X="3.25" Y="11.596" />
+        <Point X="3.5" Y="11.596" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Selector Methods\RandomPairwiseCompare.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.abstractSearchDirection" Collapsed="true">
+    <Position X="4.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>SearchDirection\abstractSearchDirection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.BFGSDirection" Collapsed="true">
+    <Position X="6.5" Y="4.5" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSearchDirection" FixedFromPoint="true">
+      <Path>
+        <Point X="6" Y="2.812" />
+        <Point X="6.24" Y="2.812" />
+        <Point X="6.24" Y="4.846" />
+        <Point X="6.5" Y="4.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gABAAAAAACAAABAAAAgAAAAAABACAAgACAIAACAEAgA=</HashCode>
+      <FileName>SearchDirection\BFGSDirection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.CyclicCoordinates" Collapsed="true">
+    <Position X="6.5" Y="2.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSearchDirection" FixedFromPoint="true">
+      <Path>
+        <Point X="6" Y="2.812" />
+        <Point X="6.24" Y="2.812" />
+        <Point X="6.24" Y="2.531" />
+        <Point X="6.5" Y="2.531" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAACAAEACAAAAAAAAAA=</HashCode>
+      <FileName>SearchDirection\CyclicCoordinates.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.FletcherReevesDirection" Collapsed="true">
+    <Position X="6.5" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSearchDirection" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="2.812" />
+        <Point X="6.232" Y="2.812" />
+        <Point X="6.232" Y="4.062" />
+        <Point X="6.5" Y="4.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAACAAABAAAAAACAAAAAAAAAAACAAAAAAAAAQ=</HashCode>
+      <FileName>SearchDirection\FletcherReevesDirection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.PowellMethod" Collapsed="true">
+    <Position X="6.5" Y="3" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSearchDirection" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="2.812" />
+        <Point X="6.24" Y="2.812" />
+        <Point X="6.24" Y="3.375" />
+        <Point X="6.5" Y="3.375" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAQAAgAAgAAACAABACAAAAGAAAAAAAAAA=</HashCode>
+      <FileName>SearchDirection\PowellsMethod.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.SteepestDescent" Collapsed="true">
+    <Position X="6.5" Y="1.5" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractSearchDirection" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="6" Y="2.812" />
+        <Point X="6.24" Y="2.812" />
+        <Point X="6.24" Y="1.846" />
+        <Point X="6.5" Y="1.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAAAAAA=</HashCode>
+      <FileName>SearchDirection\SteepestDescent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.abstractGenerator" Collapsed="true">
+    <Position X="6" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAAAQACAAACAAAAAAAAAAAAEAAAAAQAAAA=</HashCode>
+      <FileName>Generator Methods\abstractGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.SamplingGenerator" Collapsed="true">
+    <Position X="7.75" Y="6.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\abstractGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GeneticCrossoverGenerator" Collapsed="true">
+    <Position X="6" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\abstractGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GeneticMutationGenerator" Collapsed="true">
+    <Position X="7.75" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\abstractGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GADifferentialEvolutionCrossover" Collapsed="true">
+    <Position X="6" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\Genetric Algorithm Generators\GADifferentialEvolutionCrossover.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.BitStringNeighborGenerator" Collapsed="true">
+    <Position X="7.75" Y="7.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractGenerator" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="7.312" />
+        <Point X="6.75" Y="8.062" />
+        <Point X="7.75" Y="8.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAACAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\BitStringNeighborGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.ExhaustiveNeighborGenerator" Collapsed="true">
+    <Position X="9.5" Y="8.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractGenerator" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="7.312" />
+        <Point X="6.75" Y="8.562" />
+        <Point X="9.5" Y="8.562" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
+      <FileName>Generator Methods\ExhaustiveNeighborGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.ParticleSwarm" Collapsed="true">
+    <Position X="7.75" Y="9.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractGenerator" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="7.312" />
+        <Point X="6.75" Y="10.062" />
+        <Point X="7.75" Y="10.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\ParticleSwarm.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.RandomNeighborGenerator" Collapsed="true">
+    <Position X="9.5" Y="9.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractGenerator" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="7.312" />
+        <Point X="6.75" Y="9.625" />
+        <Point X="9.5" Y="9.625" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAACAAAAAAAAAAAAAAAAAAARAAAAAAA=</HashCode>
+      <FileName>Generator Methods\RandomNeighborGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.StochasticNeighborGenerator" Collapsed="true">
+    <Position X="7.75" Y="8.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractGenerator" FixedToPoint="true">
+      <Path>
+        <Point X="6.75" Y="7.312" />
+        <Point X="6.75" Y="9.062" />
+        <Point X="7.75" Y="9.062" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>CAAgAgAAAAgEIAACAAAAAAAAAAAAAAAAAAARAASAAAI=</HashCode>
+      <FileName>Generator Methods\StochasticNeighborGenerator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.LatinHyperCube" Collapsed="true">
+    <Position X="9.5" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>Generator Methods\LatinHyperCube.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.RandomSampling" Collapsed="true">
+    <Position X="9.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAQIAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\RandomSampling.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GAMutationBitString" Collapsed="true">
+    <Position X="9.5" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAABACAAAAAAAAAAEAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Generator Methods\Genetric Algorithm Generators\GAMutationBitString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GACrossoverBitString" Collapsed="true">
+    <Position X="7.75" Y="11.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAACAAAAAAAAAAEAAAAAAAAAAAACAAA=</HashCode>
+      <FileName>Generator Methods\Genetric Algorithm Generators\GACrossoverBitString.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.abstractLineSearch" Collapsed="true">
+    <Position X="8.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAACAAAABAAQJAAQAAAgAEAgAFAAAAAAAQ=</HashCode>
+      <FileName>LineSearch\abstractLineSearch.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.ArithmeticMean" Collapsed="true">
+    <Position X="9.25" Y="3" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractLineSearch" FixedFromPoint="true">
+      <Path>
+        <Point X="9" Y="2.062" />
+        <Point X="9" Y="3.346" />
+        <Point X="9.25" Y="3.346" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineSearch\ArithmeticMean.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.DSCPowell" Collapsed="true">
+    <Position X="9.25" Y="3.75" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractLineSearch" FixedFromPoint="true">
+      <Path>
+        <Point X="9" Y="2.062" />
+        <Point X="9" Y="4.096" />
+        <Point X="9.25" Y="4.096" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAACAAAAAAAAAAAAAAAAAAIAAAAAAAAAAA=</HashCode>
+      <FileName>LineSearch\DSCPowell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.GoldenSection" Collapsed="true">
+    <Position X="9.25" Y="2.25" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractLineSearch" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="9" Y="2.062" />
+        <Point X="9" Y="2.562" />
+        <Point X="9.25" Y="2.562" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAACAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineSearch\GoldenSection.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="OptimizationToolbox.SQPSimpleHalver" Collapsed="true">
+    <Position X="9.25" Y="4.5" Width="1.5" />
+    <InheritanceLine Type="OptimizationToolbox.abstractLineSearch" FixedFromPoint="true">
+      <Path>
+        <Point X="9" Y="2.062" />
+        <Point X="9" Y="4.846" />
+        <Point X="9.25" Y="4.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LineSearch\SQPSimpleHalver.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

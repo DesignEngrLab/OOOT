@@ -30,6 +30,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <DocumentationFile>bin\Debug\OptimizationToolbox.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -42,8 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="StarMath">
-      <HintPath>StarMath (compiled)\StarMath.dll</HintPath>
-      <Private>False</Private>
+      <HintPath>..\Resources\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -59,8 +59,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convergence Classes\MaxFnEvalsConvergence.cs" />
     <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
     <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
+    <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
     <Compile Include="Generator Methods\BitStringNeighborGenerator.cs" />
     <Compile Include="Generator Methods\RandomNeighborGenerator.cs" />
     <Compile Include="optimizeSort.cs" />
@@ -90,7 +92,6 @@
     <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="OptMethods\ExhaustiveSearch.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
-    <Compile Include="OptMethods\PowellsMethodOptimization.cs" />
     <Compile Include="OptMethods\HillClimbing.cs" />
     <Compile Include="SearchDirection\PowellsMethod.cs" />
     <Compile Include="SearchDirection\CyclicCoordinates.cs" />
@@ -98,7 +99,7 @@
     <Compile Include="Selector Methods\P-norm Proportional Selection.cs" />
     <Compile Include="Selector Methods\Elitism.cs" />
     <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
-    <Compile Include="VariableDescriptor.cs" />
+    <Compile Include="Design Space Description\VariableDescriptor.cs" />
     <Compile Include="Convergence Classes\abstractConvergenceClasses.cs" />
     <Compile Include="Convergence Classes\MaxTimeConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaXConvergence.cs" />
@@ -106,12 +107,11 @@
     <Compile Include="Convergence Classes\MaxAgeConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaGradFConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaFConvergence.cs" />
-    <Compile Include="Convergence Classes\MultipleANDConvergenceConditions.cs" />
-    <Compile Include="Convergence Classes\MaxDistanceInPopulationConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxSpanInPopulationConvergence.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
     <Compile Include="Objective Function Constraint Classes\abstracts for f g and h.cs" />
-    <Compile Include="DesignSpaceDescription.cs" />
+    <Compile Include="Design Space Description\DesignSpaceDescription.cs" />
     <Compile Include="Objective Function Constraint Classes\lessThanGreaterThanConstant.cs" />
     <Compile Include="LineSearch\ArithmeticMean.cs" />
     <Compile Include="LineSearch\SQPSimpleHalver.cs" />
@@ -143,6 +143,9 @@
     <Compile Include="SearchDirection\SteepestDescent.cs" />
     <Compile Include="Objective Function Constraint Classes\abstractOptFunction.cs" />
     <Compile Include="SearchIO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

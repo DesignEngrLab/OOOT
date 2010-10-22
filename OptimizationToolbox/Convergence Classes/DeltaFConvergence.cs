@@ -44,25 +44,46 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets the minimum difference.
+        /// </summary>
+        /// <value>The min difference.</value>
         public double minDifference { get; set; }
+        /// <summary>
+        /// Gets or sets the tolerance for same x. If the x is the same as the last the condition is NOT checked (returns false).
+        /// If this is not a desirable catch, then leave as the default (negative infinity). In fact any negative value for
+        /// toleranceForSame will cause it to be ignored since the distance between any two points can at best be 0.
+        /// </summary>
+        /// <value>The tolerance for same.</value>
         public double toleranceForSame { get; set; }
 
-        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null,
-                                       IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        /// <summary>
+        /// Given a value D (minimum difference), this criteria will return true, if the distance (absolute value of the difference) 
+        /// between fBest and flast is less than or equal to D.
+        /// </summary>
+        /// <param name="iteration">The number of iterations (not used).</param>
+        /// <param name="numFnEvals">The number of function evaluations (not used).</param>
+        /// <param name="fBest">The best f.</param>
+        /// <param name="xBest">The best x (used to check if candidate is the same).</param>
+        /// <param name="population">The population of candidates (not used).</param>
+        /// <param name="gradF">The gradient of F (not used).</param>
+        /// <returns>
+        /// true or false - has the process converged?
+        /// </returns>
+        public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
+            IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
-            var f = YDouble;
-            if (double.IsNaN(f))
+            if (double.IsNaN(fBest))
                 throw new Exception("DeltaFConvergence expected a double value (in the second argument, YDouble) "
                                     + " representing the last calculated value of f.");
-            var x = YDoubleArray1;
-            if (x == null)
+            if (xBest == null)
                 throw new Exception("DeltaFConvergence expected a 1-D array of doubles (in the third argument, YDoubleArray1) "
                                     + " representing the current decision vector, x.");
-            if ((xlast == null) || (StarMath.norm1(x, xlast) > toleranceForSame))
+            if ((xlast == null) || (StarMath.norm1(xBest, xlast) > toleranceForSame))
             {
-                var result = (Math.Abs(f - flast) <= minDifference);
-                xlast = x;
-                flast = f;
+                var result = (Math.Abs(fBest - flast) <= minDifference);
+                xlast = xBest;
+                flast = fBest;
                 return result;
             }
             return false;

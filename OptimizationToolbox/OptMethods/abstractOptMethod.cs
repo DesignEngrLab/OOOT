@@ -127,7 +127,8 @@ namespace OptimizationToolbox
         public double Run(out double[] xStar)
         {
             if (xStart != null) return Run(out xStar, xStart);
-            if (n > 0) return run(out xStar, null);
+            if (((spaceDescriptor != null) && (spaceDescriptor.Count > 0)) || (n > 0))
+                return run(out xStar, null);
             SearchIO.output("The number of variables was not set or determined from inputs.", 0);
             xStar = null;
             return double.PositiveInfinity;
@@ -449,13 +450,13 @@ namespace OptimizationToolbox
                 {
                     var ub = ((lessThanConstant)ineq).constant;
                     var varIndex = ((lessThanConstant)ineq).index;
-                    pd.SpaceDescriptor.VariableDescriptors[varIndex].UpperBound = ub;
+                    pd.SpaceDescriptor[varIndex].UpperBound = ub;
                 }
                 else if (ineq.GetType() == typeof(greaterThanConstant))
                 {
                     var lb = ((greaterThanConstant)ineq).constant;
                     var varIndex = ((greaterThanConstant)ineq).index;
-                    pd.SpaceDescriptor.VariableDescriptors[varIndex].UpperBound = lb;
+                    pd.SpaceDescriptor[varIndex].UpperBound = lb;
                 }
                 else pd.g.Add(ineq);
             foreach (equality eq in h)
@@ -468,29 +469,54 @@ namespace OptimizationToolbox
 
         #region Convergence Main Function
 
-        private int indexConverged;
+        private int numConvergeCriteriaNeeded = 1;
+        /// <summary>
+        /// Gets or sets the num convergence criteria needed to stop the process.
+        /// </summary>
+        /// <value>The num converge criteria needed.</value>
+        public int NumConvergeCriteriaNeeded
+        {
+            get { return Math.Min(ConvergenceMethods.Count, numConvergeCriteriaNeeded); }
+            set { numConvergeCriteriaNeeded = value; }
+        }
 
-        public string ConvergenceDeclaredBy
+        /// <summary>
+        /// Gets the criteria that declared convergence.
+        /// </summary>
+        /// <value>The convergence declared by.</value>
+        public List<abstractConvergence> ConvergenceDeclaredBy { get; private set; }
+        /// <summary>
+        /// Gets the convergence methods as a single (CSV) string of types.
+        /// </summary>
+        /// <value>The convergence declared by type string.</value>
+        public string ConvergenceDeclaredByTypeString
         {
             get
             {
-                if (ConvergenceMethods.Count <= 0)return "";
-                return ConvergenceMethods[indexConverged].GetType().ToString().Remove(0, 20);
+                if (ConvergenceDeclaredBy == null) return "";
+                string result = ConvergenceDeclaredBy.Aggregate("", (current, p) => current + (", " + p.GetType().ToString()));
+                result = result.Remove(0, 2);
+                return result.Replace("OptimizationToolbox.", "");
             }
         }
 
-        protected Boolean notConverged(int YInteger = int.MinValue, double YDouble = double.NaN,
-                                       IList<double> YDoubleArray1 = null, IList<double> YDoubleArray2 = null,
-                                       IList<double[]> YJaggedDoubleArray = null)
+        protected Boolean notConverged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
+                                          IList<double> xBest = null, IList<double[]> population = null,
+            IList<double> gradF = null)
         {
-            for (indexConverged = 0; indexConverged < ConvergenceMethods.Count; indexConverged++)
+            var trueIndices = new List<int>();
+            int i = 0;
+            while (trueIndices.Count < NumConvergeCriteriaNeeded)
             {
-                if (ConvergenceMethods[indexConverged].converged(YInteger, YDouble, YDoubleArray1, YDoubleArray2,
-                                                                 YJaggedDoubleArray))
-                    return false;
+                if (i == ConvergenceMethods.Count) return true;
+                if (ConvergenceMethods[i].converged(iteration, numFnEvals, fBest,
+                                                      xBest, population, gradF))
+                    trueIndices.Add(i);
+                i++;
             }
-            indexConverged = -1;
-            return true;
+            ConvergenceDeclaredBy = new List<abstractConvergence>
+                    (trueIndices.Select(index => ConvergenceMethods[index]));
+            return false;
         }
 
         #endregion

@@ -179,7 +179,7 @@ namespace OptimizationToolbox
                 fk = calc_f(x);
 
                 SearchIO.output("x(" + k + ") = " + StarMath.MakePrintString(x) + " = " + fk.ToString("0.00"), 4);
-            } while (notConverged(k, fk, x, gradF, new List<double[]>()));
+            } while (notConverged(k, objfn.numEvals, fk, x, null,gradF));
 
             fStar = fk;
             xStar = x;

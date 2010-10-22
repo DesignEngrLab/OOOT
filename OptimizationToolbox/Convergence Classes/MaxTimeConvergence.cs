@@ -24,22 +24,36 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class MaxTimeConvergence : abstractConvergence
     {
         private readonly DateTime startTime;
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
+        /// </summary>
         public MaxTimeConvergence()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
+        /// </summary>
+        /// <param name="maxTime">The max time.</param>
         public MaxTimeConvergence(TimeSpan maxTime)
         {
             this.maxTime = maxTime;
             startTime = DateTime.Now;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
+        /// </summary>
+        /// <param name="timeToStop">The time to stop.</param>
         public MaxTimeConvergence(DateTime timeToStop)
         {
             startTime = DateTime.Now;
@@ -48,10 +62,27 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Gets or sets the maximum time span for the process.
+        /// </summary>
+        /// <value>The max time.</value>
         public TimeSpan maxTime { get; set; }
 
-        public override bool converged(long YInteger, double YDouble = double.NaN, IList<double> YDoubleArray1 = null,
-                                       IList<double> YDoubleArray2 = null, IList<double[]> YJaggedDoubleArray = null)
+        /// <summary>
+        /// Given a value for maxTime, this criteria will return true, when the process reaches
+        /// this length of time. It does not use any of the arguments below, but in some ways
+        /// is the most user-friendly criteria. Use wisely. Use often.
+        /// </summary>
+        /// <param name="iteration">The number of iterations (not used).</param>
+        /// <param name="numFnEvals">The number of function evaluations.</param>
+        /// <param name="fBest">The best f.</param>
+        /// <param name="xBest">The best x.</param>
+        /// <param name="population">The population of candidates.</param>
+        /// <param name="gradF">The gradient of F.</param>
+        /// <returns>
+        /// true or false - has the process converged?
+        /// </returns>
+        public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
             return ((DateTime.Now - startTime) >= maxTime);
         }

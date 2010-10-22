@@ -58,19 +58,19 @@ namespace OptimizationToolbox
                     varVals = new List<double>();
                     for (var i = 0; i < numSamples; i++)
                     {
-                        var effectiveIndex = (int)(Math.Round(((double)i * VariableDescriptors[j].Size) / numSamples));
-                        varVals.Add(VariableDescriptors[j][effectiveIndex]);
+                        var effectiveIndex = (int)(((double)i * discreteSpaceDescriptor[j].Size) / numSamples);
+                        varVals.Add(discreteSpaceDescriptor[j][effectiveIndex]);
                     }
                 }
                 else if (!discreteSpaceDescriptor.DiscreteVarIndices.Contains(j) &&
                          generateFor != VariablesInScope.OnlyDiscrete)
                 {
-                    var delta = (VariableDescriptors[j].UpperBound - VariableDescriptors[j].LowerBound);
+                    var delta = (discreteSpaceDescriptor[j].UpperBound - discreteSpaceDescriptor[j].LowerBound);
                     if (double.IsInfinity(delta))
                         throw new Exception("The bounds on the " + j + "(th) variable must not be at infinity for" +
                                             "performing Latin Hypercube sampling.");
                     delta /= numSamples;
-                    var lb = VariableDescriptors[j].LowerBound;
+                    var lb = discreteSpaceDescriptor[j].LowerBound;
                     varVals = new List<double>();
                     for (var i = 0; i < numSamples; i++) varVals.Add(lb + i * delta);
                 }

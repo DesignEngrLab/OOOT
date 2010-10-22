@@ -64,22 +64,6 @@ namespace OptimizationToolbox
             }
             return false;
         }
-
-        public static void output(object message0, object message1)
-        {
-            output(message0, message1, message1, message1, message1);
-        }
-
-        public static void output(object message0, object message1, object message2)
-        {
-            output(message0, message1, message2, message2, message2);
-        }
-
-        public static void output(object message1, object message2, object message3, object message4)
-        {
-            output(message1, message2, message3, message4, message4);
-        }
-
         public static void output(params object[] list)
         {
             var index = list.Length;

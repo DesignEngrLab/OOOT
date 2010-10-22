@@ -1,0 +1,7 @@
+﻿
+namespace tester
+{
+    class efficientyMeasurement
+    {
+    }
+}

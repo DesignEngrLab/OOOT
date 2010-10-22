@@ -151,7 +151,7 @@ namespace OptimizationToolbox
                 fk = objfn.calculate(x);
                 SearchIO.output("X = " + x[0] + ", " + x[1], 3); // + ", " + xk[2]
                 SearchIO.output("F(" + k + ") = " + fk, 3);
-            } while (notConverged(k, fk, x, gradF));
+            } while (notConverged(k, objfn.numEvals, fk, x,null, gradF));
             fStar = fk;
             xStar = x;
             SearchIO.output("X* = " + x[0] + ", " + x[1], 2);

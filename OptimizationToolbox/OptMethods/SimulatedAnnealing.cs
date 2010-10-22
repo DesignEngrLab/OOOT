@@ -68,7 +68,7 @@ namespace OptimizationToolbox
             var candidates = new List<KeyValuePair<double, double[]>>();
             candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
             var temperature = scheduler.SetInitialTemperature();
-            while (notConverged(k++, candidates[0].Key, candidates[0].Value))
+            while (notConverged(k++, objfn.numEvals, candidates[0].Key, candidates[0].Value))
             {
                 SearchIO.output(k + ": f = " + candidates[0].Key, 5);
                 SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 5);

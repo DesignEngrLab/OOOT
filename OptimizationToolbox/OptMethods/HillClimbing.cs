@@ -61,7 +61,7 @@ namespace OptimizationToolbox
         {
             var candidates = new List<KeyValuePair<double, double[]>>();
             candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
-            while (notConverged(k++, candidates[0].Key, candidates[0].Value))
+            while (notConverged(k++, objfn.numEvals, candidates[0].Key, candidates[0].Value))
             {
                 SearchIO.output(k + ": f = " + candidates[0].Key, 4);
                 SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 4);
