@@ -104,7 +104,7 @@ namespace OptimizationToolbox
                          select candidate.Value).First();
                 SearchIO.output("x* = " + StarMath.MakePrintString(xStar), 4);
                 SearchIO.output("f* = " + fStar, 4);
-            } while (notConverged(k, objfn.numEvals, fStar, xStar,population.Select(a => a.Value).ToList(), 
+            } while (notConverged(k, numEvals, fStar, xStar, population.Select(a => a.Value).ToList(),
                 population.Select(a => a.Key).ToList()));
             return fStar;
         }

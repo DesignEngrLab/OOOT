@@ -145,7 +145,7 @@ namespace OptimizationToolbox
             dk = new double[n];
 
             /* this is the iteration counter for updating Xc it's compared with feasibleOuterLoopMax. */
-            foreach (equality c in h)
+            foreach (IConstraint c in h)
                 active.Add(c);
             /* this forces formulateActiveSetAndGradients to do the division. */
             divideX = true;
@@ -179,7 +179,7 @@ namespace OptimizationToolbox
                 fk = calc_f(x);
 
                 SearchIO.output("x(" + k + ") = " + StarMath.MakePrintString(x) + " = " + fk.ToString("0.00"), 4);
-            } while (notConverged(k, objfn.numEvals, fk, x, null,gradF));
+            } while (notConverged(k, numEvals, fk, x, null, gradF));
 
             fStar = fk;
             xStar = x;
@@ -193,13 +193,13 @@ namespace OptimizationToolbox
             /* this list is ordered from largest to smallest. We only want to introduce ONE new member 
              * into the active set. Which would be the first element (j.e.value) of this sorted list. */
             var newInfeasibles
-                = new SortedList<double, constraint>(new optimizeSort(optimize.maximize));
+                = new SortedList<double, IConstraint>(new optimizeSort(optimize.maximize));
 
             divideX = divideBool;
 
             /* this foreach loop can remove any number of g's from the active set, and puts
              * any newly violated g's into the sorted list newInfeasbles. */
-            foreach (inequality c in g)
+            foreach (IInequality c in g)
             {
                 var gVal = c.calculate(xk);
                 if (gVal < 0.0)

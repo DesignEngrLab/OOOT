@@ -6,13 +6,14 @@ using OptimizationToolbox;
 
 namespace Example2_Genetic_Algorithm
 {
-    class lessThanManifoldVolume:inequality
+    class lessThanManifoldVolume : IInequality
     {
-        #region Overrides of abstractOptFunction
 
-        protected override double calc(double[] x)
+        #region Implementation of IOptFunction
+
+        public double calculate(double[] x)
         {
-            return -1*x[0]*x[1]*x[2];
+            return -1 * x[0] * x[1] * x[2];
         }
 
         #endregion

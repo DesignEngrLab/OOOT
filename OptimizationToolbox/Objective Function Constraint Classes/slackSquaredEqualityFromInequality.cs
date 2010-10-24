@@ -19,31 +19,30 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+using System;
+
 namespace OptimizationToolbox
 {
-    internal class slackSquaredEqualityFromInequality : equality
+    internal class slackSquaredEqualityFromInequality : IEquality
     {
-        private readonly abstractOptFunction formerIneq;
+        private readonly IInequality formerIneq;
         private readonly int slackIndex;
 
-        public slackSquaredEqualityFromInequality(abstractOptFunction formerIneq, int slackIndex)
+        public slackSquaredEqualityFromInequality(IInequality formerIneq, int slackIndex)
         {
             this.formerIneq = formerIneq;
             this.slackIndex = slackIndex;
         }
 
-        protected override double calc(double[] x)
+        #region Implementation of IOptFunction
+
+        public double h { get; set; }
+        public differentiate findDerivBy { get; set; }
+        public int numEvals { get; private set; }
+        public double calculate(double[] x)
         {
             return formerIneq.calculate(x) + x[slackIndex] * x[slackIndex];
         }
-
-        public override double deriv_wrt_xi(double[] x, int i)
-        {
-            // the reason this returns 2xi is that the slack variable is squared, xi^2
-            // (see calculate above), meaning the derivative is 2xi
-            if (i == slackIndex) return 2.0 * x[i];
-
-            return formerIneq.deriv_wrt_xi(x, i);
-        }
+        #endregion
     }
 }

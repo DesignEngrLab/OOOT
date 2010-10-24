@@ -86,7 +86,7 @@ namespace OptimizationToolbox
             // the search direction is initialized.
             dk = new double[n];
 
-            active.AddRange(h);
+            active.AddRange(h.Cast<IConstraint>());
 
             do
             {
@@ -109,7 +109,7 @@ namespace OptimizationToolbox
 
                 SearchIO.output("----f = " + fk, 3);
                 SearchIO.output("---#active =" + active.Count, 3);
-            } while (notConverged(k, objfn.numEvals, fk, x,null, gradF));
+            } while (notConverged(k, numEvals, fk, x, null, gradF));
             fStar = fk;
             xStar = (double[])x.Clone();
             return fStar;
@@ -147,13 +147,13 @@ namespace OptimizationToolbox
              * into the active set. Which would be the first element (i.e.value) of this sorted list. */
 
             var newInfeasibles
-                = new SortedList<double, constraint>(new optimizeSort(optimize.maximize));
+                = new SortedList<double, IConstraint>(new optimizeSort(optimize.maximize));
 
             /* this foreach loop can remove any number of g's from the active set, and puts
              * any newly violated g's into the sorted list newInfeasbles. */
-            foreach (inequality c in g)
+            foreach (IInequality c in g)
             {
-                var gVal = c.calculate(xk);
+                var gVal = calculate(c, xk);
                 if (gVal < 0.0)
                 {
                     if (active.Contains(c)) active.Remove(c);

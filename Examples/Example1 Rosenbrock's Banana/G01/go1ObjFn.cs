@@ -1,4 +1,5 @@
-﻿using OptimizationToolbox;
+﻿using System;
+using OptimizationToolbox;
 
 namespace tester.G01
 {
@@ -50,9 +51,11 @@ namespace tester.G01
 
  f=5*sum(x(1:4,1))-5*sum(x(1:4,1).*x(1:4,1))-sum(x(5:13,1)); */
 
-    internal class go1ObjFn : objectiveFunction
+    internal class go1ObjFn : IObjectiveFunction, IDifferentiable
     {
-        protected override double calc(double[] x)
+        #region Implementation of IOptFunction
+
+        public double calculate(double[] x)
         {
             var f = 5 * (x[0] + x[1] + x[2] + x[3]);
             f -= 5 * (x[0] * x[0] + x[1] * x[1] + x[2] * x[2] + x[3] * x[3]);
@@ -61,10 +64,16 @@ namespace tester.G01
             return f;
         }
 
-        public override double deriv_wrt_xi(double[] x, int i)
+        #endregion
+
+        #region Implementation of IDifferentiable
+
+        public double deriv_wrt_xi(double[] x, int i)
         {
             if (i >= 4) return -1;
             return 5 - 10 * x[i];
         }
+
+        #endregion
     }
 }

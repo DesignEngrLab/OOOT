@@ -30,9 +30,9 @@ namespace OptimizationToolbox
     {
         public List<abstractConvergence> ConvergenceMethods;
         public DesignSpaceDescription SpaceDescriptor;
-        public objectiveFunction f;
-        public List<inequality> g;
-        public List<equality> h;
+        public List<object> f = new List<object>();
+        public List<object> g = new List<object>();
+        public List<object> h;
         public string name;
         public double[] xStart;
 
@@ -40,18 +40,17 @@ namespace OptimizationToolbox
 
         public void Add(object function)
         {
-            if (function.GetType().BaseType == typeof(inequality))
-                g.Add((inequality)function);
-            else if (function.GetType().BaseType == typeof(equality))
-                h.Add((equality)function);
-            else if (function.GetType().BaseType == typeof(objectiveFunction))
-                f = (objectiveFunction)function;
-            else if ((function.GetType().BaseType == typeof(abstractConvergence))
-                     && (!ConvergenceMethods.Exists(c => (c.GetType().Equals(function.GetType())))))
-                ConvergenceMethods.Add((abstractConvergence)function);
-            else if (function.GetType() == typeof(DesignSpaceDescription))
+            if (typeof(IInequality).IsInstanceOfType(function))
+                g.Add(function);
+            else if (typeof(IEquality).IsInstanceOfType(function))
+                h.Add(function);
+            else if (typeof(IObjectiveFunction).IsInstanceOfType(function))
+                f.Add(function);
+            else if (typeof(abstractConvergence).IsInstanceOfType(function))
+                        ConvergenceMethods.Add((abstractConvergence)function);
+            else if (typeof(DesignSpaceDescription).IsInstanceOfType(function))
                 SpaceDescriptor = (DesignSpaceDescription)function;
-            else if (function.GetType() == typeof(double[]))
+            else if (typeof(double[]).IsInstanceOfType(function))
                 xStart = (double[])function;
             else
                 throw (new Exception("Function, " + function + ", not of known type (needs "

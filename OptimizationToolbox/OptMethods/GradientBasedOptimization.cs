@@ -81,7 +81,7 @@ namespace OptimizationToolbox
                     xStar = (double[])x.Clone();
                 }
                 SearchIO.output("f = " + fk, 3);
-            } while (notConverged(k, objfn.numEvals, fk, x, null, gradF));
+            } while (notConverged(k, numEvals, fk, x, null, gradF));
 
             return fStar;
         }

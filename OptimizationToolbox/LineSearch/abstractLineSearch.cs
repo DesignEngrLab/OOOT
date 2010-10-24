@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using StarMathLib;
 
 namespace OptimizationToolbox
@@ -29,7 +30,7 @@ namespace OptimizationToolbox
     /// </summary>
     public abstract class abstractLineSearch
     {
-        private readonly List<constraint> infeasibles;
+        private readonly List<IConstraint> infeasibles;
         private readonly Boolean trackFeasibility;
         /// <summary>
         /// the tolerance value, epsilon is used to distinguish values of alpha. It is part
@@ -50,7 +51,7 @@ namespace OptimizationToolbox
             this.epsilon = epsilon;
             this.stepSize = stepSize;
             this.kMax = kMax;
-            infeasibles = new List<constraint>();
+            infeasibles = new List<IConstraint>();
             this.trackFeasibility = trackFeasibility;
         }
 
@@ -100,23 +101,23 @@ namespace OptimizationToolbox
 
         private void trackLastFeasible(double[] point, double alpha)
         {
-            var allConstraints = new List<constraint>(optMethod.h);
-            allConstraints.AddRange(optMethod.g);
+            var allConstraints = optMethod.h.Cast<IConstraint>().ToList();
+            allConstraints.AddRange(optMethod.g.Cast<IConstraint>());
 
-            foreach (constraint c in allConstraints)
-                if ((c.feasible(point)) && (infeasibles.Contains(c))) infeasibles.Remove(c);
-                else if ((!c.feasible(point)) && (!infeasibles.Contains(c))) infeasibles.Add(c);
+            foreach (var c in allConstraints)
+                if ((optMethod.feasible(c,point)) && (infeasibles.Contains(c))) infeasibles.Remove(c);
+                else if ((!optMethod.feasible(c, point)) && (!infeasibles.Contains(c))) infeasibles.Add(c);
 
             if (infeasibles.Count == 0) lastFeasAlpha = lastFeasAlpha4G = lastFeasAlpha4H = alpha;
-            else if (!infeasibles.Exists(ic => (typeof(equality).IsInstanceOfType(ic))))
+            else if (!infeasibles.Exists(ic => (typeof(IEquality).IsInstanceOfType(ic))))
                 lastFeasAlpha4H = alpha;
-            else if (!infeasibles.Exists(ic => (typeof(inequality).IsInstanceOfType(ic))))
+            else if (!infeasibles.Exists(ic => (typeof(IInequality).IsInstanceOfType(ic))))
                 lastFeasAlpha4G = alpha;
         }
 
-        internal void SetOptimizationDetails(abstractOptMethod OptMethod)
+        internal void SetOptimizationDetails(abstractOptMethod optmethod)
         {
-            optMethod = OptMethod;
+            this.optMethod = optmethod;
         }
     }
 }

@@ -61,7 +61,7 @@ namespace OptimizationToolbox
             x = spaceDescription.GetVariableVector(CurrentIndices);
             xStar = x;
             if (feasible(x)) fStar = calc_f(x);
-            while (notConverged(k++,objfn.numEvals, fStar, xStar) && IncrementIndices())
+            while (notConverged(k++, numEvals, fStar, xStar) && IncrementIndices())
             {
                 if (k == timePreditionIndex) performTimePrediction(startTime);
                 x = spaceDescription.GetVariableVector(CurrentIndices);
@@ -81,7 +81,7 @@ namespace OptimizationToolbox
             span /= timePreditionIndex;
             span *= spaceDescription.SizeOfSpace;
             var endTime = startTime + new TimeSpan((long)span);
-            SearchIO.output("Predicted time for the process to end:\n" + endTime,0);
+            SearchIO.output("Predicted time for the process to end:\n" + endTime, 0);
         }
 
 

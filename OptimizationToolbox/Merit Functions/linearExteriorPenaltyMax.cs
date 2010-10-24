@@ -39,12 +39,12 @@ namespace OptimizationToolbox
             var max = 0.0;
             double temp;
 
-            foreach (constraint c in optMethod.h)
+            foreach (IConstraint c in optMethod.h)
             {
                 temp = c.calculate(point);
                 max = Math.Max(max, Math.Abs(temp));
             }
-            foreach (constraint c in optMethod.g)
+            foreach (IConstraint c in optMethod.g)
             {
                 temp = c.calculate(point);
                 max = Math.Max(max, temp);
@@ -82,11 +82,11 @@ namespace OptimizationToolbox
             if (gMaxIndex == -1)
                 // this means the max was an h.
                 for (var i = 0; i != n; i++)
-                    grad[i] = penaltyWeight * optMethod.h[hMaxIndex].deriv_wrt_xi(point, i);
+                    grad[i] = penaltyWeight * optMethod.deriv_wrt_xi(optMethod.h[hMaxIndex], point, i);
             else
                 // this means the max was a g.
                 for (var i = 0; i != n; i++)
-                    grad[i] = penaltyWeight * optMethod.g[gMaxIndex].deriv_wrt_xi(point, i);
+                    grad[i] = penaltyWeight * optMethod.deriv_wrt_xi(optMethod.g[gMaxIndex], point, i);
 
             return grad;
         }

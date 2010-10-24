@@ -26,31 +26,29 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public abstract class abstractOptMethod
+    public abstract partial class abstractOptMethod
     {
         #region Fields
 
+        private const double sameTolerance = 0.000000001; // 10^-9
+        private const double defaultFiniteDifferenceStepSize = 0.1;
+        private const differentiate defaultFiniteDifferenceMode = differentiate.Central2;
+
         /* I usually object to such simple names for variables, but this 
          * follows the convention used in my course - ME392C at UT Austin. */
-        public int n { get; protected set; } /* the total number of design variables - the length of x. */
-        public int m { get; protected set; } /* the number of active constraints. */
-        public int p { get; protected set; } /* the number of equality constraints - length of h. */
-        public int q { get; protected set; } /* the number of inequality constraints - length of g. */
+        public int n { get; private set; }/* the total number of design variables - the length of x. */
+
         public int k { get; protected set; } /* the iteration counter. */
-        public objectiveFunction objfn { get; protected set; }
+
         public double fStar { get; protected set; } /*fStar is the optimum that is returned at the end of run. */
         /* 'active' is the set of Active Constraints. For simplicity all equality constraints 
          * are assumed to be active, and any additional g's that come and go in this active
          * set strategy. More importantly we want the gradient of A which is a m by n matrix. 
          * m is the # of active constraints and n is the # of variables. */
-        public List<constraint> active { get; protected set; }
-        public List<constraint> h { get; protected set; }
-        public List<constraint> g { get; protected set; }
-        public abstractSearchDirection searchDirMethod { get; protected set; }
-        public abstractLineSearch lineSearchMethod { get; protected set; }
-        public abstractMeritFunction meritFunction { get; protected set; }
-        public List<abstractConvergence> ConvergenceMethods { get; protected set; }
-        public DesignSpaceDescription spaceDescriptor { get; protected set; }
+        public abstractSearchDirection searchDirMethod { get; private set; }
+        public abstractLineSearch lineSearchMethod { get; private set; }
+        public List<abstractConvergence> ConvergenceMethods { get; private set; }
+        public DesignSpaceDescription spaceDescriptor { get; private set; }
 
         /* The following Booleans should be set in the constructor of every optimization method. 
          * Even if it seems redundant to do so, it is better to have them clearly indicated for each
@@ -65,6 +63,8 @@ namespace OptimizationToolbox
         public Boolean RequiresConvergenceCriteria { get; protected set; }
         public Boolean RequiresFeasibleStartPoint { get; protected set; }
         public Boolean RequiresDiscreteSpaceDescriptor { get; protected set; }
+
+        internal abstractMeritFunction meritFunction { get; private set; }
         public double[] xStart { get; protected set; }
         public double[] x { get; protected set; }
         public int feasibleOuterLoopMax { get; protected set; }
@@ -76,23 +76,32 @@ namespace OptimizationToolbox
 
         protected abstractOptMethod()
         {
-            g = new List<constraint>();
-            h = new List<constraint>();
-            active = new List<constraint>();
-            ConvergenceMethods = new List<abstractConvergence>();
             fStar = double.PositiveInfinity;
+            ConvergenceMethods = new List<abstractConvergence>();
+            g = new List<IInequality>();
+            h = new List<IEquality>();
+            active = new List<IConstraint>();
+            f = new List<IObjectiveFunction>();
+            functionData = new Dictionary<IOptFunction, optFunctionData>();
         }
 
         public virtual void Add(object function)
         {
             if (typeof(ProblemDefinition).IsInstanceOfType(function))
                 readInProblemDefinition((ProblemDefinition)function);
-            else if (typeof(inequality).IsInstanceOfType(function))
-                g.Add((inequality)function);
-            else if (typeof(equality).IsInstanceOfType(function))
-                h.Add((equality)function);
-            else if (typeof(objectiveFunction).IsInstanceOfType(function))
-                objfn = (objectiveFunction)function;
+            else if (typeof(IOptFunction).IsInstanceOfType(function))
+            {
+                functionData.Add((IOptFunction)function,
+                    new optFunctionData((IOptFunction)function, sameCandComparer,
+                        defaultFiniteDifferenceStepSize, defaultFiniteDifferenceMode));
+                if (typeof(IInequality).IsInstanceOfType(function))
+                    g.Add((IInequality)function);
+                else if (typeof(IEquality).IsInstanceOfType(function))
+                    h.Add((IEquality)function);
+                else if (typeof(IObjectiveFunction).IsInstanceOfType(function))
+                    f.Add((IObjectiveFunction)function);
+            }
+
             else if (typeof(abstractLineSearch).IsInstanceOfType(function))
             {
                 lineSearchMethod = (abstractLineSearch)function;
@@ -104,8 +113,8 @@ namespace OptimizationToolbox
                 meritFunction = (abstractMeritFunction)function;
             else if (typeof(abstractConvergence).IsInstanceOfType(function))
                 if (ConvergenceMethods.Exists(a => a.GetType() == function.GetType()))
-                    throw new Exception("You are adding a convergence method of type " + function.GetType() +
-                                        "to the optimization method but one already exists of this same type.");
+                    throw new Exception("You cannot add a convergence method of type " + function.GetType() +
+                                        "to the optimization method since one already exists of this same type.");
                 else ConvergenceMethods.Add((abstractConvergence)function);
             else if (typeof(double[]).IsInstanceOfType(function))
                 xStart = (double[])function;
@@ -159,7 +168,7 @@ namespace OptimizationToolbox
                                 + ", from x initial = " + n, 0);
                 return fStar;
             }
-            if (RequiresObjectiveFunction && (objfn == null))
+            if (RequiresObjectiveFunction && (f.Count == 0))
             {
                 SearchIO.output("No objective function specified.", 0);
                 return fStar;
@@ -231,7 +240,7 @@ namespace OptimizationToolbox
                     var sSquared = g[i - n].calculate(x);
                     if (sSquared < 0) xnew[i] = Math.Sqrt(-sSquared);
                     else xnew[i] = 0;
-                    h.Add(new slackSquaredEqualityFromInequality(g[i - n], i));
+                    h.Add(new slackSquaredEqualityFromInequality((IInequality)g[i - n], i));
                 }
                 x = xnew;
                 n = x.GetLength(0);
@@ -286,143 +295,16 @@ namespace OptimizationToolbox
 
         #endregion
 
-        #region Calculate f, g, h helper functions
-
-        public double calc_f(double[] point, Boolean includeMeritPenalty = false)
-        {
-            if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
-                return objfn.calculate(point) + meritFunction.calcPenalty(point);
-            return objfn.calculate(point);
-        }
-
-        public double[] calc_f_gradient(double[] point, Boolean includeMeritPenalty = false)
-        {
-            var grad = new double[n];
-            for (var i = 0; i != n; i++)
-                grad[i] = objfn.deriv_wrt_xi(point, i);
-            if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
-                return StarMath.add(grad, meritFunction.calcGradientOfPenalty(point));
-            return grad;
-        }
-
-        protected Boolean feasible(double[] point)
-        {
-            if (h.Cast<equality>().Any(a => !a.feasible(point)))
-                return false;
-
-            return g.Cast<inequality>().All(a => a.feasible(point));
-        }
-
-        protected double[] calc_h_vector(double[] point)
-        {
-            var vals = new double[p];
-            for (var i = 0; i != p; i++)
-                vals[i] = h[i].calculate(point);
-            return vals;
-        }
-
-        protected double[] calc_h_vector(double[] point, List<int> workingSet)
-        {
-            var workSetLength = workingSet.Count;
-            var vals = new double[workSetLength];
-            for (var i = 0; i != workSetLength; i++)
-                vals[i] = h[workingSet[i]].calculate(point);
-            return vals;
-        }
-
-        protected double[,] calc_h_gradient(double[] point)
-        {
-            var result = new double[p, n];
-            for (var i = 0; i != p; i++)
-                for (var j = 0; j != n; j++)
-                    result[i, j] = h[i].deriv_wrt_xi(point, j);
-            return result;
-        }
-
-        protected double[,] calc_h_gradient(double[] point, List<int> Indices)
-        {
-            var size = Indices.Count;
-            var result = new double[p, size];
-            for (var i = 0; i != p; i++)
-                for (var j = 0; j != size; j++)
-                    result[i, j] = h[i].deriv_wrt_xi(point, Indices[j]);
-            return result;
-        }
-
-        protected double[] calc_g_vector(double[] point)
-        {
-            var vals = new double[q];
-            for (var i = 0; i != q; i++)
-                vals[i] = g[i].calculate(point);
-            return vals;
-        }
-
-        protected double[] calc_g_vector(double[] point, List<int> workingSet)
-        {
-            var workSetLength = workingSet.Count;
-            var vals = new double[workSetLength];
-            for (var i = 0; i != workSetLength; i++)
-                vals[i] = g[workingSet[i]].calculate(point);
-            return vals;
-        }
-
-        protected double[,] calc_g_gradient(double[] point)
-        {
-            var result = new double[q, n];
-            for (var i = 0; i != q; i++)
-                for (var j = 0; j != n; j++)
-                    result[i, j] = g[i].deriv_wrt_xi(point, j);
-            return result;
-        }
-
-        protected double[,] calc_g_gradient(double[] point, List<int> Indices)
-        {
-            var size = Indices.Count;
-            var result = new double[q, size];
-            for (var i = 0; i != q; i++)
-                for (var j = 0; j != size; j++)
-                    result[i, j] = g[Indices[i]].deriv_wrt_xi(point, Indices[j]);
-            return result;
-        }
-
-        protected double[,] calc_active_gradient(double[] point)
-        {
-            var result = new double[m, n];
-            for (var i = 0; i != m; i++)
-                for (var j = 0; j != n; j++)
-                    result[i, j] = active[i].deriv_wrt_xi(point, j);
-            return result;
-        }
-
-        protected double[,] calc_active_gradient(double[] point, List<int> Indices)
-        {
-            var size = Indices.Count;
-            var result = new double[m, size];
-            for (var i = 0; i != m; i++)
-                for (var j = 0; j != size; j++)
-                    result[i, j] = active[i].deriv_wrt_xi(point, Indices[j]);
-            return result;
-        }
-
-        protected double[] calc_active_vector(double[] point)
-        {
-            var vals = new double[m];
-            for (var i = 0; i != m; i++)
-                vals[i] = active[i].calculate(point);
-            return vals;
-        }
-
-        #endregion
 
         #region from/to Problem Definition
 
         private void readInProblemDefinition(ProblemDefinition pd)
         {
             if (pd.g != null)
-                foreach (inequality gNew in pd.g)
+                foreach (IInequality gNew in pd.g)
                     Add(gNew);
             if (pd.h != null)
-                foreach (equality hNew in pd.h)
+                foreach (IEquality hNew in pd.h)
                     Add(hNew);
             if (pd.f != null) Add(pd.f);
             if (pd.ConvergenceMethods != null)
@@ -441,11 +323,12 @@ namespace OptimizationToolbox
             var pd = new ProblemDefinition
                          {
                              ConvergenceMethods = ConvergenceMethods,
-                             f = objfn,
-                             g = new List<inequality>(),
-                             h = new List<equality>()
+                             f = new List<object>(),
+                             g = new List<object>(),
+                             h = new List<object>()
                          };
-            foreach (inequality ineq in g)
+            foreach (var f1 in f) pd.f.Add(f1);
+            foreach (IInequality ineq in g)
                 if (ineq.GetType() == typeof(lessThanConstant))
                 {
                     var ub = ((lessThanConstant)ineq).constant;
@@ -459,7 +342,7 @@ namespace OptimizationToolbox
                     pd.SpaceDescriptor[varIndex].UpperBound = lb;
                 }
                 else pd.g.Add(ineq);
-            foreach (equality eq in h)
+            foreach (IEquality eq in h)
                 pd.h.Add(eq);
             pd.xStart = xStart;
             return pd;
@@ -470,6 +353,7 @@ namespace OptimizationToolbox
         #region Convergence Main Function
 
         private int numConvergeCriteriaNeeded = 1;
+
         /// <summary>
         /// Gets or sets the num convergence criteria needed to stop the process.
         /// </summary>
@@ -520,5 +404,6 @@ namespace OptimizationToolbox
         }
 
         #endregion
+
     }
 }

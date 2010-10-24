@@ -39,12 +39,12 @@ namespace OptimizationToolbox
             var sum = 0.0;
             double temp;
 
-            foreach (constraint c in optMethod.h)
+            foreach (IConstraint c in optMethod.h)
             {
                 temp = c.calculate(point);
                 sum += Math.Abs(temp);
             }
-            foreach (constraint c in optMethod.g)
+            foreach (IConstraint c in optMethod.g)
             {
                 temp = c.calculate(point);
                 if (temp > 0) sum += temp;
@@ -61,19 +61,19 @@ namespace OptimizationToolbox
             {
                 var sum = 0.0;
                 double temp;
-                foreach (constraint c in optMethod.h)
+                foreach (IConstraint c in optMethod.h)
                 {
                     temp = c.calculate(point);
                     if (temp < 0.0)
-                        sum -= c.deriv_wrt_xi(point, i);
+                        sum -= optMethod.deriv_wrt_xi(c,point, i);
                     if (temp > 0.0)
-                        sum += c.deriv_wrt_xi(point, i);
+                        sum += optMethod.deriv_wrt_xi(c,point, i);
                 }
-                foreach (constraint c in optMethod.g)
+                foreach (IConstraint c in optMethod.g)
                 {
                     temp = c.calculate(point);
                     if (temp > 0.0)
-                        sum += c.deriv_wrt_xi(point, i);
+                        sum += optMethod.deriv_wrt_xi(c,point, i);
                 }
                 grad[i] = penaltyWeight * sum;
             }

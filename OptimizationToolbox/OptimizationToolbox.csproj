@@ -63,8 +63,12 @@
     <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
     <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
     <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
+    <Compile Include="Objective Function Constraint Classes\optFunctionData.cs" />
+    <Compile Include="Objective Function Constraint Classes\sameCandidate.cs" />
+    <Compile Include="OptMethods\abstractOptMethod.Evaluation.cs" />
     <Compile Include="Generator Methods\BitStringNeighborGenerator.cs" />
     <Compile Include="Generator Methods\RandomNeighborGenerator.cs" />
+    <Compile Include="Objective Function Constraint Classes\Interfaces.cs" />
     <Compile Include="optimizeSort.cs" />
     <Compile Include="Generator Methods\abstractGenerator.cs">
       <SubType>Code</SubType>
@@ -110,7 +114,6 @@
     <Compile Include="Convergence Classes\MaxSpanInPopulationConvergence.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
-    <Compile Include="Objective Function Constraint Classes\abstracts for f g and h.cs" />
     <Compile Include="Design Space Description\DesignSpaceDescription.cs" />
     <Compile Include="Objective Function Constraint Classes\lessThanGreaterThanConstant.cs" />
     <Compile Include="LineSearch\ArithmeticMean.cs" />
@@ -141,7 +144,6 @@
     <Compile Include="OptMethods\abstractOptMethod.cs" />
     <Compile Include="Objective Function Constraint Classes\slackSquaredEqualityFromInequality.cs" />
     <Compile Include="SearchDirection\SteepestDescent.cs" />
-    <Compile Include="Objective Function Constraint Classes\abstractOptFunction.cs" />
     <Compile Include="SearchIO.cs" />
   </ItemGroup>
   <ItemGroup>

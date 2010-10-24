@@ -25,7 +25,7 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
-    public class polynomialInequality : inequality
+    public class polynomialInequality : IDifferentiable, IInequality
     {
         private List<double[]> coeff_exponents;
         private List<string> terms;
@@ -86,22 +86,30 @@ namespace OptimizationToolbox
 
         #endregion
 
-        #region Calculating
 
-        protected override double calc(double[] x)
+        #region Implementation of IOptFunction
+
+        public double h { get; set; }
+        public differentiate findDerivBy { get; set; }
+        public int numEvals { get; private set; }
+        public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
         }
 
-        public override double deriv_wrt_xi(double[] x, int position)
+        #endregion
+
+        #region Implementation of IDifferentiable
+
+        public double deriv_wrt_xi(double[] x, int i)
         {
-            return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, position));
+            return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, i));
         }
 
         #endregion
     }
 
-    public class polynomialEquality : equality
+    public class polynomialEquality : IDifferentiable, IEquality
     {
         private List<double[]> coeff_exponents;
         private List<string> terms;
@@ -162,22 +170,28 @@ namespace OptimizationToolbox
 
         #endregion
 
-        #region Calculating
+        #region Implementation of IDifferentiable
 
-        protected override double calc(double[] x)
+        public double deriv_wrt_xi(double[] x, int i)
+        {
+            return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, i));
+        }
+        #endregion
+
+        #region Implementation of IOptFunction
+
+        public double h { get; set; }
+        public differentiate findDerivBy { get; set; }
+        public int numEvals { get; private set; }
+        public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
-        }
-
-        public override double deriv_wrt_xi(double[] x, int position)
-        {
-            return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, position));
         }
 
         #endregion
     }
 
-    public class polynomialObjFn : objectiveFunction
+    public class polynomialObjFn : IDifferentiable, IObjectiveFunction
     {
         private List<double[]> coeff_exponents;
         private List<string> terms;
@@ -238,22 +252,28 @@ namespace OptimizationToolbox
 
         #endregion
 
-        #region Calculating
+        #region Implementation of IDifferentiable
 
-        protected override double calc(double[] x)
+        public double deriv_wrt_xi(double[] x, int i)
+        {
+            return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, i));
+        }
+        #endregion
+
+        #region Implementation of IOptFunction
+
+        public double h { get; set; }
+        public differentiate findDerivBy { get; set; }
+        public int numEvals { get; private set; }
+        public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
-        }
-
-        public override double deriv_wrt_xi(double[] x, int position)
-        {
-            return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, position));
         }
 
         #endregion
     }
 
-    public static class polynomialHelper
+    internal static class polynomialHelper
     {
         #region Converters
 
@@ -357,10 +377,8 @@ namespace OptimizationToolbox
 
         internal static List<string> convert(List<double[]> terms)
         {
-            var sTerms = new List<string>(terms.Count);
-            foreach (var c in terms)
-                sTerms.Add(convert(c));
-            return sTerms;
+            return new List<string>(terms.Select(c => convert(c)));
+           
         }
 
         internal static List<double[]> convert(double[,] matrixOfTerms)

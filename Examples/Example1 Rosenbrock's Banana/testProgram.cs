@@ -31,14 +31,14 @@ namespace testerNameSpace
     {
         private static void Main()
         {
-            // makeAndSaveProblemDefinition();
-            readInAndRunTest();
+            makeAndSaveProblemDefinition();
+           // readInAndRunTest();
         }
 
         private static void makeAndSaveProblemDefinition()
         {
-            var dsd = new DesignSpaceDescription(64);
-            for (var i = 0; i < 64; i++)
+            var dsd = new DesignSpaceDescription(2);
+            for (var i = 0; i < 2; i++)
                 dsd[i] = new VariableDescriptor(-10000, 10000, 0.01);
             var pd = new ProblemDefinition
                          {
@@ -50,6 +50,13 @@ namespace testerNameSpace
                                                       },
                              SpaceDescriptor = dsd
                          };
+            var objfn = new polynomialObjFn();
+            objfn.Add("x1^2");
+            objfn.Add("x2^2");
+            objfn.Add("-2*x1");
+            objfn.Add("-10*x2");
+            objfn.Add("26");
+            pd.Add(objfn);
             pd.saveProbToXml("../../testPD.xml");
         }
 
@@ -83,7 +90,7 @@ namespace testerNameSpace
             Console.WriteLine("Convergence Declared by " + opty.ConvergenceDeclaredBy);
             Console.WriteLine("X* = " + StarMath.MakePrintString(xStar));
             Console.WriteLine("F* = " + f, 1);
-            Console.WriteLine("NumEvals = " + pd.f.numEvals);
+            Console.WriteLine("NumEvals = " + opty.numEvals);
 
             Console.ReadKey();
         }

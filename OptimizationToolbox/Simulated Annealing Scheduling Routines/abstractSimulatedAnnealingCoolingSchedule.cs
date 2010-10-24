@@ -34,9 +34,9 @@ namespace OptimizationToolbox
             this.samplesInGeneration = samplesInGeneration;
         }
 
-        public void SetOptimizationDetails(abstractOptMethod OptMethod)
+        public void SetOptimizationDetails(abstractOptMethod optMethod)
         {
-            optMethod = OptMethod;
+            this.optMethod = optMethod;
         }
 
         internal abstract double SetInitialTemperature();

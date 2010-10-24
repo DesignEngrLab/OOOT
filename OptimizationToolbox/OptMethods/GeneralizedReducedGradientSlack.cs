@@ -121,7 +121,7 @@ namespace OptimizationToolbox
             //dk = new double[n];
 
             /* this is the iteration counter for updating Xc it's compared with feasibleOuterLoopMax. */
-            foreach (equality c in h)
+            foreach (IEquality c in h)
                 active.Add(c);
             divideXintoDecisionAndDependentVars();
 
@@ -130,7 +130,7 @@ namespace OptimizationToolbox
                 gradH = calc_h_gradient(x);
                 divideGradH_intoXcAndXdParts();
                 invGradHWRT_xc = StarMath.inverseUpper(gradHWRT_xc);
-                gradF = objfn.gradient(x);
+                gradF = calc_f_gradient(x);
                 calculateReducedGradientSearchDirection();
 
                 // use line search (arithmetic mean) to find alphaStar
@@ -148,10 +148,10 @@ namespace OptimizationToolbox
                     x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
                 }
                 k++;
-                fk = objfn.calculate(x);
+                fk = calc_f(x);
                 SearchIO.output("X = " + x[0] + ", " + x[1], 3); // + ", " + xk[2]
                 SearchIO.output("F(" + k + ") = " + fk, 3);
-            } while (notConverged(k, objfn.numEvals, fk, x,null, gradF));
+            } while (notConverged(k, numEvals, fk, x, null, gradF));
             fStar = fk;
             xStar = x;
             SearchIO.output("X* = " + x[0] + ", " + x[1], 2);

@@ -19,12 +19,14 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+using System;
+
 namespace OptimizationToolbox
 {
-    public abstract class inequalityWithConstant : inequality
+    public abstract class inequalityWithConstant : IDifferentiable, IInequality
     {
-        public double constant;
-        public int index;
+        public double constant { get; set; }
+        public int index { get; set; }
 
         #region Constructor
 
@@ -39,33 +41,49 @@ namespace OptimizationToolbox
         }
 
         #endregion
+
+        #region Implementation of IDifferentiable
+
+        public abstract double deriv_wrt_xi(double[] x, int i);
+
+        #endregion
+
+        #region Implementation of IOptFunction
+
+        public double h { get; set; }
+        public differentiate findDerivBy { get; set; }
+        public int numEvals { get; protected set; }
+        public abstract double calculate(double[] x);
+
+        #endregion
     }
 
     public class lessThanConstant : inequalityWithConstant
     {
-        protected override double calc(double[] x)
-        {
-            return x[index] - constant;
-        }
 
         public override double deriv_wrt_xi(double[] x, int i)
         {
             if (i == index) return 1.0;
             return 0.0;
         }
+
+        public override double calculate(double[] x)
+        {
+            return x[index] - constant;
+        }
     }
 
     public class greaterThanConstant : inequalityWithConstant
     {
-        protected override double calc(double[] x)
-        {
-            return constant - x[index];
-        }
-
         public override double deriv_wrt_xi(double[] x, int i)
         {
             if (i == index) return -1.0;
             return 0.0;
+        }
+
+        public override double calculate(double[] x)
+        {
+            return constant - x[index];
         }
     }
 }

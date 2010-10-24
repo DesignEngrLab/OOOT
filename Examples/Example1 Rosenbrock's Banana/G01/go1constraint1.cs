@@ -1,66 +1,68 @@
-﻿using OptimizationToolbox;
+﻿using System;
+using OptimizationToolbox;
 
 namespace tester.G01
 {
-    class go1constraint1 : inequality
+    class go1constraint1 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return 2 * x[0] + 2 * x[1] + x[9] + x[10] - 10;
         }
+
     }
-    class go1constraint2 : inequality
+    class go1constraint2 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return 2 * x[0] + 2 * x[2] + x[9] + x[11] - 10;
         }
     }
-    class go1constraint3 : inequality
+    class go1constraint3 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return 2 * x[1] + 2 * x[2] + x[10] + x[11] - 10;
         }
     }
-    class go1constraint4 : inequality
+    class go1constraint4 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return -8 * x[0] + x[9];
         }
     }
-    class go1constraint5 : inequality
+    class go1constraint5 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return -8 * x[1] + x[10];
         }
     }
-    class go1constraint6 : inequality
+    class go1constraint6 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return -8 * x[2] + x[11];
         }
     }
-    class go1constraint7 : inequality
+    class go1constraint7 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return -2 * x[3] - x[4] + x[9];
         }
     }
-    class go1constraint8 : inequality
+    class go1constraint8 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return -2 * x[5] - x[6] + x[10];
         }
     }
-    class go1constraint9 : inequality
+    class go1constraint9 : IInequality
     {
-        protected override double calc(double[] x)
+        public double calculate(double[] x)
         {
             return -2 * x[7] - x[8] + x[11];
         }
