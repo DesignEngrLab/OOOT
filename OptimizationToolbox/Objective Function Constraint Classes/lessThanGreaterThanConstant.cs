@@ -49,10 +49,6 @@ namespace OptimizationToolbox
         #endregion
 
         #region Implementation of IOptFunction
-
-        public double h { get; set; }
-        public differentiate findDerivBy { get; set; }
-        public int numEvals { get; protected set; }
         public abstract double calculate(double[] x);
 
         #endregion

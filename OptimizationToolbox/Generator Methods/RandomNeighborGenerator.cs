@@ -30,11 +30,11 @@ namespace OptimizationToolbox
         private readonly Random r;
         private int changeVectorIndex;
 
-        public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int maxNumNeighbors = 250)
+        public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int minNumNeighbors = 250)
             : base(discreteSpaceDescriptor)
         {
             r = new Random();
-            changeVectors = discreteSpaceDescriptor.CreateNeighborChangeVectors(maxNumNeighbors);
+            changeVectors = discreteSpaceDescriptor.CreateNeighborChangeVectors(minNumNeighbors);
         }
 
         public override List<double[]> GenerateCandidates(double[] candidate, int control = -1)

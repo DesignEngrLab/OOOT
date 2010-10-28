@@ -123,7 +123,12 @@ namespace OptimizationToolbox
             {
                 spaceDescriptor = (DesignSpaceDescription)function;
                 n = spaceDescriptor.n;
-                Add inequalities where appropriate...
+                foreach (var range in spaceDescriptor)
+                {
+                    g.Add(new greaterThanConstant { constant = range.LowerBound });
+                    g.Add(new lessThanConstant { constant = range.UpperBound });
+
+                        }
             }
             else
                 throw (new Exception("Function, " + function + ", not of known type (needs "
@@ -176,9 +181,8 @@ namespace OptimizationToolbox
             }
             if (RequiresSearchDirectionMethod && (searchDirMethod == null))
             {
-                // it'd be cool to use reflection to find all the possible implementations
-                // of the abstractSearchDirection class and present them at this time. 
-                // e.g. "Consider using SteepestDescent, BFGS, etc."
+                SearchIO.output("No search direction specified.", 0);
+                return fStar;
             }
             if (RequiresLineSearchMethod && (lineSearchMethod == null))
             {
@@ -203,7 +207,7 @@ namespace OptimizationToolbox
             if (g.Count == 0) SearchIO.output("No inequalities specified.", 4);
             if (h.Count == 0) SearchIO.output("No equalities specified.", 4);
             if (ConstraintsSolvedWithPenalties && (h.Count + g.Count > 0))
-                SearchIO.output("Constsraints will be solved with exterior penalty function.", 4);
+                SearchIO.output("Constraints will be solved with exterior penalty function.", 4);
             if (InequalitiesConvertedToEqualities && (g.Count > 0))
                 SearchIO.output(g.Count + " inequality constsraints will be converted to equality" +
                                 " constraints with the addition of " + g.Count + " slack variables.", 4);
@@ -222,7 +226,7 @@ namespace OptimizationToolbox
                     x = new double[n];
                     var randy = new Random();
                     for (var i = 0; i < n; i++)
-                        x[i] = 100.0 * randy.NextDouble();
+                        x[i] = 100.0 * randy.NextDouble();this should be from the DesignSpaceDescription
                 }
                 if (RequiresFeasibleStartPoint && !feasible(x))
                     if (!findFeasibleStartPoint()) return fStar;

@@ -42,7 +42,7 @@ namespace OptimizationToolbox
             RequiresLineSearchMethod = false;
             RequiresAnInitialPoint = true;
             RequiresConvergenceCriteria = true;
-            RequiresFeasibleStartPoint = true;
+            RequiresFeasibleStartPoint = false;
             RequiresDiscreteSpaceDescriptor = true;
         }
 

@@ -29,11 +29,11 @@ namespace OptimizationToolbox
         private readonly int[][] changeVectors;
         private readonly Random r;
 
-        public ExhaustiveNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int maxNumNeighbors = 250)
+        public ExhaustiveNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int minNumNeighbors = 250)
             : base(discreteSpaceDescriptor)
         {
             r = new Random();
-            changeVectors = discreteSpaceDescriptor.CreateNeighborChangeVectors(maxNumNeighbors);
+            changeVectors = discreteSpaceDescriptor.CreateNeighborChangeVectors(minNumNeighbors);
         }
 
 

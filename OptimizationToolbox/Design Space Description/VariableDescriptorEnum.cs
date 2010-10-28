@@ -82,7 +82,7 @@ namespace OptimizationToolbox
         /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         #endregion

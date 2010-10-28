@@ -78,7 +78,8 @@ namespace Example4_Using_Dependent_Analysis
 
         private static void Main()
         {
-            var opty = new GradientBasedOptimization();
+            //var opty = new GradientBasedOptimization();
+            var opty = new HillClimbing();
             var numGears = 2 * NumGearPairs;
             var FVPAnalysis = new ForceVelocityPositionAnalysis(numGears, outputTorque, inputSpeed, inputPosition);
             opty.Add(FVPAnalysis);
@@ -97,16 +98,20 @@ namespace Example4_Using_Dependent_Analysis
             {
                 dsd[4*i] = new VariableDescriptor(5, 1000, 1.0);// number of teeth: integers between 5 and 1000
                 dsd[4 * i + 1] = new VariableDescriptor(ValidPitches); // pitches from AGMA standard 
-                dsd[4*i + 2] = new VariableDescriptor(0, 50); // face width is between 0 and 50 inches
+                dsd[4*i + 2] = new VariableDescriptor(0, 50,400); // face width is between 0 and 50 inches
+                dsd[4 * i + 3] = new VariableDescriptor(0, Math.Max(360.0, (boxMaxX + boxMaxY + boxMaxZ - boxMinX - boxMinY - boxMinZ)),
+                    1000);
               }
             opty.Add(dsd);
             /******** Set up Optimization *************/
-            abstractSearchDirection searchDirMethod = new SteepestDescent();
-            opty.Add(searchDirMethod);
-            abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
-            opty.Add(lineSearchMethod);
+            //abstractSearchDirection searchDirMethod = new SteepestDescent();
+            //opty.Add(searchDirMethod);
+            //abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
+            //opty.Add(lineSearchMethod);
+            opty.Add(new ExhaustiveNeighborGenerator(dsd));
+            opty.Add(new KeepSingleBest(optimize.minimize));
             opty.Add(new squaredExteriorPenalty(opty, 10));
-            opty.Add(new DeltaXConvergence(0.0001));
+            opty.Add(new MaxAgeConvergence(40, 0.001));
             opty.Add(new MaxIterationsConvergence(50000));
             double[] xStar;
             SearchIO.verbosity = 4;

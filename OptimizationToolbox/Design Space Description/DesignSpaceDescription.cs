@@ -391,9 +391,13 @@ namespace OptimizationToolbox
         public VariableDescriptor this[int index]
         {
             get { return variableDescriptors[index]; }
-            set { variableDescriptors[index] = value; }
+            set
+            {
+                variableDescriptors[index] = value;
+                UpdateCharacteristics();
+            }
         }
 
         #endregion
     }
-    }
+}
