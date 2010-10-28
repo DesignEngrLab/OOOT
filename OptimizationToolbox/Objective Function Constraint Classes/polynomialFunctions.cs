@@ -89,9 +89,6 @@ namespace OptimizationToolbox
 
         #region Implementation of IOptFunction
 
-        public double h { get; set; }
-        public differentiate findDerivBy { get; set; }
-        public int numEvals { get; private set; }
         public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
@@ -180,9 +177,6 @@ namespace OptimizationToolbox
 
         #region Implementation of IOptFunction
 
-        public double h { get; set; }
-        public differentiate findDerivBy { get; set; }
-        public int numEvals { get; private set; }
         public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
@@ -261,10 +255,6 @@ namespace OptimizationToolbox
         #endregion
 
         #region Implementation of IOptFunction
-
-        public double h { get; set; }
-        public differentiate findDerivBy { get; set; }
-        public int numEvals { get; private set; }
         public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));

@@ -41,12 +41,12 @@ namespace OptimizationToolbox
 
             foreach (IConstraint c in optMethod.h)
             {
-                temp = c.calculate(point);
+                temp = optMethod.calculate(c, point);
                 max = Math.Max(max, Math.Abs(temp));
             }
             foreach (IConstraint c in optMethod.g)
             {
-                temp = c.calculate(point);
+                temp = optMethod.calculate(c, point);
                 max = Math.Max(max, temp);
             }
             max *= penaltyWeight;
@@ -63,7 +63,7 @@ namespace OptimizationToolbox
             var gMaxIndex = -1;
             for (var j = 0; j < optMethod.h.Count; j++)
             {
-                temp = optMethod.h[j].calculate(point);
+                temp =optMethod.calculate(optMethod.h[j],point);
                 if (Math.Abs(temp) > max)
                 {
                     max = Math.Abs(temp);
@@ -72,7 +72,7 @@ namespace OptimizationToolbox
             }
             for (var j = 0; j < optMethod.g.Count; j++)
             {
-                temp = optMethod.g[j].calculate(point);
+                temp = optMethod.calculate(optMethod.g[j], point);
                 if (temp > max)
                 {
                     max = temp;

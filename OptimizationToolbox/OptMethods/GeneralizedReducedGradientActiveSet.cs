@@ -79,7 +79,7 @@ namespace OptimizationToolbox
 
             RequiresObjectiveFunction = true;
             ConstraintsSolvedWithPenalties = false;
-            RequiresMeritFunction = false;
+            RequiresMeritFunction = true;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = true;
             RequiresLineSearchMethod = true;
@@ -201,7 +201,7 @@ namespace OptimizationToolbox
              * any newly violated g's into the sorted list newInfeasbles. */
             foreach (IInequality c in g)
             {
-                var gVal = c.calculate(xk);
+                var gVal = calculate(c,xk);
                 if (gVal < 0.0)
                 {
                     if (active.Contains(c))

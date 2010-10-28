@@ -40,12 +40,12 @@ namespace OptimizationToolbox
 
             foreach (IConstraint c in optMethod.h)
             {
-                temp = c.calculate(point);
+                temp = optMethod.calculate(c, point);
                 sum += temp * temp;
             }
             foreach (IConstraint c in optMethod.g)
             {
-                temp = c.calculate(point);
+                temp = optMethod.calculate(c, point);
                 if (temp > 0) sum += temp * temp;
             }
             sum *= penaltyWeight;
@@ -59,20 +59,20 @@ namespace OptimizationToolbox
             var hvals = new double[optMethod.h.Count];
             var gvals = new double[optMethod.g.Count];
             for (var i = 0; i < optMethod.h.Count; i++)
-                hvals[i] = optMethod.h[i].calculate(point);
+                hvals[i] = optMethod.calculate(optMethod.h[i], point);
             for (var i = 0; i < optMethod.g.Count; i++)
-                gvals[i] = optMethod.g[i].calculate(point);
+                gvals[i] = optMethod.calculate(optMethod.g[i], point);
 
             for (var j = 0; j != n; j++)
             {
                 var sum = 0.0;
                 for (var i = 0; i < optMethod.h.Count; i++)
                     if (hvals[i] != 0.0)
-                        sum += hvals[i] * optMethod.deriv_wrt_xi(optMethod.h[i],point, j);
+                        sum += hvals[i] * optMethod.deriv_wrt_xi(optMethod.h[i], point, j);
 
                 for (var i = 0; i < optMethod.g.Count; i++)
                     if (gvals[i] > 0.0)
-                        sum += gvals[i] * optMethod.deriv_wrt_xi(optMethod.g[i],point, j);
+                        sum += gvals[i] * optMethod.deriv_wrt_xi(optMethod.g[i], point, j);
                 grad[j] = 2 * penaltyWeight * sum;
             }
             return grad;

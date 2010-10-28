@@ -28,7 +28,6 @@ namespace OptimizationToolbox
     public class PowellMethod : abstractSearchDirection
     {
         private readonly double minimumAlpha = 0.001;
-        private readonly int n;
         private int innerK;
         private int itersToReset;
         private Boolean lastPass;
@@ -36,12 +35,10 @@ namespace OptimizationToolbox
         private double[] xLast;
 
 
-        public PowellMethod(int n, double minimumAlpha = 0.001, int itersToReset = -1)
+        public PowellMethod(double minimumAlpha = 0.001, int itersToReset = -1)
         {
-            this.n = n;
             this.minimumAlpha = minimumAlpha;
             this.itersToReset = itersToReset;
-            initSearchDirections();
         }
 
         public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false)
@@ -55,17 +52,17 @@ namespace OptimizationToolbox
                 lastPass = false;
                 innerK = 0;
             }
-            if (reset || (itersToReset-- == 0)
+            if (reset || (itersToReset-- == 0) || (searchDirections == null)
                 || ((Math.Abs(initAlpha) > 0) && (Math.Abs(initAlpha) <= minimumAlpha)))
             {
-                initSearchDirections();
+                initSearchDirections(x.GetLength(0));
                 innerK = 0;
                 /* after one full pass, start a spacer stage. */
             }
             if (innerK == 1) xLast = (double[])x.Clone();
-            var d = searchDirections[innerK % n];
+            var d = searchDirections[innerK % x.GetLength(0)];
 
-            if (innerK == n)
+            if (innerK == x.GetLength(0))
             {
                 innerK = 0;
                 lastPass = true;
@@ -74,7 +71,7 @@ namespace OptimizationToolbox
             return d;
         }
 
-        private void initSearchDirections()
+        private void initSearchDirections(int n)
         {
             var identity = StarMath.makeIdentity(n);
             searchDirections = new List<double[]>();

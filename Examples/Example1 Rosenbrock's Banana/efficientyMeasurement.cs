@@ -1,7 +1,0 @@
-﻿
-namespace tester
-{
-    class efficientyMeasurement
-    {
-    }
-}

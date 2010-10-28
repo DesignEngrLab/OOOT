@@ -101,7 +101,8 @@ namespace OptimizationToolbox
                 else if (typeof(IObjectiveFunction).IsInstanceOfType(function))
                     f.Add((IObjectiveFunction)function);
             }
-
+            else if (typeof(IDependentAnalysis).IsInstanceOfType(function))
+                dependentAnalysis = (IDependentAnalysis)function;
             else if (typeof(abstractLineSearch).IsInstanceOfType(function))
             {
                 lineSearchMethod = (abstractLineSearch)function;
@@ -122,13 +123,13 @@ namespace OptimizationToolbox
             {
                 spaceDescriptor = (DesignSpaceDescription)function;
                 n = spaceDescriptor.n;
+                Add inequalities where appropriate...
             }
             else
                 throw (new Exception("Function, " + function + ", not of known type (needs "
                                      + "to inherit from inequality, equality, objectiveFunction, abstractLineSearch, " +
                                      "or abstractSearchDirection)."));
         }
-
         #endregion
 
         #region Initialize and Run funtions
@@ -162,7 +163,7 @@ namespace OptimizationToolbox
             // k = 0 --> iteration counter
             k = 0;
 
-            if (n != spaceDescriptor.n)
+            if ((spaceDescriptor != null) && (n != spaceDescriptor.n))
             {
                 SearchIO.output("Differing number of variables specified. From space description = " + spaceDescriptor.n
                                 + ", from x initial = " + n, 0);
@@ -189,7 +190,7 @@ namespace OptimizationToolbox
                 SearchIO.output("No convergence method specified.", 0);
                 return fStar;
             }
-            if (RequiresMeritFunction && meritFunction == null)
+            if (RequiresMeritFunction && (meritFunction == null) && (g.Count + h.Count > 0))
             {
                 SearchIO.output("No merit function specified.", 0);
                 return fStar;
@@ -237,7 +238,7 @@ namespace OptimizationToolbox
                     xnew[i] = x[i];
                 for (var i = n; i != n + q; i++)
                 {
-                    var sSquared = g[i - n].calculate(x);
+                    var sSquared = calculate(g[i - n], x);
                     if (sSquared < 0) xnew[i] = Math.Sqrt(-sSquared);
                     else xnew[i] = 0;
                     h.Add(new slackSquaredEqualityFromInequality((IInequality)g[i - n], i));
@@ -300,13 +301,10 @@ namespace OptimizationToolbox
 
         private void readInProblemDefinition(ProblemDefinition pd)
         {
-            if (pd.g != null)
-                foreach (IInequality gNew in pd.g)
-                    Add(gNew);
-            if (pd.h != null)
-                foreach (IEquality hNew in pd.h)
-                    Add(hNew);
-            if (pd.f != null) Add(pd.f);
+            foreach (var f0 in pd.f) Add(f0);
+            foreach (var ineq in pd.g) Add(ineq);
+            foreach (var eq in pd.h) Add(eq);
+            NumConvergeCriteriaNeeded = pd.NumConvergeCriteriaNeeded;
             if (pd.ConvergenceMethods != null)
                 foreach (var cM in pd.ConvergenceMethods)
                     Add(cM);
@@ -322,12 +320,14 @@ namespace OptimizationToolbox
         {
             var pd = new ProblemDefinition
                          {
-                             ConvergenceMethods = ConvergenceMethods,
-                             f = new List<object>(),
-                             g = new List<object>(),
-                             h = new List<object>()
+                             ConvergenceMethods = this.ConvergenceMethods,
+                             xStart = this.xStart,
+                             NumConvergeCriteriaNeeded = this.NumConvergeCriteriaNeeded,
                          };
-            foreach (var f1 in f) pd.f.Add(f1);
+            foreach (IObjectiveFunction f0 in f)
+                pd.f.Add(f0);
+            foreach (IEquality eq in h)
+                pd.h.Add(eq);
             foreach (IInequality ineq in g)
                 if (ineq.GetType() == typeof(lessThanConstant))
                 {
@@ -342,9 +342,6 @@ namespace OptimizationToolbox
                     pd.SpaceDescriptor[varIndex].UpperBound = lb;
                 }
                 else pd.g.Add(ineq);
-            foreach (IEquality eq in h)
-                pd.h.Add(eq);
-            pd.xStart = xStart;
             return pd;
         }
 

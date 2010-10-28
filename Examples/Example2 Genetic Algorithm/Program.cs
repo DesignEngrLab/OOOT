@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using OptimizationToolbox;
 using StarMathLib;
-using System;
 
 namespace Example2_Genetic_Algorithm
 {
@@ -24,7 +23,7 @@ namespace Example2_Genetic_Algorithm
             /* Now a number of convergerence criteria are added. Again, since these all 
              * inherit from the abstractConvergence class, the Add method knows to where 
              * to store them. */
-            optMethod.Add(new MaxIterationsConvergence(500)); /* stop after 500 iteration (i.e. generations) */
+            optMethod.Add(new MaxIterationsConvergence(50000)); /* stop after 500 iteration (i.e. generations) */
             optMethod.Add(new MaxAgeConvergence(20, 0.000000001)); /*stop after 20 generations of the best not changing */
             optMethod.Add(new MaxSpanInPopulationConvergence(100)); /*stop if the largest distance is only one unit. */
             optMethod.NumConvergeCriteriaNeeded = 2; /* two of these three criteria are needed to stop the process. */

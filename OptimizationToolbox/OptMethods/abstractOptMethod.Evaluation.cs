@@ -26,7 +26,7 @@ namespace OptimizationToolbox
         internal List<IEquality> h { get; private set; }
         internal List<IInequality> g { get; private set; }
         internal List<IConstraint> active { get; private set; }
-        private Dictionary<IOptFunction, optFunctionData> functionData;
+        private readonly Dictionary<IOptFunction, optFunctionData> functionData;
         private sameCandidate sameCandComparer = new sameCandidate(sameTolerance);
 
         internal IDependentAnalysis dependentAnalysis { get; private set; }
@@ -43,16 +43,17 @@ namespace OptimizationToolbox
         #region Calculate f, g, h helper functions
         internal double calculate(IOptFunction function, double[] point)
         {
-            if (functionData[function].oldEvaluations.ContainsKey(point))
-                return functionData[function].oldEvaluations[point];
+            double fValue;
+            if (functionData[function].TryGetValue(point, out fValue))
+                return fValue;
 
             calc_dependent_Analysis(point);
             /**************************************************/
             /*** This is the only function that should call ***/
             /**********IOptFunction.calculate(x)***************/
-            double fValue = function.calculate(point);
+            fValue = function.calculate(point);
             /**************************************************/
-            functionData[function].oldEvaluations.Add(point, fValue);
+            functionData[function].Add((double[])point.Clone(), fValue);
             functionData[function].numEvals++;
             return fValue;
         }
@@ -63,7 +64,7 @@ namespace OptimizationToolbox
         // and the initial sampling in SA to get a temperature.
         public double calc_f(double[] point, Boolean includeMeritPenalty = false)
         {
-            var penalty = (ConstraintsSolvedWithPenalties || includeMeritPenalty)
+            var penalty = ((g.Count + h.Count > 0) && (ConstraintsSolvedWithPenalties || includeMeritPenalty))
                 ? meritFunction.calcPenalty(point) : 0.0;
             return calculate(f[0], point) + penalty;
         }
@@ -154,7 +155,9 @@ namespace OptimizationToolbox
             if (h.Any(a => !feasible(a, point)))
                 return false;
 
-            return g.Any(a => !feasible(a, point));
+            if (g.Any(a => !feasible(a, point)))
+                return false;
+            return true;
         }
 
         internal bool feasible(IInequality c, double[] point)
@@ -230,7 +233,7 @@ namespace OptimizationToolbox
 
             var backStep2 = (double[])point.Clone();
             backStep2[i] -= 2 * stepSize;
-            return (calculate(function, backStep2) - 4 * calculate(function, backStep1) + 3 * calculate(function , point))
+            return (calculate(function, backStep2) - 4 * calculate(function, backStep1) + 3 * calculate(function, point))
                 / (2 * stepSize);
         }
 

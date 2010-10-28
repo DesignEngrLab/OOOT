@@ -41,12 +41,12 @@ namespace OptimizationToolbox
 
             foreach (IConstraint c in optMethod.h)
             {
-                temp = c.calculate(point);
+                temp = optMethod.calculate(c, point);
                 sum += Math.Abs(temp);
             }
             foreach (IConstraint c in optMethod.g)
             {
-                temp = c.calculate(point);
+                temp = optMethod.calculate(c, point);
                 if (temp > 0) sum += temp;
             }
             sum *= penaltyWeight;
@@ -63,7 +63,7 @@ namespace OptimizationToolbox
                 double temp;
                 foreach (IConstraint c in optMethod.h)
                 {
-                    temp = c.calculate(point);
+                    temp = optMethod.calculate(c, point);
                     if (temp < 0.0)
                         sum -= optMethod.deriv_wrt_xi(c,point, i);
                     if (temp > 0.0)
@@ -71,7 +71,7 @@ namespace OptimizationToolbox
                 }
                 foreach (IConstraint c in optMethod.g)
                 {
-                    temp = c.calculate(point);
+                    temp = optMethod.calculate(c, point);
                     if (temp > 0.0)
                         sum += optMethod.deriv_wrt_xi(c,point, i);
                 }

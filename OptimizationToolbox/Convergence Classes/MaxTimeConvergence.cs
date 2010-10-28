@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OptimizationToolbox
 {
@@ -29,16 +30,14 @@ namespace OptimizationToolbox
     /// </summary>
     public class MaxTimeConvergence : abstractConvergence
     {
-        private readonly DateTime startTime;
+        private readonly Stopwatch timer;
 
         #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
         /// </summary>
-        public MaxTimeConvergence()
-        {
-        }
+        public MaxTimeConvergence() { }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
@@ -47,7 +46,7 @@ namespace OptimizationToolbox
         public MaxTimeConvergence(TimeSpan maxTime)
         {
             this.maxTime = maxTime;
-            startTime = DateTime.Now;
+            timer = Stopwatch.StartNew();
         }
 
         /// <summary>
@@ -56,8 +55,8 @@ namespace OptimizationToolbox
         /// <param name="timeToStop">The time to stop.</param>
         public MaxTimeConvergence(DateTime timeToStop)
         {
-            startTime = DateTime.Now;
-            maxTime = timeToStop - startTime;
+            maxTime = timeToStop - DateTime.Now;
+            timer = Stopwatch.StartNew();
         }
 
         #endregion
@@ -84,7 +83,7 @@ namespace OptimizationToolbox
         /// </returns>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
-            return ((DateTime.Now - startTime) >= maxTime);
+            return (timer.Elapsed >= maxTime);
         }
     }
 }

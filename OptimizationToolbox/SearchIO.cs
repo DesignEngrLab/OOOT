@@ -20,6 +20,7 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
+using System.Diagnostics;
 
 namespace OptimizationToolbox
 {
@@ -36,13 +37,7 @@ namespace OptimizationToolbox
                                                                        new TimeSpan(0, 0, 0, 30, 0)
                                                                    };
 
-        private static DateTime lastPrintStatement;
-        public static int iteration { get; set; }
-
-        public static Boolean terminateRequest { get; set; }
-
-
-        public static TimeSpan timeInterval { get; set; }
+        private static Stopwatch timer = Stopwatch.StartNew();
 
         public static int verbosity { get; set; }
 
@@ -53,13 +48,17 @@ namespace OptimizationToolbox
             if ((message == null) || (message.ToString() == "")) return true;
             if (verbosityLimit == 0)
             {
-                print(message);
+                Console.WriteLine(message.ToString());
+                timer.Reset();
+                timer.Start();
                 return true;
             }
             var index = verbosityLimit - verbosity + 2;
-            if ((index < 0) || ((index < 7) && (verbosityInterval[index] <= DateTime.Now - lastPrintStatement)))
+            if ((index < 0) || ((index < 7) && (verbosityInterval[index] <= timer.Elapsed)))
             {
-                print(message);
+                Console.WriteLine(message.ToString());
+                timer.Reset();
+                timer.Start();
                 return true;
             }
             return false;
@@ -70,12 +69,6 @@ namespace OptimizationToolbox
             while (index-- > 0 && !output(list[index], index))
             {
             }
-        }
-
-        public static void print(object message)
-        {
-            Console.WriteLine(message.ToString());
-            lastPrintStatement = DateTime.Now;
         }
 
         #endregion

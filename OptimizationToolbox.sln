@@ -7,14 +7,18 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D9
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example2 Genetic Algorithm", "Examples\Example2 Genetic Algorithm\Example2 Genetic Algorithm.csproj", "{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "tester", "Examples\Example1 Rosenbrock's Banana\tester.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StarMath", "StarMath", "{6A92C1D6-D43F-4A5E-8972-1DDEDA723681}"
 	ProjectSection(SolutionItems) = preProject
 		Resources\StarMath.dll = Resources\StarMath.dll
 		Resources\StarMath.pdb = Resources\StarMath.pdb
 		Resources\StarMath.XML = Resources\StarMath.XML
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example1 Simple OneFunction", "Examples\Example1 Simple One Function\Example1 Simple OneFunction.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example3 Using XML and Comparison", "Examples\Example3 Using XML and Comparison\Example3 Using XML and Comparison.csproj", "{763E9805-3D7C-493D-AEA3-C18978857408}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example4 Using Dependent Analysis", "Examples\Example4 Using Dependent Analysis\Example4 Using Dependent Analysis.csproj", "{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +60,26 @@ Global
 		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{21B926E3-326A-41E2-9DA8-03D537B73B86}.Release|x86.ActiveCfg = Release|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{763E9805-3D7C-493D-AEA3-C18978857408}.Release|x86.ActiveCfg = Release|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,5 +87,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A} = {D92977F7-C1BA-48C3-BFC7-56D41CF05EC0}
 		{21B926E3-326A-41E2-9DA8-03D537B73B86} = {D92977F7-C1BA-48C3-BFC7-56D41CF05EC0}
+		{763E9805-3D7C-493D-AEA3-C18978857408} = {D92977F7-C1BA-48C3-BFC7-56D41CF05EC0}
+		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6} = {D92977F7-C1BA-48C3-BFC7-56D41CF05EC0}
 	EndGlobalSection
 EndGlobal
