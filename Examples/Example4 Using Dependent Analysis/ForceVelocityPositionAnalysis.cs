@@ -1,4 +1,25 @@
-﻿using OptimizationToolbox;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *  
+ *     You should have received a copy of the GNU General Public License
+ *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://ooot.codeplex.com/.
+ *************************************************************************/
+using OptimizationToolbox;
 using StarMathLib;
 
 namespace Example4_Using_Dependent_Analysis
@@ -46,46 +67,46 @@ namespace Example4_Using_Dependent_Analysis
             positions[0] = inputPosition;
             for (var i = 0; i < numGears; i++)
             {
-                var N = x[i*4];
-                var P = x[i*4 + 1];
+                var N = x[i * 4];
+                var P = x[i * 4 + 1];
                 //var F = x[i * 4 + 2]; not needed in this analysis, just for mass and stress.
-                var Z = x[i*4 + 3];
-                diameters[i] = N/P;
+                var Z = x[i * 4 + 3];
+                diameters[i] = N / P;
                 if (i == 0) continue;
-                if (i%2 == 0)
-                    /* If it is even-numbered gear, then it shares
-                         * a shaft with the previous gear. Speeds are the
-                         * same and position is just translated along the shaft */
+                if (i % 2 == 0)
+                /* If it is even-numbered gear, then it shares
+                     * a shaft with the previous gear. Speeds are the
+                     * same and position is just translated along the shaft */
                 {
                     speeds[i] = speeds[i - 1];
                     positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, Z));
                 }
                 else
-                    /* else the gear is odd-numbered and mates with the previous
-                  * gear through mating teeth */
+                /* else the gear is odd-numbered and mates with the previous
+              * gear through mating teeth */
                 {
-                    speeds[i] = (x[(i - 1)*4]/N)*speeds[i - 1];
+                    speeds[i] = (x[(i - 1) * 4] / N) * speeds[i - 1];
                     positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, Z));
                     positions[i] = StarMath.multiply(positions[i - 1], StarMath.RotationZ(Z));
                     positions[i] = StarMath.multiply(positions[i],
-                                                     StarMath.Translate((diameters[i - 1] + diameters[i])/2, 0.0, 0.0));
+                                                     StarMath.Translate((diameters[i - 1] + diameters[i]) / 2, 0.0, 0.0));
                 }
             }
             torques[numGears - 1] = outputTorque;
-            forces[numGears - 1] = 2*outputTorque/diameters[numGears - 1];
+            forces[numGears - 1] = 2 * outputTorque / diameters[numGears - 1];
             for (var i = numGears - 2; i >= 0; i--)
             {
-                var N = x[i*4];
-                var NNext = x[(i + 1)*4];
-                if (i%2 == 0) /*even numbered gears are the drivers in this simple model */
+                var N = x[i * 4];
+                var NNext = x[(i + 1) * 4];
+                if (i % 2 == 0) /*even numbered gears are the drivers in this simple model */
                 {
                     forces[i] = forces[i + 1];
-                    torques[i] = (N/NNext)*torques[i + 1];
+                    torques[i] = (N / NNext) * torques[i + 1];
                 }
                 else /* odd gears share shaft with the next neighbor */
                 {
                     torques[i] = torques[i + 1];
-                    forces[i] = 2*torques[i]/diameters[i];
+                    forces[i] = 2 * torques[i] / diameters[i];
                 }
             }
         }

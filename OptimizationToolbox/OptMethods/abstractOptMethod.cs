@@ -125,10 +125,9 @@ namespace OptimizationToolbox
                 n = spaceDescriptor.n;
                 foreach (var range in spaceDescriptor)
                 {
-                    g.Add(new greaterThanConstant { constant = range.LowerBound });
-                    g.Add(new lessThanConstant { constant = range.UpperBound });
-
-                        }
+                    Add(new greaterThanConstant { constant = range.LowerBound });
+                    Add(new lessThanConstant { constant = range.UpperBound });
+                }
             }
             else
                 throw (new Exception("Function, " + function + ", not of known type (needs "
@@ -222,11 +221,18 @@ namespace OptimizationToolbox
                 else if (xStart != null) x = (double[])xStart.Clone();
                 else
                 {
-                    // no? need a random start
-                    x = new double[n];
-                    var randy = new Random();
-                    for (var i = 0; i < n; i++)
-                        x[i] = 100.0 * randy.NextDouble();this should be from the DesignSpaceDescription
+                    try
+                    {
+                        x = new RandomSampling(spaceDescriptor).GenerateCandidates(null, 1)[0];
+                    }
+                    catch
+                    {
+                        // no? need a random start
+                        x = new double[n];
+                        var randy = new Random();
+                        for (var i = 0; i < n; i++)
+                            x[i] = 100.0*randy.NextDouble();
+                    }
                 }
                 if (RequiresFeasibleStartPoint && !feasible(x))
                     if (!findFeasibleStartPoint()) return fStar;

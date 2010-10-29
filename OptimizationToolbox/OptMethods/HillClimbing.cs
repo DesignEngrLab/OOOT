@@ -60,15 +60,15 @@ namespace OptimizationToolbox
         protected override double run(out double[] xStar)
         {
             var candidates = new List<KeyValuePair<double, double[]>>();
-            candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
+            candidates.Add(new KeyValuePair<double, double[]>(calc_f(x, (meritFunction != null)), x));
             while (notConverged(k++, numEvals, candidates[0].Key, candidates[0].Value))
             {
                 SearchIO.output(k + ": f = " + candidates[0].Key, 4);
                 SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 4);
                 var neighbors = neighborGenerator.GenerateCandidates(candidates[0].Value);
                 candidates.AddRange(from neighbor in neighbors
-                                    let f = calc_f(neighbor, (meritFunction != null))
                                     where meritFunction != null || feasible(neighbor)
+                                    let f = calc_f(neighbor, (meritFunction != null))
                                     select new KeyValuePair<double, double[]>(f, neighbor));
                 selector.selectCandidates(ref candidates);
             }

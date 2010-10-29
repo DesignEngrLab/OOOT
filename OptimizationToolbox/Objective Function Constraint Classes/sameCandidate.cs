@@ -27,7 +27,7 @@ namespace OptimizationToolbox
         {
             if ((x == null) || (y == null) || (x.GetLength(0) != y.GetLength(0))) return false;
             if (x.Equals(y)) return true;
-            return false;
+            //return false;
             return (StarMath.norm2(x, y, true) <= toleranceSquared);
         }
 

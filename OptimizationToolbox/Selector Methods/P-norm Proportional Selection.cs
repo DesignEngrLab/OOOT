@@ -63,10 +63,15 @@ namespace OptimizationToolbox
             candidates = survivors;
         }
 
-        private static int findIndex(double p, IList<double> probabilities)
+        private static int findIndex(double p, double[] probabilities)
         {
+            return Array.FindIndex(probabilities, (r => (r > p)));
             var i = 0;
-            while (p > 0) p -= probabilities[i++];
+            while (0 <= (p -= probabilities[i]))
+            {
+                i++;
+            }
+            //while (p > 0) p -= probabilities[i++];
             return i;
         }
 
@@ -77,8 +82,9 @@ namespace OptimizationToolbox
             for (var i = 0; i < length; i++)
                 result[i] = Math.Pow(candidates[i].Key, p);
             var sum = result.Sum();
-            for (var i = 0; i < length; i++)
-                result[i] /= sum;
+            result[0] /= sum;
+            for (var i = 1; i < length; i++)
+                result[i] = result[i - 1] + (result[i] / sum);
             return result;
         }
 

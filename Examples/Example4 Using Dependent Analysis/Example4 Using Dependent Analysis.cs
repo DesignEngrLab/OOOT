@@ -64,22 +64,23 @@ namespace Example4_Using_Dependent_Analysis
         private static readonly double[,] inputPosition = new double[,]
                                                               {
                                                                   {1, 0, 0, 0},
-                                                                  {0, 1,0,0},
-                                                                  {0,0,1,0},
-                                                                  {0,0,0,1}
+                                                                  {0, 1, 0, 0},
+                                                                  {0, 0, 1, 0},
+                                                                  {0, 0, 0, 1}
                                                               };
 
-        private static double[] ValidPitches = new[]
-                                            {
-                                                2, 2.25, 2.5, 3, 4, 6, 8, 10, 12, 16, 
-                                                20, 24, 32, 40, 48, 64, 80, 96, 120,
-                                                150, 200
-                                            };
+        private static readonly double[] ValidPitches = new[]
+                                                            {
+                                                                2, 2.25, 2.5, 3, 4, 6, 8, 10, 12, 16,
+                                                                20, 24, 32, 40, 48, 64, 80, 96, 120,
+                                                                150, 200
+                                                            };
 
         private static void Main()
         {
             //var opty = new GradientBasedOptimization();
-            var opty = new HillClimbing();
+            //var opty = new HillClimbing();
+            var opty = new GeneticAlgorithm(500);
             var numGears = 2 * NumGearPairs;
             var FVPAnalysis = new ForceVelocityPositionAnalysis(numGears, outputTorque, inputSpeed, inputPosition);
             opty.Add(FVPAnalysis);
@@ -93,30 +94,38 @@ namespace Example4_Using_Dependent_Analysis
                 opty.Add(new samePitch(i * 4 + 1, (i + 1) * 4 + 1));
 
             /******** Set up Design Space *************/
-            var dsd = new DesignSpaceDescription(numGears*4);
-            for(int i=0; i<numGears;i++)
+            var dsd = new DesignSpaceDescription(numGears * 4);
+            for (var i = 0; i < numGears; i++)
             {
-                dsd[4*i] = new VariableDescriptor(5, 1000, 1.0);// number of teeth: integers between 5 and 1000
+                dsd[4 * i] = new VariableDescriptor(5, 1000, 1.0); // number of teeth: integers between 5 and 1000
                 dsd[4 * i + 1] = new VariableDescriptor(ValidPitches); // pitches from AGMA standard 
-                dsd[4*i + 2] = new VariableDescriptor(0, 50,400); // face width is between 0 and 50 inches
-                dsd[4 * i + 3] = new VariableDescriptor(0, Math.Max(360.0, (boxMaxX + boxMaxY + boxMaxZ - boxMinX - boxMinY - boxMinZ)),
-                    1000);
-              }
+                dsd[4 * i + 2] = new VariableDescriptor(0, 50, 400); // face width is between 0 and 50 inches
+                dsd[4 * i + 3] = new VariableDescriptor(0,
+                                                      Math.Max(360.0,
+                                                               (boxMaxX + boxMaxY + boxMaxZ - boxMinX - boxMinY -
+                                                                boxMinZ)),
+                                                      1000);
+            }
             opty.Add(dsd);
             /******** Set up Optimization *************/
             //abstractSearchDirection searchDirMethod = new SteepestDescent();
             //opty.Add(searchDirMethod);
             //abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
             //opty.Add(lineSearchMethod);
-            opty.Add(new ExhaustiveNeighborGenerator(dsd));
-            opty.Add(new KeepSingleBest(optimize.minimize));
+            opty.Add(new LatinHyperCube(dsd, VariablesInScope.BothDiscreteAndReal));
+            opty.Add(new GACrossoverBitString(dsd));
+            opty.Add(new GAMutationBitString(dsd));
+            opty.Add(new PNormProportionalSelection(optimize.minimize, true, 0.7));
+            //opty.Add(new RandomNeighborGenerator(dsd,3000));
+            //opty.Add(new KeepSingleBest(optimize.minimize));
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new MaxAgeConvergence(40, 0.001));
-            opty.Add(new MaxIterationsConvergence(50000));
+            opty.Add(new MaxFnEvalsConvergence(50000));
+            opty.Add(new MaxSpanInPopulationConvergence(15));
             double[] xStar;
             SearchIO.verbosity = 4;
             var timer = Stopwatch.StartNew();
-            var fStar = opty.Run(out xStar,numGears*4);
+            var fStar = opty.Run(out xStar, numGears * 4);
             printResults(opty, xStar, fStar, timer);
             Console.ReadKey();
         }
@@ -129,7 +138,6 @@ namespace Example4_Using_Dependent_Analysis
             Console.WriteLine("F* = " + f, 1);
             Console.WriteLine("NumEvals = " + opty.numEvals);
             Console.WriteLine("The time taken by the process = " + timer.Elapsed + ".\n\n\n");
-
         }
     }
 }

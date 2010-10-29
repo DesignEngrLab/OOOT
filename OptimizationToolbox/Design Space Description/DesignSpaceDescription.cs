@@ -204,8 +204,8 @@ namespace OptimizationToolbox
             var result = Enumerable.Range(0, changeVectors.GetLength(0)).ToList();
             for (var i = 0; i < n; i++)
             {
-                result.RemoveAll(a => ((candidate[i] + changeVectors[a][i]) < variableDescriptors[i].LowerBound));
-                result.RemoveAll(a => ((candidate[i] + changeVectors[a][i]) > variableDescriptors[i].UpperBound));
+                result.RemoveAll(a => ((variableDescriptors[i].PositionOf(candidate[i]) + changeVectors[a][i]) < 0));
+                result.RemoveAll(a => ((variableDescriptors[i].PositionOf(candidate[i]) + changeVectors[a][i]) >= variableDescriptors[i].Size));
             }
             return result;
         }
