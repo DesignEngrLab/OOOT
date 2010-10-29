@@ -130,7 +130,7 @@ namespace Example4_Using_Dependent_Analysis
             opty.Add(new boundingboxConstraint(FVPAnalysis, boxMinX, boxMaxX, boxMinY, boxMaxY, boxMinZ,
                                                boxMaxZ));
 
-            /* on and on. Stress inequality, outputLocation, outputSpeed. Details can be found in 
+            /* on and on: stress inequality, output Location, output Speed equalities. Details can be found in 
              * http://dx.doi.org/10.1115/DETC2009-86780 */
             opty.Add(new stressConstraint(FVPAnalysis, Nf, SFB, SFC));
             opty.Add(new outputLocationConstraint(FVPAnalysis, locationTol, outputX, outputY, outputZ));
@@ -140,20 +140,22 @@ namespace Example4_Using_Dependent_Analysis
                 opty.Add(new samePitch(i * 4 + 1, (i + 1) * 4 + 1));
 
             /******** Set up Design Space *************/
+            /* for the GA and the Hill Climbing, a compete discrete space is needed. Face width and
+             * location parameters should be continuous though. Consider removing the 800's below
+             * when using a mixed optimization method. */
             var dsd = new DesignSpaceDescription(numGears * 4);
             for (var i = 0; i < numGears; i++)
             {
                 dsd[4 * i] = new VariableDescriptor(5, 1000, 1.0); // number of teeth: integers between 5 and 1000
                 dsd[4 * i + 1] = new VariableDescriptor(ValidPitches); // pitches from AGMA standard 
-                dsd[4 * i + 2] = new VariableDescriptor(0, 50, 400); // face width is between 0 and 50 inches
-                dsd[4 * i + 3] = new VariableDescriptor(0,
-                                                      Math.Max(360.0,
-                                                               (boxMaxX + boxMaxY + boxMaxZ - boxMinX - boxMinY -
-                                                                boxMinZ)),
-                                                      1000);
+                dsd[4 * i + 2] = new VariableDescriptor(0, 50, 800); // face width is between 0 and 50 inches
+                dsd[4 * i + 3] = new VariableDescriptor(0, 500, 800);//location is either an angle or a length
+                                                                      // a max of 500 inches is generous
             }
             opty.Add(dsd);
             /******** Set up Optimization *************/
+            /* the following mish-mash is similiar to previous project - just trying to find a 
+             * combination of methods that'll lead to the optimial optimization algorithm. */
             //abstractSearchDirection searchDirMethod = new SteepestDescent();
             //opty.Add(searchDirMethod);
             //abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);

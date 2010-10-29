@@ -24,6 +24,12 @@ using OptimizationToolbox;
 
 namespace Example4_Using_Dependent_Analysis
 {
+    /* the best gear train in this problem is the one with the lightest
+     * combination of gears. The objective function is a farely easy thing
+     * to calculate. It is monotonic with 3/4 of the variables and the remaining
+     * quarter is not related. We are fortunate in that we can inherit from
+     * IDifferentiable as well. This drastically cuts down on the number of function
+     * calls for gradient based methods. */
     public class massObjective : IObjectiveFunction, IDifferentiable
     {
         private readonly ForceVelocityPositionAnalysis FVPAnalysis;

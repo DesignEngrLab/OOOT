@@ -24,6 +24,10 @@ using StarMathLib;
 
 namespace Example4_Using_Dependent_Analysis
 {
+    /* Here is an example of a dependent analysis. Other than the constructor
+     * it has but one function - calculate. Unlike objective functions and 
+     * constraints, however; this returns nothing. All that it does is set all
+     * of its public properties for perusal by the other functions. */
     public class ForceVelocityPositionAnalysis : IDependentAnalysis
     {
         private readonly double[,] inputPosition;
