@@ -63,8 +63,8 @@ namespace Example1_Simple_One_Function
             });
             /* At least one convergence method is required for NelderMead.
              * Since we know the optimal is 0 (@ {1, 1}) we can use the 
-             * "ToKnownBestFConvergence" with a tolerance of 0.01. */
-            optMethod.Add(new ToKnownBestFConvergence(0, 0.01));
+             * "ToKnownBestFConvergence" with a tolerance of 0.0001. */
+            optMethod.Add(new ToKnownBestFConvergence(0, 0.0001));
 
             /* Let us start the search from a specific point. */
             double[] xInit = new[] { 5.0, 50.0 };

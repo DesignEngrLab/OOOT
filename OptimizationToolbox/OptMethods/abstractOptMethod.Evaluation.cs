@@ -31,12 +31,22 @@ namespace OptimizationToolbox
 
         internal IDependentAnalysis dependentAnalysis { get; private set; }
         private double[] lastDependentAnalysis;
+
+
         private void calc_dependent_Analysis(double[] point)
         {
             if (dependentAnalysis == null) return;
             if (sameCandComparer.Equals(point, lastDependentAnalysis)) return;
             dependentAnalysis.calculate(point);
             lastDependentAnalysis = point;
+        }
+
+
+
+        public void ResetFunctionEvaluationDatabase()
+        {
+            foreach (var fd in functionData)
+                fd.Value.Clear();
         }
 
 

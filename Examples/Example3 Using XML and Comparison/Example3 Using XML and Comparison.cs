@@ -28,7 +28,7 @@ namespace Example3_Using_XML_and_Comparison
 {
     class Program
     {
-        private const string filename = "../../test1.xml";
+        private const string filename = "../../../test1.xml";
         private static void Main()
         {
             /* In this example, we first present how the details of an optimzation
@@ -72,6 +72,7 @@ namespace Example3_Using_XML_and_Comparison
             opty.Add(searchDirMethod);
 
             timer = Stopwatch.StartNew();
+            opty.ResetFunctionEvaluationDatabase();
             fStar = opty.Run(out xStar);
             printResults(opty, xStar, fStar, timer);
             /******************Generalized Reduced Gradient***********************/
@@ -176,7 +177,7 @@ namespace Example3_Using_XML_and_Comparison
              * to 2 million steps in each of the 2 design variables. */
             var dsd = new DesignSpaceDescription(2);
             for (var i = 0; i < 2; i++)
-                dsd[i] = new VariableDescriptor(-10000, 10000, 0.01);
+                dsd[i] = new VariableDescriptor(-10000, 10000, 1.0);
             pd.Add(dsd);
 
             /* Add three convergence criteria */

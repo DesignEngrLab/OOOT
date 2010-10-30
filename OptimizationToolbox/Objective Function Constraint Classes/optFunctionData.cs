@@ -65,6 +65,7 @@ namespace OptimizationToolbox
         public void Clear()
         {
             oldEvaluations.Clear();
+            numEvals = 0;
         }
         public bool Contains(KeyValuePair<double[], double> item)
         {
