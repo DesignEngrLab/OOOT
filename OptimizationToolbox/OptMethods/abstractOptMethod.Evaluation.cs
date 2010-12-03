@@ -8,12 +8,30 @@ namespace OptimizationToolbox
     public abstract partial class abstractOptMethod
     {
 
+        /// <summary>
+        /// Gets or sets the number of active constraints.
+        /// </summary>
+        /// <value>The number of active constraints, m.</value>
         public int m { get; set; }
 
+        /// <summary>
+        /// Gets or sets the number of equality constraints.
+        /// </summary>
+        /// <value>The number of equality constraints, p.</value>
         public int p { get; set; }
 
+        /// <summary>
+        /// Gets or sets the number of inequality constraints.
+        /// </summary>
+        /// <value>The number of inequality constraints, q.</value>
         public int q { get; set; }
 
+        /// <summary>
+        /// Gets the number of function evaluations. This is actually the max of
+        /// all functions (objective functions, equalities and inequalities) from
+        /// the optimization run.
+        /// </summary>
+        /// <value>The num evals.</value>
         public long numEvals
         {
             get
@@ -43,6 +61,9 @@ namespace OptimizationToolbox
 
 
 
+        /// <summary>
+        /// Resets the function evaluation database.
+        /// </summary>
         public void ResetFunctionEvaluationDatabase()
         {
             foreach (var fd in functionData)
@@ -72,6 +93,12 @@ namespace OptimizationToolbox
         // the reason this function is public but the remainder are not, is because
         // this is called from other classes. Most notably, the line search methods, 
         // and the initial sampling in SA to get a temperature.
+        /// <summary>
+        /// Calculates the value of f at the specified point (assuming single-objective).
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="includeMeritPenalty">if set to <c>true</c> [include merit penalty].</param>
+        /// <returns></returns>
         public double calc_f(double[] point, Boolean includeMeritPenalty = false)
         {
             var penalty = ((g.Count + h.Count > 0) && (ConstraintsSolvedWithPenalties || includeMeritPenalty))
@@ -80,15 +107,42 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Calculates the f vector (multi-objective) at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="includeMeritPenalty">if set to <c>true</c> [include merit penalty].</param>
+        /// <returns></returns>
         public double[] calc_f_vector(double[] point, Boolean includeMeritPenalty = false)
         { return f.Select(fi => calculate(fi, point)).ToArray(); }
+        /// <summary>
+        /// Calculates the h vector at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         protected double[] calc_h_vector(double[] point)
         { return h.Select(h0 => calculate(h0, point)).ToArray(); }
+        /// <summary>
+        /// Calculates the g vector at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         protected double[] calc_g_vector(double[] point)
         { return g.Select(g0 => calculate(g0, point)).ToArray(); }
+        /// <summary>
+        /// Calculates the active vector at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         protected double[] calc_active_vector(double[] point)
         { return active.Select(a => calculate(a, point)).ToArray(); }
 
+        /// <summary>
+        /// Calculates the gradient of f vector at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="includeMeritPenalty">if set to <c>true</c> [include merit penalty].</param>
+        /// <returns></returns>
         protected double[] calc_f_gradient(double[] point, Boolean includeMeritPenalty = false)
         {
             var grad = new double[n];
@@ -102,6 +156,11 @@ namespace OptimizationToolbox
 
 
 
+        /// <summary>
+        ///Calculates the gradient of h vector at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         protected double[,] calc_h_gradient(double[] point)
         {
             var result = new double[p, n];
@@ -111,6 +170,11 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Calculates the gradient of g vector at the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         protected double[,] calc_g_gradient(double[] point)
         {
             var result = new double[q, n];
@@ -120,6 +184,11 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Calculates the gradient of active vector at  the specified point.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         protected double[,] calc_active_gradient(double[] point)
         {
             var result = new double[m, n];
@@ -129,6 +198,13 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Calculates the gradient of h vector at the specified point
+        /// at the specified indices.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="Indices">The indices.</param>
+        /// <returns></returns>
         protected double[,] calc_h_gradient(double[] point, List<int> Indices)
         {
             var size = Indices.Count;
@@ -138,6 +214,13 @@ namespace OptimizationToolbox
                     result[i, j] = deriv_wrt_xi(h[i], point, Indices[j]);
             return result;
         }
+        /// <summary>
+        /// Calculates the gradient of g vector at the specified point
+        /// at the specified indices.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="Indices">The indices.</param>
+        /// <returns></returns>
         protected double[,] calc_g_gradient(double[] point, List<int> Indices)
         {
             var size = Indices.Count;
@@ -147,6 +230,13 @@ namespace OptimizationToolbox
                     result[i, j] = deriv_wrt_xi(g[i], point, Indices[j]);
             return result;
         }
+        /// <summary>
+        /// Calculates the gradient of active vector at the specified point
+        /// at the specified indices.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="Indices">The indices.</param>
+        /// <returns></returns>
         protected double[,] calc_active_gradient(double[] point, List<int> Indices)
         {
             var size = Indices.Count;
@@ -160,7 +250,12 @@ namespace OptimizationToolbox
 
         #endregion
 
-        internal Boolean feasible(double[] point)
+        /// <summary>
+        /// Determines if the specified point is feasible.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
+        public Boolean feasible(double[] point)
         {
             if (h.Any(a => !feasible(a, point)))
                 return false;
@@ -170,15 +265,36 @@ namespace OptimizationToolbox
             return true;
         }
 
-        internal bool feasible(IInequality c, double[] point)
+        /// <summary>
+        /// Determines if the specified point is feasible
+        /// for the inequality, c.
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
+        private bool feasible(IInequality c, double[] point)
         {
             return (calculate(c, point) <= 0);
         }
-        internal bool feasible(IEquality c, double[] point)
+        /// <summary>
+        /// Determines if the specified point is feasible
+        /// for the equality, c.
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
+        private bool feasible(IEquality c, double[] point)
         {
             return (calculate(c, point) == 0);
         }
-        internal bool feasible(IConstraint c, double[] point)
+        /// <summary>
+        /// Determines if the specified point is feasible
+        /// for the constraint, c.
+        /// </summary>
+        /// <param name="c">The c.</param>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
+        public bool feasible(IConstraint c, double[] point)
         {
             if (typeof(IEquality).IsInstanceOfType(c))
                 return feasible((IEquality)c, point);
@@ -188,7 +304,15 @@ namespace OptimizationToolbox
         }
 
 
-        internal double deriv_wrt_xi(IOptFunction function, double[] point, int i)
+        /// <summary>
+        /// Calculates the derivative with respect to variable xi
+        /// for the specified function.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The index of the variable in x.</param>
+        /// <returns></returns>
+        public double deriv_wrt_xi(IOptFunction function, double[] point, int i)
         {
             switch (functionData[function].findDerivBy)
             {

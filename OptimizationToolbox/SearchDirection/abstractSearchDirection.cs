@@ -23,10 +23,32 @@ using System;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// The class that all search direction methods must inherit from. By search direction, we mean
+    /// the vector, d that the numerical method must search in. The simplest example being SteepestDescent - 
+    /// in the opposite direction of the gradient.
+    /// </summary>
     public abstract class abstractSearchDirection
     {
+        /// <summary>
+        /// Finds the direction for the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="gradf">The gradf.</param>
+        /// <param name="f">The f.</param>
+        /// <param name="initAlpha">The init alpha.</param>
+        /// <param name="reset">if set to <c>true</c> [reset].</param>
+        /// <returns></returns>
         public abstract double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false);
 
+        /// <summary>
+        /// Finds the direction for the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="gradf">The gradf.</param>
+        /// <param name="f">The f.</param>
+        /// <param name="reset">if set to <c>true</c> [reset].</param>
+        /// <returns></returns>
         public virtual double[] find(double[] x, double[] gradf, double f, Boolean reset = false)
         {
             var dummy = double.NaN;

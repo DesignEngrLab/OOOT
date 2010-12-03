@@ -23,10 +23,19 @@ using System;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Arithmetic Mean 1-D search as described by ? Rao(?)
+    /// </summary>
     public class ArithmeticMean : abstractLineSearch
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ArithmeticMean"/> class.
+        /// </summary>
+        /// <param name="epsilon">The epsilon.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="kMax">The k max.</param>
         public ArithmeticMean(double epsilon, double stepSize, int kMax)
             : base(epsilon, stepSize, kMax)
         {
@@ -34,6 +43,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <returns></returns>
         public override double findAlphaStar(double[] x, double[] dir)
         {
             var alphaLow = 0.0;

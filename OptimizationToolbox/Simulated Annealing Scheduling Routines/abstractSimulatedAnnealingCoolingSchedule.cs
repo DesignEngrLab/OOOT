@@ -23,17 +23,37 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// the class that all simulated annealing cooling schedules must inherit from.
+    /// </summary>
     public abstract class abstractSimulatedAnnealingCoolingSchedule
     {
+        /// <summary>
+        /// the number of samples to take in determining the temperature.
+        /// </summary>
         protected readonly int samplesInGeneration;
+        /// <summary>
+        /// the reference back to the entire simulated annealing optimization method.
+        /// </summary>
         protected abstractOptMethod optMethod;
+        /// <summary>
+        /// number of samples taken thus far
+        /// </summary>
         protected int samplesThusFar;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="abstractSimulatedAnnealingCoolingSchedule"/> class.
+        /// </summary>
+        /// <param name="samplesInGeneration">The samples in generation.</param>
         protected abstractSimulatedAnnealingCoolingSchedule(int samplesInGeneration)
         {
             this.samplesInGeneration = samplesInGeneration;
         }
 
+        /// <summary>
+        /// Sets the optimization details.
+        /// </summary>
+        /// <param name="optMethod">The opt method.</param>
         public void SetOptimizationDetails(abstractOptMethod optMethod)
         {
             this.optMethod = optMethod;

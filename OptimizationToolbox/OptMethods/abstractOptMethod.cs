@@ -26,6 +26,9 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// The main class that all optimization methods inherit from.
+    /// </summary>
     public abstract partial class abstractOptMethod
     {
         #region Fields
@@ -36,44 +39,160 @@ namespace OptimizationToolbox
 
         /* I usually object to such simple names for variables, but this 
          * follows the convention used in my course - ME392C at UT Austin. */
+        /// <summary>
+        /// Gets or sets the number of decision variables.
+        /// </summary>
+        /// <value>The number of decision variables, n.</value>
         public int n { get; private set; }/* the total number of design variables - the length of x. */
 
-        public int k { get; protected set; } /* the iteration counter. */
+        /// <summary>
+        /// Gets the iteration count (can be set only by an optimization method).
+        /// </summary>
+        /// <value>The iteration count, k.</value>
+        public int k { get; protected set; }
 
+        /// <summary>
+        /// Gets the value of the optimum for single objective problems (can be set only by an optimization method).
+        /// </summary>
+        /// <value>The value of the optimum, fstar.</value>
         public double fStar { get; protected set; } /*fStar is the optimum that is returned at the end of run. */
         /* 'active' is the set of Active Constraints. For simplicity all equality constraints 
          * are assumed to be active, and any additional g's that come and go in this active
          * set strategy. More importantly we want the gradient of A which is a m by n matrix. 
          * m is the # of active constraints and n is the # of variables. */
+        /// <summary>
+        /// Gets the search dir method.
+        /// Such objects must inherit from the abstractSearchDirection class.
+        /// </summary>
+        /// <value>The search dir method.</value>
         public abstractSearchDirection searchDirMethod { get; private set; }
+        /// <summary>
+        /// Gets the line search method.
+        /// Such objects must inherit from the abstractLineSearch class.
+        /// </summary>
+        /// <value>The line search method.</value>
         public abstractLineSearch lineSearchMethod { get; private set; }
+        /// <summary>
+        /// Gets the list of convergence methods.
+        /// All objects in list inherit from the abstractConvergence class.
+        /// </summary>
+        /// <value>The convergence methods.</value>
         public List<abstractConvergence> ConvergenceMethods { get; private set; }
+        /// <summary>
+        /// Gets the space descriptor.
+        /// </summary>
+        /// <value>The space descriptor.</value>
         public DesignSpaceDescription spaceDescriptor { get; private set; }
 
         /* The following Booleans should be set in the constructor of every optimization method. 
          * Even if it seems redundant to do so, it is better to have them clearly indicated for each
          * method. */
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires objective function].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires objective function]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresObjectiveFunction { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [constraints solved with penalties].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [constraints solved with penalties]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean ConstraintsSolvedWithPenalties { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires merit function].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires merit function]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresMeritFunction { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [inequalities converted to equalities].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [inequalities converted to equalities]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean InequalitiesConvertedToEqualities { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires search direction method].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires search direction method]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresSearchDirectionMethod { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires line search method].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires line search method]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresLineSearchMethod { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires an initial point].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires an initial point]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresAnInitialPoint { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires convergence criteria].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires convergence criteria]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresConvergenceCriteria { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires feasible start point].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires feasible start point]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresFeasibleStartPoint { get; protected set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [requires discrete space descriptor].
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if [requires discrete space descriptor]; otherwise, <c>false</c>.
+        /// </value>
         public Boolean RequiresDiscreteSpaceDescriptor { get; protected set; }
 
-        internal abstractMeritFunction meritFunction { get; private set; }
+        /// <summary>
+        /// Gets the merit/penalty function method used by the optimization.
+        /// This object inherits from the abstractMeritFunction class.
+        /// </summary>
+        /// <value>The merit function.</value>
+        public abstractMeritFunction meritFunction { get; private set; }
+        /// <summary>
+        /// Gets the initial or start x candidate.
+        /// </summary>
+        /// <value>The x start.</value>
         public double[] xStart { get; protected set; }
+        /// <summary>
+        /// Gets the running value of x.
+        /// </summary>
+        /// <value>The x.</value>
         public double[] x { get; protected set; }
+
+        /// <summary>
+        /// Gets or sets the feasible outer loop max.
+        /// </summary>
+        /// <value>The feasible outer loop max.</value>
         public int feasibleOuterLoopMax { get; protected set; }
+        /// <summary>
+        /// Gets or sets the feasible inner loop max.
+        /// </summary>
+        /// <value>The feasible inner loop max.</value>
         public int feasibleInnerLoopMax { get; protected set; }
 
         #endregion
 
         #region Set-up function, Add.
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="abstractOptMethod"/> class.
+        /// </summary>
         protected abstractOptMethod()
         {
             fStar = double.PositiveInfinity;
@@ -85,6 +204,10 @@ namespace OptimizationToolbox
             functionData = new Dictionary<IOptFunction, optFunctionData>();
         }
 
+        /// <summary>
+        /// Adds the specified object to the optimization routine.
+        /// </summary>
+        /// <param name="function">The object, function.</param>
         public virtual void Add(object function)
         {
             if (typeof(ProblemDefinition).IsInstanceOfType(function))
@@ -138,6 +261,12 @@ namespace OptimizationToolbox
 
         #region Initialize and Run funtions
 
+        /// <summary>
+        /// Runs the optimization process and returns the optimal as xStar 
+        /// and the value of fStar is return by the function.
+        /// </summary>
+        /// <param name="xStar">The optimizer, xStar.</param>
+        /// <returns>optimal value, fStar</returns>
         public double Run(out double[] xStar)
         {
             if (xStart != null) return Run(out xStar, xStart);
@@ -148,12 +277,26 @@ namespace OptimizationToolbox
             return double.PositiveInfinity;
         }
 
+        /// <summary>
+        /// Runs the optimization process from the specified xInit and
+        /// returns the optimal as xStar and the value of fStar is return by the function.
+        /// </summary>
+        /// <param name="xStar">The optimizer, xStar.</param>
+        /// <param name="xInit">The initial or start point, xInit.</param>
+        /// <returns>optimal value, fStar</returns>
         public double Run(out double[] xStar, double[] xInit)
         {
             n = xInit.GetLength(0);
             return run(out xStar, xInit);
         }
 
+        /// <summary>
+        /// Runs the optimization process with the specified number of variables and
+        /// returns the optimal as xStar and the value of fStar is return by the function.
+        /// </summary>
+        /// <param name="xStar">The optimizer, xStar.</param>
+        /// <param name="NumberOfVariables">The number of variables.</param>
+        /// <returns>optimal value, fStar</returns>
         public double Run(out double[] xStar, int NumberOfVariables)
         {
             n = NumberOfVariables;
@@ -273,6 +416,12 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns></returns>
         protected abstract double run(out double[] xStar);
 
 
@@ -326,6 +475,11 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Creates a problem definition object from the details loaded in the
+        /// optimization routine. For use in saving the data to XML, etc.
+        /// </summary>
+        /// <returns>the problem definition</returns>
         public ProblemDefinition createProblemDefinition()
         {
             var pd = new ProblemDefinition
@@ -391,6 +545,16 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Returns true is the process has not converged.
+        /// </summary>
+        /// <param name="iteration">The iteration.</param>
+        /// <param name="numFnEvals">The num fn evals.</param>
+        /// <param name="fBest">The f best.</param>
+        /// <param name="xBest">The x best.</param>
+        /// <param name="population">The population.</param>
+        /// <param name="gradF">The grad F.</param>
+        /// <returns></returns>
         protected Boolean notConverged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
                                           IList<double> xBest = null, IList<double[]> population = null,
             IList<double> gradF = null)

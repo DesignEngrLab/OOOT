@@ -17,12 +17,11 @@ namespace OptimizationToolbox
         /// <summary>
         /// Determines whether the specified objects are equal.
         /// </summary>
+        /// <param name="x">The first candidate x array to compare.</param>
+        /// <param name="y">The second candidate x array to compare.</param>
         /// <returns>
         /// true if the specified objects are equal; otherwise, false.
         /// </returns>
-        /// <param name="x">The first object of type <paramref name="T"/> to compare.
-        ///                 </param><param name="y">The second object of type <paramref name="T"/> to compare.
-        ///                 </param>
         public bool Equals(double[] x, double[] y)
         {
             if ((x == null) || (y == null) || (x.GetLength(0) != y.GetLength(0))) return false;

@@ -26,17 +26,39 @@ namespace OptimizationToolbox
     /// </summary>
     public abstract class abstractMeritFunction
     {
+        /// <summary>
+        /// references back to the optimization method
+        /// </summary>
         protected abstractOptMethod optMethod;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="abstractMeritFunction"/> class.
+        /// </summary>
+        /// <param name="optMethod">The opt method.</param>
+        /// <param name="penaltyWeight">The penalty weight.</param>
         protected abstractMeritFunction(abstractOptMethod optMethod, double penaltyWeight)
         {
             this.optMethod = optMethod;
             this.penaltyWeight = penaltyWeight;
         }
 
+        /// <summary>
+        /// Gets or sets the penalty weight.
+        /// </summary>
+        /// <value>The penalty weight.</value>
         public double penaltyWeight { get; set; }
 
+        /// <summary>
+        /// Calcs the gradient of penalty.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         public abstract double[] calcGradientOfPenalty(double[] point);
+        /// <summary>
+        /// Calcs the penalty.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns></returns>
         public abstract double calcPenalty(double[] point);
     }
 }

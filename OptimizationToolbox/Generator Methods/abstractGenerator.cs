@@ -108,6 +108,10 @@ namespace OptimizationToolbox
     /// </summary>
     public abstract class SamplingGenerator : abstractGenerator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SamplingGenerator"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected SamplingGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {

@@ -37,14 +37,31 @@ namespace OptimizationToolbox
         /// of the convergence for the line search.
         /// </summary>
         protected double epsilon;
-        protected int k, kMax;
-        public double lastFeasAlpha, lastFeasAlpha4G, lastFeasAlpha4H;
+        /// <summary>
+        /// the iterations are counted with k
+        /// </summary>
+        protected int k;
+        /// <summary>
+        /// Kmax is the maximum iterations to convergence.
+        /// </summary>
+        protected int  kMax;
+        internal double lastFeasAlpha, lastFeasAlpha4G, lastFeasAlpha4H;
 
-        protected abstractOptMethod optMethod;
+        private abstractOptMethod optMethod;
+        /// <summary>
+        /// stepSize is the discretization step taken between values of alpha
+        /// </summary>
         protected double stepSize;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="abstractLineSearch"/> class.
+        /// </summary>
+        /// <param name="epsilon">The epsilon.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="kMax">The k max.</param>
+        /// <param name="trackFeasibility">if set to <c>true</c> [track feasibility].</param>
         protected abstractLineSearch(double epsilon, double stepSize, int kMax,
                                   Boolean trackFeasibility = false)
         {
@@ -57,13 +74,33 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <returns></returns>
         public abstract double findAlphaStar(double[] x, double[] dir);
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <param name="allowNegAlpha">if set to <c>true</c> [allow neg alpha].</param>
+        /// <returns></returns>
         public double findAlphaStar(double[] x, double[] dir, Boolean allowNegAlpha)
         {
             return findAlphaStar(x, dir, allowNegAlpha, stepSize);
         }
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <param name="initAlpha">The init alpha.</param>
+        /// <returns></returns>
         public double findAlphaStar(double[] x, double[] dir, double initAlpha)
         {
             return findAlphaStar(x, dir, false, initAlpha);
@@ -73,6 +110,14 @@ namespace OptimizationToolbox
          * all cases. The user still only needs to write the dervied classes only
          * implement the basic one that takes only x and dir. */
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <param name="allowNegAlpha">if set to <c>true</c> [allow neg alpha].</param>
+        /// <param name="initAlpha">The init alpha.</param>
+        /// <returns></returns>
         public double findAlphaStar(double[] x, double[] dir, Boolean allowNegAlpha, double initAlpha)
         {
             var tempStepSize = stepSize;
@@ -87,6 +132,13 @@ namespace OptimizationToolbox
             return alpha1;
         }
 
+        /// <summary>
+        /// Calcs the objective function value.
+        /// </summary>
+        /// <param name="start">The start.</param>
+        /// <param name="alpha">The alpha.</param>
+        /// <param name="dir">The dir.</param>
+        /// <returns></returns>
         protected double calcF(double[] start, double alpha, double[] dir)
         {
             var point = StarMath.add(start, StarMath.multiply(alpha, dir));
@@ -105,7 +157,7 @@ namespace OptimizationToolbox
             allConstraints.AddRange(optMethod.g.Cast<IConstraint>());
 
             foreach (var c in allConstraints)
-                if ((optMethod.feasible(c,point)) && (infeasibles.Contains(c))) infeasibles.Remove(c);
+                if ((optMethod.feasible(c, point)) && (infeasibles.Contains(c))) infeasibles.Remove(c);
                 else if ((!optMethod.feasible(c, point)) && (!infeasibles.Contains(c))) infeasibles.Add(c);
 
             if (infeasibles.Count == 0) lastFeasAlpha = lastFeasAlpha4G = lastFeasAlpha4H = alpha;

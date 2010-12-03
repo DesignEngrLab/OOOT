@@ -25,41 +25,80 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// The class that all selector classes must inherit from. 
+    /// </summary>
     public abstract class abstractSelector
     {
+        /// <summary>
+        /// the direction of the search: maximizing or minimizing
+        /// </summary>
         protected readonly optimize direction;
-        protected readonly optimizeSort directionComparer;
+        private readonly optimizeSort directionComparer;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="abstractSelector"/> class.
+        /// </summary>
+        /// <param name="direction">The direction.</param>
         protected abstractSelector(optimize direction)
         {
             this.direction = direction;
             directionComparer = new optimizeSort(direction, true);
         }
 
+        /// <summary>
+        /// Selects the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="control">The control.</param>
         public abstract void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
                                               double control = double.NaN);
 
+        /// <summary>
+        /// Makes a random list of integers up to the specified size.
+        /// </summary>
+        /// <param name="size">The size.</param>
+        /// <returns></returns>
         protected static List<int> makeRandomIntList(int size)
         {
             var rnd = new Random();
-            var result = new List<int>(size);
+            var result = Enumerable.Range(0, size).ToList();
             for (var i = 0; i < size; i++)
-                result.Insert(rnd.Next(result.Count), i);
+            {
+                var value = result[i];
+                result.RemoveAt(i);
+                result.Insert(rnd.Next(result.Count), value);
+            }
             return result;
         }
 
 
+        /// <summary>
+        /// Sorts the specified candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
         protected void sort(ref List<KeyValuePair<double, double[]>> candidates)
         {
             candidates = candidates.OrderBy(a => a.Key, new optimizeSort(direction, true)).ToList();
         }
 
+        /// <summary>
+        /// Randomizes the list.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
         protected void randomizeList(ref List<KeyValuePair<double, double[]>> candidates)
         {
             var r = new Random();
             candidates = candidates.OrderBy(a => r.NextDouble()).ToList();
         }
 
+        /// <summary>
+        /// if x betters the than y given the direction of the search
+        /// maximizing or minimizing.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns></returns>
         protected Boolean betterThan(double x, double y)
         {
             return directionComparer.BetterThan(x, y);
