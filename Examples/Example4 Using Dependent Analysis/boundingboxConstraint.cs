@@ -59,8 +59,9 @@ namespace Example4_Using_Dependent_Analysis
                 p = Math.Max(p, (minX - (FVPAnalysis.positions[i][0, 3] - (FVPAnalysis.diameters[i] / 2))));
                 p = Math.Max(p, ((FVPAnalysis.positions[i][1, 3] + (FVPAnalysis.diameters[i] / 2)) - maxY));
                 p = Math.Max(p, (minY - (FVPAnalysis.positions[i][1, 3] - (FVPAnalysis.diameters[i] / 2))));
-                p = Math.Max(p, ((FVPAnalysis.positions[i][2, 3] + (FVPAnalysis.diameters[i] / 2)) - maxZ));
-                p = Math.Max(p, (minZ - (FVPAnalysis.positions[i][2, 3] - (FVPAnalysis.diameters[i] / 2))));
+                p = Math.Max(p, (FVPAnalysis.positions[i][2, 3] - maxZ));
+                var F = x[i * 4 + 2];
+                p = Math.Max(p, (minZ - (FVPAnalysis.positions[i][2, 3] - F)));
             }
             return p;
         }

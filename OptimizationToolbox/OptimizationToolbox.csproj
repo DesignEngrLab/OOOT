@@ -135,6 +135,7 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptMethods\ImplicitEnueration.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\LundyMees.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\SangiovanniVincentelli.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />

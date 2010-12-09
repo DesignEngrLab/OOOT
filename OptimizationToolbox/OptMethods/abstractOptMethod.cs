@@ -394,7 +394,7 @@ namespace OptimizationToolbox
                     var sSquared = calculate(g[i - n], x);
                     if (sSquared < 0) xnew[i] = Math.Sqrt(-sSquared);
                     else xnew[i] = 0;
-                    h.Add(new slackSquaredEqualityFromInequality((IInequality)g[i - n], i));
+                    h.Add(new slackSquaredEqualityFromInequality(g[i - n], i));
                 }
                 x = xnew;
                 n = x.GetLength(0);
@@ -484,9 +484,9 @@ namespace OptimizationToolbox
         {
             var pd = new ProblemDefinition
                          {
-                             ConvergenceMethods = this.ConvergenceMethods,
-                             xStart = this.xStart,
-                             NumConvergeCriteriaNeeded = this.NumConvergeCriteriaNeeded,
+                             ConvergenceMethods = ConvergenceMethods,
+                             xStart = xStart,
+                             NumConvergeCriteriaNeeded = NumConvergeCriteriaNeeded,
                          };
             foreach (IObjectiveFunction f0 in f)
                 pd.f.Add(f0);

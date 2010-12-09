@@ -8,11 +8,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example2 Genetic Algorithm", "Examples\Example2 Genetic Algorithm\Example2 Genetic Algorithm.csproj", "{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "StarMath", "StarMath", "{6A92C1D6-D43F-4A5E-8972-1DDEDA723681}"
-	ProjectSection(SolutionItems) = preProject
-		Resources\StarMath.dll = Resources\StarMath.dll
-		Resources\StarMath.pdb = Resources\StarMath.pdb
-		Resources\StarMath.XML = Resources\StarMath.XML
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example1 Simple OneFunction", "Examples\Example1 Simple One Function\Example1 Simple OneFunction.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
 EndProject

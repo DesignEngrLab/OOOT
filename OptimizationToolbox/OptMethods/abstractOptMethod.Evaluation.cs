@@ -40,9 +40,9 @@ namespace OptimizationToolbox
                 return numEvalList.Max();
             }
         }
-        internal List<IObjectiveFunction> f { get; private set; }
-        internal List<IEquality> h { get; private set; }
-        internal List<IInequality> g { get; private set; }
+        public List<IObjectiveFunction> f { get; private set; }
+        public List<IEquality> h { get; private set; }
+        public List<IInequality> g { get; private set; }
         internal List<IConstraint> active { get; private set; }
         private readonly Dictionary<IOptFunction, optFunctionData> functionData;
         private sameCandidate sameCandComparer = new sameCandidate(sameTolerance);

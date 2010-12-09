@@ -1,0 +1,32 @@
+1. add GPL license to all files
+2. uniform output/verbosity print statements
+	1 fn-eval/line = 5
+	5 fn-eval/line = 4
+    20 fn-eval/line = 3
+    100 fn-eval/Line = 2
+    400 fn-eval/line = 1
+    2000 fn-eval/line = 0
+3. ToKnownBest should there be one for f and one for x?
+	also, should form be like % accuray instead of cutoff?
+	(this would not need optimize-direction)
+4. Generators
+	a. need binary perturbation (for SA)
+	b. differential evolution / real-valued crossover
+	c. latin hyper cube
+	d. alpha-ary crossover, and mutation
+	e. to improve exhaustive and random HC, CreateNeighborChangeVectors() in 
+	   designSpaceDescription could take a values to determine change-vectors
+	   [a, b] where a in 1...n, being the number of dim's to simultaneously change
+	   and b is the amount of change 1.....
+	   is 3^n -1 = nC1 + nC2 + nC3 + ... + nCn?
+5. finish SA with temperature schedules and test 
+	test with StochasticNeighborGenerator
+6. Debug DSCPowell
+7. Debug SQP
+8. finish GRG with slack
+9. add PSO optimization method (can't simply be a generator - well. not sure.)
+10. add comments
+11. make test exe's
+
+
+

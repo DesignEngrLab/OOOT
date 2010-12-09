@@ -27,8 +27,16 @@ namespace OptimizationToolbox
 {
     public class HillClimbing : abstractOptMethod
     {
-        public abstractGenerator neighborGenerator { get; set; }
-        public abstractSelector selector { get; set; }
+        /// <summary>
+        /// Gets the neighbor generator.
+        /// </summary>
+        /// <value>The neighbor generator.</value>
+        public abstractGenerator neighborGenerator { get; private set; }
+        /// <summary>
+        /// Gets the selector.
+        /// </summary>
+        /// <value>The selector.</value>
+        public abstractSelector selector { get; private set; }
 
         #region Constructor
 
