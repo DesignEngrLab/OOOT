@@ -51,46 +51,11 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         /// <param name="control">The control.</param>
-        public abstract void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public abstract void selectCandidates(ref List<Candidate> candidates,
                                               double control = double.NaN);
 
-        /// <summary>
-        /// Makes a random list of integers up to the specified size.
-        /// </summary>
-        /// <param name="size">The size.</param>
-        /// <returns></returns>
-        protected static List<int> makeRandomIntList(int size)
-        {
-            var rnd = new Random();
-            var result = Enumerable.Range(0, size).ToList();
-            for (var i = 0; i < size; i++)
-            {
-                var value = result[i];
-                result.RemoveAt(i);
-                result.Insert(rnd.Next(result.Count), value);
-            }
-            return result;
-        }
 
 
-        /// <summary>
-        /// Sorts the specified candidates.
-        /// </summary>
-        /// <param name="candidates">The candidates.</param>
-        protected void sort(ref List<KeyValuePair<double, double[]>> candidates)
-        {
-            candidates = candidates.OrderBy(a => a.Key, new optimizeSort(direction, true)).ToList();
-        }
-
-        /// <summary>
-        /// Randomizes the list.
-        /// </summary>
-        /// <param name="candidates">The candidates.</param>
-        protected void randomizeList(ref List<KeyValuePair<double, double[]>> candidates)
-        {
-            var r = new Random();
-            candidates = candidates.OrderBy(a => r.NextDouble()).ToList();
-        }
 
         /// <summary>
         /// if x betters the than y given the direction of the search

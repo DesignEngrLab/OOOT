@@ -38,16 +38,16 @@ namespace OptimizationToolbox
             this.Q = Q;
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public override void selectCandidates(ref List<Candidate> candidates,
                                               double fractionToKeep = double.NaN)
         {
-            var survivors = new List<KeyValuePair<double, double[]>>();
+            var survivors = new List<Candidate>();
             if (alwaysKeepBest)
             {
                 double bestF;
-                if (direction == optimize.maximize) bestF = candidates.Select(a => a.Key).Max();
-                else bestF = candidates.Select(a => a.Key).Min();
-                survivors.Add(candidates.Find(a => a.Key != bestF));
+                if (direction == optimize.maximize) bestF = candidates.Select(a => a.fValues[0]).Max();
+                else bestF = candidates.Select(a => a.fValues[0]).Min();
+                survivors.Add(candidates.Find(a => a.fValues[0] != bestF));
                 candidates.Remove(survivors[0]);
             }
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
@@ -75,12 +75,12 @@ namespace OptimizationToolbox
             return i;
         }
 
-        private double[] makeProbabilites(IList<KeyValuePair<double, double[]>> candidates)
+        private double[] makeProbabilites(IList<Candidate> candidates)
         {
             var length = candidates.Count;
             var result = new double[length];
             for (var i = 0; i < length; i++)
-                result[i] = Math.Pow(candidates[i].Key, p);
+                result[i] = Math.Pow(candidates[i].fValues[0], p);
             var sum = result.Sum();
             result[0] /= sum;
             for (var i = 1; i < length; i++)

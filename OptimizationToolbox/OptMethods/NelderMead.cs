@@ -45,7 +45,6 @@ namespace OptimizationToolbox
         {
             RequiresObjectiveFunction = true;
             ConstraintsSolvedWithPenalties = true;
-            RequiresMeritFunction = true;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;

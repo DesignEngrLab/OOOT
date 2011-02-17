@@ -45,7 +45,6 @@ namespace OptimizationToolbox
 
             RequiresObjectiveFunction = true;
             ConstraintsSolvedWithPenalties = true;
-            RequiresMeritFunction = true;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;
@@ -72,7 +71,7 @@ namespace OptimizationToolbox
 
         protected override double run(out double[] xStar)
         {
-            var population = new List<KeyValuePair<double, double[]>>();
+            var population = new List<Candidate>();
             /* 1. make initial population and evaluate
              *    to ensure diversity, a latin hyper cube with Hammersley could be used.*/
             SearchIO.output("creating initial population", 4);
@@ -98,38 +97,38 @@ namespace OptimizationToolbox
                 SearchIO.output("evaluating new popluation members.", 4);
                 evaluate(population);
                 k++;
-                fStar = population.Min(c => c.Key);
+                fStar = population.Min(c => c.fValues[0]);
                 xStar = (from candidate in population
-                         where (candidate.Key == fStar)
-                         select candidate.Value).First();
+                         where (candidate.fValues[0] == fStar)
+                         select candidate.x).First();
                 SearchIO.output("x* = " + StarMath.MakePrintString(xStar), 4);
                 SearchIO.output("f* = " + fStar, 4);
-            } while (notConverged(k, numEvals, fStar, xStar, population.Select(a => a.Value).ToList(),
-                population.Select(a => a.Key).ToList()));
+            } while (notConverged(k, numEvals, fStar, xStar, population.Select(a => a.x).ToList(),
+                population.Select(a => a.fValues[0]).ToList()));
             return fStar;
         }
 
-        private static double[] CalcPopulationStats(IEnumerable<KeyValuePair<double, double[]>> population)
+        private static double[] CalcPopulationStats(IEnumerable<Candidate> population)
         {
             return new[]
                        {
-                           (from c in population select c.Key).Min(),
-                           (from c in population select c.Key).Average(),
-                           (from c in population select c.Key).Max()
+                           (from c in population select c.fValues[0]).Min(),
+                           (from c in population select c.fValues[0]).Average(),
+                           (from c in population select c.fValues[0]).Max()
                        };
         }
 
 
-        private void evaluate(IList<KeyValuePair<double, double[]>> population)
+        private void evaluate(IList<Candidate> population)
         {
             for (var i = population.Count - 1; i >= 0; i--)
             {
                 var candidate = population[i];
-                if (double.IsNaN(candidate.Key))
+                if (double.IsNaN(candidate.fValues[0]))
                 {
                     population.RemoveAt(i);
-                    var f = calc_f(candidate.Value);
-                    population.Add(new KeyValuePair<double, double[]>(f, candidate.Value));
+                    var f = calc_f(candidate.x);
+                    population.Add(new Candidate(f, candidate.x));
                 }
             }
         }

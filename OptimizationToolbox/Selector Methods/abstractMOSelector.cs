@@ -19,47 +19,49 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OptimizationToolbox
 {
     /// <summary>
-    /// the class that all simulated annealing cooling schedules must inherit from.
+    /// The class that all selector classes must inherit from. 
     /// </summary>
-    public abstract class abstractSimulatedAnnealingCoolingSchedule
+    public abstract class abstractMOSelector
     {
         /// <summary>
-        /// the number of samples to take in determining the temperature.
+        /// the direction of the search: maximizing or minimizing
         /// </summary>
-        protected readonly int samplesInGeneration;
-        /// <summary>
-        /// the reference back to the entire simulated annealing optimization method.
-        /// </summary>
-        protected abstractOptMethod optMethod;
-        /// <summary>
-        /// number of samples taken thus far
-        /// </summary>
-        protected int samplesThusFar;
+        protected readonly optimize[] optDirections;
+
+
+     protected readonly   int numObjectives;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="abstractSimulatedAnnealingCoolingSchedule"/> class.
+        /// Initializes a new instance of the <see cref="abstractSelector"/> class.
         /// </summary>
-        /// <param name="samplesInGeneration">The samples in generation.</param>
-        protected abstractSimulatedAnnealingCoolingSchedule(int samplesInGeneration)
+        /// <param name="direction">The direction.</param>
+        protected abstractMOSelector(int numObjectives, optimize[] optDirections)
         {
-            this.samplesInGeneration = samplesInGeneration;
+            this.numObjectives = numObjectives;
+            if (optDirections == null)
+            {
+                optDirections = new optimize[numObjectives];
+                for (int i = 0; i < numObjectives; i++)
+                    optDirections[i] = optimize.minimize;
+            }
+            else optDirections = (optimize[])optDirections.Clone();
         }
 
         /// <summary>
-        /// Sets the optimization details.
+        /// Selects the candidates.
         /// </summary>
-        /// <param name="optMethod">The opt method.</param>
-        public void SetOptimizationDetails(abstractOptMethod optMethod)
-        {
-            this.optMethod = optMethod;
-        }
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="control">The control.</param>
+        public abstract void selectCandidates(ref List<Candidate> candidates,
+                                              double control = double.NaN);
 
-        internal abstract double SetInitialTemperature();
-        internal abstract double UpdateTemperature(double temperature, List<Candidate> candidates);
+
     }
 }

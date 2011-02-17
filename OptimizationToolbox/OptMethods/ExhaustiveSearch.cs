@@ -37,7 +37,6 @@ namespace OptimizationToolbox
             comparer = new optimizeSort(direction);
             RequiresObjectiveFunction = false;
             ConstraintsSolvedWithPenalties = false;
-            RequiresMeritFunction = false;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;

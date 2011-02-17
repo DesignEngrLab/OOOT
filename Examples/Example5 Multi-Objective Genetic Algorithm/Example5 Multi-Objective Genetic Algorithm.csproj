@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}</ProjectGuid>
+    <ProjectGuid>{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Example2_Genetic_Algorithm</RootNamespace>
@@ -80,8 +80,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="efficiencyMeasurement.cs" />
-    <Compile Include="lessThanManifoldVolume.cs" />
+    <Compile Include="RoyalRoadObjFn.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -89,11 +89,11 @@ namespace OptimizationToolbox
             return candidates;
         }
 
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
+        public override void GenerateCandidates(ref List<Candidate> candidates, int numSamples = -1)
         {
             var candVectors = GenerateCandidates(null, numSamples);
             foreach (var candVector in candVectors)
-                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, candVector));
+                candidates.Add(new Candidate(double.NaN, candVector));
         }
     }
 }

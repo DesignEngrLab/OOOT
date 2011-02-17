@@ -19,6 +19,7 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
@@ -33,11 +34,10 @@ namespace OptimizationToolbox
 
         #region Constructor
 
-        public SimulatedAnnealing(optimize direction)
+        public SimulatedAnnealing(optimize direction,Boolean ConstraintsSolvedWithPenalties=true)
         {
             RequiresObjectiveFunction = true;
-            ConstraintsSolvedWithPenalties = false;
-            RequiresMeritFunction = false;
+            this.ConstraintsSolvedWithPenalties = ConstraintsSolvedWithPenalties;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;
@@ -65,23 +65,23 @@ namespace OptimizationToolbox
 
         protected override double run(out double[] xStar)
         {
-            var candidates = new List<KeyValuePair<double, double[]>>();
-            candidates.Add(new KeyValuePair<double, double[]>(calc_f(x), x));
+            var candidates = new List<Candidate>();
+            candidates.Add(new Candidate(calc_f(x), x));
             var temperature = scheduler.SetInitialTemperature();
-            while (notConverged(k++, numEvals, candidates[0].Key, candidates[0].Value))
+            while (notConverged(k++, numEvals, candidates[0].fValues[0], candidates[0].x))
             {
-                SearchIO.output(k + ": f = " + candidates[0].Key, 5);
-                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 5);
-                var neighbors = neighborGenerator.GenerateCandidates(candidates[0].Value);
+                SearchIO.output(k + ": f = " + candidates[0].fValues[0], 5);
+                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].x), 5);
+                var neighbors = neighborGenerator.GenerateCandidates(candidates[0].x);
                 candidates.AddRange(from neighbor in neighbors
-                                    let f = calc_f(neighbor, (meritFunction != null))
-                                    where meritFunction != null || feasible(neighbor)
-                                    select new KeyValuePair<double, double[]>(f, neighbor));
+                                    let f = calc_f(neighbor)
+                                    where ConstraintsSolvedWithPenalties || feasible(neighbor)
+                                    select new Candidate(f, neighbor));
                 temperature = scheduler.UpdateTemperature(temperature, candidates);
                 selector.selectCandidates(ref candidates, temperature);
             }
-            xStar = candidates[0].Value;
-            return candidates[0].Key;
+            xStar = candidates[0].x;
+            return candidates[0].fValues[0];
         }
     }
 }

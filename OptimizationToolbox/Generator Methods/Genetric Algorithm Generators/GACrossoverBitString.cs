@@ -40,7 +40,7 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public override void GenerateCandidates(ref List<Candidate> candidates,
                                                 int targetPopNumber = -1)
         {
             /* if no population size is provided, then it is assumed that the population should
@@ -50,8 +50,8 @@ namespace OptimizationToolbox
             var numNew = 0;
             while (numNew < targetPopNumber)
             {
-                var parent1 = candidates[(numNew) % candidates.Count].Value;
-                var parent2 = candidates[(numNew + 1) % candidates.Count].Value;
+                var parent1 = candidates[(numNew) % candidates.Count].x;
+                var parent2 = candidates[(numNew + 1) % candidates.Count].x;
                 var child1 = (double[])parent1.Clone();
                 var child2 = (double[])parent2.Clone();
                 var ChangeMade = false;
@@ -89,8 +89,8 @@ namespace OptimizationToolbox
                 if (ChangeMade)
                 {
                     numNew += 2;
-                    candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child1));
-                    candidates.Add(new KeyValuePair<double, double[]>(double.NaN, child2));
+                    candidates.Add(new Candidate(double.NaN, child1));
+                    candidates.Add(new Candidate(double.NaN, child2));
                 }
             }
         }

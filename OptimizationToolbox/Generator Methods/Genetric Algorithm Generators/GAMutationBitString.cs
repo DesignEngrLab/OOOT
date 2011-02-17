@@ -40,11 +40,11 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int control = -1)
+        public override void GenerateCandidates(ref List<Candidate> candidates, int control = -1)
         {
             for (var i = candidates.Count - 1; i >= 0; i--)
             {
-                var candidate = candidates[i].Value;
+                var candidate = candidates[i].x;
                 var ChangeMade = false;
                 for (var j = 0; j < bitStringLength; j++)
                     if (rnd.NextDouble() < mRatePerBit)
@@ -58,7 +58,7 @@ namespace OptimizationToolbox
                 if (ChangeMade)
                 {
                     candidates.RemoveAt(i);
-                    candidates.Add(new KeyValuePair<double, double[]>(double.NaN, candidate));
+                    candidates.Add(new Candidate(double.NaN, candidate));
                 }
             }
         }

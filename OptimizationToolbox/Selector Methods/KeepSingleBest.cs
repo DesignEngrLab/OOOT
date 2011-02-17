@@ -31,13 +31,13 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public override void selectCandidates(ref List<Candidate> candidates,
                                               double control = double.NaN)
         {
             double bestF;
-            if (direction == optimize.maximize) bestF = candidates.Select(a => a.Key).Max();
-            else bestF = candidates.Select(a => a.Key).Min();
-            candidates.RemoveAll(a => a.Key != bestF);
+            if (direction == optimize.maximize) bestF = candidates.Select(a => a.x[0]).Max();
+            else bestF = candidates.Select(a => a.x[0]).Min();
+            candidates.RemoveAll(a => a.x[0] != bestF);
             if (candidates.Count > 1) candidates = candidates.Take(1).ToList();
         }
     }

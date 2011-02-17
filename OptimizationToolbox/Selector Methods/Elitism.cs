@@ -31,13 +31,23 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public override void selectCandidates(ref List<Candidate> candidates,
                                               double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
             sort(ref candidates);
             candidates = candidates.Take(numKeep).ToList();
+        }
+
+
+        /// <summary>
+        /// Sorts the specified candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        protected void sort(ref List<Candidate> candidates)
+        {
+            candidates = candidates.OrderBy(a => a.fValues[0], new optimizeSort(direction, true)).ToList();
         }
     }
 }

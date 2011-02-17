@@ -34,11 +34,11 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public override void selectCandidates(ref List<Candidate> candidates,
                                               double temperature = double.NaN)
         {
-            var fOld = candidates[0].Key;
-            var fNew = candidates[1].Key;
+            var fOld = candidates[0].fValues[0];
+            var fNew = candidates[1].fValues[0];
             if ((fNew == fOld) || (betterThan(fNew, fOld)))
                 /* throw away the old and keep the new */
                 candidates.RemoveAt(0);

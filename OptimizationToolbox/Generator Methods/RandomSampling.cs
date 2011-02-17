@@ -36,11 +36,11 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<KeyValuePair<double, double[]>> candidates, int numSamples = -1)
+        public override void GenerateCandidates(ref List<Candidate> candidates, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
             for (var i = 0; i < numSamples; i++)
-                candidates.Add(new KeyValuePair<double, double[]>(double.NaN, makeOneRandomCandidate()));
+                candidates.Add(new Candidate(double.NaN, makeOneRandomCandidate()));
         }
 
         public override List<double[]> GenerateCandidates(double[] candidate, int numSamples = -1)

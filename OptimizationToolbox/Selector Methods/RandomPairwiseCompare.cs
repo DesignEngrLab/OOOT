@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace OptimizationToolbox
 {
@@ -34,7 +35,7 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void selectCandidates(ref List<KeyValuePair<double, double[]>> candidates,
+        public override void selectCandidates(ref List<Candidate> candidates,
                                               double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
@@ -50,9 +51,9 @@ namespace OptimizationToolbox
                 candidates.RemoveAt(0);
                 var contestantB = candidates[0];
                 candidates.RemoveAt(0);
-                if (betterThan(contestantA.Key, contestantB.Key))
+                if (betterThan(contestantA.fValues[0], contestantB.fValues[0]))
                     candidates.Add(contestantA);
-                else if (betterThan(contestantB.Key, contestantA.Key))
+                else if (betterThan(contestantB.fValues[0], contestantA.fValues[0]))
                     candidates.Add(contestantB);
                 else
                 {
@@ -62,6 +63,17 @@ namespace OptimizationToolbox
                     candidates.Insert(rnd.Next(candidates.Count), contestantB);
                 }
             }
+        }
+
+
+        /// <summary>
+        /// Randomizes the list.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        protected void randomizeList(ref List<Candidate> candidates)
+        {
+            var r = new Random();
+            candidates = candidates.OrderBy(a => r.NextDouble()).ToList();
         }
     }
 }

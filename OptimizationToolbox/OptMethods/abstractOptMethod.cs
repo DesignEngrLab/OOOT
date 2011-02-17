@@ -103,11 +103,26 @@ namespace OptimizationToolbox
         public Boolean ConstraintsSolvedWithPenalties { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires merit function].
+        /// 
         /// </summary>
         /// <value>
         /// 	<c>true</c> if [requires merit function]; otherwise, <c>false</c>.
         /// </value>
-        public Boolean RequiresMeritFunction { get; protected set; }
+        public Boolean RequiresMeritFunction
+        {
+            get
+            {
+                return (ConstraintsSolvedWithPenalties || _requiresMeritFunction);
+            }
+            protected set
+            {
+                _requiresMeritFunction = value;
+            }
+        }
+        /* In most cases RequiresMeritFunction is the same as ConstraintsSolvedWithPenalties, so 
+         * RequiresMeritFunction is rarely set. The only time it is needed is when the method
+         * sometimes uses the penalty and sometimes does not. This is only the case in SQP and GRG.*/
+        private Boolean _requiresMeritFunction = false;
         /// <summary>
         /// Gets or sets a value indicating whether [inequalities converted to equalities].
         /// </summary>
@@ -336,10 +351,14 @@ namespace OptimizationToolbox
                 SearchIO.output("No convergence method specified.", 0);
                 return fStar;
             }
-            if (RequiresMeritFunction && (meritFunction == null) && (g.Count + h.Count > 0))
+            if (RequiresMeritFunction && (g.Count + h.Count > 0))
             {
-                SearchIO.output("No merit function specified.", 0);
-                return fStar;
+                if (meritFunction == null)
+                {
+                    SearchIO.output("No merit function specified.", 0);
+                    return fStar;
+                }
+                else SearchIO.output("Constraints will be solved with penalty function.", 4);
             }
             if (RequiresDiscreteSpaceDescriptor && (spaceDescriptor == null))
             {
@@ -348,8 +367,6 @@ namespace OptimizationToolbox
             }
             if (g.Count == 0) SearchIO.output("No inequalities specified.", 4);
             if (h.Count == 0) SearchIO.output("No equalities specified.", 4);
-            if (ConstraintsSolvedWithPenalties && (h.Count + g.Count > 0))
-                SearchIO.output("Constraints will be solved with exterior penalty function.", 4);
             if (InequalitiesConvertedToEqualities && (g.Count > 0))
                 SearchIO.output(g.Count + " inequality constsraints will be converted to equality" +
                                 " constraints with the addition of " + g.Count + " slack variables.", 4);
@@ -374,7 +391,7 @@ namespace OptimizationToolbox
                         x = new double[n];
                         var randy = new Random();
                         for (var i = 0; i < n; i++)
-                            x[i] = 100.0*randy.NextDouble();
+                            x[i] = 100.0 * randy.NextDouble();
                     }
                 }
                 if (RequiresFeasibleStartPoint && !feasible(x))

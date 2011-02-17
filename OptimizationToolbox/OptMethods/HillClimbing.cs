@@ -44,7 +44,6 @@ namespace OptimizationToolbox
         {
             RequiresObjectiveFunction = true;
             ConstraintsSolvedWithPenalties = false;
-            RequiresMeritFunction = false;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;
@@ -67,21 +66,21 @@ namespace OptimizationToolbox
 
         protected override double run(out double[] xStar)
         {
-            var candidates = new List<KeyValuePair<double, double[]>>();
-            candidates.Add(new KeyValuePair<double, double[]>(calc_f(x, (meritFunction != null)), x));
-            while (notConverged(k++, numEvals, candidates[0].Key, candidates[0].Value))
+            var candidates = new List<Candidate>();
+            candidates.Add(new Candidate(calc_f(x), x));
+            while (notConverged(k++, numEvals, candidates[0].fValues[0], candidates[0].x))
             {
-                SearchIO.output(k + ": f = " + candidates[0].Key, 4);
-                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].Value), 4);
-                var neighbors = neighborGenerator.GenerateCandidates(candidates[0].Value);
+                SearchIO.output(k + ": f = " + candidates[0].fValues[0], 4);
+                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].x), 4);
+                var neighbors = neighborGenerator.GenerateCandidates(candidates[0].x);
                 candidates.AddRange(from neighbor in neighbors
-                                    where meritFunction != null || feasible(neighbor)
-                                    let f = calc_f(neighbor, (meritFunction != null))
-                                    select new KeyValuePair<double, double[]>(f, neighbor));
+                                    where ConstraintsSolvedWithPenalties || feasible(neighbor)
+                                    let f = calc_f(neighbor)
+                                    select new Candidate(f, neighbor));
                 selector.selectCandidates(ref candidates);
             }
-            xStar = candidates[0].Value;
-            return candidates[0].Key;
+            xStar = candidates[0].x;
+            return candidates[0].fValues[0];
         }
     }
 }

@@ -56,9 +56,9 @@ namespace OptimizationToolbox
             return -3 * stdev / Math.Log(initProbabilityForThreeSigma);
         }
 
-        internal override double UpdateTemperature(double temperature, List<KeyValuePair<double, double[]>> candidates)
+        internal override double UpdateTemperature(double temperature, List<Candidate> candidates)
         {
-            objectiveValues[samplesThusFar++] = candidates[0].Key;
+            objectiveValues[samplesThusFar++] = candidates[0].fValues[0];
             if (samplesThusFar < samplesInGeneration) return temperature;
             samplesThusFar = 0;
             var stdev = StarMath.standardDeviation(objectiveValues);

@@ -53,7 +53,6 @@ namespace OptimizationToolbox
             comparer = new optimizeSort(direction);
             RequiresObjectiveFunction = false;
             ConstraintsSolvedWithPenalties = false;
-            RequiresMeritFunction = false;
             InequalitiesConvertedToEqualities = false;
             RequiresSearchDirectionMethod = false;
             RequiresLineSearchMethod = false;
@@ -77,8 +76,6 @@ namespace OptimizationToolbox
         {
             var worstF = ((int)direction) * double.NegativeInfinity;
             var candidates = new SortedList<double, double[]>(comparer);
-            if (xStart != null) x = (double[])xStart.Clone();
-            else x = spaceDescription.GetVariableVector(new long[n]);
             candidates.Add(0.0, x);
 
             if (feasible(x)) candidates.Add(calc_f(x), x);
@@ -93,9 +90,9 @@ namespace OptimizationToolbox
                     break;
                 foreach (var child in children)
                 {
-                    if (meritFunction != null || feasible(child))
+                    if (ConstraintsSolvedWithPenalties || feasible(child))
                     {
-                        var fValue = calc_f(child, (meritFunction != null));
+                        var fValue = calc_f(child);
                         candidates.Add(fValue, child);
                     }
                     else candidates.Add(worstF, x);

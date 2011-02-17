@@ -108,6 +108,7 @@
     <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
     <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
     <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
+    <Compile Include="Objective Function Constraint Classes\candidate.cs" />
     <Compile Include="Objective Function Constraint Classes\optFunctionData.cs" />
     <Compile Include="Objective Function Constraint Classes\sameCandidate.cs" />
     <Compile Include="OptMethods\abstractOptMethod.Evaluation.cs" />
@@ -135,7 +136,10 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptMethods\ImplicitEnueration.cs" />
+    <Compile Include="OptMethods\ImplicitEnumeration.cs" />
+    <Compile Include="Selector Methods\abstractMOSelector.cs" />
+    <Compile Include="Selector Methods\WeightedCuboidParetoSelector.cs" />
+    <Compile Include="Selector Methods\CuboidParetoSelector.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\LundyMees.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\SangiovanniVincentelli.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />
