@@ -50,7 +50,9 @@ namespace Example3_Using_XML_and_Comparison
             opty.Add(probTest1);
             abstractSearchDirection searchDirMethod = new SteepestDescent();
             opty.Add(searchDirMethod);
-            abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
+            //abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
+            //abstractLineSearch lineSearchMethod = new DSCPowell(0.0001, 1, 100);
+            abstractLineSearch lineSearchMethod = new GoldenSection(0.0001, 1);
             opty.Add(lineSearchMethod);
             opty.Add(new squaredExteriorPenalty(opty, 10));
             /* since this is not a population-based optimization method, we need to remove the MaxSpan criteria. */
@@ -60,7 +62,7 @@ namespace Example3_Using_XML_and_Comparison
             var timer = Stopwatch.StartNew();
             var fStar = opty.Run(out xStar);
             printResults(opty, xStar, fStar, timer);
-
+ 
             /***********Gradient Based Optimization with Fletcher-Reeves****************/
             /* we don't need to reset (invoke the constructor) for GradientBasedOptimization since we are only 
              * change the seaach direction method. */

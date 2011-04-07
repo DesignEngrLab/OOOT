@@ -82,7 +82,7 @@ namespace OptimizationToolbox
         public virtual void GenerateCandidates(ref List<Candidate> candidates, int control = -1)
         {
             throw new NotImplementedException(
-                "An override of GenerateOneCandidate (which takes a list of KeyValuePairs) was not created in class, " +
+                "An override of GenerateOneCandidate (which takes a list of Candidates) was not created in class, " +
                 GetType());
         }
 

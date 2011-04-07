@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
@@ -37,67 +38,68 @@ namespace OptimizationToolbox
 
         public override double findAlphaStar(double[] x, double[] dir)
         {
-            var aFaP = new SortedList<double, double>(new optimizeSort(optimize.minimize))
-                           {
-                               {0.0, calcF(x, 0.0, dir)},
-                               {stepSize, calcF(x, stepSize, dir)}
-                           };
+            var alphaAndF = new SortedList<double, double>();
+            alphaAndF.Add(0.0, calcF(x, 0.0, dir));
+            alphaAndF.Add(stepSize, calcF(x, stepSize, dir));
             var alphaNew = 0.0;
 
             k = 1; //so that this local k corresponds to # of f'n evals (starting at 0)
 
             #region set up first three points
-
-            if (aFaP[stepSize] <= aFaP[0.0])
-                aFaP.Add(3 * stepSize, calcF(x, 3 * stepSize, dir));
+            if (alphaAndF[stepSize] <= alphaAndF[0.0])
+                alphaAndF.Add(3 * stepSize, calcF(x, 3 * stepSize, dir));
             else
-                aFaP.Add(2 * stepSize / 3, calcF(x, 2 * stepSize / 3, dir));
+                alphaAndF.Add(2 * stepSize / 3, calcF(x, 2 * stepSize / 3, dir));
             k++;
-
             #endregion
 
             #region start
 
-            var fMin = Math.Min(aFaP.Values[0], Math.Min(aFaP.Values[1], aFaP.Values[2]));
-            var minIndex = aFaP.IndexOfValue(fMin);
+            var fMin = StarMath.Min(alphaAndF.Values);
+            var minIndex = alphaAndF.IndexOfValue(fMin);
             do
             {
                 k++;
-                if (quadraticApprox(ref alphaNew, aFaP))
+                if (quadraticApprox(ref alphaNew, alphaAndF))
                 {
                 }
                 else switch (minIndex)
+                    {
+                        case 0:
+                            alphaNew = alphaAndF.Keys[0] + (alphaAndF.Keys[0] - alphaAndF.Keys[2]);
+                            break;
+                        case 1:
+                            alphaNew = (alphaAndF.Keys[0] + alphaAndF.Keys[1] + alphaAndF.Keys[2]) / 3;
+                            break;
+                        case 2:
+                            alphaNew = alphaAndF.Keys[2] + (alphaAndF.Keys[2] - alphaAndF.Keys[0]);
+                            break;
+                    }
+                if (alphaAndF.Keys[1] == alphaNew)
                 {
-                    case 0:
-                        alphaNew = aFaP.Keys[0] - (aFaP.Keys[2] - aFaP.Keys[0]);
-                        break;
-                    case 1:
-                        alphaNew = (aFaP.Keys[0] + aFaP.Keys[1] + aFaP.Keys[2]) / 3;
-                        break;
-                    case 2:
-                        alphaNew = aFaP.Keys[2] + (aFaP.Keys[2] - aFaP.Keys[0]);
-                        break;
+                    if (alphaAndF.Values[2] > alphaAndF.Values[0]) alphaNew = (alphaAndF.Keys[1] + alphaAndF.Keys[2]) / 2;
+                    else alphaNew = (alphaAndF.Keys[1] + alphaAndF.Keys[0]) / 2;
                 }
                 var fNew = calcF(x, alphaNew, dir);
-                var fMax = Math.Max(fNew, Math.Max(aFaP.Values[0], Math.Max(aFaP.Values[1], aFaP.Values[2])));
+                var fMax = Math.Max(fNew, StarMath.Max(alphaAndF.Values));
                 // find the largest of the four values
                 //even though we don't know for sure whether alphaNew is in the bracket, we still will only
-                // throw out either
-                if ((aFaP.Values[0] == fMax) ||
-                    ((fNew == fMax) && (alphaNew < aFaP.Keys[1])) ||
-                    ((aFaP.Values[1] == fMax) && (aFaP.Keys[1] < alphaNew)))
+                // throw out either the current left or right of the bracket.
+                if ((alphaAndF.Values[0] == fMax) ||
+                    ((fNew == fMax) && (alphaNew < alphaAndF.Keys[1])) ||
+                    ((alphaAndF.Values[1] == fMax) && (alphaAndF.Keys[1] < alphaNew)))
                     //if lowest two alphas are max, then remove aFaP.Keys[0]
-                    aFaP.RemoveAt(0);
+                    alphaAndF.RemoveAt(0);
                 else //else highest two alpha create fMax, so remove alpahHigh
-                    aFaP.RemoveAt(2);
-                aFaP.Add(alphaNew, fNew);
-                fMin = Math.Min(aFaP.Values[0], Math.Min(aFaP.Values[1], aFaP.Values[2]));
-                minIndex = aFaP.IndexOfValue(fMin);
-            } while (((Math.Abs(aFaP.Keys[2] - aFaP.Keys[0]) / 2) > epsilon) && (k++ < kMax));
+                    alphaAndF.RemoveAt(2);
+                alphaAndF.Add(alphaNew, fNew);
+                fMin = Math.Min(alphaAndF.Values[0], Math.Min(alphaAndF.Values[1], alphaAndF.Values[2]));
+                minIndex = alphaAndF.IndexOfValue(fMin);
+            } while (((Math.Abs(alphaAndF.Keys[2] - alphaAndF.Keys[0]) / 2) > epsilon) && (k++ < kMax));
 
             #endregion
 
-            return aFaP.Keys[minIndex];
+            return alphaAndF.Keys[minIndex];
         }
 
         private static Boolean quadraticApprox(ref double alphaNew, SortedList<double, double> aFaP)
@@ -113,7 +115,7 @@ namespace OptimizationToolbox
             var term3 = (a - b) * (b - c) * (c - a);
 
             alphaNew = -0.5 * term2 / term1;
-            return (2*term1/term3 > 0.0);
+            return (2 * term1 / term3 > 0.0);
         }
     }
 }

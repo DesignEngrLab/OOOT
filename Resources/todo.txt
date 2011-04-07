@@ -21,7 +21,6 @@
 	   is 3^n -1 = nC1 + nC2 + nC3 + ... + nCn?
 5. finish SA with temperature schedules and test 
 	test with StochasticNeighborGenerator
-6. Debug DSCPowell
 7. Debug SQP
 8. finish GRG with slack
 9. add PSO optimization method (can't simply be a generator - well. not sure.)

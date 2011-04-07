@@ -30,8 +30,15 @@ namespace OptimizationToolbox
 
         #region Constructors
 
-        public GoldenSection(double epsilon, double stepSize, int kMax)
-            : base(epsilon, stepSize, kMax)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GoldenSection"/> class.
+        /// Unlike other line search methods, there is no need to provide a kmax. 
+        /// This is determined directly from the epsilon in the body of the code
+        /// </summary>
+        /// <param name="epsilon">The epsilon.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        public GoldenSection(double epsilon, double upperBound)
+            : base(epsilon, upperBound, -1)
         {
         }
 
