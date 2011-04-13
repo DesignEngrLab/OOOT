@@ -56,7 +56,7 @@ namespace OptimizationToolbox
             if (dependentAnalysis == null) return;
             if (sameCandComparer.Equals(point, lastDependentAnalysis)) return;
             dependentAnalysis.calculate(point);
-            lastDependentAnalysis = point;
+            lastDependentAnalysis = (double[])point.Clone();
         }
 
 
