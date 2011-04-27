@@ -41,7 +41,7 @@ namespace OptimizationToolbox
         ///                 </exception>
         public int GetHashCode(double[] obj)
         {
-            return obj.GetHashCode();
+            return -1; // obj.GetHashCode();
         }
 
         #endregion

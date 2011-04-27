@@ -225,7 +225,7 @@ namespace OptimizationToolbox
                 k++;
                 SearchIO.output("iter. = " + k, 2);
                 ////mattica SearchIO.output("Fitness = " + vertices.Keys[0].ToString(), 2);
-                SearchIO.output("Fitness = " + vertices.Keys[n], 2);
+                SearchIO.output("Fitness = " + vertices.Keys[0], 2);
             } // END While Loop
             xStar = vertices.Values[0];
             fStar = vertices.Keys[0];

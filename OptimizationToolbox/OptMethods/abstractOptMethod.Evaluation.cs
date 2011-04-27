@@ -79,11 +79,11 @@ namespace OptimizationToolbox
             if (functionData[function].TryGetValue(pointClone, out fValue))
                 return fValue;
 
-            calc_dependent_Analysis(point);
+            calc_dependent_Analysis(pointClone);
             /**************************************************/
             /*** This is the only function that should call ***/
             /**********IOptFunction.calculate(x)***************/
-            fValue = function.calculate(point);
+            fValue = function.calculate(pointClone);
             /**************************************************/
             functionData[function].Add(pointClone, fValue);
             functionData[function].numEvals++;

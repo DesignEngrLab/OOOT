@@ -25,12 +25,12 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\MechSynthPlugins\bin\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>..\..\MechSynthPlugins\bin\OptimizationToolbox.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\OptimizationToolbox.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -87,10 +87,8 @@
     <DocumentationFile>bin\x86\Release\OptimizationToolbox.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath, Version=1.0.10.1015, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Resources\StarMath.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="StarMath">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\GraphSynth2\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

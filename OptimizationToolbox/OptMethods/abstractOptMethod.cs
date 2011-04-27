@@ -33,7 +33,7 @@ namespace OptimizationToolbox
     {
         #region Fields
 
-        private const double sameTolerance = 0.000000001; // 10^-9
+        private const double sameTolerance = 0.00001; 
         private const double defaultFiniteDifferenceStepSize = 0.1;
         private const differentiate defaultFiniteDifferenceMode = differentiate.Central2;
 
@@ -261,10 +261,18 @@ namespace OptimizationToolbox
             {
                 spaceDescriptor = (DesignSpaceDescription)function;
                 n = spaceDescriptor.n;
-                foreach (var range in spaceDescriptor)
+                for (int i = 0; i < n; i++)
                 {
-                    Add(new greaterThanConstant { constant = range.LowerBound });
-                    Add(new lessThanConstant { constant = range.UpperBound });
+                    Add(new greaterThanConstant
+                    {
+                        constant = spaceDescriptor[i].LowerBound,
+                        index = i
+                    });
+                    Add(new lessThanConstant
+                    {
+                        constant = spaceDescriptor[i].UpperBound,
+                        index = i
+                    });
                 }
             }
             else
@@ -411,7 +419,7 @@ namespace OptimizationToolbox
                     var sSquared = calculate(g[i - n], x);
                     if (sSquared < 0) xnew[i] = Math.Sqrt(-sSquared);
                     else xnew[i] = 0;
-                    h.Add(new slackSquaredEqualityFromInequality(g[i - n], i));
+                    h.Add(new slackSquaredEqualityFromInequality(g[i - n], i, this));
                 }
                 x = xnew;
                 n = x.GetLength(0);

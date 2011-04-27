@@ -27,11 +27,13 @@ namespace OptimizationToolbox
     {
         private readonly IInequality formerIneq;
         private readonly int slackIndex;
+        private readonly abstractOptMethod optMethod;
 
-        public slackSquaredEqualityFromInequality(IInequality formerIneq, int slackIndex)
+        public slackSquaredEqualityFromInequality(IInequality formerIneq, int slackIndex, abstractOptMethod optMethod)
         {
             this.formerIneq = formerIneq;
             this.slackIndex = slackIndex;
+            this.optMethod = optMethod;
         }
 
         #region Implementation of IOptFunction
@@ -41,7 +43,7 @@ namespace OptimizationToolbox
         public int numEvals { get; private set; }
         public double calculate(double[] x)
         {
-            return formerIneq.calculate(x) + x[slackIndex] * x[slackIndex];
+            return optMethod.calculate(formerIneq,x) + x[slackIndex] * x[slackIndex];
         }
         #endregion
     }
