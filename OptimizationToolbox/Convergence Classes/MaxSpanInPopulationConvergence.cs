@@ -48,7 +48,7 @@ namespace OptimizationToolbox
         /// <summary>
         /// Initializes a new instance of the <see cref="MaxSpanInPopulationConvergence"/> class.
         /// </summary>
-        /// <param name="MinimumSideLength">Minimum length of the side.</param>
+        /// <param name="MinimumSpan">The minimum span.</param>
         public MaxSpanInPopulationConvergence(double MinimumSpan)
         {
             this.MinimumSpan = MinimumSpan;
@@ -58,7 +58,7 @@ namespace OptimizationToolbox
         /// Given a minimum span, S, this criteria returns true when the span is equal to 
         /// or less than S. This is probably the slowest criteria (p*log(p)) given that it must
         /// check the distance between every pair of solutions in the population. But, probably 
-        /// not an significant increase  for p < 1000.
+        /// not an significant increase  for p less than 1000.
         /// </summary>
         /// <param name="iteration">The number of iterations (not used).</param>
         /// <param name="numFnEvals">The number of function evaluations (not used).</param>

@@ -38,10 +38,9 @@ namespace OptimizationToolbox
 
         public override double findAlphaStar(double[] x, double[] dir)
         {
-            var alphaAndF = new SortedList<double, double>();
-            alphaAndF.Add(0.0, calcF(x, 0.0, dir));
-            alphaAndF.Add(stepSize, calcF(x, stepSize, dir));
-            var alphaNew = 0.0;
+            var alphaAndF = new SortedList<double, double>
+                                {{0.0, calcF(x, 0.0, dir)}, 
+                                {stepSize, calcF(x, stepSize, dir)}};
 
             k = 1; //so that this local k corresponds to # of f'n evals (starting at 0)
 
@@ -60,7 +59,8 @@ namespace OptimizationToolbox
             do
             {
                 k++;
-                if (quadraticApprox(ref alphaNew, alphaAndF))
+                double alphaNew;
+                if (quadraticApprox(out alphaNew, alphaAndF))
                 {
                 }
                 else switch (minIndex)
@@ -102,7 +102,7 @@ namespace OptimizationToolbox
             return alphaAndF.Keys[minIndex];
         }
 
-        private static Boolean quadraticApprox(ref double alphaNew, SortedList<double, double> aFaP)
+        private static Boolean quadraticApprox(out double alphaNew, SortedList<double, double> aFaP)
         {
             var a = aFaP.Keys[0];
             var fa = aFaP.Values[0];

@@ -56,7 +56,7 @@ namespace Example3_Using_XML_and_Comparison
             opty.Add(lineSearchMethod);
             opty.Add(new squaredExteriorPenalty(opty, 10));
             /* since this is not a population-based optimization method, we need to remove the MaxSpan criteria. */
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
 
             double[] xStar;
             var timer = Stopwatch.StartNew();
@@ -81,7 +81,7 @@ namespace Example3_Using_XML_and_Comparison
             opty = new GeneralizedReducedGradientActiveSet();
             opty.Add(probTest1);
             opty.Add(new squaredExteriorPenalty(opty, 10));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
 
             timer = Stopwatch.StartNew();
             fStar = opty.Run(out xStar);
@@ -99,10 +99,10 @@ namespace Example3_Using_XML_and_Comparison
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new RandomNeighborGenerator(probTest1.SpaceDescriptor));
             opty.Add(new KeepSingleBest(optimize.minimize));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
             /* the deltaX convergence needs to be removed as well, since RHC will end many iterations
              * at the same point it started. */
-            opty.ConvergenceMethods.RemoveAll(a => typeof(DeltaXConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => a is DeltaXConvergence);
 
             timer = Stopwatch.StartNew();
             fStar = opty.Run(out xStar);
@@ -127,10 +127,10 @@ namespace Example3_Using_XML_and_Comparison
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new RandomNeighborGenerator(probTest1.SpaceDescriptor, 100));
             opty.Add(new SACoolingSangiovanniVincentelli(100));
-            opty.ConvergenceMethods.RemoveAll(a => typeof(MaxSpanInPopulationConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
             /* the deltaX convergence needs to be removed as well, since RHC will end many iterations
              * at the same point it started. */
-            opty.ConvergenceMethods.RemoveAll(a => typeof(DeltaXConvergence).IsInstanceOfType(a));
+            opty.ConvergenceMethods.RemoveAll(a => a is DeltaXConvergence);
 
 
             timer = Stopwatch.StartNew();

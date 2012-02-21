@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
@@ -25,12 +25,12 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
-    internal  class CuboidParetoSelector:abstractMOSelector
+    internal class CuboidParetoSelector : abstractMOSelector
     {
-         double mu;
+        double mu;
 
-        public CuboidParetoSelector(int numObjectives,double mu = 1,  optimize[] optDirections = null)
-             : base(numObjectives, optDirections)
+        public CuboidParetoSelector(int numObjectives, double mu = 1, optimize[] optDirections = null)
+            : base(numObjectives, optDirections)
         {
             this.mu = mu;
         }
@@ -51,7 +51,7 @@ namespace OptimizationToolbox
                 }
                 paretoSet.Add(c);
             }
-            candidates= paretoSet;
+            candidates = paretoSet;
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace OptimizationToolbox
         /// <param name="c1">the subject candidate, c1 (does this dominate...).</param>
         /// <param name="c2">the object candidate, c2 (is dominated by).</param>
         /// <returns></returns>
-        private  Boolean dominates(Candidate c1, Candidate c2)
+        private Boolean dominates(Candidate c1, Candidate c2)
         {
             for (int i = 0; i < numObjectives; i++)
             {
@@ -68,7 +68,7 @@ namespace OptimizationToolbox
                 double c2Value = 0.0;
                 for (int j = 0; j < numObjectives; j++)
                 {
-                    if (j == i) c2Value +=  c2.fValues[j] / c1.fValues[j];
+                    if (j == i) c2Value += c2.fValues[j] / c1.fValues[j];
                     else c2Value += mu * c2.fValues[j] / c1.fValues[j];
                 }
                 if (((int)optDirections[i]) * c1Value < ((int)optDirections[i]) * c2Value)

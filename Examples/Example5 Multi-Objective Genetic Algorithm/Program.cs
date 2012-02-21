@@ -12,8 +12,8 @@ namespace Example5_MOGA
             /* first a new optimization method in the form of a genetic algorithm is created. */
             var optMethod = new GeneticAlgorithm();
             /* The objective function is Rosenbrock's banana function again. */
-            optMethod.Add(new polynomialObjFn()
-            {
+            optMethod.Add(new polynomialObjFn
+                              {
                 Terms = new List<string>
                 {
                     "100*x1^4",
@@ -74,10 +74,10 @@ namespace Example5_MOGA
             var fOptimal = optMethod.Run(out xOptimal);
 
             /* since we are curious how the process completed we now output some details. */
-            SearchIO.output("f* = " + fOptimal, 0); /* the 0 indicates that this statement has high priority
+            SearchIO.output("f* = " + fOptimal); /* the 0 indicates that this statement has high priority
                                                      * and shouldn't be skipped in printing to the console. */
-            SearchIO.output("x* = " + StarMath.MakePrintString(xOptimal), 0);
-            SearchIO.output("The process converged by criteria: " + optMethod.ConvergenceDeclaredByTypeString, 0);
+            SearchIO.output("x* = " + StarMath.MakePrintString(xOptimal));
+            SearchIO.output("The process converged by criteria: " + optMethod.ConvergenceDeclaredByTypeString);
             Console.ReadLine();
         }
     }

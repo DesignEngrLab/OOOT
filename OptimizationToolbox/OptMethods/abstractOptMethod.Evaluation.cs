@@ -45,7 +45,7 @@ namespace OptimizationToolbox
         public List<IInequality> g { get; private set; }
         internal List<IConstraint> active { get; private set; }
         private readonly Dictionary<IOptFunction, optFunctionData> functionData;
-        private sameCandidate sameCandComparer = new sameCandidate(sameTolerance);
+        private readonly sameCandidate sameCandComparer = new sameCandidate(sameTolerance);
 
         internal IDependentAnalysis dependentAnalysis { get; private set; }
         private double[] lastDependentAnalysis;
@@ -149,7 +149,7 @@ namespace OptimizationToolbox
             var grad = new double[n];
             for (var i = 0; i != n; i++)
                 grad[i] = deriv_wrt_xi(f[0], point, i);
-            if (ConstraintsSolvedWithPenalties || includeMeritPenalty)
+            if (!feasible(point) && (ConstraintsSolvedWithPenalties || includeMeritPenalty))
                 return StarMath.add(grad, meritFunction.calcGradientOfPenalty(point));
             return grad;
         }
@@ -297,9 +297,9 @@ namespace OptimizationToolbox
         /// <returns></returns>
         public bool feasible(IConstraint c, double[] point)
         {
-            if (typeof(IEquality).IsInstanceOfType(c))
+            if (c is IEquality)
                 return feasible((IEquality)c, point);
-            if (typeof(IInequality).IsInstanceOfType(c))
+            if (c is IInequality)
                 return feasible((IInequality)c, point);
             throw new Exception("IConstraint is neither IInequality or IEquality?!?");
         }

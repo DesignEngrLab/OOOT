@@ -49,6 +49,7 @@ namespace OptimizationToolbox
     public class ProblemDefinition
     {
         #region Properties
+        /// <summary>
         /// Gets or sets the name.
         /// </summary>
         /// <value>The name.</value>
@@ -135,17 +136,17 @@ namespace OptimizationToolbox
         /// <param name="function">The function.</param>
         public void Add(object function)
         {
-            if (typeof(IInequality).IsInstanceOfType(function))
+            if (function is IInequality)
                 g.Add((IInequality)function);
-            else if (typeof(IEquality).IsInstanceOfType(function))
+            else if (function is IEquality)
                 h.Add((IEquality)function);
-            else if (typeof(IObjectiveFunction).IsInstanceOfType(function))
+            else if (function is IObjectiveFunction)
                 f.Add((IObjectiveFunction)function);
-            else if (typeof(abstractConvergence).IsInstanceOfType(function))
+            else if (function is abstractConvergence)
                 ConvergenceMethods.Add((abstractConvergence)function);
-            else if (typeof(DesignSpaceDescription).IsInstanceOfType(function))
+            else if (function is DesignSpaceDescription)
                 SpaceDescriptor = (DesignSpaceDescription)function;
-            else if (typeof(double[]).IsInstanceOfType(function))
+            else if (function is double[])
                 xStart = (double[])function;
             else
                 throw (new Exception("Function, " + function + ", not of known type (needs "
@@ -181,11 +182,11 @@ namespace OptimizationToolbox
             if (newDesignprob.name == null)
                 newDesignprob.name = Path.GetFileNameWithoutExtension(filename);
             foreach (var item in newDesignprob.FunctionList.Items)
-                if (typeof(IObjectiveFunction).IsInstanceOfType(item))
+                if (item is IObjectiveFunction)
                     newDesignprob.f.Add((IObjectiveFunction)item);
-                else if (typeof(IInequality).IsInstanceOfType(item))
+                else if (item is IInequality)
                     newDesignprob.g.Add((IInequality)item);
-                else if (typeof(IEquality).IsInstanceOfType(item))
+                else if (item is IEquality)
                     newDesignprob.h.Add((IEquality)item);
             newDesignprob.FunctionList = new ListforIOptFunctions(newDesignprob.f, newDesignprob.g, newDesignprob.h);
             probReader.Close();
@@ -254,7 +255,8 @@ namespace OptimizationToolbox
                 //NOTE: Assuming this class is sharing the same namespace. If not,
                 // place your own logic here to reconstruct full class name
                 var type = Type.GetType(GetType().Namespace + "." + subReader.Name);
-                Items.Add((IOptFunction)new XmlSerializer(type).Deserialize(subReader));
+                if (type != null) 
+                    Items.Add((IOptFunction)new XmlSerializer(type).Deserialize(subReader));
             }
         }
 

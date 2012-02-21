@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace OptimizationToolbox
@@ -272,7 +273,7 @@ namespace OptimizationToolbox
             var sTerm = "";
             var num = term.GetLength(0);
             if (num == 0) return "";
-            if (num == 1) return term[0].ToString();
+            if (num == 1) return term[0].ToString(CultureInfo.InvariantCulture);
             if (term[0] == -1.0) sTerm = "-";
             else if (term[0] != 1.0) sTerm = term[0] + "*";
             for (var i = 1; i != num; i++)
@@ -342,9 +343,7 @@ namespace OptimizationToolbox
                     else throw new Exception("Error in syntax of polynomial subterm: " + subTerms[j]);
                 }
             }
-            var maxIndex = 0;
-            foreach (int a in positions)
-                if (a > maxIndex) maxIndex = a;
+            var maxIndex = (positions.Count == 0) ? 0 : positions.Max();
 
             var term = new double[maxIndex + 1];
             term[0] = coeff;
@@ -367,8 +366,7 @@ namespace OptimizationToolbox
 
         internal static List<string> convert(List<double[]> terms)
         {
-            return new List<string>(terms.Select(c => convert(c)));
-           
+            return new List<string>(terms.Select(convert));
         }
 
         internal static List<double[]> convert(double[,] matrixOfTerms)

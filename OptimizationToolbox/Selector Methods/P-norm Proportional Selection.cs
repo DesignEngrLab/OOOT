@@ -44,9 +44,9 @@ namespace OptimizationToolbox
             var survivors = new List<Candidate>();
             if (alwaysKeepBest)
             {
-                double bestF;
-                if (direction == optimize.maximize) bestF = candidates.Select(a => a.fValues[0]).Max();
-                else bestF = candidates.Select(a => a.fValues[0]).Min();
+                double bestF = direction == optimize.maximize 
+                    ? candidates.Select(a => a.fValues[0]).Max() 
+                    : candidates.Select(a => a.fValues[0]).Min();
                 survivors.Add(candidates.Find(a => a.fValues[0] != bestF));
                 candidates.Remove(survivors[0]);
             }

@@ -39,12 +39,12 @@ namespace OptimizationToolbox
             var max = 0.0;
             double temp;
 
-            foreach (IConstraint c in optMethod.h)
+            foreach (var c in optMethod.h)
             {
                 temp = optMethod.calculate(c, point);
                 max = Math.Max(max, Math.Abs(temp));
             }
-            foreach (IConstraint c in optMethod.g)
+            foreach (var c in optMethod.g)
             {
                 temp = optMethod.calculate(c, point);
                 max = Math.Max(max, temp);

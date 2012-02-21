@@ -39,7 +39,7 @@ namespace Example2_Genetic_Algorithm
                                       {
                                           new VariableDescriptor(1, 20, 1.0),
                                           new VariableDescriptor(0, 100, 0.0001),
-                                          new VariableDescriptor(-180, 180, (long) 36000)
+                                          new VariableDescriptor(-180, 180, 36000)
                                       };
             optMethod.Add(SpaceDescriptor);
             /* the genetic algorithm requires some more values to be fully specified. These include initial, 
@@ -70,10 +70,10 @@ namespace Example2_Genetic_Algorithm
             var fOptimal = optMethod.Run(out xOptimal);
 
             /* since we are curious how the process completed we now output some details. */
-            SearchIO.output("f* = " + fOptimal, 0); /* the 0 indicates that this statement has high priority
+            SearchIO.output("f* = " + fOptimal); /* the 0 indicates that this statement has high priority
                                                      * and shouldn't be skipped in printing to the console. */
-            SearchIO.output("x* = " + StarMath.MakePrintString(xOptimal), 0);
-            SearchIO.output("The process converged by criteria: " + optMethod.ConvergenceDeclaredByTypeString, 0);
+            SearchIO.output("x* = " + StarMath.MakePrintString(xOptimal));
+            SearchIO.output("The process converged by criteria: " + optMethod.ConvergenceDeclaredByTypeString);
             Console.ReadLine();
         }
     }

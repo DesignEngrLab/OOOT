@@ -80,7 +80,7 @@ namespace OptimizationToolbox
             span /= timePreditionIndex;
             span *= spaceDescription.SizeOfSpace;
             var endTime = startTime + new TimeSpan((long)span);
-            SearchIO.output("Predicted time for the process to end:\n" + endTime, 0);
+            SearchIO.output("Predicted time for the process to end:\n" + endTime);
         }
 
 

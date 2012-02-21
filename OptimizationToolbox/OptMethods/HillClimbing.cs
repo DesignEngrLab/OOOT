@@ -57,17 +57,16 @@ namespace OptimizationToolbox
 
         public override void Add(object function)
         {
-            if (typeof(abstractGenerator).IsInstanceOfType(function))
+            if (function is abstractGenerator)
                 neighborGenerator = (abstractGenerator)function;
-            else if (typeof(abstractSelector).IsInstanceOfType(function))
+            else if (function is abstractSelector)
                 selector = (abstractSelector)function;
             else base.Add(function);
         }
 
         protected override double run(out double[] xStar)
         {
-            var candidates = new List<Candidate>();
-            candidates.Add(new Candidate(calc_f(x), x));
+            var candidates = new List<Candidate> { new Candidate(calc_f(x), x) };
             while (notConverged(k++, numEvals, candidates[0].fValues[0], candidates[0].x))
             {
                 SearchIO.output(k + ": f = " + candidates[0].fValues[0], 4);

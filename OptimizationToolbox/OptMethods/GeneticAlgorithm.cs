@@ -58,13 +58,13 @@ namespace OptimizationToolbox
 
         public override void Add(object function)
         {
-            if (typeof(SamplingGenerator).IsInstanceOfType(function))
+            if (function is SamplingGenerator)
                 initGenerator = (SamplingGenerator)function;
-            else if (typeof(GeneticCrossoverGenerator).IsInstanceOfType(function))
+            else if (function is GeneticCrossoverGenerator)
                 crossoverGenerator = (GeneticCrossoverGenerator)function;
-            else if (typeof(GeneticMutationGenerator).IsInstanceOfType(function))
+            else if (function is GeneticMutationGenerator)
                 mutationGenerator = (GeneticMutationGenerator)function;
-            else if (typeof(abstractSelector).IsInstanceOfType(function))
+            else if (function is abstractSelector)
                 fitnessSelector = (abstractSelector)function;
             else base.Add(function);
         }

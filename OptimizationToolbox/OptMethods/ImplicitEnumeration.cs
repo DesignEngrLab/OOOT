@@ -66,7 +66,7 @@ namespace OptimizationToolbox
 
         public override void Add(object function)
         {
-            if (typeof(abstractGenerator).IsInstanceOfType(function))
+            if (function is abstractGenerator)
                 neighborGenerator = (abstractGenerator)function;
             else base.Add(function);
         }
@@ -75,8 +75,7 @@ namespace OptimizationToolbox
         protected override double run(out double[] xStar)
         {
             var worstF = ((int)direction) * double.NegativeInfinity;
-            var candidates = new SortedList<double, double[]>(comparer);
-            candidates.Add(0.0, x);
+            var candidates = new SortedList<double, double[]>(comparer) { { 0.0, x } };
 
             if (feasible(x)) candidates.Add(calc_f(x), x);
 

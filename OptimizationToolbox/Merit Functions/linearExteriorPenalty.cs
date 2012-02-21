@@ -39,12 +39,12 @@ namespace OptimizationToolbox
             var sum = 0.0;
             double temp;
 
-            foreach (IConstraint c in optMethod.h)
+            foreach (var c in optMethod.h)
             {
                 temp = optMethod.calculate(c, point);
                 sum += Math.Abs(temp);
             }
-            foreach (IConstraint c in optMethod.g)
+            foreach (var c in optMethod.g)
             {
                 temp = optMethod.calculate(c, point);
                 if (temp > 0) sum += temp;
@@ -61,7 +61,7 @@ namespace OptimizationToolbox
             {
                 var sum = 0.0;
                 double temp;
-                foreach (IConstraint c in optMethod.h)
+                foreach (var c in optMethod.h)
                 {
                     temp = optMethod.calculate(c, point);
                     if (temp < 0.0)
@@ -69,7 +69,7 @@ namespace OptimizationToolbox
                     if (temp > 0.0)
                         sum += optMethod.deriv_wrt_xi(c,point, i);
                 }
-                foreach (IConstraint c in optMethod.g)
+                foreach (var c in optMethod.g)
                 {
                     temp = optMethod.calculate(c, point);
                     if (temp > 0.0)

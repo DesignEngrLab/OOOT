@@ -145,7 +145,7 @@ namespace OptimizationToolbox
             dk = new double[n];
 
             /* this is the iteration counter for updating Xc it's compared with feasibleOuterLoopMax. */
-            foreach (IConstraint c in h)
+            foreach (var c in h)
                 active.Add(c);
             /* this forces formulateActiveSetAndGradients to do the division. */
             divideX = true;
@@ -288,7 +288,8 @@ namespace OptimizationToolbox
                     gradA_wrt_xd[j, i] = gradA[j, xdIndices[i]];
         }
 
-        private void calculateReducedGradientSearchDirection()
+        private void 
+            calculateReducedGradientSearchDirection()
         {
             var gradFXc = new double[m];
             var gradFXd = new double[n - m];

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project

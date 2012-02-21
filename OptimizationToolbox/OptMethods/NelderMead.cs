@@ -79,7 +79,7 @@ namespace OptimizationToolbox
                 vertices.Add(calc_f(y), y);
             }
 
-            while (notConverged(k, numEvals, vertices.Keys[0], vertices.Values[0], vertices.Values, null))
+            while (notConverged(k, numEvals, vertices.Keys[0], vertices.Values[0], vertices.Values))
             {
                 #region Compute the REFLECTION POINT
 
@@ -97,7 +97,7 @@ namespace OptimizationToolbox
                 for (var i = 0; i < n; i++)
                     Xr[i] = (1 + rho) * Xm[i] - rho * Xr[i];
                 var fXr = calc_f(Xr);
-
+                SearchIO.output("x_r = " + StarMathLib.StarMath.MakePrintString(Xr), 4);
                 #endregion
 
                 #region if reflection point is better than best
@@ -224,7 +224,6 @@ namespace OptimizationToolbox
 
                 k++;
                 SearchIO.output("iter. = " + k, 2);
-                ////mattica SearchIO.output("Fitness = " + vertices.Keys[0].ToString(), 2);
                 SearchIO.output("Fitness = " + vertices.Keys[0], 2);
             } // END While Loop
             xStar = vertices.Values[0];

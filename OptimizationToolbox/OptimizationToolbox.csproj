@@ -87,9 +87,6 @@
     <DocumentationFile>bin\x86\Release\OptimizationToolbox.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath">
-      <HintPath>..\..\..\..\..\..\Program Files (x86)\GraphSynth2\StarMath.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -200,7 +197,12 @@
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\StarMath\StarMath\StarMath.csproj">
+      <Project>{8B37DF1E-A3C9-42B6-BF1F-D65180FF556E}</Project>
+      <Name>StarMath</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

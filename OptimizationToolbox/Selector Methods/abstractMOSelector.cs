@@ -19,9 +19,8 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
-using System;
+
 using System.Collections.Generic;
-using System.Linq;
 
 namespace OptimizationToolbox
 {
@@ -36,7 +35,7 @@ namespace OptimizationToolbox
         protected readonly optimize[] optDirections;
 
 
-     protected readonly   int numObjectives;
+        protected readonly int numObjectives;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="abstractSelector"/> class.

@@ -20,57 +20,105 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
-using System.Diagnostics;
 
 namespace OptimizationToolbox
 {
     public static class SearchIO
     {
-        private static readonly TimeSpan[] verbosityInterval = new[]
-                                                                   {
-                                                                       new TimeSpan(0, 0, 0, 0, 30),
-                                                                       new TimeSpan(0, 0, 0, 0, 100),
-                                                                       new TimeSpan(0, 0, 0, 0, 300),
-                                                                       new TimeSpan(0, 0, 0, 1, 0),
-                                                                       new TimeSpan(0, 0, 0, 3, 0),
-                                                                       new TimeSpan(0, 0, 0, 10, 0),
-                                                                       new TimeSpan(0, 0, 0, 30, 0)
-                                                                   };
-
-        private static Stopwatch timer = Stopwatch.StartNew();
 
         public static int verbosity { get; set; }
 
+
         #region Outputting to sidebar Console
+        //private static readonly TimeSpan[] verbosityInterval = new[]
+        //                                                           {
+        //                                                               new TimeSpan(0, 0, 0,0, 1),
+        //                                                               new TimeSpan(0, 0, 0, 0,3),
+        //                                                               new TimeSpan(0, 0, 0,0, 10),
+        //                                                               new TimeSpan(0, 0, 0, 0, 30),
+        //                                                               new TimeSpan(0, 0, 0, 0, 100),
+        //                                                               new TimeSpan(0, 0, 0, 0, 300),
+        //                                                               new TimeSpan(0, 0, 0, 1, 0),
+        //                                                               new TimeSpan(0, 0, 0, 3, 0),
+        //                                                               new TimeSpan(0, 0, 0, 10, 0),
+        //                                                               new TimeSpan(0, 0, 0, 30, 0)
+        //                                                           };
 
-        public static Boolean output(object message, int verbosityLimit = 1)
+        //private static readonly Stopwatch timer = Stopwatch.StartNew();
+
+
+        /// <summary>
+        ///  Calling SearchIO.output will output the string, message, to the 
+        ///  text display on the right of GraphSynth, but ONLY if the verbosity (see
+        ///  below) is greater than or equal to your specified limit for this message.
+        ///  the verbosity limit must be 0, 1, 2, 3, or 4.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        /// <param name="verbosityLimit">The verbosity limit.</param>
+        public static Boolean output(object message, int verbosityLimit = 0)
         {
-            if ((message == null) || (message.ToString() == "")) return true;
-            if (verbosityLimit == 0)
-            {
-                Console.WriteLine(message.ToString());
-                timer.Reset();
-                timer.Start();
-                return true;
-            }
-            var index = verbosityLimit - verbosity + 2;
-            if ((index < 0) || ((index < 7) && (verbosityInterval[index] <= timer.Elapsed)))
-            {
-                Console.WriteLine(message.ToString());
-                timer.Reset();
-                timer.Start();
-                return true;
-            }
-            return false;
+            if ((verbosityLimit > verbosity)
+                || (string.IsNullOrEmpty(message.ToString())))
+                return false;
+            Console.WriteLine(message);
+            return true;
         }
-        public static void output(params object[] list)
+        /// <summary>
+        /// Outputs the one item of the specified list corresponding to the particular verbosity.
+        /// </summary>
+        /// <param name="list">The list.</param>
+        /// <returns></returns>
+        public static Boolean output(params object[] list)
         {
-            var index = list.Length;
-            while (index-- > 0 && !output(list[index], index))
-            {
-            }
+            if ((verbosity >= list.Length)
+                || (string.IsNullOrEmpty(list[verbosity].ToString())))
+                return false;
+            Console.WriteLine(list[verbosity]);
+            return true;
         }
 
+        ///// <summary>
+        /////   This was a new and better idea but users didn't like it. It was motivated 
+        /////   by an issue of sending too much to the buffer and having the program lock
+        /////   up, but the problem is, people want messages to appear reliably not 
+        /////   "randomly". You would see it for one iteration and not the next - and that
+        /////   was frustrating.
+        ///// </summary>
+        ///// <param name = "message">The message.</param>
+        ///// <param name = "verbosityLimit">The verbosity limit.</param>
+        //public static Boolean output(object message, int verbosityLimit = 0)
+        //{
+        //    if ((message == null) || (message.ToString() == "")) return true;
+        //    if (verbosityLimit == 0)
+        //    {
+        //        Console.WriteLine(message.ToString());
+        //        timer.Reset();
+        //        timer.Start();
+        //        return true;
+        //    }
+        //    var index = verbosityLimit - verbosity + 2;
+        //    if ((index < 0) || ((index < 7) && (verbosityInterval[index] <= timer.Elapsed)))
+        //    {
+        //        Console.WriteLine(message.ToString());
+        //        timer.Reset();
+        //        timer.Start();
+        //        return true;
+        //    }
+        //    return false;
+        //}
+
+        ///// <summary>
+        /////   Outputs the specified message to the output textbox -
+        /////   one for each verbosity level.
+        ///// </summary>
+        ///// <param name = "list">The list.</param>
+        //public static void output(params object[] list)
+        //{
+        //    var index = list.Length;
+        //    while (index-- > 0 && !output(list[index], index))
+        //    {
+        //    }
+        //}
         #endregion
     }
 }

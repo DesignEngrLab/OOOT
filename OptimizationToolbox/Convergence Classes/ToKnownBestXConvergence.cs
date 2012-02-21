@@ -54,7 +54,7 @@ namespace OptimizationToolbox
         /// <param name="minDifference">The min difference.</param>
         public ToKnownBestXConvergence(double[] xBest, double minDifference)
         {
-            this.xAtOptimal = (double[])xBest.Clone();
+            xAtOptimal = (double[])xBest.Clone();
             this.minDifference = minDifference;
         }
 

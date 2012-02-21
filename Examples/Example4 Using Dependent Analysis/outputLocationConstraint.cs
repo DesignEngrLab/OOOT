@@ -29,9 +29,6 @@ namespace Example4_Using_Dependent_Analysis
         private readonly ForceVelocityPositionAnalysis FVPAnalysis;
         private readonly double tolerance;
 
-        private readonly double thetaX;
-        private readonly double thetaY;
-        private readonly double thetaZ;
         private readonly double xtarget;
         private readonly double ytarget;
         private readonly double ztarget;

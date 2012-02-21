@@ -9,7 +9,7 @@ namespace OptimizationToolbox
         private readonly double toleranceSquared;
         public sameCandidate(double tolerance)
         {
-            this.toleranceSquared = tolerance * tolerance;
+            toleranceSquared = tolerance * tolerance;
         }
 
         #region Implementation of IEqualityComparer<double[]>

@@ -28,13 +28,16 @@ namespace Example1_Simple_One_Function
 {
     class Program
     {
-        private static void Main()
+        private static void Main2()
         {
+            SearchIO.verbosity = 4;
+
+
             /* first a new optimization method in the form of Nelder-Mead method
              * (http://comjnl.oxfordjournals.org/content/7/4/308.abstract). This 
              * is the method also at the heart of MatLab's fsolve function. It's a
-             * clever and wholly unique method that works well for low-dimensionh
-             * problems wit no constraints (if constraints are used, you will need
+             * clever and wholly unique method that works well for low-dimensions
+             * problems with no constraints (if constraints are used, you will need
              * to specify a merit/penalty function. */
             var optMethod = new NelderMead();
             /* The objective function is Rosenbrock's banana function
@@ -49,8 +52,8 @@ namespace Example1_Simple_One_Function
              * sums that are multiplied or raised to a power. Therefore, the equation
              * for Rosenbrock's shown at the top of the wikipedia page must be
              * broken down into individual terms like that shown below. */
-            optMethod.Add(new polynomialObjFn()
-            {
+            optMethod.Add(new polynomialObjFn
+                              {
                 Terms = new List<string>
                 {
                     "100*x1^4",

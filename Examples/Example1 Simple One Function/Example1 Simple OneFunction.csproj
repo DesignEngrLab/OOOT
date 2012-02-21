@@ -82,6 +82,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="chengTest.cs" />
     <Compile Include="Example1 Simple One Function.cs" />
   </ItemGroup>
   <ItemGroup>

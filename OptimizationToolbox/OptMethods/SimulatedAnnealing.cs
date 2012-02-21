@@ -34,7 +34,7 @@ namespace OptimizationToolbox
 
         #region Constructor
 
-        public SimulatedAnnealing(optimize direction,Boolean ConstraintsSolvedWithPenalties=true)
+        public SimulatedAnnealing(optimize direction, Boolean ConstraintsSolvedWithPenalties = true)
         {
             RequiresObjectiveFunction = true;
             this.ConstraintsSolvedWithPenalties = ConstraintsSolvedWithPenalties;
@@ -53,20 +53,19 @@ namespace OptimizationToolbox
 
         public override void Add(object function)
         {
-            if (typeof(abstractSimulatedAnnealingCoolingSchedule).IsInstanceOfType(function))
+            if (function is abstractSimulatedAnnealingCoolingSchedule)
             {
                 scheduler = (abstractSimulatedAnnealingCoolingSchedule)function;
                 scheduler.SetOptimizationDetails(this);
             }
-            else if (typeof(abstractGenerator).IsInstanceOfType(function))
+            else if (function is abstractGenerator)
                 neighborGenerator = (abstractGenerator)function;
             else base.Add(function);
         }
 
         protected override double run(out double[] xStar)
         {
-            var candidates = new List<Candidate>();
-            candidates.Add(new Candidate(calc_f(x), x));
+            var candidates = new List<Candidate> { new Candidate(calc_f(x), x) };
             var temperature = scheduler.SetInitialTemperature();
             while (notConverged(k++, numEvals, candidates[0].fValues[0], candidates[0].x))
             {

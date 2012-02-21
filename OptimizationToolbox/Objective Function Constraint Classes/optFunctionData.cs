@@ -18,7 +18,7 @@ namespace OptimizationToolbox
         internal optFunctionData(IOptFunction function, IEqualityComparer<double[]> comparer,
             double finiteDiffStepSize, differentiate findDerivBy)
         {
-            if (typeof(IDifferentiable).IsInstanceOfType(function))
+            if (function is IDifferentiable)
                 this.findDerivBy = differentiate.Analytic;
             else
             {

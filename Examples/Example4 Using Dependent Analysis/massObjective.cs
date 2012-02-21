@@ -38,8 +38,8 @@ namespace Example4_Using_Dependent_Analysis
 
         public massObjective(ForceVelocityPositionAnalysis fvpsAnalysis, double gearDensity)
         {
-            this.FVPAnalysis = fvpsAnalysis;
-            this.numberGears = fvpsAnalysis.numGears;
+            FVPAnalysis = fvpsAnalysis;
+            numberGears = fvpsAnalysis.numGears;
             this.gearDensity = gearDensity;
         }
 
@@ -76,7 +76,7 @@ namespace Example4_Using_Dependent_Analysis
                 return coeff * -2 * x[i - 1] * x[i - 1] * x[i + 1] / (x[i] * x[i] * x[i]);
             if (i % 4 == 2) //face width
                 return coeff * x[i - 2] * x[i - 2] / (x[i - 1] * x[i - 1]);
-            else return 0;
+            return 0;
         }
 
         #endregion

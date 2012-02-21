@@ -161,15 +161,15 @@ namespace OptimizationToolbox
                 else if ((!optMethod.feasible(c, point)) && (!infeasibles.Contains(c))) infeasibles.Add(c);
 
             if (infeasibles.Count == 0) lastFeasAlpha = lastFeasAlpha4G = lastFeasAlpha4H = alpha;
-            else if (!infeasibles.Exists(ic => (typeof(IEquality).IsInstanceOfType(ic))))
+            else if (!infeasibles.Exists(ic => (ic is IEquality)))
                 lastFeasAlpha4H = alpha;
-            else if (!infeasibles.Exists(ic => (typeof(IInequality).IsInstanceOfType(ic))))
+            else if (!infeasibles.Exists(ic => (ic is IInequality)))
                 lastFeasAlpha4G = alpha;
         }
 
         internal void SetOptimizationDetails(abstractOptMethod optmethod)
         {
-            this.optMethod = optmethod;
+            optMethod = optmethod;
         }
     }
 }

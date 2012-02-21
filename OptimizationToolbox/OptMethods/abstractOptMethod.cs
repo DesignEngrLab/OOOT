@@ -122,7 +122,7 @@ namespace OptimizationToolbox
         /* In most cases RequiresMeritFunction is the same as ConstraintsSolvedWithPenalties, so 
          * RequiresMeritFunction is rarely set. The only time it is needed is when the method
          * sometimes uses the penalty and sometimes does not. This is only the case in SQP and GRG.*/
-        private Boolean _requiresMeritFunction = false;
+        private Boolean _requiresMeritFunction;
         /// <summary>
         /// Gets or sets a value indicating whether [inequalities converted to equalities].
         /// </summary>
@@ -225,44 +225,45 @@ namespace OptimizationToolbox
         /// <param name="function">The object, function.</param>
         public virtual void Add(object function)
         {
-            if (typeof(ProblemDefinition).IsInstanceOfType(function))
+            if (function is ProblemDefinition)
                 readInProblemDefinition((ProblemDefinition)function);
-            else if (typeof(IOptFunction).IsInstanceOfType(function))
+            else if (function is IOptFunction)
             {
                 functionData.Add((IOptFunction)function,
                     new optFunctionData((IOptFunction)function, sameCandComparer,
                         defaultFiniteDifferenceStepSize, defaultFiniteDifferenceMode));
-                if (typeof(IInequality).IsInstanceOfType(function))
+                if (function is IInequality)
                     g.Add((IInequality)function);
-                else if (typeof(IEquality).IsInstanceOfType(function))
+                else if (function is IEquality)
                     h.Add((IEquality)function);
-                else if (typeof(IObjectiveFunction).IsInstanceOfType(function))
+                else if (function is IObjectiveFunction)
                     f.Add((IObjectiveFunction)function);
             }
-            else if (typeof(IDependentAnalysis).IsInstanceOfType(function))
+            else if (function is IDependentAnalysis)
                 dependentAnalysis = (IDependentAnalysis)function;
-            else if (typeof(abstractLineSearch).IsInstanceOfType(function))
+            else if (function is abstractLineSearch)
             {
                 lineSearchMethod = (abstractLineSearch)function;
                 lineSearchMethod.SetOptimizationDetails(this);
             }
-            else if (typeof(abstractSearchDirection).IsInstanceOfType(function))
+            else if (function is abstractSearchDirection)
                 searchDirMethod = (abstractSearchDirection)function;
-            else if (typeof(abstractMeritFunction).IsInstanceOfType(function))
+            else if (function is abstractMeritFunction)
                 meritFunction = (abstractMeritFunction)function;
-            else if (typeof(abstractConvergence).IsInstanceOfType(function))
+            else if (function is abstractConvergence)
                 if (ConvergenceMethods.Exists(a => a.GetType() == function.GetType()))
                     throw new Exception("You cannot add a convergence method of type " + function.GetType() +
                                         "to the optimization method since one already exists of this same type.");
                 else ConvergenceMethods.Add((abstractConvergence)function);
-            else if (typeof(double[]).IsInstanceOfType(function))
+            else if (function is double[])
                 xStart = (double[])function;
-            else if (typeof(DesignSpaceDescription).IsInstanceOfType(function))
+            else if (function is DesignSpaceDescription)
             {
                 spaceDescriptor = (DesignSpaceDescription)function;
                 n = spaceDescriptor.n;
                 for (int i = 0; i < n; i++)
                 {
+                    if (spaceDescriptor[i].Discrete) continue;
                     Add(new greaterThanConstant
                     {
                         constant = spaceDescriptor[i].LowerBound,
@@ -295,7 +296,7 @@ namespace OptimizationToolbox
             if (xStart != null) return Run(out xStar, xStart);
             if (((spaceDescriptor != null) && (spaceDescriptor.Count > 0)) || (n > 0))
                 return run(out xStar, null);
-            SearchIO.output("The number of variables was not set or determined from inputs.", 0);
+            SearchIO.output("The number of variables was not set or determined from inputs.");
             xStar = null;
             return double.PositiveInfinity;
         }
@@ -336,41 +337,41 @@ namespace OptimizationToolbox
             if ((spaceDescriptor != null) && (n != spaceDescriptor.n))
             {
                 SearchIO.output("Differing number of variables specified. From space description = " + spaceDescriptor.n
-                                + ", from x initial = " + n, 0);
+                                + ", from x initial = " + n);
                 return fStar;
             }
             if (RequiresObjectiveFunction && (f.Count == 0))
             {
-                SearchIO.output("No objective function specified.", 0);
+                SearchIO.output("No objective function specified.");
                 return fStar;
             }
             if (RequiresSearchDirectionMethod && (searchDirMethod == null))
             {
-                SearchIO.output("No search direction specified.", 0);
+                SearchIO.output("No search direction specified.");
                 return fStar;
             }
             if (RequiresLineSearchMethod && (lineSearchMethod == null))
             {
-                SearchIO.output("No line search method specified.", 0);
+                SearchIO.output("No line search method specified.");
                 return fStar;
             }
             if (RequiresConvergenceCriteria && ConvergenceMethods.Count == 0)
             {
-                SearchIO.output("No convergence method specified.", 0);
+                SearchIO.output("No convergence method specified.");
                 return fStar;
             }
             if (RequiresMeritFunction && (g.Count + h.Count > 0))
             {
                 if (meritFunction == null)
                 {
-                    SearchIO.output("No merit function specified.", 0);
+                    SearchIO.output("No merit function specified.");
                     return fStar;
                 }
-                else SearchIO.output("Constraints will be solved with penalty function.", 4);
+                SearchIO.output("Constraints will be solved with penalty function.", 4);
             }
             if (RequiresDiscreteSpaceDescriptor && (spaceDescriptor == null))
             {
-                SearchIO.output("No description of the discrete space is specified.", 0);
+                SearchIO.output("No description of the discrete space is specified.");
                 return fStar;
             }
             if (g.Count == 0) SearchIO.output("No inequalities specified.", 4);
@@ -430,10 +431,10 @@ namespace OptimizationToolbox
             {
                 if (n == m)
                     SearchIO.output("There are as many equality constraints as design variables " +
-                                    "(m = size). Consider another approach. Optimization is not needed.", 0);
+                                    "(m = size). Consider another approach. Optimization is not needed.");
                 else
                     SearchIO.output("There are more equality constraints than design variables " +
-                                    "(m > size). Therefore the problem is overconstrained.", 0);
+                                    "(m > size). Therefore the problem is overconstrained.");
                 return fStar;
             }
 
