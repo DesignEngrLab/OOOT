@@ -19,30 +19,21 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public interface IDifferentiable
+    public class NewtonMethod : abstractSearchDirection
     {
-        double deriv_wrt_xi(double[] x, int i);
-    }
+        public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, bool reset = false)
+        {
+            /* calc the magnitude of the new gradient, magGradF. This is used several
+             * times so in order to minimize time, calc it once and save it. */
+            var magGradF = StarMath.norm2(gradf);
+            if (magGradF == 0) return gradf;
+            /* if the gradient of f is all zeros, then simply return it. */
 
-    public interface ITwiceDifferentiable
-    {
-        double second_deriv_wrt_ij(double[] x, int i, int j);
-    }
-    
-    public interface IOptFunction
-    {
-        double calculate(double[] x);
-    }
-    public interface IObjectiveFunction : IOptFunction { }
-    public interface IConstraint : IOptFunction{}
-    public interface IEquality : IConstraint { }
-    public interface IInequality : IConstraint { }
-
-    public interface IDependentAnalysis
-    {
-        void calculate(double[] x);
+            return (StarMath.multiply((-1.0 / magGradF), gradf));
+        }
     }
 }

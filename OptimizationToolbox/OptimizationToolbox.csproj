@@ -134,6 +134,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
+    <Compile Include="SearchDirection\NewtonMethod.cs" />
     <Compile Include="Selector Methods\abstractMOSelector.cs" />
     <Compile Include="Selector Methods\WeightedCuboidParetoSelector.cs" />
     <Compile Include="Selector Methods\CuboidParetoSelector.cs" />
