@@ -87,6 +87,10 @@
     <DocumentationFile>bin\x86\Release\OptimizationToolbox.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StarMath, Version=1.0.11.729, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\StarMath.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -105,6 +109,7 @@
     <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
     <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
     <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
+    <Compile Include="LineSearch\FixedOrGoldenSection.cs" />
     <Compile Include="Objective Function Constraint Classes\candidate.cs" />
     <Compile Include="Objective Function Constraint Classes\optFunctionData.cs" />
     <Compile Include="Objective Function Constraint Classes\sameCandidate.cs" />
@@ -133,8 +138,8 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptMethods\NewtonMethod.cs" />
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
-    <Compile Include="SearchDirection\NewtonMethod.cs" />
     <Compile Include="Selector Methods\abstractMOSelector.cs" />
     <Compile Include="Selector Methods\WeightedCuboidParetoSelector.cs" />
     <Compile Include="Selector Methods\CuboidParetoSelector.cs" />
@@ -197,12 +202,6 @@
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\StarMath\StarMath\StarMath.csproj">
-      <Project>{8B37DF1E-A3C9-42B6-BF1F-D65180FF556E}</Project>
-      <Name>StarMath</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

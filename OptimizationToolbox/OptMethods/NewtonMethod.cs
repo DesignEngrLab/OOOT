@@ -19,11 +19,13 @@
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+
+using System;
 using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public class GradientBasedOptimization : abstractOptMethod
+    public class NewtonMethod : abstractOptMethod
     {
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
          * value. gradF is the gradient of f and dk is the search direction at iteration
@@ -38,13 +40,13 @@ namespace OptimizationToolbox
 
         #region Constructor
 
-        public GradientBasedOptimization()
+        public NewtonMethod()
         {
             RequiresObjectiveFunction = true;
             ConstraintsSolvedWithPenalties = true;
             InequalitiesConvertedToEqualities = false;
-            RequiresSearchDirectionMethod = true;
-            RequiresLineSearchMethod = true;
+            RequiresSearchDirectionMethod = false;
+            RequiresLineSearchMethod = false;
             RequiresAnInitialPoint = true;
             RequiresConvergenceCriteria = true;
             RequiresFeasibleStartPoint = false;
@@ -57,6 +59,9 @@ namespace OptimizationToolbox
 
         protected override double run(out double[] xStar)
         {
+            if (!(f[0] is ITwiceDifferentiable))
+                throw new Exception("Newton's method requires that the objective function be twice differentiable"
+                + "\n(Must inherit from ITwiceDifferentiable).");
             /* this is just to overcome a small issue with the compiler. It thinks that xStar will
              * not have a value since it only appears in a conditional statement below. This initi-
              * alization is to "ensure" that it does and that the code compiles. */
@@ -66,11 +71,17 @@ namespace OptimizationToolbox
             do
             {
                 gradF = calc_f_gradient(x);
-                var step = StarMath.norm2(gradF);
-                dk = searchDirMethod.find(x, gradF, fk, ref alphaStar);
+                var Hessian = new double[n, n];
+                for (int i = 0; i < n; i++)
+                    for (int j = i; j < n; j++)
+                        Hessian[i, j] = Hessian[j, i] = ((ITwiceDifferentiable)f[0]).second_deriv_wrt_ij(x, i, j);
+
+
+                dk = StarMath.multiply(-1, StarMath.multiply(StarMath.inverse(Hessian), gradF));
+                var step = StarMath.norm2(dk);
+                dk = StarMath.divide(dk, step);
                 // use line search (arithmetic mean) to find alphaStar
                 alphaStar = lineSearchMethod.findAlphaStar(x, dk, step);
-                SearchIO.output(step + " then " + alphaStar);
                 x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
                 SearchIO.output("iteration=" + k, 3);
                 k++;

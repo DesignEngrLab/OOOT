@@ -59,10 +59,10 @@ namespace OptimizationToolbox
             var diffX = StarMath.subtract(x, xLast);
             var diffGradF = StarMath.subtract(gradf, gradFLast);
             T = StarMath.multiplyVectorsIntoAMatrix(diffX, diffGradF);
-            T = StarMath.multiply((1 / StarMath.dotProduct(diffX, diffGradF)), T);
+            T = StarMath.multiply((1 / StarMath.multiplyDot(diffX, diffGradF)), T);
 
             u = StarMath.multiplyVectorsIntoAMatrix(diffX, diffX);
-            u = StarMath.multiply((1 / StarMath.dotProduct(diffX, diffGradF)), u);
+            u = StarMath.multiply((1 / StarMath.multiplyDot(diffX, diffGradF)), u);
 
             IMinusT = StarMath.subtract(StarMath.makeIdentity(T.GetLength(0)), T);
 
