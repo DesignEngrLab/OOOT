@@ -25,7 +25,11 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+<<<<<<< local
     public class CuboidParetoSelector : abstractMOSelector
+=======
+    internal class CuboidParetoSelector : abstractMOSelector
+>>>>>>> other
     {
         double mu;
 

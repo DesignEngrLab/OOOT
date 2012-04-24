@@ -10,7 +10,7 @@ namespace Example5_MOGA
         static void Main()
         {
             /* first a new optimization method in the form of a genetic algorithm is created. */
-            var optMethod = new GeneticAlgorithm();
+            var optMethod = new MultiObjectiveGeneticAlgorithm();
             /* The objective function is Rosenbrock's banana function again. */
             optMethod.Add(new polynomialObjFn
                               {
@@ -21,9 +21,11 @@ namespace Example5_MOGA
                     "x1^2",
                     "-2*x1",
                     "100*x2^2",
-                    "1",
+                    "1"
                 }
             });
+
+            optMethod.Add(new RoyalRoads());
 
             /* Now a number of convergerence criteria are added. Again, since these all 
              * inherit from the abstractConvergence class, the Add method knows to where 
@@ -62,6 +64,7 @@ namespace Example5_MOGA
              * as tournament selection wherein a random selection of two candidates results in the inferior one
              * being removed from the population. It requires the optimization direction: are lower values better
              * (minimize) or larger (maximize)? */
+            optMethod.Add(new CuboidParetoSelector(2, double.NaN, new[] { optimize.minimize, optimize.minimize }));
             optMethod.Add(new RandomPairwiseCompare(optimize.minimize));
 
             /* for output statements (points in the code where the SearchIO.output(...) function is called, the

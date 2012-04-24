@@ -73,7 +73,12 @@ namespace OptimizationToolbox
 
         public Candidate(double f, double[] x)
         {
-            fValues = new[] {f};
+            this.fValues = new[] {f};
+            this.x = (double[])x.Clone();
+        }
+        public Candidate(double[] f, double[] x)
+        {
+            this.fValues = (double[])f.Clone();
             this.x = (double[])x.Clone();
         }
     }

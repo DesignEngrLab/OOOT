@@ -263,7 +263,7 @@ namespace OptimizationToolbox
                 n = spaceDescriptor.n;
                 for (int i = 0; i < n; i++)
                 {
-                    if (spaceDescriptor[i].Discrete) continue;
+                    if (spaceDescriptor.DiscreteVarIndices.Contains(i)) continue;
                     Add(new greaterThanConstant
                     {
                         constant = spaceDescriptor[i].LowerBound,
@@ -296,7 +296,7 @@ namespace OptimizationToolbox
             if (xStart != null) return Run(out xStar, xStart);
             if (((spaceDescriptor != null) && (spaceDescriptor.Count > 0)) || (n > 0))
                 return run(out xStar, null);
-            SearchIO.output("The number of variables was not set or determined from inputs.");
+            SearchIO.output("The number of variables was not set or determined from inputs.", 0);
             xStar = null;
             return double.PositiveInfinity;
         }
@@ -337,37 +337,37 @@ namespace OptimizationToolbox
             if ((spaceDescriptor != null) && (n != spaceDescriptor.n))
             {
                 SearchIO.output("Differing number of variables specified. From space description = " + spaceDescriptor.n
-                                + ", from x initial = " + n);
+                                + ", from x initial = " + n, 0);
                 return fStar;
             }
             if (RequiresObjectiveFunction && (f.Count == 0))
             {
-                SearchIO.output("No objective function specified.");
+                SearchIO.output("No objective function specified.", 0);
                 return fStar;
             }
             if (RequiresSearchDirectionMethod && (searchDirMethod == null))
             {
-                SearchIO.output("No search direction specified.");
+                SearchIO.output("No search direction specified.", 0);
                 return fStar;
             }
             if (RequiresLineSearchMethod && (lineSearchMethod == null))
             {
-                SearchIO.output("No line search method specified.");
+                SearchIO.output("No line search method specified.", 0);
                 return fStar;
             }
             if (RequiresConvergenceCriteria && ConvergenceMethods.Count == 0)
             {
-                SearchIO.output("No convergence method specified.");
+                SearchIO.output("No convergence method specified.", 0);
                 return fStar;
             }
             if (RequiresMeritFunction && (g.Count + h.Count > 0))
             {
                 if (meritFunction == null)
                 {
-                    SearchIO.output("No merit function specified.");
+                    SearchIO.output("No merit function specified.", 0);
                     return fStar;
                 }
-                SearchIO.output("Constraints will be solved with penalty function.", 4);
+                else SearchIO.output("Constraints will be solved with penalty function.", 4);
             }
             if (RequiresDiscreteSpaceDescriptor && (spaceDescriptor == null))
             {

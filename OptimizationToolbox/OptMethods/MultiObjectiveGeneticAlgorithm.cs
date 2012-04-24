@@ -25,50 +25,8 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public class GeneticAlgorithm : abstractOptMethod
+    public class MultiObjectiveGeneticAlgorithm : GeneticAlgorithm
     {
-        #region Fields
-
-        protected readonly int populationSize;
-        public abstractGenerator initGenerator { get; set; }
-        public abstractGenerator crossoverGenerator { get; set; }
-        public abstractGenerator mutationGenerator { get; set; }
-        public abstractSelector fitnessSelector { get; set; }
-
-        #endregion
-
-        #region Constructor
-
-        public GeneticAlgorithm(int populationSize = 100)
-        {
-            this.populationSize = populationSize;
-
-            RequiresObjectiveFunction = true;
-            ConstraintsSolvedWithPenalties = true;
-            InequalitiesConvertedToEqualities = false;
-            RequiresSearchDirectionMethod = false;
-            RequiresLineSearchMethod = false;
-            RequiresAnInitialPoint = false;
-            RequiresConvergenceCriteria = true;
-            RequiresFeasibleStartPoint = false;
-            RequiresDiscreteSpaceDescriptor = true;
-        }
-
-        #endregion
-
-        public override void Add(object function)
-        {
-            if (function is SamplingGenerator)
-                initGenerator = (SamplingGenerator)function;
-            else if (function is GeneticCrossoverGenerator)
-                crossoverGenerator = (GeneticCrossoverGenerator)function;
-            else if (function is GeneticMutationGenerator)
-                mutationGenerator = (GeneticMutationGenerator)function;
-            else if (function is abstractSelector)
-                fitnessSelector = (abstractSelector)function;
-            else base.Add(function);
-        }
-
         protected override double run(out double[] xStar)
         {
             var population = new List<Candidate>();
@@ -85,7 +43,7 @@ namespace OptimizationToolbox
                                 "*******************\n* Iteration: " + k + " *\n*******************");
                 /* 3. selection survivors*/
                 SearchIO.output("selecting from population  (current pop = " + population.Count + ").", 4);
-                SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)),0);
+                SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)), 4);
                 fitnessSelector.selectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
                 SearchIO.output("generating new candidates (current pop = " + population.Count + ").", 4);
@@ -108,14 +66,16 @@ namespace OptimizationToolbox
             return fStar;
         }
 
-        private static double[] CalcPopulationStats(IEnumerable<Candidate> population)
+        private double[,] CalcPopulationStats(IEnumerable<Candidate> population)
         {
-            return new[]
-                       {
-                           (from c in population select c.fValues[0]).Min(),
-                           (from c in population select c.fValues[0]).Average(),
-                           (from c in population select c.fValues[0]).Max()
-                       };
+            var result = new double[3, f.Count];
+            for (int i = 0; i < f.Count; i++)
+            {
+                result[0, i] = (from c in population select c.fValues[i]).Min();
+                result[1, i] = (from c in population select c.fValues[0]).Average();
+                result[2, i] = (from c in population select c.fValues[0]).Max();
+            };
+            return result;
         }
 
 
@@ -124,11 +84,11 @@ namespace OptimizationToolbox
             for (var i = population.Count - 1; i >= 0; i--)
             {
                 var candidate = population[i];
-                if (double.IsNaN(candidate.fValues[0]))
+                if (candidate.fValues.Contains(double.NaN))
                 {
                     population.RemoveAt(i);
-                    var f = calc_f(candidate.x);
-                    population.Add(new Candidate(f, candidate.x));
+                    var fVals  = calc_f_vector(candidate.x);
+                    population.Add(new Candidate(fVals, candidate.x));
                 }
             }
         }

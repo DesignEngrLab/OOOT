@@ -30,7 +30,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>bin\Debug\OptimizationToolbox.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -90,6 +91,7 @@
     <Reference Include="StarMath, Version=1.0.11.729, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\StarMath.dll</HintPath>
+      <HintPath>..\Resources\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -138,7 +140,11 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptMethods\GeneticAlgorithm.cs">
     <Compile Include="OptMethods\NewtonMethod.cs" />
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
     <Compile Include="Selector Methods\abstractMOSelector.cs" />
     <Compile Include="Selector Methods\WeightedCuboidParetoSelector.cs" />
@@ -148,7 +154,6 @@
     <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />
     <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="OptMethods\ExhaustiveSearch.cs" />
-    <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="OptMethods\HillClimbing.cs" />
     <Compile Include="SearchDirection\PowellsMethod.cs" />
     <Compile Include="SearchDirection\CyclicCoordinates.cs" />
