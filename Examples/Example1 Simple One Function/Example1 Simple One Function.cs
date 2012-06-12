@@ -28,7 +28,7 @@ namespace Example1_Simple_One_Function
 {
     class Program
     {
-        private static void Main2()
+        private static void Main()
         {
             SearchIO.verbosity = 4;
 

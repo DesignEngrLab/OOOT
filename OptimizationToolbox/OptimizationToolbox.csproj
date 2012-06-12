@@ -140,10 +140,8 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptMethods\GeneticAlgorithm.cs">
+    <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="OptMethods\NewtonMethod.cs" />
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
     <Compile Include="Selector Methods\abstractMOSelector.cs" />
