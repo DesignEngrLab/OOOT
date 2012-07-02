@@ -65,7 +65,7 @@ namespace OptimizationToolbox
             /* this is just to overcome a small issue with the compiler. It thinks that xStar will
              * not have a value since it only appears in a conditional statement below. This initi-
              * alization is to "ensure" that it does and that the code compiles. */
-            xStar = null;
+            xStar = (double[])x.Clone();
             //evaluate f(x0)
             fStar = fk = calc_f(x);
             do
@@ -76,8 +76,9 @@ namespace OptimizationToolbox
                     for (int j = i; j < n; j++)
                         Hessian[i, j] = Hessian[j, i] = ((ITwiceDifferentiable)f[0]).second_deriv_wrt_ij(x, i, j);
 
-
                 dk = StarMath.multiply(-1, StarMath.multiply(StarMath.inverse(Hessian), gradF));
+                if (double.IsNaN(StarMath.sum(dk)))
+                    dk = StarMath.multiply(-1, gradF);
                 var step = StarMath.norm2(dk);
                 dk = StarMath.divide(dk, step);
                 // use line search (arithmetic mean) to find alphaStar
