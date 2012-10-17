@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DDC24355-6AA5-4EDF-BAE5-BF5F337CF1E7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>OptimizationToolbox_Portable</RootNamespace>
+    <AssemblyName>OptimizationToolbox_Portable</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Profile2</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\Silverlight_PMKS\StarMath_Portable\StarMath_Portable.csproj">
+      <Project>{e9f1d372-fcfd-429c-9539-b6e52fde4e19}</Project>
+      <Name>StarMath_Portable</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\abstractConvergenceClasses.cs">
+      <Link>Convergence Classes\abstractConvergenceClasses.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\DeltaFConvergence.cs">
+      <Link>Convergence Classes\DeltaFConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\DeltaGradFConvergence.cs">
+      <Link>Convergence Classes\DeltaGradFConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\DeltaXConvergence.cs">
+      <Link>Convergence Classes\DeltaXConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\MaxAgeConvergence.cs">
+      <Link>Convergence Classes\MaxAgeConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\MaxFnEvalsConvergence.cs">
+      <Link>Convergence Classes\MaxFnEvalsConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\MaxIterationsConvergence.cs">
+      <Link>Convergence Classes\MaxIterationsConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\MaxSpanInPopulationConvergence.cs">
+      <Link>Convergence Classes\MaxSpanInPopulationConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\MaxTimeConvergence.cs">
+      <Link>Convergence Classes\MaxTimeConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\ToKnownBestFConvergence.cs">
+      <Link>Convergence Classes\ToKnownBestFConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Convergence Classes\ToKnownBestXConvergence.cs">
+      <Link>Convergence Classes\ToKnownBestXConvergence.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Design Space Description\DesignSpaceDescription.cs">
+      <Link>DesignSpaceDescription.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Design Space Description\VariableDescriptor.cs">
+      <Link>VariableDescriptor.cs</Link>
+    </Compile>
+    <Compile Include="..\..\OOOT\OptimizationToolbox\Design Space Description\VariableDescriptorEnum.cs">
+      <Link>VariableDescriptorEnum.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

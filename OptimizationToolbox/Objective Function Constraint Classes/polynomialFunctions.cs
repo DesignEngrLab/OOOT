@@ -349,7 +349,8 @@ namespace OptimizationToolbox
             term[0] = coeff;
             for (var i = 1; i <= maxIndex; i++)
             {
-                pos = positions.FindIndex(whichVar => (i == whichVar));
+                var w = positions.FirstOrDefault(whichVar => (i == whichVar));
+                pos = positions.IndexOf(w);
                 if (pos == -1) term[i] = 0.0;
                 else term[i] = exponents[pos];
             }

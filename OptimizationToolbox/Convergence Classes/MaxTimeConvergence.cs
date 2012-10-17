@@ -20,8 +20,8 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
@@ -30,7 +30,7 @@ namespace OptimizationToolbox
     /// </summary>
     public class MaxTimeConvergence : abstractConvergence
     {
-        private readonly Stopwatch timer;
+        private readonly DateTime timer;
 
         #region Constructor
 
@@ -46,7 +46,8 @@ namespace OptimizationToolbox
         public MaxTimeConvergence(TimeSpan maxTime)
         {
             this.maxTime = maxTime;
-            timer = Stopwatch.StartNew();
+            timer = DateTime.Now;
+
         }
 
         /// <summary>
@@ -56,7 +57,7 @@ namespace OptimizationToolbox
         public MaxTimeConvergence(DateTime timeToStop)
         {
             maxTime = timeToStop - DateTime.Now;
-            timer = Stopwatch.StartNew();
+            timer = DateTime.Now;
         }
 
         #endregion
@@ -83,7 +84,7 @@ namespace OptimizationToolbox
         /// </returns>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
-            return (timer.Elapsed >= maxTime);
+            return (-timer.Subtract(DateTime.Now) >= maxTime);
         }
     }
 }

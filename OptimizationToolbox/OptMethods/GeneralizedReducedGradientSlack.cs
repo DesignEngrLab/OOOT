@@ -114,10 +114,7 @@ namespace OptimizationToolbox
 
         protected override double run(out double[] xStar)
         {
-            //throw new NotImplementedException();
-            //evaluate f(x0)
             fStar = fk = calc_f(x);
-            //dk = new double[n];
 
             /* this is the iteration counter for updating Xc it's compared with feasibleOuterLoopMax. */
             foreach (IEquality c in h)

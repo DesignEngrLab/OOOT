@@ -85,13 +85,13 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\OptimizationToolbox\OptimizationToolbox.csproj">
       <Project>{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}</Project>
       <Name>OptimizationToolbox</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

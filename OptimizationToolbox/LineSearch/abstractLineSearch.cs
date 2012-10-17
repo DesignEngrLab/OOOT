@@ -161,9 +161,9 @@ namespace OptimizationToolbox
                 else if ((!optMethod.feasible(c, point)) && (!infeasibles.Contains(c))) infeasibles.Add(c);
 
             if (infeasibles.Count == 0) lastFeasAlpha = lastFeasAlpha4G = lastFeasAlpha4H = alpha;
-            else if (!infeasibles.Exists(ic => (ic is IEquality)))
+            else if (!infeasibles.Any(ic => (ic is IEquality)))
                 lastFeasAlpha4H = alpha;
-            else if (!infeasibles.Exists(ic => (ic is IInequality)))
+            else if (!infeasibles.Any(ic => (ic is IInequality)))
                 lastFeasAlpha4G = alpha;
         }
 

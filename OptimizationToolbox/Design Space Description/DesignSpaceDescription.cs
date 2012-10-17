@@ -183,7 +183,8 @@ namespace OptimizationToolbox
             var changes = new List<int[]>();
             foreach (var baseVector in lastChanges)
             {
-                var firstAffectiveNewIndex = Array.FindLastIndex(baseVector, a => (a != 0)) + 1;
+                var value = baseVector.LastOrDefault(a => (a != 0));
+                var firstAffectiveNewIndex = Array.LastIndexOf(baseVector, value) + 1;
                 foreach (var i in DiscreteVarIndices)
                     if (i >= firstAffectiveNewIndex)
                     {

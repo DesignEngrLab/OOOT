@@ -251,7 +251,7 @@ namespace OptimizationToolbox
             else if (function is abstractMeritFunction)
                 meritFunction = (abstractMeritFunction)function;
             else if (function is abstractConvergence)
-                if (ConvergenceMethods.Exists(a => a.GetType() == function.GetType()))
+                if (ConvergenceMethods.Any(a => a.GetType() == function.GetType()))
                     throw new Exception("You cannot add a convergence method of type " + function.GetType() +
                                         "to the optimization method since one already exists of this same type.");
                 else ConvergenceMethods.Add((abstractConvergence)function);
@@ -480,7 +480,6 @@ namespace OptimizationToolbox
         }
 
         #endregion
-
 
         #region from/to Problem Definition
 
