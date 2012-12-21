@@ -69,14 +69,15 @@ namespace OptimizationToolbox
             var temperature = scheduler.SetInitialTemperature();
             while (notConverged(k++, numEvals, candidates[0].fValues[0], candidates[0].x))
             {
-                SearchIO.output(k + ": f = " + candidates[0].fValues[0], 5);
-                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].x), 5);
+                SearchIO.output(k + ": f = " + candidates[0].fValues[0], 4);
+                SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].x), 4);
                 var neighbors = neighborGenerator.GenerateCandidates(candidates[0].x);
                 candidates.AddRange(from neighbor in neighbors
                                     let f = calc_f(neighbor)
                                     where ConstraintsSolvedWithPenalties || feasible(neighbor)
                                     select new Candidate(f, neighbor));
                 temperature = scheduler.UpdateTemperature(temperature, candidates);
+                SearchIO.output("temperture = " + temperature,3);
                 selector.selectCandidates(ref candidates, temperature);
             }
             xStar = candidates[0].x;

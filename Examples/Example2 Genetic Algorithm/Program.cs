@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using OptimizationToolbox;
 using StarMathLib;
 
@@ -6,23 +7,36 @@ namespace Example2_Genetic_Algorithm
 {
     class Program
     {
+        private static void printResults(abstractOptMethod opty, double[] xStar, double f, Stopwatch timer)
+        {
+            Console.WriteLine("Completed running " + opty.GetType());
+            Console.WriteLine("Convergence Declared by " + opty.ConvergenceDeclaredByTypeString);
+            Console.WriteLine("X* = " + StarMath.MakePrintString(xStar));
+            Console.WriteLine("F* = " + f, 1);
+            Console.WriteLine("NumEvals = " + opty.numEvals);
+            Console.WriteLine("The time taken by the process = " + timer.Elapsed + ".\n\n\n");
+            Console.ReadLine();
+        }
         static void Main()
         {
+            SearchIO.verbosity = 4;
             /* first a new optimization method in the form of a genetic algorithm is created. */
-            var optMethod = new GeneticAlgorithm();
+            var optMethod = new GeneticAlgorithm(100);
             /* then an objective function and constraints are added. Since these inherit from
              * type OptimizationToolbox.objectiveFunction and OptimizationToolbox.inequality
              * the Add function knows where to store them so that they will be invoked by the
              * fitness evaluation section of the GA. */
             optMethod.Add(new efficiencyMeasurement());
-            optMethod.Add(new lessThanManifoldVolume());
+
+            //optMethod.Add(new lessThanManifoldVolume());
             /* GA's cannot explicitly handle inequalities, so a merit function must be added
              * so that the fitness evaluation knows how to combine the constraint with the 
              * objective function. */
-            optMethod.Add(new squaredExteriorPenalty(optMethod, 50));
+            //optMethod.Add(new squaredExteriorPenalty(optMethod, 50));
             /* Now a number of convergerence criteria are added. Again, since these all 
              * inherit from the abstractConvergence class, the Add method knows to where 
              * to store them. */
+            optMethod.Add(new ToKnownBestFConvergence(0.0, 0.5));
             optMethod.Add(new MaxIterationsConvergence(50000)); /* stop after 500 iteration (i.e. generations) */
             optMethod.Add(new MaxAgeConvergence(20, 0.000000001)); /*stop after 20 generations of the best not changing */
             optMethod.Add(new MaxSpanInPopulationConvergence(100)); /*stop if the largest distance is only one unit. */
@@ -65,16 +79,13 @@ namespace Example2_Genetic_Algorithm
              * may be used, but this will likely cut into the speed of the search process. */
             SearchIO.verbosity = 4;
 
+            var timer = Stopwatch.StartNew();
             /* everything is set, we can now run the algorithm and retrieve the f* and x* values. */
             double[] xOptimal;
             var fOptimal = optMethod.Run(out xOptimal);
 
-            /* since we are curious how the process completed we now output some details. */
-            SearchIO.output("f* = " + fOptimal); /* the 0 indicates that this statement has high priority
-                                                     * and shouldn't be skipped in printing to the console. */
-            SearchIO.output("x* = " + StarMath.MakePrintString(xOptimal));
-            SearchIO.output("The process converged by criteria: " + optMethod.ConvergenceDeclaredByTypeString);
-            Console.ReadLine();
+            printResults(optMethod, xOptimal, fOptimal, timer);
+
         }
     }
 }

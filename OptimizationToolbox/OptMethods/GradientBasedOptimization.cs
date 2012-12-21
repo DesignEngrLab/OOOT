@@ -70,7 +70,6 @@ namespace OptimizationToolbox
                 dk = searchDirMethod.find(x, gradF, fk, ref alphaStar);
                 // use line search (arithmetic mean) to find alphaStar
                 alphaStar = lineSearchMethod.findAlphaStar(x, dk, step);
-                SearchIO.output(step + " then " + alphaStar);
                 x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
                 SearchIO.output("iteration=" + k, 3);
                 k++;

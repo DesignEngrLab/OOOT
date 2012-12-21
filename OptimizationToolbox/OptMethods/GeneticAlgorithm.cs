@@ -85,14 +85,16 @@ namespace OptimizationToolbox
                                 "*******************\n* Iteration: " + k + " *\n*******************");
                 /* 3. selection survivors*/
                 SearchIO.output("selecting from population  (current pop = " + population.Count + ").", 4);
-                SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)),0);
+                SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)), 0);
                 fitnessSelector.selectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
                 SearchIO.output("generating new candidates (current pop = " + population.Count + ").", 4);
-                crossoverGenerator.GenerateCandidates(ref population, populationSize);
+                if (crossoverGenerator != null)
+                    crossoverGenerator.GenerateCandidates(ref population, populationSize);
                 /* 5. generate modifications to all with mutation */
                 SearchIO.output("performing mutation (current pop = " + population.Count + ").", 4);
-                mutationGenerator.GenerateCandidates(ref population);
+                if (mutationGenerator != null)
+                    mutationGenerator.GenerateCandidates(ref population);
                 /* 6. evaluate new members of population.*/
                 SearchIO.output("evaluating new popluation members.", 4);
                 evaluate(population);

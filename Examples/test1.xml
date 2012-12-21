@@ -22,16 +22,16 @@
   <NumConvergeCriteriaNeeded>1</NumConvergeCriteriaNeeded>
   <SpaceDescriptor>
     <VariableDescriptor>
-      <LowerBound>-10000</LowerBound>
-      <UpperBound>10000</UpperBound>
+      <LowerBound>-5000</LowerBound>
+      <UpperBound>5000</UpperBound>
       <Delta>1</Delta>
-      <Size>20001</Size>
+      <Size>10001</Size>
     </VariableDescriptor>
     <VariableDescriptor>
-      <LowerBound>-10000</LowerBound>
-      <UpperBound>10000</UpperBound>
+      <LowerBound>-5000</LowerBound>
+      <UpperBound>5000</UpperBound>
       <Delta>1</Delta>
-      <Size>20001</Size>
+      <Size>10001</Size>
     </VariableDescriptor>
   </SpaceDescriptor>
   <FunctionList>

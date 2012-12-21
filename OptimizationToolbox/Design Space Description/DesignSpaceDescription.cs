@@ -119,6 +119,24 @@ namespace OptimizationToolbox
             return result;
         }
 
+        public int[][] CreateNeighborChangeVectorsHack(int minimumNeighbors)
+        {
+            /* the main data structure here is a List of Lists of Lists of arrays.
+             * Why not just make it one List of arrays since, in the end, the whole thing
+             * is condensed to this anyway? The reason is that we need to keep track of the 
+             * transitions for a particular step size in order to create the next set. That
+             * is, the CreateNewChangeVectorsBasedOnLast requires this. There may be an easier
+             * way to write that function but this may be most efficent. So, the first list is
+             * indexed by stepSize, the inner lists by the number of nonzeros in the transitions 
+             * (e.g. (1,0,0) is a transition in the first of these lists, and (0,-1,1) is a trans-
+             * tion in the second list. The third list is simply the number of symmetric transitions
+             * found at that step size for that many non-zeros. There are two for each binary possibilty
+             * to ensure symmetry - for every positive step there is a corresponding one negative step. */
+            var transitions = new List<int[]> {new[] {-1, 0}, new[] {0, -1}, new[] {+1, 0}, new[] {0, +1},
+            new[] {+1, +1}, new[] {-1, -1}, new[] {+1, -1}, new[] {-1, +1}};
+            return transitions.ToArray();
+        }
+
         /// <summary>
         ///   Creates the neighbor change vectors. There will at least the minimum specified, 
         ///   and the process will stop after this max is reached although there may be significantly
@@ -161,20 +179,20 @@ namespace OptimizationToolbox
                 do
                 {
                     var stepSize = (int)(Math.Round(Math.Exp(tempExp)));
-                    var lastChanges = new List<int[]> { new int[n] };
                     if (transitions.Count <= tempExp)
+                    {
                         transitions.Add(new List<List<int[]>>());
-                    else lastChanges = transitions[tempExp][transitions[tempExp].Count - 1];
-                    transitions[tempExp].Add(CreateNewChangeVectorsBasedOnLast(lastChanges, stepSize));
+                        transitions[tempExp].Add(CreateNewChangeVectorsBasedOnLast(stepSize));
+                    }
+                    else
+                        transitions[tempExp].Add(CreateNewChangeVectorsBasedOnLast(transitions[tempExp].Last(), stepSize));
                     minimumNeighbors -= transitions[tempExp][transitions[tempExp].Count - 1].Count;
                 } while ((--tempExp >= 0) && (minimumNeighbors > 0));
                 exponent++;
             } while (minimumNeighbors > 0);
             var transitionsCombined = new List<int[]>();
             foreach (var degreeLists in transitions.SelectMany(sizeLists => sizeLists))
-            {
                 transitionsCombined.AddRange(degreeLists);
-            }
             return transitionsCombined.ToArray();
         }
 
@@ -183,10 +201,9 @@ namespace OptimizationToolbox
             var changes = new List<int[]>();
             foreach (var baseVector in lastChanges)
             {
-                var value = baseVector.LastOrDefault(a => (a != 0));
-                var firstAffectiveNewIndex = Array.LastIndexOf(baseVector, value) + 1;
+                var firstEffectiveIndex = Array.FindLastIndex(baseVector, (a => (a != 0)));
                 foreach (var i in DiscreteVarIndices)
-                    if (i >= firstAffectiveNewIndex)
+                    if (i > firstEffectiveIndex && baseVector[i] == 0)
                     {
                         var changeVector = (int[])baseVector.Clone();
                         changeVector[i] = -stepSize;
@@ -195,6 +212,22 @@ namespace OptimizationToolbox
                         changeVector[i] = stepSize;
                         changes.Add(changeVector);
                     }
+            }
+            return changes;
+        }
+
+
+        private List<int[]> CreateNewChangeVectorsBasedOnLast(int stepSize)
+        {
+            var changes = new List<int[]>();
+            foreach (var i in DiscreteVarIndices)
+            {
+                var changeVector = new int[n];
+                changeVector[i] = -stepSize;
+                changes.Add(changeVector);
+                changeVector = new int[n];
+                changeVector[i] = stepSize;
+                changes.Add(changeVector);
             }
             return changes;
         }

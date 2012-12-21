@@ -30,7 +30,7 @@ namespace OptimizationToolbox
         private readonly Random r;
         private int changeVectorIndex;
 
-        public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int minNumNeighbors = 250)
+        public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int minNumNeighbors = 50)
             : base(discreteSpaceDescriptor)
         {
             r = new Random();

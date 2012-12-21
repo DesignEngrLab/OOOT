@@ -45,11 +45,19 @@ namespace OptimizationToolbox
             else
             {
                 var probability = Math.Exp(((int)direction) * (fNew - fOld) / temperature);
+                SearchIO.output("fnew = " + fNew + "; fold = " + fOld + "; prob = " + probability, 5);
                 if (rnd.NextDouble() <= probability)
+                {
                     /* throw away the old and keep the new */
                     candidates.RemoveAt(0);
+                    SearchIO.output("keep new", 5);
+                }
                 /* otherwise stay with the old */
-                else candidates.RemoveAt(1);
+                else
+                {
+                    candidates.RemoveAt(1);
+                    SearchIO.output("keep old", 5);
+                }
             }
         }
     }

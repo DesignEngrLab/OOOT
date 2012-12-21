@@ -35,9 +35,9 @@ namespace OptimizationToolbox
                                               double control = double.NaN)
         {
             double bestF = (direction == optimize.maximize)
-                               ? candidates.Select(a => a.x[0]).Max()
-                               : candidates.Select(a => a.x[0]).Min();
-            candidates.RemoveAll(a => a.x[0] != bestF);
+                               ? candidates.Select(a => a.fValues[0]).Max()
+                               : candidates.Select(a => a.fValues[0]).Min();
+            candidates.RemoveAll(a => a.fValues[0] != bestF);
             if (candidates.Count > 1) candidates = candidates.Take(1).ToList();
         }
     }

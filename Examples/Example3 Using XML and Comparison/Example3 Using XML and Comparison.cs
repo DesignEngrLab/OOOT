@@ -31,12 +31,13 @@ namespace Example3_Using_XML_and_Comparison
         private const string filename = "../../../test1.xml";
         private static void Main()
         {
+            SearchIO.verbosity = 4;
             /* In this example, we first present how the details of an optimzation
              * problem can be saved to an XML-file so that it can be read in 
              * and solved as opposed to defining all the details in an imperative
              * (code line by code line) way. In the first function, the xml file
              * name "test1.xml" is created. */
-            makeAndSaveProblemDefinition();
+            // makeAndSaveProblemDefinition();
 
             /* now we create a series of different optimization methods and test
              * them on the problem. The problem is now opened from the file and
@@ -46,6 +47,7 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /***********Gradient Based Optimization with Steepest Descent****************/
+            SearchIO.output("***********Gradient Based Optimization with Steepest Descent****************");
             opty = new GradientBasedOptimization();
             opty.Add(probTest1);
             abstractSearchDirection searchDirMethod = new SteepestDescent();
@@ -62,8 +64,9 @@ namespace Example3_Using_XML_and_Comparison
             var timer = Stopwatch.StartNew();
             var fStar = opty.Run(out xStar);
             printResults(opty, xStar, fStar, timer);
- 
+
             /***********Gradient Based Optimization with Fletcher-Reeves****************/
+            SearchIO.output("***********Gradient Based Optimization with Fletcher-Reeves****************");
             /* we don't need to reset (invoke the constructor) for GradientBasedOptimization since we are only 
              * change the seaach direction method. */
             searchDirMethod = new FletcherReevesDirection();
@@ -78,6 +81,7 @@ namespace Example3_Using_XML_and_Comparison
             fStar = opty.Run(out xStar);
             printResults(opty, xStar, fStar, timer);
             /******************Generalized Reduced Gradient***********************/
+            SearchIO.output("******************Generalized Reduced Gradient***********************");
             opty = new GeneralizedReducedGradientActiveSet();
             opty.Add(probTest1);
             opty.Add(new squaredExteriorPenalty(opty, 10));
@@ -94,9 +98,10 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Random Hill Climbing ***********************/
+            SearchIO.output("******************Random Hill Climbing ***********************");
             opty = new HillClimbing();
             opty.Add(probTest1);
-            opty.Add(new squaredExteriorPenalty(opty, 10));
+            opty.Add(new squaredExteriorPenalty(opty, 8));
             opty.Add(new RandomNeighborGenerator(probTest1.SpaceDescriptor));
             opty.Add(new KeepSingleBest(optimize.minimize));
             opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
@@ -112,6 +117,7 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Exhaustive Hill Climbing ***********************/
+            SearchIO.output("******************Exhaustive Hill Climbing ***********************");
             /* Everything else about the Random Hill Climbing stays the same. */
             opty.Add(new ExhaustiveNeighborGenerator(probTest1.SpaceDescriptor));
 
@@ -122,6 +128,7 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Simulated Annealing***********************/
+            SearchIO.output("******************Simulated Annealing***********************");
             opty = new SimulatedAnnealing(optimize.minimize);
             opty.Add(probTest1);
             opty.Add(new squaredExteriorPenalty(opty, 10));
@@ -139,6 +146,7 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Exhaustive Search ***********************/
+            SearchIO.output("******************Exhaustive Search ***********************");
             opty = new ExhaustiveSearch(probTest1.SpaceDescriptor, optimize.minimize);
             opty.Add(probTest1);
             /* No convergence criteria is needed as the process concludes when all
@@ -154,8 +162,6 @@ namespace Example3_Using_XML_and_Comparison
              * completion), you are probably looking at 1 to 2 years. */
             printResults(opty, xStar, fStar, timer);
 
-
-            Console.ReadKey();
         }
 
         private static void printResults(abstractOptMethod opty, double[] xStar, double f, Stopwatch timer)
@@ -166,7 +172,7 @@ namespace Example3_Using_XML_and_Comparison
             Console.WriteLine("F* = " + f, 1);
             Console.WriteLine("NumEvals = " + opty.numEvals);
             Console.WriteLine("The time taken by the process = " + timer.Elapsed + ".\n\n\n");
-
+            Console.ReadLine();
         }
 
         private static void makeAndSaveProblemDefinition()
@@ -179,7 +185,7 @@ namespace Example3_Using_XML_and_Comparison
              * to 2 million steps in each of the 2 design variables. */
             var dsd = new DesignSpaceDescription(2);
             for (var i = 0; i < 2; i++)
-                dsd[i] = new VariableDescriptor(-10000, 10000, 1.0);
+                dsd[i] = new VariableDescriptor(-5000, 5000, 1.0);
             pd.Add(dsd);
 
             /* Add three convergence criteria */

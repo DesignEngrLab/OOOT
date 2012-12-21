@@ -28,7 +28,7 @@ namespace OptimizationToolbox
     public class SACoolingSangiovanniVincentelli : abstractSimulatedAnnealingCoolingSchedule
     {
         private const int initialSamples = 100;
-        private const double initProbabilityForThreeSigma = 0.99;
+        private const double initProbabilityForThreeSigma = 0.8;
         private readonly double lambda;
         private double[] objectiveValues;
 
@@ -40,15 +40,13 @@ namespace OptimizationToolbox
 
         internal override double SetInitialTemperature()
         {
-            var LHC = new LatinHyperCube(optMethod.spaceDescriptor, VariablesInScope.OnlyDiscrete);
-            var initCandidates = LHC.GenerateCandidates(null, initialSamples);
+            var randNeighbor = new RandomNeighborGenerator(optMethod.spaceDescriptor);
             objectiveValues = new double[initialSamples];
+            var x = (double[])optMethod.xStart.Clone();
             for (var j = 0; j < initialSamples; j++)
             {
-                for (var i = 0; i < optMethod.n; i++)
-                    if (!optMethod.spaceDescriptor.DiscreteVarIndices.Contains(i))
-                        initCandidates[j][i] = optMethod.xStart[i];
-                objectiveValues[j] = optMethod.calc_f(initCandidates[j], true);
+                objectiveValues[j] = optMethod.calc_f(x, true);
+                x = randNeighbor.GenerateCandidates(x)[0];
             }
             var stdev = StarMath.standardDeviation(objectiveValues);
 
@@ -62,7 +60,9 @@ namespace OptimizationToolbox
             if (samplesThusFar < samplesInGeneration) return temperature;
             samplesThusFar = 0;
             var stdev = StarMath.standardDeviation(objectiveValues);
-            return temperature * Math.Exp(-1 * lambda * temperature / stdev);
+            var newTemp = temperature * Math.Exp(-1 * lambda * temperature / stdev);
+            if (newTemp == 0) newTemp = .99 * temperature;
+            return newTemp;
         }
     }
 }
