@@ -95,6 +95,7 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptMethods\PowellsOptimization.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="OptMethods\NewtonMethod.cs" />
     <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
@@ -108,7 +109,6 @@
     <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="OptMethods\ExhaustiveSearch.cs" />
     <Compile Include="OptMethods\HillClimbing.cs" />
-    <Compile Include="SearchDirection\PowellsMethod.cs" />
     <Compile Include="SearchDirection\CyclicCoordinates.cs" />
     <Compile Include="Selector Methods\abstractSelector.cs" />
     <Compile Include="Selector Methods\P-norm Proportional Selection.cs" />

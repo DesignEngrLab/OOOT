@@ -64,20 +64,20 @@ namespace OptimizationToolbox
                 {
                     /* if the quadratic approximatoin fails, we make note of it with this enumerator. */
                     loopStatus = DSCPowellLoopStatus.SecondDerivNegative;
-                        SearchIO.output("<<< uh-oh! negative 2nd deriv @ k=" + k + "!>>>",3);
+                    SearchIO.output("<<< uh-oh! negative 2nd deriv @ k=" + k + "!>>>", 5);
                 }
                 else if (alphaAndF.Keys.Contains(alphaNew))
                 {
                     /* if the alpha is already one of the three, then no point in keeping it. */
                     loopStatus = DSCPowellLoopStatus.NewPointAlreadyFound;
-                        SearchIO.output("<<< uh-oh! new point is a repeat @ k=" + k + "!>>>",3);
+                    SearchIO.output("<<< uh-oh! new point is a repeat @ k=" + k + "!>>>", 5);
                 }
                 else
                 {
                     var fNew = calcF(x, alphaNew, dir);
                     if (fNew > alphaAndF.Values.Min() && NewPointIsFarthest(alphaNew, alphaAndF.Keys, minIndex))
                     {
-                            SearchIO.output("<<< uh-oh! new point is not best and too far away @ k=" + k + "!>>>",3);
+                        SearchIO.output("<<< uh-oh! new point is not best and too far away @ k=" + k + "!>>>", 5);
                         /* the new point is not the best and is farthest from the current best, so it will simply
                          * be deleted after it is added. That's not good. */
                         loopStatus = DSCPowellLoopStatus.NewPointIsFarthest;

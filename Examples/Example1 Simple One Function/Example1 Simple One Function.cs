@@ -21,7 +21,6 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
-using Example2_Genetic_Algorithm;
 using OptimizationToolbox;
 using StarMathLib;
 
@@ -41,6 +40,8 @@ namespace Example1_Simple_One_Function
              * problems with no constraints (if constraints are used, you will need
              * to specify a merit/penalty function. */
             var optMethod = new NelderMead();
+            //var optMethod = new PowellsOptimization();
+            //optMethod.Add(new DSCPowell(0.01, 0.1, 50));
             /* The objective function is Rosenbrock's banana function
              * (http://en.wikipedia.org/wiki/Rosenbrock_function). 
              * All objective functions must a object from classes that inherit
@@ -53,26 +54,26 @@ namespace Example1_Simple_One_Function
              * sums that are multiplied or raised to a power. Therefore, the equation
              * for Rosenbrock's shown at the top of the wikipedia page must be
              * broken down into individual terms like that shown below. */
-            optMethod.Add(new efficiencyMeasurement());
-            //optMethod.Add(new polynomialObjFn
-            //                  {
-            //    Terms = new List<string>
-            //    {
-            //        "100*x1^4",
-            //        "-200*x1^2*x2",
-            //        "x1^2",
-            //        "-2*x1",
-            //        "100*x2^2",
-            //        "1",
-            //    }
-            //});
+            // optMethod.Add(new efficiencyMeasurement());
+            optMethod.Add(new polynomialObjFn
+                              {
+                                  Terms = new List<string>
+                {
+                    "100*x1^4",
+                    "-200*x1^2*x2",
+                    "x1^2",
+                    "-2*x1",
+                    "100*x2^2",
+                    "1",
+                }
+                              });
             /* At least one convergence method is required for NelderMead.
              * Since we know the optimal is 0 (@ {1, 1}) we can use the 
              * "ToKnownBestFConvergence" with a tolerance of 0.0001. */
             optMethod.Add(new ToKnownBestFConvergence(0, 0.0001));
 
             /* Let us start the search from a specific point. */
-            double[] xInit = new[] { 100.0,100,100};
+            double[] xInit = new[] { 100.0, 100 };//,100};
             //double[] xInit = new[] { 5.0, 50.0 };
             double[] xStar;
 

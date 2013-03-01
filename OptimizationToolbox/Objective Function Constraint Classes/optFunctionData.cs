@@ -8,7 +8,7 @@ namespace OptimizationToolbox
     {
         readonly Dictionary<double[], double> oldEvaluations;
         readonly Queue<double[]> queue;
-        private const long maxSize = 5000;
+        private const long maxSize = 1000;
         private const long sizeStepDown = 100;
 
         internal long numEvals { get; set; }
