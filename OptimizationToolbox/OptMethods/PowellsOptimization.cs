@@ -20,6 +20,7 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 
+using System;
 using System.Collections.Generic;
 using StarMathLib;
 
@@ -27,6 +28,7 @@ namespace OptimizationToolbox
 {
     public class PowellsOptimization : abstractOptMethod
     {
+        private const double minAlphaStepRatio = 1e-6;
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
@@ -74,14 +76,26 @@ namespace OptimizationToolbox
                 var xinner = (double[])x.Clone();
                 var maxImprovement = 0.0;
                 var indexOfMaxImprovement = -1;
-                var combinedDir = new double[n];
+                var maxAlpha = 0.0;
+                var indexOfMaxAlpha = -1;
+                var minAlpha = double.PositiveInfinity;
+                var indexOfMinAlpha = -1;
                 for (int i = 0; i < n; i++)
                 {
                     var dk = conjugateDirections[i];
                     alphaStar = lineSearchMethod.findAlphaStar(xinner, dk, true);
-                    combinedDir[i] = alphaStar;
                     xinner = StarMath.add(xinner, StarMath.multiply(alphaStar, dk));
                     var fNew = calc_f(xinner);
+                    if (Math.Abs(alphaStar) > Math.Abs(maxAlpha))
+                    {
+                        maxAlpha = alphaStar;
+                        indexOfMaxAlpha = i;
+                    }
+                    if (Math.Abs(alphaStar) < Math.Abs(minAlpha))
+                    {
+                        minAlpha = alphaStar;
+                        indexOfMinAlpha = i;
+                    }
                     if (fk - fNew > maxImprovement)
                     {
                         maxImprovement = fk - fNew;
@@ -90,22 +104,35 @@ namespace OptimizationToolbox
                     fk = fNew;
                     k++;
                 }
-                 /*combine direction search. */
-                var xJump = StarMath.subtract(StarMath.multiply(2, xinner), x, n);
-                var fJump = calc_f(xJump);
-                if (fJump >= fBegin
-                    || (fBegin - 2*fk + fJump)*(fBegin - fk - maxImprovement)*(fBegin - fk - maxImprovement)
-                    >= (fBegin - fJump)*(fBegin - fJump)*maxImprovement/2)
-                    x = xinner;
+                if (Math.Abs(maxAlpha) < minAlphaStepRatio || Math.Abs(minAlpha / maxAlpha) < minAlphaStepRatio)
+                {
+                    conjugateDirections.Clear();
+                    for (int i = 0; i < n; i++)
+                    {
+                        var direction = new double[n];
+                        direction[i] = 1;
+                        conjugateDirections.Add(direction);
+                    }
+                }
                 else
                 {
-                    combinedDir = StarMath.normalize(StarMath.subtract(xinner, x, n));
-                    alphaStar = lineSearchMethod.findAlphaStar(xinner, combinedDir, true);
-                    x = StarMath.add(xinner, StarMath.multiply(alphaStar, combinedDir));
-                    conjugateDirections.RemoveAt(indexOfMaxImprovement);
-                    conjugateDirections.Add(combinedDir);
-                    k++;
-                    fk = calc_f(x);
+                    /*combine direction search. */
+                    var xJump = StarMath.subtract(StarMath.multiply(2, xinner), x, n);
+                    var fJump = calc_f(xJump);
+                    if (fJump >= fBegin
+                        || (fBegin - 2 * fk + fJump) * (fBegin - fk - maxImprovement) * (fBegin - fk - maxImprovement)
+                        >= (fBegin - fJump) * (fBegin - fJump) * maxImprovement / 2)
+                        x = xinner;
+                    else
+                    {
+                        var combinedDir = StarMath.normalize(StarMath.subtract(xinner, x, n));
+                        alphaStar = lineSearchMethod.findAlphaStar(xinner, combinedDir, true);
+                        x = StarMath.add(xinner, StarMath.multiply(alphaStar, combinedDir));
+                        conjugateDirections.RemoveAt(indexOfMaxImprovement);
+                        conjugateDirections.Add(combinedDir);
+                        k++;
+                        fk = calc_f(x);
+                    }
                 }
                 if (fk < fStar)
                 {
