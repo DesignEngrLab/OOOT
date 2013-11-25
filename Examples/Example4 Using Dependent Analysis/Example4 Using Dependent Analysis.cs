@@ -111,7 +111,7 @@ namespace Example4_Using_Dependent_Analysis
         {
             //var opty = new GradientBasedOptimization();
             //var opty = new HillClimbing();
-            var opty = new GeneticAlgorithm(500);
+            var opty = new GeneticAlgorithm(100);
 
             var numGears = 2 * NumGearPairs;
 
@@ -168,7 +168,7 @@ namespace Example4_Using_Dependent_Analysis
             //opty.Add(new KeepSingleBest(optimize.minimize));
             opty.Add(new squaredExteriorPenalty(opty, 10));
             opty.Add(new MaxAgeConvergence(40, 0.001));
-            opty.Add(new MaxFnEvalsConvergence(50000));
+            opty.Add(new MaxFnEvalsConvergence(10000));
             opty.Add(new MaxSpanInPopulationConvergence(15));
             double[] xStar;
             SearchIO.verbosity = 4;

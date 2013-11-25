@@ -68,37 +68,35 @@ namespace Example4_Using_Dependent_Analysis
         public void calculate(double[] x)
         {
             speeds[0] = inputSpeed;
-            positions[0] = inputPosition;
-            for (var i = 0; i < numGears; i++)
+            positions[0] = StarMath.multiply(inputPosition, StarMath.Translate(0.0, 0.0, x[2]));
+            diameters[0] = x[0] / x[1];
+            for (var i = 1; i < numGears; i++)
             {
                 var N = x[i * 4];
                 var P = x[i * 4 + 1];
                 var F = x[i * 4 + 2];
                 var Z = x[i * 4 + 3];
                 diameters[i] = N / P;
-                if (i == 0)
+
+                if (i % 2 == 0)
+                /* If it is even-numbered gear, then it shares
+             * a shaft with the previous gear. Speeds are the
+             * same and position is just translated along the shaft */
                 {
-                    if (i % 2 == 0)
-                    /* If it is even-numbered gear, then it shares
-                 * a shaft with the previous gear. Speeds are the
-                 * same and position is just translated along the shaft */
-                    {
-                        speeds[i] = speeds[i - 1];
-                        positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, Z));
-                    }
-                    else
-                    /* else the gear is odd-numbered and mates with the previous
-          * gear through mating teeth */
-                    {
-                        speeds[i] = (x[(i - 1) * 4] / N) * speeds[i - 1];
-                        positions[i] = StarMath.multiply(positions[i - 1], StarMath.RotationZ(Z));
-                        positions[i] = StarMath.multiply(positions[i],
-                                                         StarMath.Translate((diameters[i - 1] + diameters[i]) / 2, 0.0,
-                                                                            0.0));
-                    }
+                    speeds[i] = speeds[i - 1];
+                    positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, Z));
                 }
-                /* finally we move the coordinates from the front side of the gear to the back. This is the case
-                 * for the first gear as well. */
+                else
+                /* else the gear is odd-numbered and mates with the previous 
+                 * gear through mating teeth */
+                {
+                    speeds[i] = (x[(i - 1) * 4] / N) * speeds[i - 1];
+                    positions[i] = StarMath.multiply(positions[i - 1], StarMath.RotationZ(Z));
+                    positions[i] = StarMath.multiply(positions[i],
+                                                     StarMath.Translate((diameters[i - 1] + diameters[i]) / 2, 0.0,
+                                                                        0.0));
+                }
+                /* finally we move the coordinates from the front side of the gear to the back. */
                 positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, F));
             }
             torques[numGears - 1] = outputTorque;
