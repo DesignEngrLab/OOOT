@@ -79,7 +79,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         /// <param name="control">The control.</param>
-        public virtual void GenerateCandidates(ref List<Candidate> candidates, int control = -1)
+        public virtual void GenerateCandidates(ref List<ICandidate> candidates, int control = -1)
         {
             throw new NotImplementedException(
                 "An override of GenerateOneCandidate (which takes a list of Candidates) was not created in class, " +
