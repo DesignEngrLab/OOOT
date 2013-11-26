@@ -66,20 +66,22 @@ namespace OptimizationToolbox
 
         protected override double run(out double[] xStar)
         {
-            var candidates = new List<Candidate> { new Candidate(calc_f(x), x) };
-            while (notConverged(k++, numEvals, candidates[0].fValues[0], candidates[0].x))
+            var candidates = new List<ICandidate> { new Candidate(calc_f(x), x) };
+            while (notConverged(k++, numEvals, candidates[0].objectives[0], candidates[0].x))
             {
-                SearchIO.output(k + ": f = " + candidates[0].fValues[0], 4);
+                SearchIO.output(k + ": f = " + candidates[0].objectives[0], 4);
                 SearchIO.output("     x = " + StarMath.MakePrintString(candidates[0].x), 4);
                 var neighbors = neighborGenerator.GenerateCandidates(candidates[0].x);
-                candidates.AddRange(from neighbor in neighbors
-                                    where ConstraintsSolvedWithPenalties || feasible(neighbor)
-                                    let f = calc_f(neighbor)
-                                    select new Candidate(f, neighbor));
-                selector.selectCandidates(ref candidates);
+                var feasibleAndEvaluatedNeighbors =
+                    from neighbor in neighbors
+                    where ConstraintsSolvedWithPenalties || feasible(neighbor)
+                    let f = calc_f(neighbor)
+                    select new Candidate(f, neighbor);
+                candidates.AddRange(feasibleAndEvaluatedNeighbors.Cast<ICandidate>());
+                selector.SelectCandidates(ref candidates);
             }
             xStar = candidates[0].x;
-            return candidates[0].fValues[0];
+            return candidates[0].objectives[0];
         }
     }
 }

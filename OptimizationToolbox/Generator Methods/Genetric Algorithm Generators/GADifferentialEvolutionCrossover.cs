@@ -31,7 +31,7 @@ namespace OptimizationToolbox
         {
         }
 
-        public override void GenerateCandidates(ref List<Candidate> candidates, int number = -1)
+        public override void GenerateCandidates(ref List<ICandidate> candidates, int number = -1)
         {
             throw new NotImplementedException();
         }

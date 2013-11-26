@@ -25,24 +25,41 @@ using System.Collections.Generic;
 namespace OptimizationToolbox
 {
     /// <summary>
-    /// The class that all selector classes must inherit from. 
+    /// The class that all selector classes must inherit from.
     /// </summary>
     public abstract class abstractSelector
     {
         /// <summary>
-        /// the direction of the search: maximizing or minimizing
+        /// the direction of the search foreach object: maximizing or minimizing
         /// </summary>
-        protected readonly optimize direction;
-        private readonly optimizeSort directionComparer;
+        protected  readonly optimize[] optDirections;
+        /// <summary>
+        /// The direction comparer
+        /// </summary>
+        protected readonly optimizeSort[] directionComparer;
+        /// <summary>
+        /// The number objectives
+        /// </summary>
+        protected readonly int numObjectives;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="abstractSelector"/> class.
+        /// Initializes a new instance of the <see cref="abstractSelector" /> class.
         /// </summary>
-        /// <param name="direction">The direction.</param>
-        protected abstractSelector(optimize direction)
+        /// <param name="optimizationDirections">The optimization directions.</param>
+        protected abstractSelector(optimize[] optimizationDirections)
         {
-            this.direction = direction;
-            directionComparer = new optimizeSort(direction, true);
+            numObjectives = optimizationDirections.GetLength(0);
+            if (optDirections == null) optDirections = new[] {optimize.minimize};
+            else
+            {
+                optDirections = new optimize[numObjectives];
+                directionComparer = new optimizeSort[numObjectives];
+                for (int i = 0; i < numObjectives; i++)
+                {
+                    optDirections[i] = optimizationDirections[i];
+                    directionComparer[i] = new optimizeSort(optDirections[i]);
+                }
+            }
         }
 
         /// <summary>
@@ -50,7 +67,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         /// <param name="control">The control.</param>
-        public abstract void selectCandidates(ref List<Candidate> candidates,
+        public abstract void SelectCandidates(ref List<ICandidate> candidates,
                                               double control = double.NaN);
 
 
@@ -63,9 +80,13 @@ namespace OptimizationToolbox
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
         /// <returns></returns>
-        protected Boolean betterThan(double x, double y)
+        /// <exception cref="System.Exception">The default 'BetterThan' function
+        /// can only function when there is a single objective function.</exception>
+        protected Boolean BetterThan(double x, double y)
         {
-            return directionComparer.BetterThan(x, y);
+            if (numObjectives>1) 
+                throw new Exception("The default 'BetterThan' function can only function when there is a single objective function.");
+            return directionComparer[0].BetterThan(x, y);
         }
     }
 }

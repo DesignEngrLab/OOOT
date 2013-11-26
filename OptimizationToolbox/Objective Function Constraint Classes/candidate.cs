@@ -25,7 +25,7 @@ namespace OptimizationToolbox
     /// <summary>
     /// 
     /// </summary>
-    public class Candidate
+    public interface ICandidate
     {
         /// <summary>
         /// Gets or sets the f values.
@@ -33,53 +33,67 @@ namespace OptimizationToolbox
         /// <value>
         /// The f values.
         /// </value>
-        public double[] fValues { get; set; }
+        double[] objectives { get; set; }
+
         /// <summary>
         /// Gets or sets the g values.
         /// </summary>
         /// <value>
         /// The g values.
         /// </value>
-        public double[] gValues { get; set; }
+        double[] gValues { get; set; }
+
         /// <summary>
         /// Gets or sets the h values.
         /// </summary>
         /// <value>
         /// The h values.
         /// </value>
-        public double[] hValues { get; set; }
+        double[] hValues { get; set; }
+
         /// <summary>
         /// Gets or sets the x vector - the vector of design variables.
         /// </summary>
         /// <value>
         /// The x.
         /// </value>
-        public double[] x { get; set; }
+        double[] x { get; set; }
+    }
 
+    public class Candidate : ICandidate
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="Candidate"/> class.
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="evaluationMethods">the evaluation methods </param>
-        public Candidate(double[]x, abstractOptMethod evaluationMethods = null)
+        public Candidate(double[] x, abstractOptMethod evaluationMethods = null)
         {
-            this.x = (double[]) x.Clone();
-            if (evaluationMethods!=null)
+            this.x = (double[])x.Clone();
+            if (evaluationMethods != null)
             {
-//                evaluationMethods
+                //                evaluationMethods
             }
         }
 
 
         public Candidate(double f, double[] x)
         {
-            this.fValues = new[] {f};
+            this.objectives = new[] { f };
             this.x = (double[])x.Clone();
         }
         public Candidate(double[] f, double[] x)
         {
-            this.fValues = (double[])f.Clone();
+            this.objectives = (double[])f.Clone();
             this.x = (double[])x.Clone();
         }
+
+        public double[] objectives { get; set; }
+
+        public double[] gValues { get; set; }
+
+        public double[] hValues { get; set; }
+
+        public double[] x { get; set; }
     }
 }

@@ -29,11 +29,11 @@ namespace OptimizationToolbox
     {
         protected override double run(out double[] xStar)
         {
-            var population = new List<Candidate>();
+            var population = new List<ICandidate>();
             /* 1. make initial population and evaluate
              *    to ensure diversity, a latin hyper cube with Hammersley could be used.*/
             SearchIO.output("creating initial population", 4);
-            initGenerator.GenerateCandidates(ref population, populationSize);
+            initGenerator.GenerateCandidates(ref population, control: populationSize);
             SearchIO.output("evaluating initial population", 4);
             evaluate(population);
 
@@ -44,10 +44,10 @@ namespace OptimizationToolbox
                 /* 3. selection survivors*/
                 SearchIO.output("selecting from population  (current pop = " + population.Count + ").", 4);
                 SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)), 4);
-                fitnessSelector.selectCandidates(ref population);
+                fitnessSelector.SelectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
                 SearchIO.output("generating new candidates (current pop = " + population.Count + ").", 4);
-                crossoverGenerator.GenerateCandidates(ref population, populationSize);
+                crossoverGenerator.GenerateCandidates(ref population, control: populationSize);
                 /* 5. generate modifications to all with mutation */
                 SearchIO.output("performing mutation (current pop = " + population.Count + ").", 4);
                 mutationGenerator.GenerateCandidates(ref population);
@@ -55,36 +55,36 @@ namespace OptimizationToolbox
                 SearchIO.output("evaluating new popluation members.", 4);
                 evaluate(population);
                 k++;
-                fStar = population.Min(c => c.fValues[0]);
+                fStar = population.Min(c => c.objectives[0]);
                 xStar = (from candidate in population
-                         where (candidate.fValues[0] == fStar)
+                         where (candidate.objectives[0] == fStar)
                          select candidate.x).First();
                 SearchIO.output("x* = " + StarMath.MakePrintString(xStar), 4);
                 SearchIO.output("f* = " + fStar, 4);
             } while (notConverged(k, numEvals, fStar, xStar, population.Select(a => a.x).ToList(),
-                population.Select(a => a.fValues[0]).ToList()));
+                population.Select(a => a.objectives[0]).ToList()));
             return fStar;
         }
 
-        private double[,] CalcPopulationStats(IEnumerable<Candidate> population)
+        private double[,] CalcPopulationStats(IEnumerable<ICandidate> population)
         {
             var result = new double[3, f.Count];
             for (int i = 0; i < f.Count; i++)
             {
-                result[0, i] = (from c in population select c.fValues[i]).Min();
-                result[1, i] = (from c in population select c.fValues[0]).Average();
-                result[2, i] = (from c in population select c.fValues[0]).Max();
+                result[0, i] = (from c in population select c.objectives[i]).Min();
+                result[1, i] = (from c in population select c.objectives[0]).Average();
+                result[2, i] = (from c in population select c.objectives[0]).Max();
             };
             return result;
         }
 
 
-        private void evaluate(IList<Candidate> population)
+        private void evaluate(IList<ICandidate> population)
         {
             for (var i = population.Count - 1; i >= 0; i--)
             {
                 var candidate = population[i];
-                if (candidate.fValues.Contains(double.NaN))
+                if (candidate.objectives.Contains(double.NaN))
                 {
                     population.RemoveAt(i);
                     var fVals  = calc_f_vector(candidate.x);

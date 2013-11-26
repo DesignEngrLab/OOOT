@@ -21,33 +21,24 @@ using System.Linq;
  *     Please find further details and contact information on OOOT
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
+using System.Xml;
 
 namespace OptimizationToolbox
 {
     public class Elitism : abstractSelector
     {
         public Elitism(optimize direction)
-            : base(direction)
+            : base(new[] { direction })
         {
         }
 
-        public override void selectCandidates(ref List<Candidate> candidates,
-                                              double fractionToKeep = double.NaN)
+        public override void SelectCandidates(ref List<ICandidate> candidates, double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
-            var numKeep = (int)(candidates.Count * fractionToKeep);
-            sort(ref candidates);
-            candidates = candidates.Take(numKeep).ToList();
+            var numKeep = (int)(candidates.Count() * fractionToKeep);
+            var orderedCands = candidates.OrderBy(a => a.objectives[0], directionComparer[0]);
+            candidates = orderedCands.Take(numKeep).ToList();
         }
 
-
-        /// <summary>
-        /// Sorts the specified candidates.
-        /// </summary>
-        /// <param name="candidates">The candidates.</param>
-        protected void sort(ref List<Candidate> candidates)
-        {
-            candidates = candidates.OrderBy(a => a.fValues[0], new optimizeSort(direction, true)).ToList();
-        }
     }
 }

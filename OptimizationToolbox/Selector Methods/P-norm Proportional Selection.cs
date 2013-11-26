@@ -31,24 +31,24 @@ namespace OptimizationToolbox
         private readonly Random rnd;
 
         public PNormProportionalSelection(optimize direction, Boolean AlwaysKeepBest, double Q = 0.5)
-            : base(direction)
+            : base(new[] { direction })
         {
             rnd = new Random();
             alwaysKeepBest = AlwaysKeepBest;
             this.Q = Q;
         }
 
-        public override void selectCandidates(ref List<Candidate> candidates,
-                                              double fractionToKeep = double.NaN)
+        public override void SelectCandidates(ref List<ICandidate> candidates, double fractionToKeep = double.NaN)
         {
-            var survivors = new List<Candidate>();
+            var survivors = new List<ICandidate>();
             if (alwaysKeepBest)
             {
-                double bestF = direction == optimize.maximize 
-                    ? candidates.Select(a => a.fValues[0]).Max() 
-                    : candidates.Select(a => a.fValues[0]).Min();
-                survivors.Add(candidates.Find(a => a.fValues[0] != bestF));
-                candidates.Remove(survivors[0]);
+                double bestF = optDirections[0] == optimize.maximize
+                    ? candidates.Select(a => a.objectives[0]).Max()
+                    : candidates.Select(a => a.objectives[0]).Min();
+                var best = candidates.Find(a => a.objectives[0] != bestF);
+                survivors.Add(best);
+                candidates.Remove(best);
             }
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
             var numKeep = (int)(candidates.Count * fractionToKeep);
@@ -66,21 +66,14 @@ namespace OptimizationToolbox
         private static int findIndex(double p, double[] probabilities)
         {
             return Array.FindIndex(probabilities, (r => (r > p)));
-            var i = 0;
-            while (0 <= (p -= probabilities[i]))
-            {
-                i++;
-            }
-            //while (p > 0) p -= probabilities[i++];
-            return i;
         }
 
-        private double[] makeProbabilites(IList<Candidate> candidates)
+        private double[] makeProbabilites(IList<ICandidate> candidates)
         {
             var length = candidates.Count;
             var result = new double[length];
             for (var i = 0; i < length; i++)
-                result[i] = Math.Pow(candidates[i].fValues[0], p);
+                result[i] = Math.Pow(candidates[i].objectives[0], p);
             var sum = result.Sum();
             result[0] /= sum;
             for (var i = 1; i < length; i++)
@@ -113,9 +106,9 @@ namespace OptimizationToolbox
             get { return p; }
             set
             {
-                if (Math.Abs(value) < minP) p = (double)direction * minP;
-                else if (Math.Abs(value) > maxP) p = (double)direction * maxP;
-                else p = (double)direction * Math.Abs(value);
+                if (Math.Abs(value) < minP) p = (double)optDirections[0] * minP;
+                else if (Math.Abs(value) > maxP) p = (double)optDirections[0] * maxP;
+                else p = (double)optDirections[0] * Math.Abs(value);
                 determineQfromP();
             }
         }
@@ -137,9 +130,9 @@ namespace OptimizationToolbox
             if (q <= minQ)
                 p = 0.0;
             else if (q >= maxQ)
-                p = (double)direction * maxP;
+                p = (double)optDirections[0] * maxP;
             else
-                p = (double)direction * (minP + (maxP - minP) * Math.Pow(q, v));
+                p = (double)optDirections[0] * (minP + (maxP - minP) * Math.Pow(q, v));
 
 
             SearchIO.output("", "", "", "q=" + q + ",p=" + p,

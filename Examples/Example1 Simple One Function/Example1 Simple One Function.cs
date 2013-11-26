@@ -39,9 +39,9 @@ namespace Example1_Simple_One_Function
              * clever and wholly unique method that works well for low-dimensions
              * problems with no constraints (if constraints are used, you will need
              * to specify a merit/penalty function. */
-            var optMethod = new NelderMead();
-            //var optMethod = new PowellsOptimization();
-            //optMethod.Add(new DSCPowell(0.01, 0.1, 50));
+            //var optMethod = new NelderMead();
+            var optMethod = new PowellsOptimization();
+            optMethod.Add(new DSCPowell(0.01, 0.1, 50));
             /* The objective function is Rosenbrock's banana function
              * (http://en.wikipedia.org/wiki/Rosenbrock_function). 
              * All objective functions must a object from classes that inherit

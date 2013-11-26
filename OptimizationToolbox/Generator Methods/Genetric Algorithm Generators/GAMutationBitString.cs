@@ -40,7 +40,7 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<Candidate> candidates, int control = -1)
+        public override void GenerateCandidates(ref List<ICandidate> candidates, int control = -1)
         {
             for (var i = candidates.Count - 1; i >= 0; i--)
             {

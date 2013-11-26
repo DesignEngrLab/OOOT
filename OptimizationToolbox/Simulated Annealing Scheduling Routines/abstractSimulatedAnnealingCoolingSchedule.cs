@@ -60,6 +60,6 @@ namespace OptimizationToolbox
         }
 
         internal abstract double SetInitialTemperature();
-        internal abstract double UpdateTemperature(double temperature, List<Candidate> candidates);
+        internal abstract double UpdateTemperature(double temperature, List<ICandidate> candidates);
     }
 }

@@ -44,10 +44,6 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath, Version=1.0.11.729, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\StarMath\StarMath\bin\Release\StarMath.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -100,9 +96,9 @@
     <Compile Include="OptMethods\NewtonMethod.cs" />
     <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
-    <Compile Include="Selector Methods\abstractMOSelector.cs" />
-    <Compile Include="Selector Methods\WeightedCuboidParetoSelector.cs" />
-    <Compile Include="Selector Methods\CuboidParetoSelector.cs" />
+    <Compile Include="Selector Methods\ParetoFunctions.cs" />
+    <Compile Include="Selector Methods\ParetoElitism.cs" />
+    <Compile Include="Selector Methods\SkewboidSelectors.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\LundyMees.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\SangiovanniVincentelli.cs" />
     <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />
@@ -160,6 +156,12 @@
   <ItemGroup>
     <None Include="ClassDiagram1.cd" />
     <None Include="ClassDiagram2.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\StarMath\StarMath\StarMath.csproj">
+      <Project>{8b37df1e-a3c9-42b6-bf1f-d65180ff556e}</Project>
+      <Name>StarMath</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

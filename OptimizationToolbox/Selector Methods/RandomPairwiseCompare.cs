@@ -30,17 +30,17 @@ namespace OptimizationToolbox
         private readonly Random rnd;
 
         public RandomPairwiseCompare(optimize direction)
-            : base(direction)
+            : base(new[] { direction })
         {
             rnd = new Random();
         }
 
-        public override void selectCandidates(ref List<Candidate> candidates,
-                                              double fractionToKeep = double.NaN)
+        public override void SelectCandidates(ref List<ICandidate> candidates, double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;
-            var numKeep = (int)(candidates.Count * fractionToKeep);
-            randomizeList(ref candidates);
+            var numKeep = (int)(candidates.Count * fractionToKeep);       
+            candidates = candidates.OrderBy(a => rnd.NextDouble()).ToList();
+
             /* maxLoops was created in the off chance that the population stagnates all at the same
              * objective function value. It is unlikely that the process should exist on this account
              * but it has happened. Ergo, we put in this condition so that the process doesn't hang here.*/
@@ -51,9 +51,9 @@ namespace OptimizationToolbox
                 candidates.RemoveAt(0);
                 var contestantB = candidates[0];
                 candidates.RemoveAt(0);
-                if (betterThan(contestantA.fValues[0], contestantB.fValues[0]))
+                if (BetterThan(contestantA.objectives[0], contestantB.objectives[0]))
                     candidates.Add(contestantA);
-                else if (betterThan(contestantB.fValues[0], contestantA.fValues[0]))
+                else if (BetterThan(contestantB.objectives[0], contestantA.objectives[0]))
                     candidates.Add(contestantB);
                 else
                 {
@@ -63,17 +63,6 @@ namespace OptimizationToolbox
                     candidates.Insert(rnd.Next(candidates.Count), contestantB);
                 }
             }
-        }
-
-
-        /// <summary>
-        /// Randomizes the list.
-        /// </summary>
-        /// <param name="candidates">The candidates.</param>
-        protected void randomizeList(ref List<Candidate> candidates)
-        {
-            var r = new Random();
-            candidates = candidates.OrderBy(a => r.NextDouble()).ToList();
         }
     }
 }

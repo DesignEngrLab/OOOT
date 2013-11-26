@@ -29,22 +29,21 @@ namespace OptimizationToolbox
         private readonly Random rnd;
 
         public MetropolisCriteria(optimize direction)
-            : base(direction)
+            : base(new[] { direction })
         {
             rnd = new Random();
         }
 
-        public override void selectCandidates(ref List<Candidate> candidates,
-                                              double temperature = double.NaN)
+        public override void SelectCandidates(ref List<ICandidate> candidates, double temperature = double.NaN)
         {
-            var fOld = candidates[0].fValues[0];
-            var fNew = candidates[1].fValues[0];
-            if ((fNew == fOld) || (betterThan(fNew, fOld)))
+            var fOld = candidates[0].objectives[0];
+            var fNew = candidates[1].objectives[0];
+            if ((fNew == fOld) || (BetterThan(fNew, fOld)))
                 /* throw away the old and keep the new */
                 candidates.RemoveAt(0);
             else
             {
-                var probability = Math.Exp(((int)direction) * (fNew - fOld) / temperature);
+                var probability = Math.Exp(((int)optDirections[0]) * (fNew - fOld) / temperature);
                 SearchIO.output("fnew = " + fNew + "; fold = " + fOld + "; prob = " + probability, 5);
                 if (rnd.NextDouble() <= probability)
                 {

@@ -89,7 +89,7 @@ namespace OptimizationToolbox
             return candidates;
         }
 
-        public override void GenerateCandidates(ref List<Candidate> candidates, int numSamples = -1)
+        public override void GenerateCandidates(ref List<ICandidate> candidates, int numSamples = -1)
         {
             var candVectors = GenerateCandidates(null, numSamples);
             foreach (var candVector in candVectors)

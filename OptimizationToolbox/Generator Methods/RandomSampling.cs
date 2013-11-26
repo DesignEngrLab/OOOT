@@ -36,7 +36,7 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<Candidate> candidates, int numSamples = -1)
+        public override void GenerateCandidates(ref List<ICandidate> candidates, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
             for (var i = 0; i < numSamples; i++)

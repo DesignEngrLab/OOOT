@@ -1,5 +1,6 @@
 ﻿using System;
 using OptimizationToolbox;
+using OptimizationToolbox.Selector_Methods;
 using StarMathLib;
 using System.Collections.Generic;
 
@@ -64,7 +65,7 @@ namespace Example5_MOGA
              * as tournament selection wherein a random selection of two candidates results in the inferior one
              * being removed from the population. It requires the optimization direction: are lower values better
              * (minimize) or larger (maximize)? */
-            optMethod.Add(new CuboidParetoSelector(2, double.NaN, new[] { optimize.minimize, optimize.minimize }));
+            optMethod.Add(new SkewboidDiversity( optimize.minimize, optimize.minimize ));
             optMethod.Add(new RandomPairwiseCompare(optimize.minimize));
 
             /* for output statements (points in the code where the SearchIO.output(...) function is called, the

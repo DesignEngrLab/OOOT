@@ -56,10 +56,10 @@ namespace OptimizationToolbox
             return -3 * stdev / Math.Log(initProbabilityForThreeSigma);
         }
 
-        internal override double UpdateTemperature(double temperature, List<Candidate> candidates)
+        internal override double UpdateTemperature(double temperature, List<ICandidate> candidates)
         {
             throw new NotImplementedException();
-            objectiveValues[samplesThusFar++] = candidates[0].fValues[0];
+            objectiveValues[samplesThusFar++] = candidates[0].objectives[0];
             if (samplesThusFar < samplesInGeneration)
                 return temperature;
             samplesThusFar = 0;

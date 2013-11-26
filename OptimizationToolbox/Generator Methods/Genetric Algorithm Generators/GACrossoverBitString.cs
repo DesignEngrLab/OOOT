@@ -40,8 +40,7 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
-        public override void GenerateCandidates(ref List<Candidate> candidates,
-                                                int targetPopNumber = -1)
+        public override void GenerateCandidates(ref List<ICandidate> candidates, int targetPopNumber = -1)
         {
             /* if no population size is provided, then it is assumed that the population should
              * double from the current one. */

@@ -47,7 +47,7 @@
     <polynomialInequality>
       <Terms>
         <string>-x1</string>
-        <string>x2</string>
+        <string>2*x2</string>
       </Terms>
     </polynomialInequality>
   </FunctionList>
