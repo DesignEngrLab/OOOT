@@ -146,21 +146,21 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Exhaustive Search ***********************/
-            SearchIO.output("******************Exhaustive Search ***********************");
-            opty = new ExhaustiveSearch(probTest1.SpaceDescriptor, optimize.minimize);
-            opty.Add(probTest1);
+           // SearchIO.output("******************Exhaustive Search ***********************");
+            //opty = new ExhaustiveSearch(probTest1.SpaceDescriptor, optimize.minimize);
+            //opty.Add(probTest1);
             /* No convergence criteria is needed as the process concludes when all
              * states have been visited but for this problem that is 4 trillion states.*/
-            opty.ConvergenceMethods.Clear();
+            //opty.ConvergenceMethods.Clear();
             /* if you DID KNOW the best, you can include a criteria like...*/
-            opty.ConvergenceMethods.Add(new ToKnownBestXConvergence(new[] { 3.0, 3.0 }, 0.0000001));
-            timer = Stopwatch.StartNew();
-            fStar = opty.Run(out xStar);
+            //opty.ConvergenceMethods.Add(new ToKnownBestXConvergence(new[] { 3.0, 3.0 }, 0.0000001));
+            //timer = Stopwatch.StartNew();
+            //fStar = opty.Run(out xStar);
 
             /* you probably will never see this process complete. Even with the added
              * convergence criteria (which is not factored into the estimated time of
              * completion), you are probably looking at 1 to 2 years. */
-            printResults(opty, xStar, fStar, timer);
+            //printResults(opty, xStar, fStar, timer);
 
         }
 

@@ -49,7 +49,11 @@ namespace OptimizationToolbox
         protected abstractSelector(optimize[] optimizationDirections)
         {
             numObjectives = optimizationDirections.GetLength(0);
-            if (optDirections == null) optDirections = new[] {optimize.minimize};
+            if (optDirections == null)
+            {
+                optDirections = new[] {optimize.minimize};
+                directionComparer = new [] { new optimizeSort(optimize.minimize) };
+            }
             else
             {
                 optDirections = new optimize[numObjectives];
