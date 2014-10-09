@@ -73,8 +73,8 @@ namespace Example1_Simple_One_Function
             optMethod.Add(new ToKnownBestFConvergence(0, 0.0001));
 
             /* Let us start the search from a specific point. */
-            double[] xInit = new[] { 100.0, 100 };//,100};
-            //double[] xInit = new[] { 5.0, 50.0 };
+            //double[] xInit = new[] { 100.0, 100 };//,100};
+            double[] xInit = new[] { 5.0, 50.0 };
             double[] xStar;
 
             /* the next line is where the optimization actually occurs. 

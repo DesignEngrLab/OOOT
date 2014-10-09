@@ -161,7 +161,15 @@ namespace OptimizationToolbox
         public long PositionOf(double value)
         {
             if (!Discrete) return -1;
-            if (Values != null) return Array.IndexOf(Values, value);
+            if (Values != null)
+            {
+                var result = Array.IndexOf(Values, value);
+                if (result != -1) return result;
+                var minDifference = Values.Min(x => Math.Abs(x - value));
+                for (int j = 0; j < size; j++)
+                    if (Math.Abs(Values[j] - value) == minDifference)
+                        return j;
+            }
             var i = (value - LowerBound) / Delta;
             if (i - Math.Floor(i) / Delta < epsilon) return (long)i;
             return -1;

@@ -75,18 +75,18 @@ namespace OptimizationToolbox
         internal double calculate(IOptFunction function, double[] point)
         {
             double fValue;
-            double[] pointClone = (double[])point.Clone();
-            if (functionData[function].TryGetValue(pointClone, out fValue))
-                return fValue;
+            //double[] pointClone = (double[])point.Clone();
+            //if (functionData[function].TryGetValue(pointClone, out fValue))
+            //    return fValue;
 
-            calc_dependent_Analysis(pointClone);
+            calc_dependent_Analysis(point);
             /**************************************************/
             /*** This is the only function that should call ***/
             /**********IOptFunction.calculate(x)***************/
-            fValue = function.calculate(pointClone);
+            fValue = function.calculate(point);
             /**************************************************/
-            functionData[function].Add(pointClone, fValue);
-            functionData[function].numEvals++;
+            //functionData[function].Add(point, fValue);
+            //functionData[function].numEvals++;
             return fValue;
         }
 
