@@ -76,12 +76,15 @@ namespace OptimizationToolbox
                                     + " representing the current simplex of solutions.");
             if (population.Count == 0) return false;
             double maxSideLength = 0;
+            double minSideLength = double.PositiveInfinity;
             for (var i = 0; i < population.Count - 1; i++)
                 for (var j = i + 1; j < population.Count; j++)
                 {
                     var sideLengthSquared = StarMath.norm2(population[i], population[j], true);
                     if (maxSideLength < sideLengthSquared) maxSideLength = sideLengthSquared;
+                    if (minSideLength > sideLengthSquared) minSideLength = sideLengthSquared;
                 }
+            SearchIO.output("ratio =" + Math.Sqrt(minSideLength/maxSideLength));
             SearchIO.output("side length =" + Math.Sqrt(maxSideLength), 6);
             return (Math.Sqrt(maxSideLength) <= MinimumSpan);
         }
