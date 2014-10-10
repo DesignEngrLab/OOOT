@@ -96,7 +96,6 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="OptMethods\LinkToMcCaffreyEO.cs" />
     <Compile Include="OptMethods\NelderMead.cs" />
     <Compile Include="OptMethods\PowellsOptimization.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />

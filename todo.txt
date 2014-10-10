@@ -1,4 +1,4 @@
 TO DO
-2. Genetic Algorithm (is McCaffrey's superior? it seems quite ')   
+
 3. Particle Swarm
 4. pattern search
