@@ -96,6 +96,8 @@
     <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="OptMethods\LinkToMcCaffreyEO.cs" />
+    <Compile Include="OptMethods\NelderMead.cs" />
     <Compile Include="OptMethods\PowellsOptimization.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
     <Compile Include="OptMethods\NewtonMethod.cs" />
@@ -142,7 +144,6 @@
     <Compile Include="OptMethods\GradientBasedOptimization.cs" />
     <Compile Include="OptMethods\GeneralizedReducedGradientActiveSet.cs" />
     <Compile Include="OptMethods\GeneralizedReducedGradientSlack.cs" />
-    <Compile Include="OptMethods\NelderMead.cs" />
     <Compile Include="OptMethods\SequentialQuadraticProgramming.cs" />
     <Compile Include="Objective Function Constraint Classes\polynomialFunctions.cs" />
     <Compile Include="ProblemDefinition.cs" />

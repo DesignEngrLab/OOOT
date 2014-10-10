@@ -4,7 +4,7 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
-	public class GA: abstractOptMethod
+	public class LinkToMcCaffreyEO : abstractOptMethod
 	{
 		public abstractGenerator neighborGenerator { get; private set; }
 		/// <summary>
@@ -25,7 +25,7 @@ namespace OptimizationToolbox
 		private readonly int randomorx=0;//0- random number
 
 
-		public GA ()
+		public LinkToMcCaffreyEO ()
 		{
 			RequiresObjectiveFunction = true;
 			ConstraintsSolvedWithPenalties = true;
@@ -38,7 +38,7 @@ namespace OptimizationToolbox
 			RequiresLineSearchMethod = true;
 		}
 
-		public GA(double minG,double maxG,int no_of_var)
+		public LinkToMcCaffreyEO(double minG,double maxG,int no_of_var)
 			: this()
 		{
 			this.minGene=minG;
@@ -46,7 +46,7 @@ namespace OptimizationToolbox
 			this.numGenes = no_of_var;
 		}
 
-		public GA(double minG,double maxG,int no_of_var, int doInitial)
+        public LinkToMcCaffreyEO(double minG, double maxG, int no_of_var, int doInitial)
 			: this()
 		{
 			this.minGene=minG;
