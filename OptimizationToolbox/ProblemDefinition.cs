@@ -161,10 +161,14 @@ namespace OptimizationToolbox
         /// <param name="filename">The filename.</param>
         public void saveProbToXml(string filename)
         {
+#if FullDOTNET
             var probWriter = new StreamWriter(filename);
             var probSerializer = new XmlSerializer(typeof(ProblemDefinition));
             probSerializer.Serialize(probWriter, this);
             probWriter.Close();
+#else
+            throw new NotImplementedException();
+#endif
         }
 
 
@@ -174,7 +178,8 @@ namespace OptimizationToolbox
         /// <param name="filename">The filename.</param>
         /// <returns></returns>
         public static ProblemDefinition openprobFromXml(string filename)
-        {
+        {  
+#if FullDOTNET
             var probReader = new StreamReader(filename);
             var probDeserializer = new XmlSerializer(typeof(ProblemDefinition));
             var newDesignprob = (ProblemDefinition)probDeserializer.Deserialize(probReader);
@@ -190,7 +195,10 @@ namespace OptimizationToolbox
                     newDesignprob.h.Add((IEquality)item);
             newDesignprob.FunctionList = new ListforIOptFunctions(newDesignprob.f, newDesignprob.g, newDesignprob.h);
             probReader.Close();
-            return newDesignprob;
+            return newDesignprob;   
+#else
+            throw new NotImplementedException();
+#endif
         }
     }
 

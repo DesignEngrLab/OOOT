@@ -46,7 +46,7 @@ namespace OptimizationToolbox
                 double bestF = optDirections[0] == optimize.maximize
                     ? candidates.Select(a => a.objectives[0]).Max()
                     : candidates.Select(a => a.objectives[0]).Min();
-                var best = candidates.Find(a => a.objectives[0] != bestF);
+                var best = candidates.FirstOrDefault(a => a.objectives[0] == bestF);
                 survivors.Add(best);
                 candidates.Remove(best);
             }
@@ -65,7 +65,10 @@ namespace OptimizationToolbox
 
         private static int findIndex(double p, double[] probabilities)
         {
-            return Array.FindIndex(probabilities, (r => (r > p)));
+            for (int index = 0; index < probabilities.GetLength(0); index++)
+                if (probabilities[index]>p)
+                    return index;
+            return -1;
         }
 
         private double[] makeProbabilites(IList<ICandidate> candidates)

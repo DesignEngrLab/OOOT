@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Collections;
+using System.Linq;
 
 namespace OptimizationToolbox
 {
@@ -59,7 +60,10 @@ namespace OptimizationToolbox
 
         internal static int FindVariableIndex(BitByteHexLimits[] limits, int i)
         {
-            return Array.FindIndex(limits, a => a.EndIndex > i);
+            for (int index = 0; index < limits.GetLength(0); index++)
+                if (limits[index].EndIndex > i)
+                    return index;
+            return -1;
         }
 
         internal static BitArray Encode(long value, int length)
@@ -83,7 +87,7 @@ namespace OptimizationToolbox
         {
             long result = 0;
             long factor = 1;
-            for (var i = 0; i < b.Count; i++)
+            for (var i = 0; i < b.Length; i++)
             {
                 if (b[i]) result += factor;
                 factor *= 2;
@@ -105,7 +109,7 @@ namespace OptimizationToolbox
         internal static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, int position,
                                                 long maxValue, out long c1Value, out long c2Value)
         {
-            for (var i = position; i < c1BitArray.Count; i++)
+            for (var i = position; i < c1BitArray.Length; i++)
             {
                 var c1Temp = c1BitArray[i];
                 c1BitArray.Set(i, c2BitArray[i]);

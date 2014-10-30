@@ -1,4 +1,4 @@
 TO DO
 
-3. Particle Swarm
-4. pattern search
+3. Particle Swarm (both by McCaffrey - MSO is split among 4 classes. the PSO that pradeep used is partiswarm.
+4. pattern search (looks like a simper version of Hooke Jeeves; 5 iterations?!)
