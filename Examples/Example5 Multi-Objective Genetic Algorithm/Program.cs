@@ -44,7 +44,8 @@ namespace Example5_MOGA
              * and one-hundredth in the third. Note that you can provide either the delta or the number of steps. Here
              * 36,001 steps will make increments of one-hundredth. */
             var SpaceDescriptor = new DesignSpaceDescription
-                                      {
+                                      {                                                 
+                                          new VariableDescriptor(-100, 100, 0.0001),
                                           new VariableDescriptor(-100, 100, 0.0001),
                                           new VariableDescriptor(-100, 100, 0.0001)
                                       };

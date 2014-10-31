@@ -1,173 +1,152 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
+    <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{02218BAA-F410-4B89-96C9-9CE2A0F7FC8A}</ProjectGuid>
+    <ProjectGuid>{A865CEF9-F16B-4D4A-A984-9934F87CF78D}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OptimizationToolbox</RootNamespace>
     <AssemblyName>OptimizationToolbox</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>
-    </StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
+    <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <TargetFrameworkProfile>Profile7</TargetFrameworkProfile>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <DocumentationFile>
-    </DocumentationFile>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>none</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
+    <DocumentationFile>bin\Release\OptimizationToolbox.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath, Version=1.0.14.827, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\StarMath.1.0.14.0827\lib\portable-net45+sl5+wp8+win8\StarMath.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Convergence Classes\MaxFnEvalsConvergence.cs" />
-    <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
-    <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
-    <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
-    <Compile Include="LineSearch\FixedOrGoldenSection.cs" />
-    <Compile Include="Objective Function Constraint Classes\candidate.cs" />
-    <Compile Include="Objective Function Constraint Classes\optFunctionData.cs" />
-    <Compile Include="Objective Function Constraint Classes\sameCandidate.cs" />
-    <Compile Include="OptMethods\abstractOptMethod.Evaluation.cs" />
-    <Compile Include="Generator Methods\BitStringNeighborGenerator.cs" />
-    <Compile Include="Generator Methods\RandomNeighborGenerator.cs" />
-    <Compile Include="Objective Function Constraint Classes\Interfaces.cs" />
-    <Compile Include="optimizeSort.cs" />
-    <Compile Include="Generator Methods\abstractGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Generator Methods\BitByteHexFunctions.cs" />
-    <Compile Include="Generator Methods\Genetric Algorithm Generators\GAMutationBitString.cs" />
-    <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverBitString.cs" />
-    <Compile Include="Generator Methods\Genetric Algorithm Generators\GADifferentialEvolutionCrossover.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Generator Methods\LatinHyperCube.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Generator Methods\ParticleSwarm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Generator Methods\ExhaustiveNeighborGenerator.cs" />
-    <Compile Include="Generator Methods\RandomSampling.cs" />
-    <Compile Include="Generator Methods\StochasticNeighborGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OptMethods\NelderMead.cs" />
-    <Compile Include="OptMethods\PowellsOptimization.cs" />
-    <Compile Include="OptMethods\GeneticAlgorithm.cs" />
-    <Compile Include="OptMethods\NewtonMethod.cs" />
-    <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
-    <Compile Include="OptMethods\ImplicitEnumeration.cs" />
-    <Compile Include="Selector Methods\ParetoFunctions.cs" />
-    <Compile Include="Selector Methods\ParetoElitism.cs" />
-    <Compile Include="Selector Methods\SkewboidSelectors.cs" />
-    <Compile Include="Simulated Annealing Scheduling Routines\LundyMees.cs" />
-    <Compile Include="Simulated Annealing Scheduling Routines\SangiovanniVincentelli.cs" />
-    <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />
-    <Compile Include="OptMethods\SimulatedAnnealing.cs" />
-    <Compile Include="OptMethods\ExhaustiveSearch.cs" />
-    <Compile Include="OptMethods\HillClimbing.cs" />
-    <Compile Include="SearchDirection\CyclicCoordinates.cs" />
-    <Compile Include="Selector Methods\abstractSelector.cs" />
-    <Compile Include="Selector Methods\P-norm Proportional Selection.cs" />
-    <Compile Include="Selector Methods\Elitism.cs" />
-    <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
-    <Compile Include="Design Space Description\VariableDescriptor.cs" />
     <Compile Include="Convergence Classes\abstractConvergenceClasses.cs" />
-    <Compile Include="Convergence Classes\MaxTimeConvergence.cs" />
-    <Compile Include="Convergence Classes\DeltaXConvergence.cs" />
-    <Compile Include="Convergence Classes\MaxIterationsConvergence.cs" />
-    <Compile Include="Convergence Classes\MaxAgeConvergence.cs" />
-    <Compile Include="Convergence Classes\DeltaGradFConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaFConvergence.cs" />
+    <Compile Include="Convergence Classes\DeltaGradFConvergence.cs" />
+    <Compile Include="Convergence Classes\DeltaXConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxAgeConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxFnEvalsConvergence.cs" />
+    <Compile Include="Convergence Classes\MaxIterationsConvergence.cs" />
     <Compile Include="Convergence Classes\MaxSpanInPopulationConvergence.cs" />
-    <Compile Include="Enumerators.cs" />
-    <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
+    <Compile Include="Convergence Classes\MaxTimeConvergence.cs" />
+    <Compile Include="Convergence Classes\ToKnownBestFConvergence.cs" />
+    <Compile Include="Convergence Classes\ToKnownBestXConvergence.cs" />
     <Compile Include="Design Space Description\DesignSpaceDescription.cs" />
-    <Compile Include="Objective Function Constraint Classes\lessThanGreaterThanConstant.cs" />
+    <Compile Include="Design Space Description\VariableDescriptor.cs" />
+    <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
+    <Compile Include="Enumerators.cs" />
+    <Compile Include="Generator Methods\abstractGenerator.cs" />
+    <Compile Include="Generator Methods\BitByteHexFunctions.cs" />
+    <Compile Include="Generator Methods\BitStringNeighborGenerator.cs" />
+    <Compile Include="Generator Methods\ExhaustiveNeighborGenerator.cs" />
+    <Compile Include="Generator Methods\Genetric Algorithm Generators\GACrossoverBitString.cs" />
+    <Compile Include="Generator Methods\Genetric Algorithm Generators\GADifferentialEvolutionCrossover.cs" />
+    <Compile Include="Generator Methods\Genetric Algorithm Generators\GAMutationBitString.cs" />
+    <Compile Include="Generator Methods\LatinHyperCube.cs" />
+    <Compile Include="Generator Methods\ParticleSwarm.cs" />
+    <Compile Include="Generator Methods\RandomNeighborGenerator.cs" />
+    <Compile Include="Generator Methods\RandomSampling.cs" />
+    <Compile Include="Generator Methods\StochasticNeighborGenerator.cs" />
+    <Compile Include="Generator Methods\Swarm Methods\ParticleSwarm.cs" />
+    <Compile Include="Generator Methods\Swarm Methods\Particle_MSO.cs" />
+    <Compile Include="Generator Methods\Swarm Methods\Swarm.cs" />
+    <Compile Include="LineSearch\abstractLineSearch.cs" />
     <Compile Include="LineSearch\ArithmeticMean.cs" />
-    <Compile Include="LineSearch\SQPSimpleHalver.cs" />
     <Compile Include="LineSearch\DSCPowell.cs" />
-    <Compile Include="LineSearch\GoldenSection.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="LineSearch\FixedOrGoldenSection.cs" />
+    <Compile Include="LineSearch\GoldenSection.cs" />
+    <Compile Include="LineSearch\SQPSimpleHalver.cs" />
     <Compile Include="Merit Functions\abstractMeritFunction.cs" />
     <Compile Include="Merit Functions\linearExteriorPenalty.cs" />
     <Compile Include="Merit Functions\linearExteriorPenaltyMax.cs" />
     <Compile Include="Merit Functions\linearExteriorPenaltySum.cs" />
     <Compile Include="Merit Functions\squaredExteriorPenalty.cs" />
-    <Compile Include="OptMethods\GradientBasedOptimization.cs" />
+    <Compile Include="Objective Function Constraint Classes\candidate.cs" />
+    <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
+    <Compile Include="Objective Function Constraint Classes\Interfaces.cs" />
+    <Compile Include="Objective Function Constraint Classes\lessThanGreaterThanConstant.cs" />
+    <Compile Include="Objective Function Constraint Classes\optFunctionData.cs" />
+    <Compile Include="Objective Function Constraint Classes\polynomialFunctions.cs" />
+    <Compile Include="Objective Function Constraint Classes\sameCandidate.cs" />
+    <Compile Include="Objective Function Constraint Classes\slackSquaredEqualityFromInequality.cs" />
+    <Compile Include="optimizeSort.cs" />
+    <Compile Include="OptMethods\abstractOptMethod.cs" />
+    <Compile Include="OptMethods\abstractOptMethod.Evaluation.cs" />
+    <Compile Include="OptMethods\ExhaustiveSearch.cs" />
     <Compile Include="OptMethods\GeneralizedReducedGradientActiveSet.cs" />
     <Compile Include="OptMethods\GeneralizedReducedGradientSlack.cs" />
+    <Compile Include="OptMethods\GeneticAlgorithm.cs" />
+    <Compile Include="OptMethods\GradientBasedOptimization.cs" />
+    <Compile Include="OptMethods\HillClimbing.cs" />
+    <Compile Include="OptMethods\ImplicitEnumeration.cs" />
+    <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
+    <Compile Include="OptMethods\NelderMead.cs" />
+    <Compile Include="OptMethods\NewtonMethod.cs" />
+    <Compile Include="OptMethods\PowellsOptimization.cs" />
     <Compile Include="OptMethods\SequentialQuadraticProgramming.cs" />
-    <Compile Include="Objective Function Constraint Classes\polynomialFunctions.cs" />
+    <Compile Include="OptMethods\SimulatedAnnealing.cs" />
     <Compile Include="ProblemDefinition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Selector Methods\KeepSingleBest.cs" />
-    <Compile Include="Selector Methods\MetropolisCriteria.cs" />
     <Compile Include="SearchDirection\abstractSearchDirection.cs" />
     <Compile Include="SearchDirection\BFGSDirection.cs" />
+    <Compile Include="SearchDirection\CyclicCoordinates.cs" />
     <Compile Include="SearchDirection\FletcherReevesDirection.cs" />
-    <Compile Include="LineSearch\abstractLineSearch.cs" />
-    <Compile Include="OptMethods\abstractOptMethod.cs" />
-    <Compile Include="Objective Function Constraint Classes\slackSquaredEqualityFromInequality.cs" />
     <Compile Include="SearchDirection\SteepestDescent.cs" />
     <Compile Include="SearchIO.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
-    <None Include="ClassDiagram2.cd" />
-    <None Include="packages.config" />
+    <Compile Include="Selector Methods\abstractSelector.cs" />
+    <Compile Include="Selector Methods\Elitism.cs" />
+    <Compile Include="Selector Methods\KeepSingleBest.cs" />
+    <Compile Include="Selector Methods\MetropolisCriteria.cs" />
+    <Compile Include="Selector Methods\P-norm Proportional Selection.cs" />
+    <Compile Include="Selector Methods\ParetoElitism.cs" />
+    <Compile Include="Selector Methods\ParetoFunctions.cs" />
+    <Compile Include="Selector Methods\RandomPairwiseCompare.cs" />
+    <Compile Include="Selector Methods\SkewboidSelectors.cs" />
+    <Compile Include="Simulated Annealing Scheduling Routines\abstractSimulatedAnnealingCoolingSchedule.cs" />
+    <Compile Include="Simulated Annealing Scheduling Routines\LundyMees.cs" />
+    <Compile Include="Simulated Annealing Scheduling Routines\SangiovanniVincentelli.cs" />
+    <Compile Include="SortedList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="StarMath.XML" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Reference Include="StarMath">
+      <HintPath>..\packages\StarMath.1.0.14.0827\lib\portable-net45+sl5+wp8+win8\StarMath.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('$(SolutionDir)\.nuget\NuGet.targets')" Text="$([System.String]::Format('$(ErrorText)', '$(SolutionDir)\.nuget\NuGet.targets'))" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

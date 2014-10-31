@@ -1,18 +1,27 @@
-﻿// Type: System.Collections.Generic.SortedList`2
-// Assembly: System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
-// MVID: 67296426-5FEC-4466-BD0C-69BBFD2659CF
-// Assembly location: C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.dll
-
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox PCL Version. It is a modified version from the source found 
+ *     at:
+ *     Type: System.Collections.Generic.SortedList`2
+ *     Assembly: System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089
+ *     MVID: 67296426-5FEC-4466-BD0C-69BBFD2659CF
+ *     Original Assembly location: C:\Windows\Microsoft.NET\Framework\v4.0.30319\System.dll
+ *     
+ *     Since SortedList is not included within the Portable .NET version, we
+ *     are including it here.
+ *************************************************************************/
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime;
-using System.Runtime.InteropServices;
 using System.Threading;
 
 namespace OptimizationToolbox
 {
+
+    /// <summary>
+    /// Represents a collection of key/value pairs that are sorted by key based on the associated <see cref="T:System.Collections.Generic.IComparer`1"/> implementation.
+    /// </summary>
+    /// <typeparam name="TKey">The type of keys in the collection.</typeparam><typeparam name="TValue">The type of values in the collection.</typeparam>
 
     public class SortedList<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IDictionary, ICollection, IEnumerable
     {
@@ -25,7 +34,6 @@ namespace OptimizationToolbox
         private IComparer<TKey> comparer;
         private SortedList<TKey, TValue>.KeyList keyList;
         private SortedList<TKey, TValue>.ValueList valueList;
-
         private object _syncRoot;
         private const int _defaultCapacity = 4;
         private const int MaxArrayLength = 2146435071;
@@ -49,7 +57,7 @@ namespace OptimizationToolbox
                 if (value == this.keys.Length)
                     return;
                 if (value < this._size)
-                    throw new Exception();
+                    throw new ArgumentOutOfRangeException();
                 if (value > 0)
                 {
                     TKey[] keyArray = new TKey[value];
@@ -219,7 +227,7 @@ namespace OptimizationToolbox
                 int index = this.IndexOfKey(key);
                 if (index >= 0)
                     return this.values[index];
-              throw new Exception();
+                throw new Exception();
                 return default(TValue);
             }
             set
@@ -252,8 +260,8 @@ namespace OptimizationToolbox
             set
             {
                 if (!SortedList<TKey, TValue>.IsCompatibleKey(key))
-                    throw new Exception();
-               // ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
+                    throw new ArgumentNullException();
+                throw new Exception();
                 try
                 {
                     TKey index = (TKey)key;
@@ -263,12 +271,12 @@ namespace OptimizationToolbox
                     }
                     catch (InvalidCastException ex)
                     {
-                        throw new Exception();
+                        throw new ArgumentException();
                     }
                 }
                 catch (InvalidCastException ex)
                 {
-                    throw new Exception();
+                    throw new ArgumentException();
                 }
             }
         }
@@ -295,7 +303,7 @@ namespace OptimizationToolbox
         public SortedList(int capacity)
         {
             if (capacity < 0)
-              throw new ArgumentOutOfRangeException();
+                throw new ArgumentOutOfRangeException();
             this.keys = new TKey[capacity];
             this.values = new TValue[capacity];
             this.comparer = (IComparer<TKey>)Comparer<TKey>.Default;
@@ -327,7 +335,6 @@ namespace OptimizationToolbox
         /// Initializes a new instance of the <see cref="T:System.Collections.Generic.SortedList`2"/> class that contains elements copied from the specified <see cref="T:System.Collections.Generic.IDictionary`2"/>, has sufficient capacity to accommodate the number of elements copied, and uses the default <see cref="T:System.Collections.Generic.IComparer`1"/>.
         /// </summary>
         /// <param name="dictionary">The <see cref="T:System.Collections.Generic.IDictionary`2"/> whose elements are copied to the new <see cref="T:System.Collections.Generic.SortedList`2"/>.</param><exception cref="T:System.ArgumentNullException"><paramref name="dictionary"/> is null.</exception><exception cref="T:System.ArgumentException"><paramref name="dictionary"/> contains one or more duplicate keys.</exception>
-
         public SortedList(IDictionary<TKey, TValue> dictionary)
             : this(dictionary, (IComparer<TKey>)null)
         {
@@ -341,10 +348,10 @@ namespace OptimizationToolbox
             : this(dictionary != null ? dictionary.Count : 0, comparer)
         {
             if (dictionary == null)
-                throw new Exception();
+                throw new ArgumentNullException();
             dictionary.Keys.CopyTo(this.keys, 0);
             dictionary.Values.CopyTo(this.values, 0);
-            //Array.Sort<TKey, TValue>(this.keys, this.values, comparer);
+            // Array.Sort<TKey, TValue>(this.keys, this.values, comparer);
             this._size = dictionary.Count;
         }
 
@@ -355,10 +362,10 @@ namespace OptimizationToolbox
         public void Add(TKey key, TValue value)
         {
             if ((object)key == null)
-               throw new ArgumentNullException();
+                throw new ArgumentNullException();
             int num = Array.BinarySearch<TKey>(this.keys, 0, this._size, key, this.comparer);
             if (num >= 0)
-           throw new ArgumentException();
+                throw new ArgumentException();
             this.Insert(~num, key, value);
         }
 
@@ -385,8 +392,8 @@ namespace OptimizationToolbox
         void IDictionary.Add(object key, object value)
         {
             if (key == null)
-               throw new ArgumentException();
-            //ThrowHelper.IfNullAndNullsAreIllegalThenThrow<TValue>(value, ExceptionArgument.value);
+                throw new ArgumentNullException();
+            throw new Exception();
             try
             {
                 TKey key1 = (TKey)key;
@@ -396,12 +403,12 @@ namespace OptimizationToolbox
                 }
                 catch (InvalidCastException ex)
                 {
-                throw new Exception();
+                    throw new ArgumentException();
                 }
             }
             catch (InvalidCastException ex)
             {
-            throw new Exception();
+                throw new ArgumentException();
             }
         }
 
@@ -471,7 +478,7 @@ namespace OptimizationToolbox
             if (arrayIndex < 0 || arrayIndex > array.Length)
                 throw new ArgumentOutOfRangeException();
             if (array.Length - arrayIndex < this.Count)
-            throw new ArgumentException();
+                throw new ArgumentException();
             for (int index = 0; index < this.Count; ++index)
             {
                 KeyValuePair<TKey, TValue> keyValuePair = new KeyValuePair<TKey, TValue>(this.keys[index], this.values[index]);
@@ -509,7 +516,6 @@ namespace OptimizationToolbox
                 }
                 catch (ArrayTypeMismatchException ex)
                 {
-
                     throw new ArgumentException();
                 }
             }
@@ -527,8 +533,8 @@ namespace OptimizationToolbox
 
         private TValue GetByIndex(int index)
         {
-            if (index < 0 || index >= this._size)   
-                throw new ArgumentOutOfRangeException(); 
+            if (index < 0 || index >= this._size)
+                throw new ArgumentOutOfRangeException();
             return this.values[index];
         }
 
@@ -563,7 +569,7 @@ namespace OptimizationToolbox
         {
             if (index < 0 || index >= this._size)
                 throw new ArgumentOutOfRangeException();
-                return this.keys[index];
+            return this.keys[index];
         }
 
         /// <summary>
@@ -577,7 +583,7 @@ namespace OptimizationToolbox
         public int IndexOfKey(TKey key)
         {
             if ((object)key == null)
-                throw new Exception();
+                throw new ArgumentNullException();
             int num = Array.BinarySearch<TKey>(this.keys, 0, this._size, key, this.comparer);
             if (num < 0)
                 return -1;
@@ -643,7 +649,7 @@ namespace OptimizationToolbox
         public void RemoveAt(int index)
         {
             if (index < 0 || index >= this._size)
-                throw new Exception();
+                throw new ArgumentOutOfRangeException();
             --this._size;
             if (index < this._size)
             {
@@ -691,7 +697,7 @@ namespace OptimizationToolbox
         private static bool IsCompatibleKey(object key)
         {
             if (key == null)
-                throw new Exception();
+                throw new ArgumentNullException();
             return key is TKey;
         }
 
@@ -711,7 +717,7 @@ namespace OptimizationToolbox
                 get
                 {
                     if (this.index == 0 || this.index == this._sortedList.Count + 1)
-                        throw new Exception();
+                        throw new InvalidOperationException();
                     return (object)this.key;
                 }
             }
@@ -721,7 +727,7 @@ namespace OptimizationToolbox
                 get
                 {
                     if (this.index == 0 || this.index == this._sortedList.Count + 1)
-                        throw new Exception();
+                        throw new InvalidOperationException();
                     return new DictionaryEntry((object)this.key, (object)this.value);
                 }
             }
@@ -739,7 +745,7 @@ namespace OptimizationToolbox
                 get
                 {
                     if (this.index == 0 || this.index == this._sortedList.Count + 1)
-                        throw new Exception();
+                        throw new InvalidOperationException();
                     if (this.getEnumeratorRetType == 2)
                         return (object)new DictionaryEntry((object)this.key, (object)this.value);
                     else
@@ -752,7 +758,7 @@ namespace OptimizationToolbox
                 get
                 {
                     if (this.index == 0 || this.index == this._sortedList.Count + 1)
-                        throw new Exception();
+                        throw new InvalidOperationException();
                     return (object)this.value;
                 }
             }
@@ -777,7 +783,7 @@ namespace OptimizationToolbox
             public bool MoveNext()
             {
                 if (this.version != this._sortedList.version)
-                    throw new Exception();
+                    throw new InvalidOperationException();
                 if ((uint)this.index < (uint)this._sortedList.Count)
                 {
                     this.key = this._sortedList.keys[this.index];
@@ -797,7 +803,7 @@ namespace OptimizationToolbox
             void IEnumerator.Reset()
             {
                 if (this.version != this._sortedList.version)
-                    throw new Exception();
+                    throw new InvalidOperationException();
                 this.index = 0;
                 this.key = default(TKey);
                 this.value = default(TValue);
@@ -824,7 +830,7 @@ namespace OptimizationToolbox
                 get
                 {
                     if (this.index == 0 || this.index == this._sortedList.Count + 1)
-                        throw new Exception();
+                        throw new InvalidOperationException();
                     return (object)this.currentKey;
                 }
             }
@@ -844,7 +850,7 @@ namespace OptimizationToolbox
             public bool MoveNext()
             {
                 if (this.version != this._sortedList.version)
-                    throw new Exception();
+                    throw new InvalidOperationException();
                 if ((uint)this.index < (uint)this._sortedList.Count)
                 {
                     this.currentKey = this._sortedList.keys[this.index];
@@ -862,7 +868,7 @@ namespace OptimizationToolbox
             void IEnumerator.Reset()
             {
                 if (this.version != this._sortedList.version)
-                    throw new Exception();
+                    throw new InvalidOperationException();
                 this.index = 0;
                 this.currentKey = default(TKey);
             }
@@ -925,7 +931,8 @@ namespace OptimizationToolbox
 
             void IEnumerator.Reset()
             {
-                if (this.version != this._sortedList.version) throw new InvalidOperationException();
+                if (this.version != this._sortedList.version)
+                    throw new InvalidOperationException();
                 this.index = 0;
                 this.currentValue = default(TValue);
             }
@@ -934,11 +941,6 @@ namespace OptimizationToolbox
         private sealed class KeyList : IList<TKey>, ICollection<TKey>, IEnumerable<TKey>, ICollection, IEnumerable
         {
             private SortedList<TKey, TValue> _dict;
-
-            public bool Remove(TKey item)
-            {
-                throw new NotImplementedException();
-            }
 
             public int Count
             {
@@ -972,22 +974,15 @@ namespace OptimizationToolbox
                 }
             }
 
-            public void RemoveAt(int index)
-            {
-                throw new NotImplementedException();
-            }
-
-            TKey IList<TKey>.this[int index]
-            {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
-            }
-
             public TKey this[int index]
             {
                 get
                 {
                     return this._dict.GetKey(index);
+                }
+                set
+                {
+                    throw new NotSupportedException();
                 }
             }
 
@@ -996,15 +991,14 @@ namespace OptimizationToolbox
                 this._dict = dictionary;
             }
 
-
-            public void Add(TKey item)
+            public void Add(TKey key)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void Clear()
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public bool Contains(TKey key)
@@ -1022,7 +1016,7 @@ namespace OptimizationToolbox
                 if (array != null)
                 {
                     if (array.Rank != 1)
-                        throw new Exception();
+                        throw new ArgumentException();
                 }
                 try
                 {
@@ -1030,7 +1024,7 @@ namespace OptimizationToolbox
                 }
                 catch (ArrayTypeMismatchException ex)
                 {
-                    throw new Exception();
+                    throw new ArgumentException();
                 }
             }
 
@@ -1052,7 +1046,7 @@ namespace OptimizationToolbox
             public int IndexOf(TKey key)
             {
                 if ((object)key == null)
-                    throw new Exception();
+                    throw new ArgumentNullException();
                 int num = Array.BinarySearch<TKey>(this._dict.keys, 0, this._dict.Count, key, this._dict.comparer);
                 if (num >= 0)
                     return num;
@@ -1060,7 +1054,18 @@ namespace OptimizationToolbox
                     return -1;
             }
 
+            public bool Remove(TKey key)
+            {
+                throw new NotSupportedException();
+                return false;
+            }
+
+            public void RemoveAt(int index)
+            {
+                throw new NotSupportedException();
+            }
         }
+
         private sealed class ValueList : IList<TValue>, ICollection<TValue>, IEnumerable<TValue>, ICollection, IEnumerable
         {
             private SortedList<TKey, TValue> _dict;
@@ -1103,6 +1108,10 @@ namespace OptimizationToolbox
                 {
                     return this._dict.GetByIndex(index);
                 }
+                set
+                {
+                    throw new NotSupportedException();
+                }
             }
 
             internal ValueList(SortedList<TKey, TValue> dictionary)
@@ -1110,15 +1119,14 @@ namespace OptimizationToolbox
                 this._dict = dictionary;
             }
 
-
-            public void Add(TValue item)
+            public void Add(TValue key)
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public void Clear()
             {
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             }
 
             public bool Contains(TValue value)
@@ -1136,7 +1144,7 @@ namespace OptimizationToolbox
                 if (array != null)
                 {
                     if (array.Rank != 1)
-                        throw new Exception();
+                        throw new ArgumentException();
                 }
                 try
                 {
@@ -1144,7 +1152,7 @@ namespace OptimizationToolbox
                 }
                 catch (ArrayTypeMismatchException ex)
                 {
-                    throw new Exception();
+                    throw new ArgumentException();
                 }
             }
 
@@ -1176,14 +1184,10 @@ namespace OptimizationToolbox
 
             public void RemoveAt(int index)
             {
-                throw new NotImplementedException();
-            }
-
-            TValue IList<TValue>.this[int index]
-            {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
+                throw new NotSupportedException();
             }
         }
     }
 }
+
+

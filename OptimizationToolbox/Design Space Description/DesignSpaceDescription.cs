@@ -201,7 +201,9 @@ namespace OptimizationToolbox
             var changes = new List<int[]>();
             foreach (var baseVector in lastChanges)
             {
-                var firstEffectiveIndex = Array.FindLastIndex(baseVector, (a => (a != 0)));
+                var firstEffectiveIndex = baseVector.GetLength(0)-1;
+                while (firstEffectiveIndex >= 0 && baseVector[firstEffectiveIndex] == 0) firstEffectiveIndex--;
+
                 foreach (var i in DiscreteVarIndices)
                     if (i > firstEffectiveIndex && baseVector[i] == 0)
                     {

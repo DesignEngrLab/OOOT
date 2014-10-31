@@ -28,11 +28,11 @@ namespace Example1_Simple_One_Function
 {
     class Program
     {
+        
         private static void Main()
         {
             SearchIO.verbosity = 4;
-
-
+                      
             /* first a new optimization method in the form of Nelder-Mead method
              * (http://comjnl.oxfordjournals.org/content/7/4/308.abstract). This 
              * is the method also at the heart of MatLab's fsolve function. It's a
