@@ -1500,17 +1500,19 @@
             </summary>
             <param name="function">The function.</param>
         </member>
-        <member name="M:OptimizationToolbox.ProblemDefinition.saveProbToXml(System.String)">
+        <member name="M:OptimizationToolbox.ProblemDefinition.SaveProbToXml(System.IO.Stream)">
             <summary>
             Saves the problem definition to XML.
             </summary>
+            <param name="stream">The stream.</param>
             <param name="filename">The filename.</param>
         </member>
-        <member name="M:OptimizationToolbox.ProblemDefinition.openprobFromXml(System.String)">
+        <member name="M:OptimizationToolbox.ProblemDefinition.OpenprobFromXml(System.IO.Stream)">
             <summary>
             Open the problem definition from XML.
             </summary>
-            <param name="filename">The filename.</param>
+            <param name="stream">The stream.</param>
+            <param name="name">The filename.</param>
             <returns></returns>
         </member>
         <member name="P:OptimizationToolbox.ProblemDefinition.name">

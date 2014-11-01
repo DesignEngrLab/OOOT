@@ -83,12 +83,13 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OptimizationToolbox, Version=1.0.14.1030, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\OOOT.1.0.14.1030\lib\OptimizationToolbox.dll</HintPath>
+    <Reference Include="OptimizationToolbox">
+      <HintPath>..\..\packages\OOOT.1.0.14.1031\lib\OptimizationToolbox.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="StarMath">
       <HintPath>..\..\packages\StarMath.1.0.14.0827\lib\portable-net45+sl5+wp8+win8\StarMath.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -101,9 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="OptimizationToolbox.XML" />
