@@ -21,6 +21,7 @@
  *************************************************************************/
 using System;
 using System.Diagnostics;
+using System.IO;
 using OptimizationToolbox;
 using StarMathLib;
 
@@ -37,12 +38,15 @@ namespace Example3_Using_XML_and_Comparison
              * and solved as opposed to defining all the details in an imperative
              * (code line by code line) way. In the first function, the xml file
              * name "test1.xml" is created. */
-            // makeAndSaveProblemDefinition();
+            makeAndSaveProblemDefinition();
 
             /* now we create a series of different optimization methods and test
              * them on the problem. The problem is now opened from the file and
              * the details are stored in an object of class "Problem Definition".*/
-            ProblemDefinition probTest1 = ProblemDefinition.openprobFromXml(filename);
+            var stream = new FileStream(filename, FileMode.Open);
+
+
+            ProblemDefinition probTest1 = ProblemDefinition.OpenprobFromXml(stream);
             abstractOptMethod opty;
 
 
@@ -146,7 +150,7 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Exhaustive Search ***********************/
-           // SearchIO.output("******************Exhaustive Search ***********************");
+            // SearchIO.output("******************Exhaustive Search ***********************");
             //opty = new ExhaustiveSearch(probTest1.SpaceDescriptor, optimize.minimize);
             //opty.Add(probTest1);
             /* No convergence criteria is needed as the process concludes when all
@@ -216,8 +220,8 @@ namespace Example3_Using_XML_and_Comparison
             pd.Add(g1);
 
             pd.Add(new double[] { 1500.0, 700.0 });
-
-            pd.saveProbToXml(filename);
+            var stream = new FileStream(filename, FileMode.Create);
+            pd.SaveProbToXml(stream);
         }
     }
 }

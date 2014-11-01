@@ -23,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -158,34 +159,32 @@ namespace OptimizationToolbox
         /// <summary>
         /// Saves the problem definition to XML.
         /// </summary>
+        /// <param name="stream">The stream.</param>
         /// <param name="filename">The filename.</param>
-        public void saveProbToXml(string filename)
+        public void SaveProbToXml(Stream stream)
         {
-#if FullDOTNET
-            var probWriter = new StreamWriter(filename);
+            var probWriter = new StreamWriter(stream);
             var probSerializer = new XmlSerializer(typeof(ProblemDefinition));
             probSerializer.Serialize(probWriter, this);
-            probWriter.Close();
-#else
-            throw new NotImplementedException();
-#endif
+            probWriter.Dispose();
         }
 
 
         /// <summary>
         /// Open the problem definition from XML.
         /// </summary>
-        /// <param name="filename">The filename.</param>
+        /// <param name="stream">The stream.</param>
+        /// <param name="name">The filename.</param>
         /// <returns></returns>
-        public static ProblemDefinition openprobFromXml(string filename)
-        {  
-#if FullDOTNET
-            var probReader = new StreamReader(filename);
+        public static ProblemDefinition OpenprobFromXml(Stream stream)
+        {
+            var probReader = new StreamReader(stream);
             var probDeserializer = new XmlSerializer(typeof(ProblemDefinition));
             var newDesignprob = (ProblemDefinition)probDeserializer.Deserialize(probReader);
-            SearchIO.output(Path.GetFileName(filename) + " successfully loaded.");
+            string name = getNameFromStream(stream);
+            SearchIO.output(name + " successfully loaded.");
             if (newDesignprob.name == null)
-                newDesignprob.name = Path.GetFileNameWithoutExtension(filename);
+                newDesignprob.name = name;
             foreach (var item in newDesignprob.FunctionList.Items)
                 if (item is IObjectiveFunction)
                     newDesignprob.f.Add((IObjectiveFunction)item);
@@ -194,11 +193,20 @@ namespace OptimizationToolbox
                 else if (item is IEquality)
                     newDesignprob.h.Add((IEquality)item);
             newDesignprob.FunctionList = new ListforIOptFunctions(newDesignprob.f, newDesignprob.g, newDesignprob.h);
-            probReader.Close();
-            return newDesignprob;   
-#else
-            throw new NotImplementedException();
-#endif
+            probReader.Dispose();
+            return newDesignprob;
+        }
+
+        private static string getNameFromStream(Stream stream)
+        {
+            var type = stream.GetType();
+            var namePropertyInfo = type.GetProperty("Name");
+            var name = (string)namePropertyInfo.GetValue(stream, null);
+            var lastDirectorySeparator = name.LastIndexOf("\\");
+            var fileExtensionIndex = name.LastIndexOf(".");
+            return (lastDirectorySeparator < fileExtensionIndex)
+                ? name.Substring(lastDirectorySeparator + 1, fileExtensionIndex - lastDirectorySeparator - 1)
+                : name.Substring(lastDirectorySeparator + 1, name.Length - lastDirectorySeparator - 1);
         }
     }
 
@@ -263,7 +271,7 @@ namespace OptimizationToolbox
                 //NOTE: Assuming this class is sharing the same namespace. If not,
                 // place your own logic here to reconstruct full class name
                 var type = Type.GetType(GetType().Namespace + "." + subReader.Name);
-                if (type != null) 
+                if (type != null)
                     Items.Add((IOptFunction)new XmlSerializer(type).Deserialize(subReader));
             }
         }
