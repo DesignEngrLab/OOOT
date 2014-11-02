@@ -22,8 +22,7 @@ namespace OptimizationToolbox
     /// Represents a collection of key/value pairs that are sorted by key based on the associated <see cref="T:System.Collections.Generic.IComparer`1"/> implementation.
     /// </summary>
     /// <typeparam name="TKey">The type of keys in the collection.</typeparam><typeparam name="TValue">The type of values in the collection.</typeparam>
-
-    public class SortedList<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IDictionary, ICollection, IEnumerable
+    internal class SortedList<TKey, TValue> : IDictionary<TKey, TValue>, ICollection<KeyValuePair<TKey, TValue>>, IEnumerable<KeyValuePair<TKey, TValue>>, IDictionary, ICollection, IEnumerable
     {
         private static TKey[] emptyKeys = new TKey[0];
         private static TValue[] emptyValues = new TValue[0];
