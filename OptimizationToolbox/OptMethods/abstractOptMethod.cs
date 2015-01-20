@@ -33,12 +33,9 @@ namespace OptimizationToolbox
     {
         #region Fields
 
-        private const double sameTolerance = 0.00001; 
-        private const double defaultFiniteDifferenceStepSize = 0.1;
-        private const differentiate defaultFiniteDifferenceMode = differentiate.Central2;
 
         /* I usually object to such simple names for variables, but this 
-         * follows the convention used in my course - ME392C at UT Austin. */
+         * follows the convention used in my courses */
         /// <summary>
         /// Gets or sets the number of decision variables.
         /// </summary>
@@ -231,7 +228,7 @@ namespace OptimizationToolbox
             {
                 functionData.Add((IOptFunction)function,
                     new optFunctionData((IOptFunction)function, sameCandComparer,
-                        defaultFiniteDifferenceStepSize, defaultFiniteDifferenceMode));
+                        Parameters.DefaultFiniteDifferenceStepSize, Parameters.DefaultFiniteDifferenceMode));
                 if (function is IInequality)
                     g.Add((IInequality)function);
                 else if (function is IEquality)

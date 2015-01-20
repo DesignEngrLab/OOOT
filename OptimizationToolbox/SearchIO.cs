@@ -27,7 +27,6 @@ namespace OptimizationToolbox
     public static class SearchIO
     {
 
-        public static int verbosity { get; set; }
 
 
         #region Outputting to sidebar Console
@@ -58,7 +57,7 @@ namespace OptimizationToolbox
         /// <param name="verbosityLimit">The verbosity limit.</param>
         public static Boolean output(object message, int verbosityLimit = 0)
         {
-            if ((verbosityLimit > verbosity)
+            if ((verbosityLimit > (int)Parameters.Verbosity)
                 || (string.IsNullOrEmpty(message.ToString())))
                 return false;
             Debug.WriteLine(message);
@@ -71,10 +70,10 @@ namespace OptimizationToolbox
         /// <returns></returns>
         public static Boolean output(params object[] list)
         {
-            if ((verbosity >= list.Length)
-                || (string.IsNullOrEmpty(list[verbosity].ToString())))
+            if (((int)Parameters.Verbosity >= list.Length)
+                || (string.IsNullOrEmpty(list[(int)Parameters.Verbosity].ToString())))
                 return false;
-            Debug.WriteLine(list[verbosity]);
+            Debug.WriteLine(list[(int)Parameters.Verbosity]);
             return true;
         }
 

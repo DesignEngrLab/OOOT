@@ -72,7 +72,7 @@ namespace Example5_MOGA
             /* for output statements (points in the code where the SearchIO.output(...) function is called, the
              * verbosity is set to 4 which is high. Typical values are between 0 and 4 but higher values (>4)
              * may be used, but this will likely cut into the speed of the search process. */
-            SearchIO.verbosity = 4;
+            Parameters.Verbosity = VerbosityLevels.AboveNormal;
 
             /* everything is set, we can now run the algorithm and retrieve the f* and x* values. */
             double[] xOptimal;

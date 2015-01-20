@@ -25,9 +25,6 @@ namespace OptimizationToolbox
 {
     public class GoldenSection : abstractLineSearch
     {
-        private const double golden62 = 0.61803398874989484820458683436564;
-        private const double golden38 = 1 - golden62;
-
         #region Constructors
 
         /// <summary>
@@ -48,8 +45,8 @@ namespace OptimizationToolbox
         {
             var alphaLow = 0.0;
             var alphaHigh = stepSize;
-            var alpha1 = golden38 * alphaHigh;
-            var alpha2 = golden62 * alphaHigh;
+            var alpha1 = Parameters.Golden38 * alphaHigh;
+            var alpha2 = Parameters.Golden62 * alphaHigh;
 
             var fLow = calcF(x, alphaLow, dir);
             var fHigh = calcF(x, alphaHigh, dir);
@@ -58,7 +55,7 @@ namespace OptimizationToolbox
 
             #region Setting up Bracket
 
-            /* not sure this has been published before, but borrowing the concept from DSC, what the
+            /* borrowing the concept from DSC, what the
              * following while-loop is doing is to check if the three points are decreasing, if so
              * we define a new alphaHigh - in the GS-proportion so that the old alpahHigh can become
              * the new alpha2, the old alpha2 can become a new alpha1. In this way, can define a 
@@ -69,7 +66,7 @@ namespace OptimizationToolbox
                 f1 = f2;
                 alpha2 = alphaHigh;
                 f2 = fHigh;
-                alphaHigh /= golden62;
+                alphaHigh /= Parameters.Golden62;
                 fHigh = calcF(x, alphaHigh, dir);
             }
             if (double.IsNaN(f1)) f1 = calcF(x, alpha1, dir);
@@ -90,7 +87,7 @@ namespace OptimizationToolbox
                     alphaHigh = alpha2;
                     alpha2 = alpha1;
                     f2 = f1;
-                    alpha1 = golden38 * (alphaHigh - alphaLow) + alphaLow;
+                    alpha1 =Parameters.Golden38 * (alphaHigh - alphaLow) + alphaLow;
                     f1 = calcF(x, alpha1, dir);
                     // reduce the upper bounds, alphaLow does not
                     // change in this case.
@@ -100,7 +97,7 @@ namespace OptimizationToolbox
                     alphaLow = alpha1;
                     alpha1 = alpha2;
                     f1 = f2;
-                    alpha2 = golden62 * (alphaHigh - alphaLow) + alphaLow;
+                    alpha2 = Parameters.Golden62 * (alphaHigh - alphaLow) + alphaLow;
                     f2 = calcF(x, alpha2, dir);
                 }
             }

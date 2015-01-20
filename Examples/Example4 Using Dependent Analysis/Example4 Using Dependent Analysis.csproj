@@ -83,13 +83,8 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="OptimizationToolbox">
-      <HintPath>..\..\packages\OOOT.1.0.14.1031\lib\OptimizationToolbox.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="StarMath">
-      <HintPath>..\..\packages\StarMath.1.0.14.0827\lib\portable-net45+sl5+wp8+win8\StarMath.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\..\packages\StarMath.2.0.15.0117\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
@@ -111,7 +106,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="OptimizationToolbox.XML" />
+    <ProjectReference Include="..\..\OptimizationToolbox\OptimizationToolbox.csproj">
+      <Project>{a865cef9-f16b-4d4a-a984-9934f87cf78d}</Project>
+      <Name>OptimizationToolbox</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="StarMath.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

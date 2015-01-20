@@ -27,7 +27,7 @@ namespace OptimizationToolbox
 {
     public class StochasticNeighborGenerator : abstractGenerator
     {
-        private const double minToMaxRatio = 0.05;
+        public static double MinToMaxRatio = 0.05;
         private readonly int[][] changeVectors;
         private readonly optimize direction;
         private readonly Random r;
@@ -83,7 +83,7 @@ namespace OptimizationToolbox
                     if (performance[changes[i]] != 0)
                         result[i] = performance[changes[i]] / population[changes[i]];
                     else result[i] = 0;
-                var minP = minToMaxRatio * result.Max();
+                var minP = MinToMaxRatio * result.Max();
                 for (var i = 0; i < result.GetLength(0); i++)
                     if (result[i] < minP) result[i] = minP;
             }

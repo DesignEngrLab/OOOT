@@ -13,7 +13,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <TargetFrameworkProfile>Profile344</TargetFrameworkProfile>
+    <TargetFrameworkProfile>Profile158</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
@@ -41,6 +41,7 @@
     <Compile Include="Convergence Classes\abstractConvergenceClasses.cs" />
     <Compile Include="Convergence Classes\DeltaFConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaGradFConvergence.cs" />
+    <Compile Include="Convergence Classes\DirectSearchStepTooSmallConvergence.cs" />
     <Compile Include="Convergence Classes\DeltaXConvergence.cs" />
     <Compile Include="Convergence Classes\MaxAgeConvergence.cs" />
     <Compile Include="Convergence Classes\MaxFnEvalsConvergence.cs" />
@@ -52,6 +53,8 @@
     <Compile Include="Design Space Description\DesignSpaceDescription.cs" />
     <Compile Include="Design Space Description\VariableDescriptor.cs" />
     <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
+    <Compile Include="OptMethods\HookeAndJeeves.cs" />
+    <Compile Include="Parameters.cs" />
     <Compile Include="Enumerators.cs" />
     <Compile Include="Generator Methods\abstractGenerator.cs" />
     <Compile Include="Generator Methods\BitByteHexFunctions.cs" />
@@ -98,6 +101,7 @@
     <Compile Include="OptMethods\HillClimbing.cs" />
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
     <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />
+    <Compile Include="OptMethods\Rosenbrock.cs" />
     <Compile Include="OptMethods\NelderMead.cs" />
     <Compile Include="OptMethods\NewtonMethod.cs" />
     <Compile Include="OptMethods\PowellsOptimization.cs" />
@@ -130,14 +134,11 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="StarMath">
-      <HintPath>..\packages\StarMath.1.0.14.0827\lib\portable-net45+sl5+wp8+win8\StarMath.dll</HintPath>
-      <Private>True</Private>
+      <HintPath>..\packages\StarMath.2.0.15.0117\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

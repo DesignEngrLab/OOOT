@@ -27,7 +27,7 @@ namespace OptimizationToolbox
 {
     public class RandomSampling : SamplingGenerator
     {
-        private const double defaultRealBound = 10000;
+        public static double DefaultRealBound = 10000;
         private readonly Random rnd;
 
         public RandomSampling(DesignSpaceDescription discreteSpaceDescriptor)
@@ -64,9 +64,9 @@ namespace OptimizationToolbox
                 else
                 {
                     var range = discreteSpaceDescriptor[j].UpperBound - discreteSpaceDescriptor[j].LowerBound;
-                    if (double.IsInfinity(range)) range = 2 * defaultRealBound;
+                    if (double.IsInfinity(range)) range = 2 * DefaultRealBound;
                     var lb = discreteSpaceDescriptor[j].LowerBound;
-                    if (double.IsInfinity(lb)) lb = -defaultRealBound;
+                    if (double.IsInfinity(lb)) lb = -DefaultRealBound;
                     x[j] = range * rnd.NextDouble() + lb;
                 }
             return x;

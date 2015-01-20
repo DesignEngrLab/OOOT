@@ -25,7 +25,7 @@ namespace OptimizationToolbox
 {
     public class ExhaustiveSearch : abstractOptMethod
     {
-        private const long timePreditionIndex = 1000;
+        public static int timePreditionIndex = 1000;
 
         #region Constructor
 

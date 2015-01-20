@@ -45,7 +45,7 @@ namespace OptimizationToolbox
         public List<IInequality> g { get; private set; }
         internal List<IConstraint> active { get; private set; }
         private readonly Dictionary<IOptFunction, optFunctionData> functionData;
-        private readonly sameCandidate sameCandComparer = new sameCandidate(sameTolerance);
+        private readonly sameCandidate sameCandComparer = new sameCandidate(Parameters.ToleranceForSame);
 
         internal IDependentAnalysis dependentAnalysis { get; private set; }
         private double[] lastDependentAnalysis;
@@ -75,18 +75,22 @@ namespace OptimizationToolbox
         internal double calculate(IOptFunction function, double[] point)
         {
             double fValue;
-            //double[] pointClone = (double[])point.Clone();
-            //if (functionData[function].TryGetValue(pointClone, out fValue))
-            //    return fValue;
-
+            var pointClone = (double[])point.Clone();
+            SearchIO.output("evaluating x =" + point.MakePrintString(), 4);
+            if (functionData[function].TryGetValue(pointClone, out fValue))
+            {
+                SearchIO.output("f =" + fValue + " (from store).", 4);
+                return fValue;
+            }
             calc_dependent_Analysis(point);
             /**************************************************/
             /*** This is the only function that should call ***/
             /**********IOptFunction.calculate(x)***************/
             fValue = function.calculate(point);
             /**************************************************/
-            //functionData[function].Add(point, fValue);
-            //functionData[function].numEvals++;
+            functionData[function].Add(pointClone, fValue);
+            functionData[function].numEvals++;
+            SearchIO.output("f =" + fValue + " (f'n eval #" + numEvals + ")", 4);
             return fValue;
         }
 

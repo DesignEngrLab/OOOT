@@ -19,7 +19,9 @@ namespace Example2_Genetic_Algorithm
         }
         static void Main()
         {
-            SearchIO.verbosity = 4;
+            Parameters.Verbosity = VerbosityLevels.AboveNormal;
+            // this next line is to set the Debug statements from OOOT to the Console.
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
             /* first a new optimization method in the form of a genetic algorithm is created. */
             var optMethod = new GeneticAlgorithm(100);
             /* then an objective function and constraints are added. Since these inherit from
@@ -77,7 +79,9 @@ namespace Example2_Genetic_Algorithm
             /* for output statements (points in the code where the SearchIO.output(...) function is called, the
              * verbosity is set to 4 which is high. Typical values are between 0 and 4 but higher values (>4)
              * may be used, but this will likely cut into the speed of the search process. */
-            SearchIO.verbosity = 4;
+            Parameters.Verbosity = VerbosityLevels.AboveNormal;
+            // this next line is to set the Debug statements from OOOT to the Console.
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
             var timer = Stopwatch.StartNew();
             /* everything is set, we can now run the algorithm and retrieve the f* and x* values. */

@@ -21,18 +21,21 @@
  *************************************************************************/
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using OptimizationToolbox;
 using StarMathLib;
+using tester;
 
 namespace Example1_Simple_One_Function
 {
     class Program
     {
-        
+
         private static void Main()
         {
-            SearchIO.verbosity = 4;
-                      
+            Parameters.Verbosity = VerbosityLevels.AboveNormal;
+            // this next line is to set the Debug statements from OOOT to the Console.
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
             /* first a new optimization method in the form of Nelder-Mead method
              * (http://comjnl.oxfordjournals.org/content/7/4/308.abstract). This 
              * is the method also at the heart of MatLab's fsolve function. It's a
@@ -40,7 +43,9 @@ namespace Example1_Simple_One_Function
              * problems with no constraints (if constraints are used, you will need
              * to specify a merit/penalty function. */
             //var optMethod = new NelderMead();
-            var optMethod = new PowellsOptimization();
+            //var optMethod = new PowellsOptimization();
+            var optMethod = new HookeAndJeeves(1,0.5, 1, 1e-10);
+            //var optMethod = new Rosenbrock(3, -0.5, 1, 1e-10);
             optMethod.Add(new DSCPowell(0.01, 0.1, 50));
             /* The objective function is Rosenbrock's banana function
              * (http://en.wikipedia.org/wiki/Rosenbrock_function). 
@@ -55,26 +60,28 @@ namespace Example1_Simple_One_Function
              * for Rosenbrock's shown at the top of the wikipedia page must be
              * broken down into individual terms like that shown below. */
             // optMethod.Add(new efficiencyMeasurement());
-            optMethod.Add(new polynomialObjFn
-                              {
-                                  Terms = new List<string>
-                {
-                    "100*x1^4",
-                    "-200*x1^2*x2",
-                    "x1^2",
-                    "-2*x1",
-                    "100*x2^2",
-                    "1",
-                }
-                              });
+            optMethod.Add(new BragasFruitTruck());
+            //optMethod.Add(new polynomialObjFn
+            //                  {
+            //                      Terms = new List<string>
+            //    {
+            //        "100*x1^4",
+            //        "-200*x1^2*x2",
+            //        "x1^2",
+            //        "-2*x1",
+            //        "100*x2^2",
+            //        "1",
+            //    }
+            //                  });
             /* At least one convergence method is required for NelderMead.
              * Since we know the optimal is 0 (@ {1, 1}) we can use the 
              * "ToKnownBestFConvergence" with a tolerance of 0.0001. */
-            optMethod.Add(new ToKnownBestFConvergence(0, 0.0001));
+            //optMethod.Add(new ToKnownBestFConvergence(0, 0.0001));
 
+              optMethod.Add(new ToKnownBestFConvergence(0, 1076.4951108)); 
+            //optMethod.Add(new DeltaXConvergence(1e-6));
             /* Let us start the search from a specific point. */
-            //double[] xInit = new[] { 100.0, 100 };//,100};
-            double[] xInit = new[] { 5.0, 50.0 };
+            double[] xInit = new[] { 1.0, 5 };//,100};
             double[] xStar;
 
             /* the next line is where the optimization actually occurs. 
@@ -91,7 +98,7 @@ namespace Example1_Simple_One_Function
              * we can probe it following the run to get at important data like how the 
              * process converged. */
             Console.WriteLine("Convergence Declared by " + optMethod.ConvergenceDeclaredByTypeString);
-            Console.WriteLine("X* = " + StarMath.MakePrintString(xStar));
+            Console.WriteLine("X* = " + xStar.MakePrintString());
             Console.WriteLine("F* = " + fStar, 1);
             Console.WriteLine("NumEvals = " + optMethod.numEvals);
             /* Since there is no randomness in the process, you should get the following

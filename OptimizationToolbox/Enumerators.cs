@@ -24,6 +24,9 @@ namespace OptimizationToolbox
     /* Enumerator for Search functions that have generality 
      * to either minimize or maximize (e.g. PNPPS, stochasticChoose). */
 
+    /// <summary>
+    /// the direction of the optimization
+    /// </summary>
     public enum optimize
     {
         minimize = -1,
@@ -35,6 +38,9 @@ namespace OptimizationToolbox
      * functions (that derive from the Optimization Toolbox's abstractOptFunction) need
      * to determine how derivatives will be calculated. */
 
+    /// <summary>
+    /// The types of numerical differention (finite difference) supported by OOOT
+    /// </summary>
     public enum differentiate
     {
         Analytic,
@@ -45,4 +51,18 @@ namespace OptimizationToolbox
         Forward2,
         Central4
     } ;
+
+    /// <summary>
+    /// Setting the Verbosity to one of these values changes the amount of output
+    /// send to the Debug Listener. Lower values may speed up search
+    /// </summary>
+    public enum VerbosityLevels
+    {
+        OnlyCritical = 0,
+        Low = 1,
+        BelowNormal = 2,
+        Normal = 3,
+        AboveNormal = 4,
+        Everything = int.MaxValue
+    };
 }

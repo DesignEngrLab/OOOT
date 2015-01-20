@@ -84,12 +84,14 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="StarMath">
-      <HintPath>..\..\packages\StarMath.1.0.14.0827\lib\portable-net45+sl5+wp8+win8\StarMath.dll</HintPath>
+    <Reference Include="StarMath, Version=2.0.14.1114, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\StarMath.2.0.15.0117\lib\portable-net4+sl5+wp8+win8\StarMath.dll</HintPath>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BragasFruitTruck.cs" />
     <Compile Include="Example1 Simple One Function.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -100,13 +102,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="StarMath.XML" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\OptimizationToolbox\OptimizationToolbox.csproj">
       <Project>{a865cef9-f16b-4d4a-a984-9934f87cf78d}</Project>
       <Name>OptimizationToolbox</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="StarMath.XML" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

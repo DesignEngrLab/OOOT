@@ -11,7 +11,7 @@ namespace Skewboid
         private static double alpha;
         private static double[] weights;
         private static optimize[] optDirections;
-        private const double tolerance = 0.0001; // tolerance
+        public static double SkewboidAlphaTolerance = 0.0001; // tolerance
 
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Skewboid
                                    * the while loop will be passed over completely, hence need this line.
                                    * so, if that indeed happens, we throw an error. */
             int k = 0;
-            while (numKeep != numTarget && alphaUB - alphaLB > tolerance)
+            while (numKeep != numTarget && alphaUB - alphaLB > SkewboidAlphaTolerance)
             {
                 k++;
                 alphaTarget = alphaLB + (alphaUB - alphaLB) * (numatLB - numKeep) / (numatLB - numatUB);

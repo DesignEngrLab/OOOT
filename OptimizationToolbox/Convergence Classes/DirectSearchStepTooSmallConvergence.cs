@@ -20,27 +20,19 @@
  *     at http://ooot.codeplex.com/.
  *************************************************************************/
 using System;
+using System.Collections.Generic;
 using StarMathLib;
 
 namespace OptimizationToolbox
 {
-    public class CyclicCoordinates : abstractSearchDirection
+    internal class DirectSearchStepTooSmallConvergence : abstractConvergence
     {
-        private int counter;
-        private double[] xLast;
+        internal Boolean hasConverged { get; set; }
 
-        public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false)
+        public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
+            IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
-            if (counter == x.GetLength(0))
-            {
-                counter = 0;
-                return x.subtract(xLast).normalize();
-            }                                       
-            if (counter == 0) xLast = (double[])x.Clone();   
-            var d = new double[x.GetLength(0)];
-            d[counter] = 1;
-            counter++;
-            return d;
+            return hasConverged;
         }
     }
 }

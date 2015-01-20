@@ -32,7 +32,9 @@ namespace Example3_Using_XML_and_Comparison
         private const string filename = "../../../test1.xml";
         private static void Main()
         {
-            SearchIO.verbosity = 4;
+            Parameters.Verbosity = VerbosityLevels.AboveNormal;
+            // this next line is to set the Debug statements from OOOT to the Console.
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
             /* In this example, we first present how the details of an optimzation
              * problem can be saved to an XML-file so that it can be read in 
              * and solved as opposed to defining all the details in an imperative

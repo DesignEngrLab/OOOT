@@ -27,8 +27,7 @@ namespace OptimizationToolbox
 {
     public class VariableDescriptor
     {
-        private const int MaxToStoreImplicitly = 5000;
-        private const double epsilon = 0.00000001;
+
         /* both real and discrete numbers can have both upper and lower limits.
          * Discrete require values less than infinity, but for reals, it may be infinity. */
 
@@ -137,7 +136,7 @@ namespace OptimizationToolbox
         {
             size = newSize;
             delta = newDelta;
-            if (newSize < MaxToStoreImplicitly)
+            if (newSize < Parameters.DiscreteVariableMaxToStoreImplicitly)
             {
                 values = new double[newSize];
                 values[0] = lowerBound;
@@ -171,7 +170,7 @@ namespace OptimizationToolbox
                         return j;
             }
             var i = (value - LowerBound) / Delta;
-            if (i - Math.Floor(i) / Delta < epsilon) return (long)i;
+            if (i - Math.Floor(i) / Delta < Parameters.ToleranceForSame) return (long)i;
             return -1;
         }
     }

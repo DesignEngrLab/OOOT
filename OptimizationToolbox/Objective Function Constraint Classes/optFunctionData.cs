@@ -8,8 +8,6 @@ namespace OptimizationToolbox
     {
         readonly Dictionary<double[], double> oldEvaluations;
         readonly Queue<double[]> queue;
-        private const long maxSize = 1000;
-        private const long sizeStepDown = 100;
 
         internal long numEvals { get; set; }
         internal double finiteDiffStepSize { get; set; }
@@ -115,10 +113,13 @@ namespace OptimizationToolbox
         ///                 </exception>
         public void Add(double[] key, double value)
         {
+            if (Parameters.MaxFunctionDataStore == 0) return;
             oldEvaluations.Add(key, value);
-            if (queue.Count >= maxSize)
-                for (int i = 0; i < sizeStepDown; i++)
-                    Remove(queue.Dequeue());
+            if (queue.Count >= Parameters.MaxFunctionDataStore)
+            {
+                SearchIO.output("reducing queue...", 4);
+                for (int i = 0; i < Parameters.FunctionStoreCleanOutStepDown; i++)
+                    Remove(queue.Dequeue());}
             queue.Enqueue(key);
         }
 

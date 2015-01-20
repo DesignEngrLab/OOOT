@@ -150,7 +150,7 @@ namespace Example4_Using_Dependent_Analysis
                 dsd[4 * i + 1] = new VariableDescriptor(ValidPitches); // pitches from AGMA standard 
                 dsd[4 * i + 2] = new VariableDescriptor(0, 50, 800); // face width is between 0 and 50 inches
                 dsd[4 * i + 3] = new VariableDescriptor(0, 500, 800);//location is either an angle or a length
-                                                                      // a max of 500 inches is generous
+                // a max of 500 inches is generous
             }
             opty.Add(dsd);
             /******** Set up Optimization *************/
@@ -171,7 +171,9 @@ namespace Example4_Using_Dependent_Analysis
             opty.Add(new MaxFnEvalsConvergence(10000));
             opty.Add(new MaxSpanInPopulationConvergence(15));
             double[] xStar;
-            SearchIO.verbosity = 4;
+            Parameters.Verbosity = VerbosityLevels.AboveNormal;
+            // this next line is to set the Debug statements from OOOT to the Console.
+            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
             var timer = Stopwatch.StartNew();
             var fStar = opty.Run(out xStar, numGears * 4);
             printResults(opty, xStar, fStar, timer);
