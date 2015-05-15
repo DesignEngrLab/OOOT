@@ -1,0 +1,88 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+      <h2>Problem Formulation </h2>
+       <p>An optimization problem is described by:</p>
+<ol>
+<li>the number of variables in the decision vector, x.</li>
+<li>space-constraints that define the limits of the elements in x</li>
+<li>one or more objective functions</li>
+<li>and inequality and equality constraints (in any number included none at all).</li>
+</ol>
+<h2><u>Space Description</u></h2>
+<p>The number of design variables can be provided in a number of ways. Two common ways are to simply let OOOT infer this value at run time when the Run statement is invoked. There are three overloads to the main run function:<font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">double</font></font><font style="font-size: 9.5pt;"> Run(<font color="#0000ff">out</font> <font color="#0000ff">double</font>[] xStar)</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">double</font></font><font style="font-size: 9.5pt;"> Run(<font color="#0000ff">out</font> <font color="#0000ff">double</font>[] xStar, <font color="#0000ff">double</font>[] xInit) </font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">double</font></font><font style="font-size: 9.5pt;"> Run(<font color="#0000ff">out</font> <font color="#0000ff">double</font>[] xStar, <font color="#0000ff">int</font> NumberOfVariables)</font></font></p>
+<p>The last one provides the number directly and the middle one provides a starting point which can be used for this. But, if the first statement is used, it is possible an error will be produced if the number is not known. This can also be provided by creating a DesignSpaceDescription object which provides clear data on the limitations of each variable. For many of the continuous optimization methods, this is not needed, but it is crucial component of the discrete methods. The DesignSpaceDescription is essentially a list of Variable Descriptors where each variable descriptor states:</p>
+<ul>
+<li>LowerBound: the lowest acceptable value. It is used for both discrete and continuous variables. For real-valued optimization, it is converted to a simple inequality constraint.</li>
+<li>Upper Bound: the largest acceptable value. It is used for both discrete and continuous variables. For real-valued optimization, it is converted to a simple inequality constraint.</li>
+<li>Delta: For discrete variables, where a uniform spacing occurs between accepted values. For example if only integers are accepted, Delta would be set to 1.0.</li>
+<li>Size: As opposed to setting the Delta, one could also indicate the number of elements in the range from LowerBound to Upper Bound. This is also only used for discrete variables.</li>
+<li>Values: For more direct control over discrete values, one can provide an array of possible values with this property.</li>
+</ul>
+<h2><u>Optimization Functions</u></h2>
+<p>One can add objective functions, and constraints directly to an optimization method, by simply calling the abstractOptMethod.Add(&hellip;) function. Example:</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font style="font-size: 9.5pt;"> g1 = <font color="#0000ff">new</font> <font color="#2b91af">polynomialInequality</font>();</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">g1.Add(<font color="#a31515">"-x1"</font>);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">g1.Add(<font color="#a31515">"x2"</font>); </font><font style="font-size: 9.5pt;" color="#008000">/* this inequality translates to x2 - x1 &lt; 0 */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">pd.Add(g1);</font><font style="font-size: 9.5pt;"><font color="#008000">&nbsp;&nbsp; /* of simply x1 &gt; x2. */<a href="http://download.codeplex.com/download?ProjectName=ooot&amp;DownloadId=162108"><img style="; padding-left: 0px; padding-right: 0px; display: inline; float: right; padding-top: 0px; border-width: 0px;" title="ClassDiagram2" src="images/ClassDiagram2.png" alt="ClassDiagram2" width="595" height="293" align="right" border="0" /></a></font></font></font></p>
+<p>Internally, a function detects if this object inherits from one of the interfaces defined in OOOT. These interfaces are simple and the entirety of the Interfaces.cs file is shown here:</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> </font><font style="font-size: 9.5pt;" color="#2b91af">IDifferentiable</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">double</font> deriv_wrt_xi(<font color="#0000ff">double</font>[] x, <font color="#0000ff">int</font> i);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">}</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> </font><font style="font-size: 9.5pt;" color="#2b91af">IOptFunction</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">double</font> calculate(<font color="#0000ff">double</font>[] x);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">}</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> <font color="#2b91af">IObjectiveFunction</font> : <font color="#2b91af">IOptFunction</font> { }</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> <font color="#2b91af">IConstraint</font> : <font color="#2b91af">IOptFunction</font>{}</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> <font color="#2b91af">IEquality</font> : <font color="#2b91af">IConstraint</font> { }</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> <font color="#2b91af">IInequality</font> : <font color="#2b91af">IConstraint</font> { }</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">public</font></font><font style="font-size: 9.5pt;"> <font color="#0000ff">interface</font> </font><font style="font-size: 9.5pt;" color="#2b91af">IDependentAnalysis</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">void</font> calculate(<font color="#0000ff">double</font>[] x);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">}</font></font></p>
+<p>In early October 2010, I converted from an abstract class approach to this interface approach to add more flexibility to the notion of working within larger applications. Since one can have a class inherit from any number of interfaces, all that you need to do is add the interface name to your classes and overload one or two functions. Internally, the toolbox keeps a list of these functions and invokes their &ldquo;calculate&rdquo; function when it needs a value. It is also ideal for to inherit from <font color="#2b91af"><font size="3">IDifferentiable</font> </font>as well if the analytical derivative can be found. Please see the <a href="http://ooot.codeplex.com/wikipage?title=Examples" target="_blank">example projects</a> for details.&nbsp;</p>
+        
+       
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

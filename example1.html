@@ -1,0 +1,75 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+       <h2>Example 1: Simple Unconstrained 2-D Optimization</h2>
+       <p>In this first simple example we solve the unconstrained Rosenbrock&rsquo;s banana function with <a href="http://comjnl.oxfordjournals.org/content/7/4/308.abstract" target="_blank">Nelder-Mead Search</a>. The Nelder Mead search method, also at the heart of MatLab's fsolve function, is a clever and wholly unique method that works well for low-dimensional problems with no constraints (if constraints are used, you will need to specify a merit/penalty function.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">&nbsp;&nbsp; <font color="#0000ff">var</font> optMethod = <font color="#0000ff">new</font> <font color="#2b91af">NelderMead</font>();</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">The objective function is the famous <a href="http://en.wikipedia.org/wiki/Rosenbrock_function" target="_blank">Rosenbrock's banana function</a> for two dimensions. All objective functions must a object from classes that inherit from the <font color="#4bacc6"><strong>IObjectiveFunction</strong></font> interface. Within the toolbox there is one such method called polynomialObjFn. Like polynomialInequality, and polynomialInequality, this class stores a list of polynomial terms which are summed together. An individual term can be comprised of a constant and any (or all) variables raised to any power. These methods cannot handle functions where there are individual sums that are multiplied or raised to a power. Therefore, the equation for Rosenbrock's shown at the top of the Wikipedia page must be broken down into individual terms like that shown below.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">polynomialObjFn</font>()</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">Terms = <font color="#0000ff">new</font> <font color="#2b91af">List</font>&lt;<font color="#0000ff">string</font>&gt;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#a31515">"100*x1^4"</font>,</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#a31515">"-200*x1^2*x2"</font>,</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#a31515">"x1^2"</font>,</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#a31515">"-2*x1"</font>,</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#a31515">"100*x2^2"</font>,</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#a31515">"1"</font>,</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">}</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">});</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">Next additional details in the optimization algorithm are required. Actually, Nelder-Mead requires the least additional primping. One thing it does requires is at least one convergence method. Since we know the optimal is 0 (@ {1, 1}) we can use the "ToKnownBestFConvergence" with a tolerance of 0.0001.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">ToKnownBestFConvergence</font>(0, 0.01));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">In this example, we will provide a starting point, but it is not required. If one is not provided a random point is chosen.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">double</font>[] xInit = <font color="#0000ff">new</font>[] { 5.0, 50.0 };</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">The next line is where the optimization actually occurs. Note that the Run command requires the "out double[]" as it's first argument. In this way, the optimization can return a single double equal to the value of the optimal objective function, and an optimizer, a vector of optimal decision variables. There are two other overloads for the Run command. You can simply specify the out vector and nothing else, or you can provide the out vector and the number of decision variables.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font> fStar = optMethod.Run(<font color="#0000ff">out</font> xStar, xInit);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">The output is provided from the optimization. Since the optMethod is an object, we can probe it following the run to get at important data like how the process converged.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font>.WriteLine(<font color="#a31515">"Convergence Declared by "</font> + optMethod.ConvergenceDeclaredByTypeString);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font>.WriteLine(<font color="#a31515">"X* = "</font> + <font color="#2b91af">StarMath</font>.MakePrintString(xStar));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font>.WriteLine(<font color="#a31515">"F* = "</font> + fStar, 1);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#2b91af">Console</font>.WriteLine(<font color="#a31515">"NumEvals = "</font> + optMethod.numEvals);</font></font></p>
+<p>Whatever computer you run this on, you should get the same output since there is no randomness in the process:</p>
+<p><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><strong>Convergence Declared by ToKnownBestFConvergence </strong></p>
+<p><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><strong>X* = { 1.007 , 1.014 } </strong></p>
+<p><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><strong>F* = 9.57200828679561E-05 </strong></p>
+<p><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><strong>NumEvals = 264 </strong></p>
+       
+       
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

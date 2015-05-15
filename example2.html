@@ -1,0 +1,114 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+      <h2>Example 2: Using Genetic Algorithm</h2>
+       <p>Here is a example that showcases different files for creating objective function and constraint classes as well as the setup required for a Genetic Algorithm. There are many GA&rsquo;s on the web, but this is my own &ndash; specifically created for use in OOOT. <a href="http://ooot.codeplex.com/wikipage?title=A%20Study%20of%20C%23%20implementations%20of%20GAs" target="_blank">Read why I decided to write another one.</a> <br />The following code (with verbose commenting) is found in the Source Code under:</p>
+<p>Examples-&gt;Example2 Genetic Algorithm-&gt;Program.cs</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* first a new optimization method in the form of a genetic algorithm is created. */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font style="font-size: 9.5pt;"> optMethod = <font color="#0000ff">new</font> <font color="#2b91af">GeneticAlgorithm</font>();</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* then an objective function and constraints are added. Since these inherit from</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* type OptimizationToolbox.objectiveFunction and OptimizationToolbox.inequality</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* the Add function knows where to store them so that they will be invoked by the</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* fitness evaluation section of the GA. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">efficiencyMeasurement</font>());</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">lessThanManifoldVolume</font>());</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* GA's cannot explicitly handle inequalities, so a merit function must be added</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* so that the fitness evaluation knows how to combine the constraint with the </font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* objective function. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">squaredExteriorPenalty</font>(optMethod, 50));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* Now a number of convergerence criteria are added. Again, since these all </font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* inherit from the abstractConvergence class, the Add method knows to where </font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* to store them. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">MaxIterationsConvergence</font>(500)); </font><font style="font-size: 9.5pt;" color="#008000">/* stop after 500 iteration (i.e. generations) */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">MaxAgeConvergence</font>(20, 0.000000001)); </font><font style="font-size: 9.5pt;" color="#008000">/*stop after 20 generations of the best not changing */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">MaxSpanInPopulationConvergence</font>(100)); </font><font style="font-size: 9.5pt;" color="#008000">/*stop if the largest distance is only one unit. */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.NumConvergeCriteriaNeeded = 2; </font><font style="font-size: 9.5pt;" color="#008000">/* two of these three criteria are needed to stop the process. */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* The genetic algorithm is for discrete problems. Therefore we need to provide the optimization algorithm</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* and the subsequent generators with the details of the space. The first variable represents the number of</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* passes in our fictitious problem. We set the lower bound to 1 and the upper bound to 20. The third argument</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* is the delta and since only integers are possible we set this to 1. The second and third variables are</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* really continous, but for the purpose of the GA we set a discretization at one-ten-thousandth for the second</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* and one-hundredth in the third. </font></font><strong><font style="font-size: 9.5pt;" color="#00008b">Note that you can provide either the delta or the number of steps. Here</font></strong></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* 36,001 steps will make increments of one-hundredth. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font style="font-size: 9.5pt;"> SpaceDescriptor = <font color="#0000ff">new</font> </font><font style="font-size: 9.5pt;" color="#2b91af">DesignSpaceDescription</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">new</font> <font color="#2b91af">VariableDescriptor</font>(1, 20, 1.0),</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">new</font> <font color="#2b91af">VariableDescriptor</font>(0, 100, 0.0001),</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">new</font> <font color="#2b91af">VariableDescriptor</font>(-180, 180, (<font color="#0000ff">long</font>) 36000)</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp; </font><font style="font-size: 9.5pt;">};</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(SpaceDescriptor);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* the genetic algorithm requires some more values to be fully specified. These include initial, </font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">* crossover, and mutation generators, as well as a selector. A Latin Hyper Cube initial sample is</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">* first created to assure the population covers the space well. */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">LatinHyperCube</font>(SpaceDescriptor, <font color="#2b91af">VariablesInScope</font>.BothDiscreteAndReal));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">/* the typical bit-string approach to mutation and crossover are adopted here. </font></font><strong><font style="font-size: 9.5pt;" color="#00008b">Note that the</font></strong></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* mutation rate (per candidate) is increased to 0.4 from the default of 0.1. Which means that</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* 4 in 10 candidates should experience at least one mutation. No new crossover rate is provided</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* therefore the default of 1.7 will be used. This means that between two parents there will likely </font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* be 1.7 locations of crossover between them. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">GAMutationBitString</font>(SpaceDescriptor, 0.4));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">GACrossoverBitString</font>(SpaceDescriptor));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* Finally, the selector is added to the population. This RandomPairwiseCompare is often referred to</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* as tournament selection wherein a random selection of two candidates results in the inferior one</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* being removed from the population. It requires the optimization direction: are lower values better</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* (minimize) or larger (maximize)? */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">optMethod.Add(<font color="#0000ff">new</font> <font color="#2b91af">RandomPairwiseCompare</font>(<font color="#2b91af">optimize</font>.minimize));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* for output statements (points in the code where the SearchIO.output(...) function is called, the</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* verbosity is set to 4 which is high. Typical values are between 0 and 4 but higher values (&gt;4)</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;</font><font style="font-size: 9.5pt;">* may be used, but this will likely cut into the speed of the search process. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#2b91af"><font style="font-size: 9.5pt;">SearchIO</font></font><font style="font-size: 9.5pt;">.verbosity = 4;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* everything is set, we can now run the algorithm and retrieve the f* and x* values. */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">double</font></font><font style="font-size: 9.5pt;">[] xOptimal;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">var</font></font><font style="font-size: 9.5pt;"> fOptimal = optMethod.Run(<font color="#0000ff">out</font> xOptimal);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#008000">/* since we are curious how the process completed we now output some details. */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#2b91af"><font style="font-size: 9.5pt;">SearchIO</font></font><font style="font-size: 9.5pt;">.output(<font color="#a31515">"f* = "</font> + fOptimal, 0); </font><font style="font-size: 9.5pt;" color="#008000">/* the 0 indicates that this statement has high priority</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#008000"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">* and shouldn't be skipped in printing to the console. */</font></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#2b91af"><font style="font-size: 9.5pt;">SearchIO</font></font><font style="font-size: 9.5pt;">.output(<font color="#a31515">"x* = "</font> + <font color="#2b91af">StarMath</font>.MakePrintString(xOptimal), 0);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#2b91af"><font style="font-size: 9.5pt;">SearchIO</font></font><font style="font-size: 9.5pt;">.output(<font color="#a31515">"The process converged by criteria: "</font> + optMethod.ConvergenceDeclaredByTypeString, 0);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;" color="#2b91af">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+       
+       
+       
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

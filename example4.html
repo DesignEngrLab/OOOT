@@ -1,0 +1,59 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+       
+       <h2>Example 4: Using Dependent Analysis</h2>
+       <p>In this final example, we show a real complex engineering application: the optimization of 24 parameters for a six-gear geartrain. One of the&nbsp; main things to learn from this example is the use of a <strong>dependent analysis</strong> which is needed by nearly all the constraints and the objective function. Many times, one needs to run a simulation on a candidate solution &ndash; from which other functions extract meaningful data. This is the case for the gear train problem. The example, is more about the set-up as opposed to the optimization. I tried Gradient Based, Random Hill Climbing and Genetic Algorithm. It is unclear what is best to solve this problem. Experience tells me that since there are discrete and continuous variables and the space should be fairly smooth, if not uni-modal - that some Branch-n-bound combined with GRG or SQP would be best.</p>
+<p>In examining the main source code for this problem, we come to the&nbsp; Dependent Analysis after a long setup of initial inputs and constants, . Take a look at the file/class ForceVelocityPositionAnalysis.cs and notice that it inherits from <font color="#2b91af"><strong>IDependentAnalysis</strong></font>. By adding this to the optimization method (see below), we are ensuring that it is called for any new decision variables found in the process.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font> FVPAnalysis = <font color="#0000ff">new</font> <font color="#2b91af">ForceVelocityPositionAnalysis</font>(numGears, outputTorque, inputSpeed, inputPosition);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">opty.Add(FVPAnalysis);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">Next, all of the constraints and the objective are declared. Many of these use information found in the Dependent Analysis. There may be a variety of ways to do this, but the approach I take here is to pass the Dependent Analysis object, FVPAnalysis, to the pertinent functions so that they can simply reference values within the DependentAnalysis. For example, the objective function is to minimize mass. It&rsquo;s constructor receives the FVPAnalysis, and the gearDensity:</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">public</font> massObjective(<font color="#2b91af">ForceVelocityPositionAnalysis</font> fvpsAnalysis, <font color="#0000ff">double</font> gearDensity)</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">{</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">this</font>.FVPAnalysis = fvpsAnalysis;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">this</font>.numberGears = fvpsAnalysis.numGears;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">this</font>.gearDensity = gearDensity;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">}</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">We see that the Dependent Analysis is stored with an identical local name (of course, the naming is arbitrary &ndash; I just uncreatively used the same name).</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">And then in the calculate(x) function of the massObjective class, I can grab values for the diameter of each gear, as they were determined as part of the DependentAnalysis:</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font color="#0000ff"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp; var</font></font><font style="font-size: 9.5pt;"> faceWidth = x[i * 4 + 2];</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">totMass += <font color="#2b91af">Math</font>.PI * <font color="#2b91af">Math</font>.Pow((FVPAnalysis.diameters[i] / 2), 2) * faceWidth * gearDensity; <br /></font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">Tn OOOT, the DependentAnalysisis always guaranteed to be called before the objective function or constraints that utilize it, UNLESS you directly call the calculate(x) function. It is best to call the abstractOptMethod.calculate(optFunction, x) function instead as this checks to see if it is a repeat point to something it&rsquo;s already calculated or whether the DependentAnalysisneeds to be re-run.</p>
+       
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

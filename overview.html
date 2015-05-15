@@ -1,0 +1,46 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+        <h2>Overview</h2><p>The following &ldquo;<a href="http://ooot.codeplex.com/wikipage?title=Main Classes Diagram&amp;version=1">class diagram</a>&rdquo; shows the main optimization methods that have currently been implemented &ndash; as well as some insight into organization of classes and objects. <a href="http://ooot.codeplex.com/wikipage?title=Examples" target="_blank">The best way to understand how to use OOOT, is through examples.</a>&nbsp;There are two basic types of methods implemented so far: methods for continuous variables and methods for discrete variables. Approaches for mixed methods such as Branch-and-Bound are planned but not currently included.</p>
+<p><a href="images/ClassDiagram1.png">
+<img style="padding-left: 0px; padding-right: 0px; display: inline; float: left; padding-top: 0px; border-width: 0px;" title="ClassDiagram1" src="images/ClassDiagram1thumb.png"  align="left" border="0" height="293" width="207" /></a>Many of the optimization methods for real valued decision variables will require that a line-search method be specified (Arithmetic Mean, Golden Section, DSC-Powell) and a search direction method (Cyclic Coordinate Search, Steepest Descent, Powell&rsquo;s Method, Fletcher-Reeves, or Broyden-Fletcher-Goldfarb-Shanno).</p>
+<p>With this modular design it is possible to reconfigure these to create 80 unique algorithms. In addition to these there are also ten different convergence criteria that can be added&nbsp; individually or in any combination to these 80 algorithms. <a href="http://ooot.codeplex.com/wikipage?title=Convergence%20Criteria" target="_blank">Read more about convergence methods here.</a></p>
+<p>But, one of the biggest advantages of the toolbox is the way that objective functions, equalities and inequalities can be easily added to the optimization process. Most (if not all open source approaches) optimization codes requires the problem specific details to be compiled along with the algorithm. Here, the problem formulation can be in another library or exe and can be customized at run-time instead of compile time. It is even possible to have the optimization algorithm change in response to the nature of the design variables and the number of constraints. <a href="http://ooot.codeplex.com/wikipage?title=Problem%20Formulation" target="_blank">Read more about problem formulation here.</a></p>
+<p>There are some powerful, commercial, optimization toolboxes, and there is MatLab&rsquo;s wonderful toolbox, but there is no excellent open-source for C, C#, C++, and Java. This is a grass-roots attempt to create this. My individual efforts to create this are winding down, but hopefully others will join in to make this a Wikipedia-like high-quality research tool. Read more about my plans, the unresolved issues, and the <a href="http://ooot.codeplex.com/wikipage?title=To%20Do%20List" target="_blank">master to-do list, here</a>.</p>
+           </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

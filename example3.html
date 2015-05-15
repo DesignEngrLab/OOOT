@@ -1,0 +1,84 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+       <h2>Example 3: Using XML and Comparison </h2>
+       <p>This example describes the use of the Problem Definition class that save problem formulation details to a file. Something about the pure imperative nature of how problems and methods are created did not seem intuitive, as a result, the declarative nature of an XML file was accommodated. The example can be divided into two parts. In the first part, a problem is created in a normal imperative (line-by-line of code) manner and the results are saved to an xml file called &ldquo;test1.xml&rdquo;. After running the example, take a minute to look at what included. Here is a condensed snapshot of the members:</p>
+<p><a href="http://download.codeplex.com/download?ProjectName=ooot&amp;DownloadId=162239">
+<img style="; padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border-width: 0px; left: 0px; top: 0px;" title="image" src="images/probDefXML.png" alt="image" width="644" height="262" border="0" /></a></p>
+<p>As described on the Problem Formulation page, there are four aspects to a setting up a problem: 1) number of variables, 2) space constraints, 3) objective(s), and 4) constraints. This file only includes these and not the details on the optimization method. Except for the convergence criteria. It was decided that the convergence criteria may be one aspect to include since such files may be used to compare one optimization methods to another, and the mode of convergence may be set to the same for optimization methods.</p>
+<p>In the first function, makeAndSaveProblemDefinition(), the xml file is created. Note, in this function that a ProblemDefinition object is created and receives objects in the same way as the abstractOptMethod.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font> pd = <font color="#0000ff">new</font> <font color="#2b91af">ProblemDefinition</font>();</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">var</font> dsd = <font color="#0000ff">new</font> <font color="#2b91af">DesignSpaceDescription</font>(2);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#0000ff">for</font> (<font color="#0000ff">var</font> i = 0; i &lt; 2; i++)</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">dsd[i] = <font color="#0000ff">new</font> <font color="#2b91af">VariableDescriptor</font>(-10000, 10000, 0.01);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">pd.Add(dsd);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;" color="#008000">/* Add three convergence criteria */</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">pd.Add(<font color="#0000ff">new</font> <font color="#2b91af">DeltaXConvergence</font>(0.0001));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">pd.Add(<font color="#0000ff">new</font> <font color="#2b91af">MaxAgeConvergence</font>(100, 0.000000001));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">pd.Add(<font color="#0000ff">new</font> <font color="#2b91af">MaxFnEvalsConvergence</font>(50000));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">pd.Add(<font color="#0000ff">new</font> <font color="#2b91af">MaxSpanInPopulationConvergence</font>(1));</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">&nbsp;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font face="Consolas"><font style="font-size: 9.5pt;">.</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">&nbsp;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font face="Consolas"><font style="font-size: 9.5pt;">.</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">&nbsp;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font></font><font face="Consolas"><font style="font-size: 9.5pt;">.</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; pd.Add(<font color="#0000ff">new</font> <font color="#0000ff">double</font>[] { 1500.0, 700.0 });</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">This last line adds the initial point, xStart to the problem definition. At the bottom of the file, the &ldquo;saveProbToXml&rdquo;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">pd.saveProbToXml(filename);</font></font></p>
+<p style="line-height: 13pt; margin: 0in 0in 10pt;">&nbsp;</p>
+<p>Back in the main function, the file is now opened and the resulting problem definition is added all at once to an optimization method.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;"><font color="#2b91af">ProblemDefinition</font> probTest1 = <font color="#2b91af">ProblemDefinition</font>.openprobFromXml(filename);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp; <font color="#2b91af">abstractOptMethod</font> opty;</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">&nbsp;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">opty.Add(probTest1);</font></font></p>
+<p>In the remainder of the file, seven optimization methods are invoked on this problem. This is a small convex, uni-modal, smooth problem with an unconstrained minimum at {1, 5} and a constrained minimum at {3, 3}. In the commands used to create the optimization methods, note how aspects of the problem are added, reused and removed. For example, the only difference in the first and second approach is a change in the search direction method.</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">searchDirMethod = <font color="#0000ff">new</font> <font color="#2b91af">FletcherReevesDirection</font>();</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">opty.Add(searchDirMethod);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">opty.ResetFunctionEvaluationDatabase();</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font style="font-size: 9.5pt;">fStar = opty.Run(<font color="#0000ff">out</font> xStar);</font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">The ResetFuncationEvaluationsDatabase is a rarely used function that is only added in this one spot since the optimization method is the same as the previous. If this line is commented, the only affect is the number of function evaluations is not reset to 0, and the Fletcher-Reeves approach may benefit from states found in the Steepest Descent one. The next method, Generalized-Reduced Gradient, is the ONLY one here that handles constraints explicitly. It find the optimal very quickly and accurately. However, many of the others show a better value of f*, this is because they are using an imperfect penalty function (new squaredExteriorPenalty(opty, 10)). While it seems that GRG includes it as well, it is only used in the the line search method.&nbsp; The remaining discrete methods are somewhat on par with these first three, but require the discretization provides in the problem definition. <font face="Consolas"><font style="font-size: 9.5pt;">&nbsp; </font></font></p>
+<p style="line-height: normal; margin: 0in 0in 0pt;">&nbsp;</p>
+<p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">The final exhaustive search will not likely finish and you will see why when you run it. However, if you change the delta from 0.01 to 1.0, you may get it to complete in a weekend.</font></font></p>
+       
+       
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>

@@ -1,0 +1,89 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Ooot by DesignEngrLab</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/github-light.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>OOOT: Object-Oriented Optimization Toolbox</h1>
+
+        <ul>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/zipball/master">Download ZIP</a></li>
+          <li class="download"><a class="buttons" href="https://github.com/DesignEngrLab/OOOT/tarball/master">Download TAR</a></li>
+          <li><a class="buttons github" href="https://github.com/DesignEngrLab/OOOT">View On GitHub</a></li>
+        </ul>
+
+        <p class="header">This project is maintained by <a class="header name" href="https://github.com/DesignEngrLab">DesignEngrLab</a></p>
+
+
+      </header>
+      <section>
+      <h2>A Study of C# implementations of GAs </h2>
+      
+<p>I am completed a simple genetic algorithm in OOOT (Oct &lsquo;10). But instead of re-inventing the wheel, I wanted to first check out other approaches found online. I found five, but they do not fit the needs that I want. For my reference (and perhaps yours), I am jotting down my notes on these. Some of my conclusions are seat-of-the-pants and may offend the contributing authors of these. If so, cordially respond with a correction.</p>
+		  <h3>Genetic Algorithm</h3>
+		  <p><strong>Source: </strong><em>unknown</em></p>
+		  This one was downloaded in June 2005 by some of my research assistants. I can find no URLs within it, but it would be interesting to see the state of the project now if it has continued. I have been unable to find the site, the name, or the author. 
+		  <a href="GeneticAlgorithm.zip">You can download a copy of the zip here.</a> <br /><br />It seems very thorough with nice example applications and a modular approach as is adopted in OOOT. The controlling exe would setup the options and then invoke: <br /><br />
+<pre class="csharpcode">GeneticAlgorithm ga = <span class="kwrd">new</span> GeneticAlgorithm();
+ga.Selector = <span class="kwrd">new</span> WeightedSelector(ga.Genomes);
+ga.Crossover = <span class="kwrd">new</span> BinaryCrossover();
+ga.Crossover.CrossoverProbability = 0.1;
+ga.Crossover.MutationProbability = 0.07;
+ga.GenomeFactory = <span class="kwrd">new</span> BinaryGenomeFactory(<span class="kwrd">typeof</span>(SimpleSolution));
+ga.Evaluator = <span class="kwrd">new</span> SimpleEvaluator();
+ga.NewGlobalBest += <span class="kwrd">new</span> GeneticAlgorithmEventHandler(onNewGBest);
+ga.CreateGenomes(15);
+ExitConditions whenToQuit = <span class="kwrd">new</span> ExitConditions();
+whenToQuit.Duration = <span class="kwrd">new</span> TimeSpan(0, 0, 15);
+Genome maxima = ga.FindOptima(whenToQuit);</pre>
+<br />+ the use of a TimeSpan for convergence is brilliant. Since then, I have felt that this is really the only true convergence for optimization. <br />+ the variety and delineation of clear selectors and crossover <br />- unfortunately, the generation seems to be fixed to a strange for-loop (as part of the main search process, the FindOptima function) where each member of the previous generation contributes to exactly one individual in the subsequent iteration. I am unfamiliar with this method being used in the literature. 
+		  <h3>EVO</h3>
+		  <p><strong>Source: </strong><a title="http://evo.codeplex.com/" href="http://evo.codeplex.com/">http://evo.codeplex.com/</a></p>
+		  <p>provides some nice interfaces and the code is modular. The approach to having a list of operators in any order makes it possible to capture many approaches found in the literature. For example, crossover before mutation before tournament; or tournament then crossover, etc. Nice! But no example applications are provided, so needs some work to set up. <br />Also, after further study, this seems mostly a skeleton/framework that needs more work.</p>
+		  <h3>Simple(r) GA in C#</h3>
+		  <p>Source:
+		  <a title="http://www.codeproject.com/KB/recipes/btl_ga.aspx" href="http://www.codeproject.com/KB/recipes/btl_ga.aspx">http://www.codeproject.com/KB/recipes/btl_ga.aspx</a> <br /><a title="http://www.codeproject.com/KB/recipes/simplegenalg.aspx" href="http://www.codeproject.com/KB/recipes/simplegenalg.aspx">http://www.codeproject.com/KB/recipes/simplegenalg.aspx</a></p>
+		  <p>This one pops up first in Google (genetic algorithm C#), but it really lacks the necessary encode/decode building block sophistication to be call a GA. Solutions to only real-valued problems and since crossover only happens between the variables (read dimensions), no new values can be created other than what&rsquo;s in the initial population unless accomplished by mutation.</p>
+		  <h3>AForge&rsquo;s GA</h3>
+		  <p><strong>Source: </strong>
+		  <a title="http://www.codeproject.com/KB/recipes/aforge_genetic.aspx" href="http://www.codeproject.com/KB/recipes/aforge_genetic.aspx">http://www.codeproject.com/KB/recipes/aforge_genetic.aspx</a></p>
+		  AForge does a lot more than GA&rsquo;s now, but I gather this was one of the earliest projects that comprise it. There are four nice example projects that work interactively with a Windows Form (and thus events are part of the algorithm), but the main body of the algorithm is defined not within the library but with functions in the examples (tucked away in the MainForm.cs files). But basically this is the RunEpoch function as part of the library embedded in a loop to control convergence. The RunEpoch[sic] has some nice simplicity and modularity to it: <br />
+<pre class="csharpcode"><span class="kwrd">public</span> <span class="kwrd">void</span> RunEpoch()
+{
+  Crossover();
+  Mutate();
+  Selection();
+  <span class="kwrd">if</span> (autoShuffling) Shuffle();
+}</pre>
+<br />But these functions are not modules, they are hard-coded, and suffer from the same problem as the previous two &ndash; no encoding to a low-level schemata (i.e. binary numbers).<p>Implementing a Genetic Algorithms in C# and .NET</p>
+		  <p><a title="http://www.c-sharpcorner.com/UploadFile/mgold/GeneticAlgorithm12032005044205AM/GeneticAlgorithm.aspx" href="http://www.c-sharpcorner.com/UploadFile/mgold/GeneticAlgorithm12032005044205AM/GeneticAlgorithm.aspx">http://www.c-sharpcorner.com/UploadFile/mgold/Genetic <br />Algorithm12032005044205AM/GeneticAlgorithm.aspx</a></p>
+		  <p>Like the Simple one above this also take a major shortcut on crossover so as to remove the implicit parallelism or &ldquo;building block hypothesis&rdquo; that provides the real power of GAs</p>
+		  <h3>GALib</h3>
+		  <p>Source:
+		  <a title="http://sourceforge.net/projects/csgalib/" href="http://sourceforge.net/projects/csgalib/">http://sourceforge.net/projects/csgalib/ <br /></a><a title="http://www.codeproject.com/KB/recipes/galib.aspx" href="http://www.codeproject.com/KB/recipes/galib.aspx">http://www.codeproject.com/KB/recipes/galib.aspx</a></p>
+		  <p>this one shares it&rsquo;s moniker with a very well known C-implementation (Matthew&rsquo;s GALib; <a title="http://lancet.mit.edu/ga/" href="http://lancet.mit.edu/ga/">http://lancet.mit.edu/ga/</a>) but makes no mention that it is derived from it. Like EVO, it lacks example applications to understand how it is to be used. In a sense, this one takes a wholly asynchronous event driven approach, where selection, mutation and crossover happen as separate events. Unfortunately, this one too, is incomplete with no approach to doing crossover <em>correctly (</em>with low level building blocks).</p>
+		  <h3>Discussion</h3>
+<p>In the GA that I have developed, the bit-string is made to a length dependent on the &lsquo;size&rsquo; of the variable range as described in the DesignSpaceDescription. Therefore if you have a problem with one variable with 10 possible values and another with 1 million. The bit-string will be 4 + 20 = 24 bits. Four bits to make a value between 1 and 10 (the remaining 6 for values are repeats of the first 6, and 20 bits for the one million range. In this way, the most compact genome is created, and the search process does not waste computation flipping bits that are of no consequence. On my to do list (or if anyone else is so inclined), I would like to make &ldquo;Generators&rdquo; for other encodings other than bit-string encodings. What about 4-ary or hexadecimal encoding? Also, I would like to see/create a real-valued encoding ala differential evolution.</p>
+    
+       
+      </section>
+      <footer>
+        <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
+      </footer>
+    </div>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+		
+  </body>
+</html>
