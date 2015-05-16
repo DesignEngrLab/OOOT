@@ -31,8 +31,8 @@
       <section>
        <h2>Example 3: Using XML and Comparison </h2>
        <p>This example describes the use of the Problem Definition class that save problem formulation details to a file. Something about the pure imperative nature of how problems and methods are created did not seem intuitive, as a result, the declarative nature of an XML file was accommodated. The example can be divided into two parts. In the first part, a problem is created in a normal imperative (line-by-line of code) manner and the results are saved to an xml file called &ldquo;test1.xml&rdquo;. After running the example, take a minute to look at what included. Here is a condensed snapshot of the members:</p>
-<p><a href="http://download.codeplex.com/download?ProjectName=ooot&amp;DownloadId=162239">
-<img style="; padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border-width: 0px; left: 0px; top: 0px;" title="image" src="images/probDefXML.png" alt="image" width="644" height="262" border="0" /></a></p>
+<p>
+<img style="; padding-left: 0px; padding-right: 0px; display: inline; padding-top: 0px; border-width: 0px; left: 0px; top: 0px;" title="image" src="images/probDefXML.png" alt="image" width="644" height="262" border="0" /></p>
 <p>As described on the Problem Formulation page, there are four aspects to a setting up a problem: 1) number of variables, 2) space constraints, 3) objective(s), and 4) constraints. This file only includes these and not the details on the optimization method. Except for the convergence criteria. It was decided that the convergence criteria may be one aspect to include since such files may be used to compare one optimization methods to another, and the mode of convergence may be set to the same for optimization methods.</p>
 <p>In the first function, makeAndSaveProblemDefinition(), the xml file is created. Note, in this function that a ProblemDefinition object is created and receives objects in the same way as the abstractOptMethod.</p>
 <p style="line-height: normal; margin: 0in 0in 0pt;"><font face="Consolas"><font style="font-size: 9.5pt;">&nbsp;</font></font></p>

@@ -12,6 +12,12 @@
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <style type="text/css">
+	.auto-style1 {
+		font-weight: 200;
+		color: #C30000;
+	}
+	</style>
   </head>
   <body>
     <div class="wrapper">
@@ -32,27 +38,31 @@
         <h2>Project Description </h2>A library (.dll) of various linear, nonlinear, and stochastic numerical optimization techniques. While some of these are older than 40 years, many have yet to take advantage of an object-oriented programming model. This toolbox was originally created to&nbsp;aid in the automated design of various engineering artifacts.<br>
 <p>Here is a table of content of wiki files I have created so far for OOOT:</p>
 <ul>
-<li><a href="/wikipage?referringTitle=Documentation">Home</a> presents a motivation and introduction for the toolbox.
+<li>
+<a href="overview.html">
+<span class="auto-style1">Overview</span></a> presents a motivation and introduction for the toolbox.
 <ul>
-<li>The <a href="/wikipage?title=Main%20Classes%20Diagram&amp;referringTitle=Documentation">Main Classes Diagram</a> attempts to show the logic in the organization of some of the files. It lies that there are six main optimization routines. There are currently 9 and more are on the way (Branch &amp; Bound, Particle Swarm, etc.).</li>
+<li>The <a href="images/ClassDiagram1.png">Main Classes Diagram</a> attempts to show the logic in the organization of some of the files. It lies that there are six main optimization routines. There are currently 9 and more are on the way (Branch &amp; Bound, Particle Swarm, etc.).</li>
 </ul>
 </li>
-<li><a href="/wikipage?title=Problem%20Formulation&amp;referringTitle=Documentation">Problem Formulation</a> offers basic thinking in how problems are provided to an optimization routine.</li>
-<li><a href="/wikipage?title=Convergence%20Criteria&amp;referringTitle=Documentation">Convergence Criteria</a> lists the 10 different convergence criteria and how they can be combined per optimization technique.</li>
-<li><a href="/wikipage?title=Examples&amp;referringTitle=Documentation">Examples</a>
+<li><a href="formulation.html">Problem Formulation</a> offers basic thinking in how problems are provided to an optimization routine.</li>
+<li><a href="convergence.html">Convergence Criteria</a> lists the 10 different convergence criteria and how they can be combined per optimization technique.</li>
+<li><strong>Examples</strong>
 <ul>
-<li><a href="/wikipage?title=Example%201%3a%20Simple%20OneFunction&amp;referringTitle=Documentation">Example 1: Simple OneFunction</a> is a simple Nelder-Mead optimization performed on Rosenbrock's Banana Function.</li>
-<li><a href="/wikipage?title=Example%202%3a%20Setting%20up%20a%20Genetic%20Algorithm&amp;referringTitle=Documentation">Example 2: Setting up a Genetic Algorithm</a> shows how to run a GA and how to store the objective function and constraints in files that inherit from OOOT interfaces, which by the way are shown in more details in <a href="/wikipage?title=Problem%20Formulation&amp;referringTitle=Documentation">Problem Formulation</a>.
+<li><a href="example1.html">Example 1: Simple 2D Function</a> is a simple Nelder-Mead optimization performed on Rosenbrock's Banana Function.</li>
+<li><a href="example2.html">Example 2: Setting up a Genetic Algorithm</a> shows how to run a GA and how to store the objective function and constraints in files that inherit from OOOT interfaces, which by the way are shown in more details in 
+<a href="formulation.html">Problem Formulation</a>.
 <ul>
-<li>The <a href="http://ooot.codeplex.com/wikipage?title=A%20Study%20of%20C%23%20implementations%20of%20GAs">A Study of C# implementations of GAs</a> surveys other GA's on the internet and presents some motivation for rolling my own.</li>
+<li>The <a href="ga_study.html">A Study of C# implementations of GAs</a> surveys other GA's on the internet and presents some motivation for rolling my own.</li>
 </ul>
 </li>
-<li><a href="/wikipage?title=Example%203%3a%20Using%20XML%20and%20Comparison&amp;referringTitle=Documentation">Example 3: Using XML and Comparison</a> illustrates how saving and opening problem defintions can be accomplished as well as how multiple optimization methods can be invoked in the same problem formulation.</li>
-<li><a href="/wikipage?title=Example%204%20Using%20Dependent%20Analysis&amp;referringTitle=Documentation">Example 4 Using Dependent Analysis</a> introduces a useful technique for combining the determination of dependent paramters in one analysis that may be used by multiple constraints and objectives.</li>
+<li><a href="example3.html">Example 3: Using XML and Comparison</a> illustrates how saving and opening problem defintions can be accomplished as well as how multiple optimization methods can be invoked in the same problem formulation.</li>
+<li><a href="example4.html">Example 4 Using Dependent Analysis</a> introduces a useful technique for combining the determination of dependent paramters in one analysis that may be used by multiple constraints and objectives.</li>
 </ul>
 </li>
 </ul>
-<p><br />Finally, I provide a rough <a href="/wikipage?title=To%20Do%20List&amp;referringTitle=Documentation">To Do List</a> to offer to fortune-telling in where all of this is going:</p>
+<p><br />Finally, I provide a rough 
+<a href="https://github.com/DesignEngrLab/OOOT/wiki/To-Do">To Do List</a> to offer to fortune-telling in where all of this is going:</p>
           </section>
       <footer>
         <p><small>Hosted on <a href="https://pages.github.com">GitHub Pages</a> using the Dinky theme</small></p>
