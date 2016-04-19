@@ -84,8 +84,8 @@ namespace OptimizationToolbox
                     if (maxSideLength < sideLengthSquared) maxSideLength = sideLengthSquared;
                     if (minSideLength > sideLengthSquared) minSideLength = sideLengthSquared;
                 }
-            SearchIO.output("ratio =" + Math.Sqrt(minSideLength/maxSideLength));
-            SearchIO.output("side length =" + Math.Sqrt(maxSideLength), 6);
+            SearchIO.output("ratio =" + Math.Sqrt(minSideLength / maxSideLength), 5);
+            SearchIO.output("side length =" + Math.Sqrt(maxSideLength), 5);
             return (Math.Sqrt(maxSideLength) <= MinimumSpan);
         }
     }

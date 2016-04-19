@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D92977F7-C1BA-48C3-BFC7-56D41CF05EC0}"
 EndProject
@@ -20,13 +20,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		todo.txt = todo.txt
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A8DC5B4C-496C-4A98-AC1D-CED3DF24C959}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OptimizationToolbox", "OptimizationToolbox\OptimizationToolbox.csproj", "{A865CEF9-F16B-4D4A-A984-9934F87CF78D}"
 EndProject
 Global
@@ -41,7 +34,8 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Mixed Platforms.Build.0 = Debug|x86
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|x64.ActiveCfg = Debug|x64

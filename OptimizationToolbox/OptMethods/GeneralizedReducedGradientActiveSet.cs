@@ -228,7 +228,7 @@ namespace OptimizationToolbox
                 if (divideX)
                 {
                     divideGradA_intoXcAndXdParts();
-                    invGradA_wrt_xc = StarMath.inverseUpper(gradA_wrt_xc);
+                    invGradA_wrt_xc = StarMath.inverse(gradA_wrt_xc); //should this just be inverseUpper?
                 }
             }
         }

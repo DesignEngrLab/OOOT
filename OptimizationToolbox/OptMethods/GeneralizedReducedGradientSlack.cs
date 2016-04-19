@@ -125,7 +125,7 @@ namespace OptimizationToolbox
             {
                 gradH = calc_h_gradient(x);
                 divideGradH_intoXcAndXdParts();
-                invGradHWRT_xc = StarMath.inverseUpper(gradHWRT_xc);
+                invGradHWRT_xc = StarMath.inverse(gradHWRT_xc); //should this just be inverseUpper?
                 gradF = calc_f_gradient(x);
                 calculateReducedGradientSearchDirection();
 
