@@ -1,4 +1,6 @@
 TO DO
-
+1. 1D search
+2. weights on objective and constraints
 3. Particle Swarm (both by McCaffrey - MSO is split among 4 classes. the PSO that pradeep used is partiswarm.
 4. pattern search (looks like a simper version of Hooke Jeeves; 5 iterations?!)
+5. can we support multiple IDependentAnalyses?
