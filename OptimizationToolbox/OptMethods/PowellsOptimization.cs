@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 
 using System;
@@ -84,7 +84,7 @@ namespace OptimizationToolbox
                 {
                     var dk = conjugateDirections[i];
                     alphaStar = lineSearchMethod.findAlphaStar(xinner, dk, true);
-                    xinner = StarMath.add(xinner, StarMath.multiply(alphaStar, dk));
+                    xinner = xinner.add(StarMath.multiply(alphaStar, dk));
                     var fNew = calc_f(xinner);
                     if (Math.Abs(alphaStar) > Math.Abs(maxAlpha))
                     {
@@ -117,7 +117,7 @@ namespace OptimizationToolbox
                 else
                 {
                     /*combine direction search. */
-                    var xJump = StarMath.subtract(StarMath.multiply(2, xinner), x, n);
+                    var xJump = StarMath.multiply(2, xinner).subtract(x, n);
                     var fJump = calc_f(xJump);
                     if (fJump >= fBegin
                         || (fBegin - 2 * fk + fJump) * (fBegin - fk - maxImprovement) * (fBegin - fk - maxImprovement)
@@ -125,9 +125,9 @@ namespace OptimizationToolbox
                         x = xinner;
                     else
                     {
-                        var combinedDir = StarMath.normalize(StarMath.subtract(xinner, x, n));
+                        var combinedDir = xinner.subtract(x, n).normalize();
                         alphaStar = lineSearchMethod.findAlphaStar(xinner, combinedDir, true);
-                        x = StarMath.add(xinner, StarMath.multiply(alphaStar, combinedDir));
+                        x = xinner.add(StarMath.multiply(alphaStar, combinedDir));
                         conjugateDirections.RemoveAt(indexOfMaxImprovement);
                         conjugateDirections.Add(combinedDir);
                         k++;

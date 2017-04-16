@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 
 using System;
@@ -125,7 +125,7 @@ namespace OptimizationToolbox
             {
                 gradH = calc_h_gradient(x);
                 divideGradH_intoXcAndXdParts();
-                invGradHWRT_xc = StarMath.inverse(gradHWRT_xc); //should this just be inverseUpper?
+                invGradHWRT_xc = gradHWRT_xc.inverse(); //should this just be inverseUpper?
                 gradF = calc_f_gradient(x);
                 calculateReducedGradientSearchDirection();
 
@@ -136,12 +136,12 @@ namespace OptimizationToolbox
                 //alphaStar = lineSearchMethod.findAlphaStar(xk, dk, g);
 
                 xkLast = x;
-                x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                x = xkLast.add(StarMath.multiply(alphaStar, dk));
                 var outerFeasibleK = 0;
                 while (!updateXc() && (++outerFeasibleK == feasibleOuterLoopMax))
                 {
                     alphaStar /= 2;
-                    x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                    x = xkLast.add(StarMath.multiply(alphaStar, dk));
                 }
                 k++;
                 fk = calc_f(x);
@@ -219,13 +219,10 @@ namespace OptimizationToolbox
                 gradFXc[i] = gradF[xcIndices[i]];
             //how to handle the problem when slack goes to zero/epsilon and the invgrad then goes to infinity
             var dir_Xd =
-                StarMath.subtract(gradFXd,
-                                  StarMath.multiply(gradFXc,
-                                                    StarMath.multiply(invGradHWRT_xc, gradHWRT_xd)));
+                gradFXd.subtract(gradFXc.multiply(invGradHWRT_xc.multiply(gradHWRT_xd)));
             var dir_Xc =
                 StarMath.multiply(-1.0,
-                                  StarMath.multiply(invGradHWRT_xc,
-                                                    StarMath.multiply(gradHWRT_xd, dir_Xd)));
+                                  invGradHWRT_xc.multiply(gradHWRT_xd.multiply(dir_Xd)));
             for (var i = 0; i < n - m; i++)
                 dk[xdIndices[i]] = dir_Xd[i];
             for (var i = 0; i < m; i++)
@@ -243,14 +240,14 @@ namespace OptimizationToolbox
                 dir_Xd[i] = dk[xdIndices[i]];
 
             var xcOld = xc;
-            xc = StarMath.subtract(xcOld, StarMath.multiply(invGradHWRT_xc, calc_h_vector(x)));
-            while (StarMath.norm1(xc, xcOld) / StarMath.norm1(xc) > epsilon)
+            xc = xcOld.subtract(invGradHWRT_xc.multiply(calc_h_vector(x)));
+            while (xc.norm1(xcOld) / xc.norm1() > epsilon)
             {
                 gradHWRT_xc = calc_h_gradient(x, xcIndices);
-                invGradHWRT_xc = StarMath.inverse(gradHWRT_xc);
+                invGradHWRT_xc = gradHWRT_xc.inverse();
                 if (++innerFeasibleK == feasibleInnerLoopMax) return false;
                 xcOld = xc;
-                xc = StarMath.subtract(xcOld, StarMath.multiply(invGradHWRT_xc, calc_h_vector(x)));
+                xc = xcOld.subtract(invGradHWRT_xc.multiply(calc_h_vector(x)));
                 foreach (int i in xcIndices)
                     if ((i >= n - q) && (x[i] < 0))
                         /*then it's a slack variable that's gone negative and should simply be set to eps*/

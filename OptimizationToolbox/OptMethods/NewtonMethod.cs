@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 
 using System;
@@ -76,15 +76,15 @@ namespace OptimizationToolbox
                     for (int j = i; j < n; j++)
                         Hessian[i, j] = Hessian[j, i] = ((ITwiceDifferentiable)f[0]).second_deriv_wrt_ij(x, i, j);
 
-                dk = StarMath.multiply(-1, StarMath.multiply(StarMath.inverse(Hessian), gradF));
-                if (double.IsNaN(StarMath.SumAllElements(dk)))
+                dk = StarMath.multiply(-1, Hessian.inverse().multiply(gradF));
+                if (double.IsNaN(dk.SumAllElements()))
                     dk = StarMath.multiply(-1, gradF);
-                var step = StarMath.norm2(dk); 
+                var step = dk.norm2(); 
                 if (step == 0) continue;
-                dk = StarMath.divide(dk, step);
+                dk = dk.divide(step);
                 // use line search (arithmetic mean) to find alphaStar
                 alphaStar = lineSearchMethod.findAlphaStar(x, dk, step);
-                x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
+                x = x.add(StarMath.multiply(alphaStar, dk));
                 SearchIO.output("iteration=" + k, 3);
                 k++;
                 fk = calc_f(x);

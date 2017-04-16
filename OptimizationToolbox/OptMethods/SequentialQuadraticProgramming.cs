@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 
 using System;
@@ -101,7 +101,7 @@ namespace OptimizationToolbox
                 //
 
                 alphaStar = lineSearchMethod.findAlphaStar(x, dk, initAlpha);
-                x = StarMath.add(x, StarMath.multiply(alphaStar, dk));
+                x = x.add(StarMath.multiply(alphaStar, dk));
                 SearchIO.output("iteration=" + k, 3);
                 SearchIO.output("--alpha=" + alphaStar, 3);
                 k++;
@@ -117,7 +117,7 @@ namespace OptimizationToolbox
 
         private double adjustMeritPenalty()
         {
-            var weight = StarMath.norm1(lambdas);
+            var weight = lambdas.norm1();
 
             /* what is the point of the next condition? is it a correct step when one is still in the
              * infeasible region? */
@@ -180,29 +180,27 @@ namespace OptimizationToolbox
         private double[] calculateSQPSearchDirection(double[] xk, out double initAlpha)
         {
             activeVals = calc_active_vector(xk);
-            var At = StarMath.transpose(A);
-            var invAAt = StarMath.inverse(StarMath.multiply(A, At));
-            var AtinvAAt = StarMath.multiply(At, invAAt);
+            var At = A.transpose();
+            var invAAt = A.multiply(At).inverse();
+            var AtinvAAt = At.multiply(invAAt);
             //double[,] J = StarMath.makeIdentity(n);
             var invJ = StarMath.makeIdentity(n);
 
             // double[,] P = StarMath.subtract(StarMath.makeIdentity(n), AtinvAAtA);
 
-            var P = StarMath.multiply(invJ,
-                                      StarMath.subtract(StarMath.multiply(AtinvAAt, A), StarMath.makeIdentity(n)));
+            var P = invJ.multiply(AtinvAAt.multiply(A).subtract(StarMath.makeIdentity(n)));
             //double[,] Q = StarMath.multiply(invJ,
             //        StarMath.multiply(AtinvAAt, StarMath.multiply(A,
             //        StarMath.multiply(J, StarMath.multiply(invAtA, At)))));
             var Q = AtinvAAt;
-            var dirMin = StarMath.multiply(P, gradF);
-            var dirCC = StarMath.multiply(Q, activeVals);
-            var dir = StarMath.subtract(dirMin, dirCC);
+            var dirMin = P.multiply(gradF);
+            var dirCC = Q.multiply(activeVals);
+            var dir = dirMin.subtract(dirCC);
 
-            lambdas = StarMath.multiply(invAAt, StarMath.subtract(
-                activeVals, StarMath.multiply(A, gradF)));
+            lambdas = invAAt.multiply(activeVals.subtract(A.multiply(gradF)));
 
             if (double.IsNaN(dir[0])) dir = dk;
-            initAlpha = StarMath.norm2(dir);
+            initAlpha = dir.norm2();
             if (initAlpha > 0) dir = StarMath.multiply((1.0 / initAlpha), dir);
             return dir;
         }

@@ -11,7 +11,7 @@ namespace Example2_Genetic_Algorithm
         {
             Console.WriteLine("Completed running " + opty.GetType());
             Console.WriteLine("Convergence Declared by " + opty.ConvergenceDeclaredByTypeString);
-            Console.WriteLine("X* = " + StarMath.MakePrintString(xStar));
+            Console.WriteLine("X* = " + xStar.MakePrintString());
             Console.WriteLine("F* = " + f, 1);
             Console.WriteLine("NumEvals = " + opty.numEvals);
             Console.WriteLine("The time taken by the process = " + timer.Elapsed + ".\n\n\n");

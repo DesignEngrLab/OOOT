@@ -4,20 +4,18 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
- *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+ *     MIT X11 License for more details.
+ *
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -213,7 +211,7 @@ namespace OptimizationToolbox
             h = new List<IEquality>();
             active = new List<IConstraint>();
             f = new List<IObjectiveFunction>();
-            functionData = new Dictionary<IOptFunction, optFunctionData>();
+            functionData = new Dictionary<IOptFunction, RecentFunctionEvalStore>();
         }
 
         /// <summary>
@@ -227,7 +225,7 @@ namespace OptimizationToolbox
             else if (function is IOptFunction)
             {
                 functionData.Add((IOptFunction)function,
-                    new optFunctionData((IOptFunction)function, sameCandComparer,
+                    new RecentFunctionEvalStore((IOptFunction)function, sameCandComparer,
                         Parameters.DefaultFiniteDifferenceStepSize, Parameters.DefaultFiniteDifferenceMode));
                 if (function is IInequality)
                     g.Add((IInequality)function);
@@ -450,7 +448,7 @@ namespace OptimizationToolbox
 
         private Boolean findFeasibleStartPoint()
         {
-            var average = StarMath.norm1(x) / x.GetLength(0);
+            var average = x.norm1() / x.GetLength(0);
             var randNum = new Random();
             // n-m variables can be changed
 

@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 using System;
 using StarMathLib;
@@ -56,24 +56,23 @@ namespace OptimizationToolbox
              * the inverse Hessian that starts out as the identity matrix. For the rest of
              * the terms consult an optimization textbook...like the one I'm writing ever so
              * slowly. */
-            var diffX = StarMath.subtract(x, xLast);
-            var diffGradF = StarMath.subtract(gradf, gradFLast);
-            T = StarMath.multiplyVectorsIntoAMatrix(diffX, diffGradF);
-            T = StarMath.multiply((1 / StarMath.dotProduct(diffX, diffGradF)), T);
+            var diffX = x.subtract(xLast);
+            var diffGradF = gradf.subtract(gradFLast);
+            T = diffX.multiplyVectorsIntoAMatrix(diffGradF);
+            T = StarMath.multiply((1 / diffX.dotProduct(diffGradF)), T);
 
-            u = StarMath.multiplyVectorsIntoAMatrix(diffX, diffX);
-            u = StarMath.multiply((1 / StarMath.dotProduct(diffX, diffGradF)), u);
+            u = diffX.multiplyVectorsIntoAMatrix(diffX);
+            u = StarMath.multiply((1 / diffX.dotProduct(diffGradF)), u);
 
-            IMinusT = StarMath.subtract(StarMath.makeIdentity(T.GetLength(0)), T);
+            IMinusT = StarMath.makeIdentity(T.GetLength(0)).subtract(T);
 
-            invH = StarMath.add(StarMath.multiply(IMinusT,
-                                                  StarMath.multiply(invHLast, IMinusT)), u);
-            dir = StarMath.multiply(invH, gradf);
+            invH = IMinusT.multiply(invHLast.multiply(IMinusT)).add(u);
+            dir = invH.multiply(gradf);
 
             gradFLast = (double[])gradf.Clone();
             xLast = (double[])xLast.Clone();
             invHLast = (double[,])invH.Clone();
-            magDir = StarMath.norm2(dir);
+            magDir = dir.norm2();
             if (magDir == 0) return gradf;
             /* if the gradient of f is all zeros, then simply return it. */
             dir = StarMath.multiply((-1.0 / magDir), gradf);
@@ -85,7 +84,7 @@ namespace OptimizationToolbox
         {
             gradFLast = (double[])gradf.Clone();
             invHLast = StarMath.makeIdentity(x.GetLength(0));
-            magDir = StarMath.norm2(gradf);
+            magDir = gradf.norm2();
             if (magDir == 0) return gradf;
             /* if the gradient of f is all zeros, then simply return it. */
             dir = StarMath.multiply((-1.0 / magDir), gradf);

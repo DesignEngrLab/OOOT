@@ -57,7 +57,7 @@ namespace Example4_Using_Dependent_Analysis
         {
             var targetOut = new[] { xtarget, ytarget, ztarget, 1.0 };
             var candidateOut = StarMath.GetColumn(3, FVPAnalysis.positions[FVPAnalysis.numGears - 1]);
-            var hVal = StarMath.norm2(targetOut, candidateOut, true);
+            var hVal = targetOut.norm2(candidateOut, true);
             if (hVal < tolerance) return 0.0;
             return hVal;
         }

@@ -68,7 +68,7 @@ namespace Example4_Using_Dependent_Analysis
         public void calculate(double[] x)
         {
             speeds[0] = inputSpeed;
-            positions[0] = StarMath.multiply(inputPosition, StarMath.Translate(0.0, 0.0, x[2]));
+            positions[0] = inputPosition.multiply(StarMath.Translate(0.0, 0.0, x[2]));
             diameters[0] = x[0] / x[1];
             for (var i = 1; i < numGears; i++)
             {
@@ -84,20 +84,19 @@ namespace Example4_Using_Dependent_Analysis
              * same and position is just translated along the shaft */
                 {
                     speeds[i] = speeds[i - 1];
-                    positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, Z));
+                    positions[i] = positions[i - 1].multiply(StarMath.Translate(0.0, 0.0, Z));
                 }
                 else
                 /* else the gear is odd-numbered and mates with the previous 
                  * gear through mating teeth */
                 {
                     speeds[i] = (x[(i - 1) * 4] / N) * speeds[i - 1];
-                    positions[i] = StarMath.multiply(positions[i - 1], StarMath.RotationZ(Z));
-                    positions[i] = StarMath.multiply(positions[i],
-                                                     StarMath.Translate((diameters[i - 1] + diameters[i]) / 2, 0.0,
+                    positions[i] = positions[i - 1].multiply(StarMath.RotationZ(Z));
+                    positions[i] = positions[i].multiply(StarMath.Translate((diameters[i - 1] + diameters[i]) / 2, 0.0,
                                                                         0.0));
                 }
                 /* finally we move the coordinates from the front side of the gear to the back. */
-                positions[i] = StarMath.multiply(positions[i - 1], StarMath.Translate(0.0, 0.0, F));
+                positions[i] = positions[i - 1].multiply(StarMath.Translate(0.0, 0.0, F));
             }
             torques[numGears - 1] = outputTorque;
             forces[numGears - 1] = 2 * outputTorque / diameters[numGears - 1];

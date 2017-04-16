@@ -81,7 +81,7 @@ namespace Example5_MOGA
             /* since we are curious how the process completed we now output some details. */
             SearchIO.output("f* = " + fOptimal); /* the 0 indicates that this statement has high priority
                                                      * and shouldn't be skipped in printing to the console. */
-            SearchIO.output("x* = " + StarMath.MakePrintString(xOptimal));
+            SearchIO.output("x* = " + xOptimal.MakePrintString());
             SearchIO.output("The process converged by criteria: " + optMethod.ConvergenceDeclaredByTypeString);
             Console.ReadLine();
         }

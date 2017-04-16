@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +85,7 @@ namespace OptimizationToolbox
                                 "*******************\n* Iteration: " + k + " *\n*******************");
                 /* 3. selection survivors*/
                 SearchIO.output("selecting from population  (current pop = " + population.Count + ").", 4);
-                SearchIO.output(StarMath.MakePrintString(CalcPopulationStats(population)), 4);
+                SearchIO.output(CalcPopulationStats(population).MakePrintString(), 4);
                 fitnessSelector.SelectCandidates(ref population);
                 /* 4. generate remainder of population with crossover generators */
                 SearchIO.output("generating new candidates (current pop = " + population.Count + ").", 4);
@@ -103,7 +103,7 @@ namespace OptimizationToolbox
                 xStar = (from candidate in population
                          where (candidate.objectives[0] == fStar)
                          select candidate.x).First();
-                SearchIO.output("x* = " + StarMath.MakePrintString(xStar), 4);
+                SearchIO.output("x* = " + xStar.MakePrintString(), 4);
                 SearchIO.output("f* = " + fStar, 4);
             } while (notConverged(k, numEvals, fStar, xStar, population.Select(a => a.x).ToList(),
                 population.Select(a => a.objectives[0]).ToList()));

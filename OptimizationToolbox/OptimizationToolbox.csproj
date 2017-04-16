@@ -53,6 +53,7 @@
     <Compile Include="Design Space Description\DesignSpaceDescription.cs" />
     <Compile Include="Design Space Description\VariableDescriptor.cs" />
     <Compile Include="Design Space Description\VariableDescriptorEnum.cs" />
+    <Compile Include="OptMethods\GradientBasedOptimization.cs" />
     <Compile Include="OptMethods\HookeAndJeeves.cs" />
     <Compile Include="Parameters.cs" />
     <Compile Include="Enumerators.cs" />
@@ -86,7 +87,7 @@
     <Compile Include="Objective Function Constraint Classes\equalToValue.cs" />
     <Compile Include="Objective Function Constraint Classes\Interfaces.cs" />
     <Compile Include="Objective Function Constraint Classes\lessThanGreaterThanConstant.cs" />
-    <Compile Include="Objective Function Constraint Classes\optFunctionData.cs" />
+    <Compile Include="Objective Function Constraint Classes\RecentFunctionEvalStore.cs" />
     <Compile Include="Objective Function Constraint Classes\polynomialFunctions.cs" />
     <Compile Include="Objective Function Constraint Classes\sameCandidate.cs" />
     <Compile Include="Objective Function Constraint Classes\slackSquaredEqualityFromInequality.cs" />
@@ -97,7 +98,7 @@
     <Compile Include="OptMethods\GeneralizedReducedGradientActiveSet.cs" />
     <Compile Include="OptMethods\GeneralizedReducedGradientSlack.cs" />
     <Compile Include="OptMethods\GeneticAlgorithm.cs" />
-    <Compile Include="OptMethods\GradientBasedOptimization.cs" />
+    <Compile Include="OptMethods\OneDimensionalSearch.cs" />
     <Compile Include="OptMethods\HillClimbing.cs" />
     <Compile Include="OptMethods\ImplicitEnumeration.cs" />
     <Compile Include="OptMethods\MultiObjectiveGeneticAlgorithm.cs" />

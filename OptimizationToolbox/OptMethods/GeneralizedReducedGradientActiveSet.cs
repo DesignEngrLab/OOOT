@@ -4,20 +4,20 @@
  *     Copyright 2010 Matthew Ira Campbell, PhD.
  *
  *     OOOT is free software: you can redistribute it and/or modify
- *     it under the terms of the GNU General Public License as published by
+ *     it under the terms of the MIT X11 License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *  
  *     OOOT is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *     GNU General Public License for more details.
+ *     MIT X11 License for more details.
  *  
- *     You should have received a copy of the GNU General Public License
- *     along with OOOT.  If not, see <http://www.gnu.org/licenses/>.
+
+
  *     
  *     Please find further details and contact information on OOOT
- *     at http://ooot.codeplex.com/.
+ *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
 using System;
 using System.Collections.Generic;
@@ -167,18 +167,18 @@ namespace OptimizationToolbox
                 alphaStar = lineSearchMethod.findAlphaStar(x, dk);
 
                 xkLast = x;
-                x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                x = xkLast.add(StarMath.multiply(alphaStar, dk));
                 int outerFeasibleK = 0;
                 while (!updateXc() && (++outerFeasibleK <= feasibleOuterLoopMax))
                 {
                     alphaStar /= 2;
-                    x = StarMath.add(xkLast, StarMath.multiply(alphaStar, dk));
+                    x = xkLast.add(StarMath.multiply(alphaStar, dk));
                     divideX = true;
                 }
                 k++;
                 fk = calc_f(x);
 
-                SearchIO.output("x(" + k + ") = " + StarMath.MakePrintString(x) + " = " + fk.ToString("0.00"), 4);
+                SearchIO.output("x(" + k + ") = " + x.MakePrintString() + " = " + fk.ToString("0.00"), 4);
             } while (notConverged(k, numEvals, fk, x, null, gradF));
 
             fStar = fk;
@@ -228,7 +228,7 @@ namespace OptimizationToolbox
                 if (divideX)
                 {
                     divideGradA_intoXcAndXdParts();
-                    invGradA_wrt_xc = StarMath.inverse(gradA_wrt_xc); //should this just be inverseUpper?
+                    invGradA_wrt_xc = gradA_wrt_xc.inverse(); //should this just be inverseUpper?
                 }
             }
         }
@@ -299,13 +299,10 @@ namespace OptimizationToolbox
                 gradFXc[i] = gradF[xcIndices[i]];
             //how to handle the problem when slack goes to zero/epsilon and the invgrad then goes to infinity
             var dir_Xd =
-                StarMath.subtract(gradFXd,
-                                  StarMath.multiply(gradFXc,
-                                                    StarMath.multiply(invGradA_wrt_xc, gradA_wrt_xd)));
+                gradFXd.subtract(gradFXc.multiply(invGradA_wrt_xc.multiply(gradA_wrt_xd)));
             var dir_Xc =
                 StarMath.multiply(-1.0,
-                                  StarMath.multiply(invGradA_wrt_xc,
-                                                    StarMath.multiply(gradA_wrt_xd, dir_Xd)));
+                                  invGradA_wrt_xc.multiply(gradA_wrt_xd.multiply(dir_Xd)));
             for (var i = 0; i < n - m; i++)
                 dk[xdIndices[i]] = dir_Xd[i];
             for (var i = 0; i < m; i++)
@@ -323,14 +320,14 @@ namespace OptimizationToolbox
                 dir_Xd[i] = dk[xdIndices[i]];
 
             double[] xcOld = xc;
-            xc = StarMath.subtract(xcOld, StarMath.multiply(invGradA_wrt_xc, calc_active_vector(x)));
-            while (StarMath.norm1(xc, xcOld) / StarMath.norm1(xc) > epsilon)
+            xc = xcOld.subtract(invGradA_wrt_xc.multiply(calc_active_vector(x)));
+            while (xc.norm1(xcOld) / xc.norm1() > epsilon)
             {
                 gradA_wrt_xc = calc_active_gradient(x, xcIndices);
-                invGradA_wrt_xc = StarMath.inverse(gradA_wrt_xc);
+                invGradA_wrt_xc = gradA_wrt_xc.inverse();
                 if (++innerFeasibleK == feasibleInnerLoopMax) return false;
                 xcOld = xc;
-                xc = StarMath.subtract(xcOld, StarMath.multiply(invGradA_wrt_xc, calc_active_vector(x)));
+                xc = xcOld.subtract(invGradA_wrt_xc.multiply(calc_active_vector(x)));
             }
             return true;
         }

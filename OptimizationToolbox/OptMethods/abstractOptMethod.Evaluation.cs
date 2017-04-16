@@ -1,4 +1,23 @@
-﻿using System;
+﻿/*************************************************************************
+ *     This file & class is part of the Object-Oriented Optimization
+ *     Toolbox (or OOOT) Project
+ *     Copyright 2010 Matthew Ira Campbell, PhD.
+ *
+ *     OOOT is free software: you can redistribute it and/or modify
+ *     it under the terms of the MIT X11 License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *  
+ *     OOOT is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     MIT X11 License for more details.
+ *
+ *     
+ *     Please find further details and contact information on OOOT
+ *     at http://designengrlab.github.io/OOOT/.
+ *************************************************************************/
+ using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
@@ -44,7 +63,7 @@ namespace OptimizationToolbox
         public List<IEquality> h { get; private set; }
         public List<IInequality> g { get; private set; }
         internal List<IConstraint> active { get; private set; }
-        private readonly Dictionary<IOptFunction, optFunctionData> functionData;
+        private readonly Dictionary<IOptFunction, RecentFunctionEvalStore> functionData;
         private readonly sameCandidate sameCandComparer = new sameCandidate(Parameters.ToleranceForSame);
 
         internal IDependentAnalysis dependentAnalysis { get; private set; }
@@ -154,7 +173,7 @@ namespace OptimizationToolbox
             for (var i = 0; i != n; i++)
                 grad[i] = deriv_wrt_xi(f[0], point, i);
             if (!feasible(point) && (ConstraintsSolvedWithPenalties || includeMeritPenalty))
-                return StarMath.add(grad, meritFunction.calcGradientOfPenalty(point));
+                return grad.add(meritFunction.calcGradientOfPenalty(point));
             return grad;
         }
 
