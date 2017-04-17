@@ -235,7 +235,11 @@ namespace OptimizationToolbox
                     f.Add((IObjectiveFunction)function);
             }
             else if (function is IDependentAnalysis)
-                dependentAnalysis = (IDependentAnalysis)function;
+            {
+                if (dependentAnalyses == null)
+                    dependentAnalyses = new List<IDependentAnalysis>();
+                dependentAnalyses.Add((IDependentAnalysis)function);
+            }
             else if (function is abstractLineSearch)
             {
                 lineSearchMethod = (abstractLineSearch)function;

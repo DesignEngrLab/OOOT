@@ -59,6 +59,7 @@ namespace OptimizationToolbox
                 return numEvalList.Max();
             }
         }
+        public List<IDependentAnalysis> dependentAnalyses { get; private set; }
         public List<IObjectiveFunction> f { get; private set; }
         public List<IEquality> h { get; private set; }
         public List<IInequality> g { get; private set; }
@@ -66,19 +67,17 @@ namespace OptimizationToolbox
         private readonly Dictionary<IOptFunction, RecentFunctionEvalStore> functionData;
         private readonly sameCandidate sameCandComparer = new sameCandidate(Parameters.ToleranceForSame);
 
-        internal IDependentAnalysis dependentAnalysis { get; private set; }
-        private double[] lastDependentAnalysis;
+        private double[] lastDependentAnalysisPoint;
 
 
         private void calc_dependent_Analysis(double[] point)
         {
-            if (dependentAnalysis == null) return;
-            if (sameCandComparer.Equals(point, lastDependentAnalysis)) return;
-            dependentAnalysis.calculate(point);
-            lastDependentAnalysis = (double[])point.Clone();
+            if (dependentAnalyses == null || !dependentAnalyses.Any()) return;
+            if (sameCandComparer.Equals(point, lastDependentAnalysisPoint)) return;
+            foreach (var dependentAnalysis in dependentAnalyses)
+                dependentAnalysis.calculate(point);
+            lastDependentAnalysisPoint = (double[])point.Clone();
         }
-
-
 
         /// <summary>
         /// Resets the function evaluation database.
