@@ -37,6 +37,10 @@ namespace OptimizationToolbox
             variableDescriptors = new List<VariableDescriptor>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DesignSpaceDescription"/> class.
+        /// </summary>
+        /// <param name="VariableDescriptors">The variable descriptors.</param>
         public DesignSpaceDescription(IEnumerable<VariableDescriptor> VariableDescriptors)
         {
             variableDescriptors = new List<VariableDescriptor>(VariableDescriptors);
