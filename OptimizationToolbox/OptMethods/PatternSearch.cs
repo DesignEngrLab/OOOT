@@ -60,8 +60,8 @@ namespace OptimizationToolbox
 						xCopy2.CopyTo (xCopy, 0);
 						xCopy2.CopyTo (GlobalXstar, 0);
 					} else {
-						xCopy1.CopyTo (xCopy, 0);
-						xCopy1.CopyTo (GlobalXstar, 0);
+						xCopy1.CopyTo(xCopy,0);
+						xCopy1.CopyTo(GlobalXstar, 0);
 					}
 					meshSize = meshSize * 2;
 

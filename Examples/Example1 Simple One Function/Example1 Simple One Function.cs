@@ -35,7 +35,7 @@ namespace Example1_Simple_One_Function
         {
             Parameters.Verbosity = VerbosityLevels.AboveNormal;
             // this next line is to set the Debug statements from OOOT to the Console.
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             /* first a new optimization method in the form of Nelder-Mead method
              * (http://comjnl.oxfordjournals.org/content/7/4/308.abstract). This 
              * is the method also at the heart of MatLab's fsolve function. It's a
@@ -44,7 +44,7 @@ namespace Example1_Simple_One_Function
              * to specify a merit/penalty function. */
             //var optMethod = new NelderMead();
             //var optMethod = new PowellsOptimization();
-            var optMethod = new HookeAndJeeves(1,0.5, 1, 1e-10);
+            var optMethod = new HookeAndJeeves(1, 0.5, 1, 1e-10);
             //var optMethod = new Rosenbrock(3, -0.5, 1, 1e-10);
             optMethod.Add(new DSCPowell(0.01, 0.1, 50));
             /* The objective function is Rosenbrock's banana function
@@ -78,7 +78,7 @@ namespace Example1_Simple_One_Function
              * "ToKnownBestFConvergence" with a tolerance of 0.0001. */
             //optMethod.Add(new ToKnownBestFConvergence(0, 0.0001));
 
-              optMethod.Add(new ToKnownBestFConvergence(0, 1076.4951108)); 
+            optMethod.Add(new ToKnownBestFConvergence(0, 1076.4951108));
             //optMethod.Add(new DeltaXConvergence(1e-6));
             /* Let us start the search from a specific point. */
             double[] xInit = new[] { 1.0, 5 };//,100};

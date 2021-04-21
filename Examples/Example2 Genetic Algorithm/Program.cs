@@ -21,7 +21,7 @@ namespace Example2_Genetic_Algorithm
         {
             Parameters.Verbosity = VerbosityLevels.AboveNormal;
             // this next line is to set the Debug statements from OOOT to the Console.
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             /* first a new optimization method in the form of a genetic algorithm is created. */
             var optMethod = new GeneticAlgorithm(100);
             /* then an objective function and constraints are added. Since these inherit from
@@ -81,7 +81,7 @@ namespace Example2_Genetic_Algorithm
              * may be used, but this will likely cut into the speed of the search process. */
             Parameters.Verbosity = VerbosityLevels.AboveNormal;
             // this next line is to set the Debug statements from OOOT to the Console.
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
             var timer = Stopwatch.StartNew();
             /* everything is set, we can now run the algorithm and retrieve the f* and x* values. */

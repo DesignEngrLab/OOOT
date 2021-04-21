@@ -173,7 +173,7 @@ namespace Example4_Using_Dependent_Analysis
             double[] xStar;
             Parameters.Verbosity = VerbosityLevels.AboveNormal;
             // this next line is to set the Debug statements from OOOT to the Console.
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             var timer = Stopwatch.StartNew();
             var fStar = opty.Run(out xStar, numGears * 4);
             printResults(opty, xStar, fStar, timer);

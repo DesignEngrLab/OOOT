@@ -32,9 +32,9 @@ namespace Example3_Using_XML_and_Comparison
         private const string filename = "../../../test1.xml";
         private static void Main()
         {
-            Parameters.Verbosity = VerbosityLevels.AboveNormal;
+            Parameters.Verbosity = VerbosityLevels.Normal;
             // this next line is to set the Debug statements from OOOT to the Console.
-            Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             /* In this example, we first present how the details of an optimzation
              * problem can be saved to an XML-file so that it can be read in 
              * and solved as opposed to defining all the details in an imperative
@@ -47,55 +47,75 @@ namespace Example3_Using_XML_and_Comparison
              * the details are stored in an object of class "Problem Definition".*/
             var stream = new FileStream(filename, FileMode.Open);
 
+            double[] xStar;
 
             ProblemDefinition probTest1 = ProblemDefinition.OpenprobFromXml(stream);
             abstractOptMethod opty;
 
+            /******************Exhaustive Search ***********************/
+            //SearchIO.output("******************Exhaustive Search ***********************");
+            //Console.ReadKey();
+            //opty = new ExhaustiveSearch(probTest1.SpaceDescriptor, optimize.minimize);
+            //opty.Add(probTest1);
+            ///* No convergence criteria is needed as the process concludes when all
+            // * states have been visited but for this problem that is 4 trillion states.*/
+            //opty.ConvergenceMethods.Clear();
+            ///* if you DID KNOW the best, you can include a criteria like...*/
+            //opty.ConvergenceMethods.Add(new ToKnownBestXConvergence(new[] { 3.0, 3.0 }, 0.0000001));
+            //var timer = Stopwatch.StartNew();
+            //var fStar = opty.Run(out xStar);
+
+            ///* you probably will never see this process complete. Even with the added
+            // * convergence criteria (which is not factored into the estimated time of
+            // * completion), you are probably looking at 1 to 2 years. */
+            //printResults(opty, xStar, fStar, timer);
 
             /***********Gradient Based Optimization with Steepest Descent****************/
-            SearchIO.output("***********Gradient Based Optimization with Steepest Descent****************");
-            opty = new GradientBasedOptimization();
-            opty.Add(probTest1);
-            abstractSearchDirection searchDirMethod = new SteepestDescent();
-            opty.Add(searchDirMethod);
-            //abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
-            //abstractLineSearch lineSearchMethod = new DSCPowell(0.0001, 1, 100);
-            abstractLineSearch lineSearchMethod = new GoldenSection(0.0001, 1);
-            opty.Add(lineSearchMethod);
-            opty.Add(new squaredExteriorPenalty(opty, 10));
-            /* since this is not a population-based optimization method, we need to remove the MaxSpan criteria. */
-            opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
+            //SearchIO.output("***********Gradient Based Optimization with Steepest Descent****************");
+            //Console.ReadKey();
+            //opty = new GradientBasedOptimization();
+            //opty.Add(probTest1);
+            //abstractSearchDirection searchDirMethod = new SteepestDescent();
+            //opty.Add(searchDirMethod);
+            ////abstractLineSearch lineSearchMethod = new ArithmeticMean(0.0001, 1, 100);
+            ////abstractLineSearch lineSearchMethod = new DSCPowell(0.0001, 1, 100);
+            //abstractLineSearch lineSearchMethod = new GoldenSection(0.0001, 1);
+            //opty.Add(lineSearchMethod);
+            //opty.Add(new squaredExteriorPenalty(opty, 10));
+            ///* since this is not a population-based optimization method, we need to remove the MaxSpan criteria. */
+            //opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
 
-            double[] xStar;
-            var timer = Stopwatch.StartNew();
-            var fStar = opty.Run(out xStar);
-            printResults(opty, xStar, fStar, timer);
+            //timer = Stopwatch.StartNew();
+            //fStar = opty.Run(out xStar);
+            //printResults(opty, xStar, fStar, timer);
 
-            /***********Gradient Based Optimization with Fletcher-Reeves****************/
-            SearchIO.output("***********Gradient Based Optimization with Fletcher-Reeves****************");
-            /* we don't need to reset (invoke the constructor) for GradientBasedOptimization since we are only 
-             * change the seaach direction method. */
-            searchDirMethod = new FletcherReevesDirection();
-            /* you could also try the remaining 3 search direction methods. */
-            //searchDirMethod = new CyclicCoordinates();
-            //searchDirMethod = new BFGSDirection();
-            //searchDirMethod = new PowellMethod(0.001, 6);
-            opty.Add(searchDirMethod);
+            ///***********Gradient Based Optimization with Fletcher-Reeves****************/
+            //SearchIO.output("***********Gradient Based Optimization with Fletcher-Reeves****************");
+            //Console.ReadKey();
+            ///* we don't need to reset (invoke the constructor) for GradientBasedOptimization since we are only 
+            // * change the seaach direction method. */
+            //searchDirMethod = new FletcherReevesDirection();
+            ///* you could also try the remaining 3 search direction methods. */
+            ////searchDirMethod = new CyclicCoordinates();
+            ////searchDirMethod = new BFGSDirection();
+            ////searchDirMethod = new PowellMethod(0.001, 6);
+            //opty.Add(searchDirMethod);
 
-            timer = Stopwatch.StartNew();
-            opty.ResetFunctionEvaluationDatabase();
-            fStar = opty.Run(out xStar);
-            printResults(opty, xStar, fStar, timer);
-            /******************Generalized Reduced Gradient***********************/
-            SearchIO.output("******************Generalized Reduced Gradient***********************");
-            opty = new GeneralizedReducedGradientActiveSet();
-            opty.Add(probTest1);
-            opty.Add(new squaredExteriorPenalty(opty, 10));
-            opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
+            //timer = Stopwatch.StartNew();
+            //opty.ResetFunctionEvaluationDatabase();
+            //fStar = opty.Run(out xStar);
+            //printResults(opty, xStar, fStar, timer);
+            ///******************Generalized Reduced Gradient***********************/
+            //SearchIO.output("******************Generalized Reduced Gradient***********************");
+            //Console.ReadKey();
+            //opty = new GeneralizedReducedGradientActiveSet();
+            //opty.Add(probTest1);
+            //opty.Add(new squaredExteriorPenalty(opty, 10));
+            //opty.ConvergenceMethods.RemoveAll(a => a is MaxSpanInPopulationConvergence);
 
-            timer = Stopwatch.StartNew();
-            fStar = opty.Run(out xStar);
-            printResults(opty, xStar, fStar, timer);
+            //timer = Stopwatch.StartNew();
+            //fStar = opty.Run(out xStar);
+            //printResults(opty, xStar, fStar, timer);
             /* GRG is the ONLY one here that handles constraints explicity. It find the
              * optimal very quickly and accurately. However, many of the other show a 
              * better value of f*, this is because they are using an imperfect penalty
@@ -104,7 +124,10 @@ namespace Example3_Using_XML_and_Comparison
 
 
             /******************Random Hill Climbing ***********************/
+            probTest1.SpaceDescriptor = new DesignSpaceDescription(new[]{new VariableDescriptor(-5000, 5000, 0.1),
+                new VariableDescriptor(-5000, 5000, 0.1) });
             SearchIO.output("******************Random Hill Climbing ***********************");
+            Console.ReadKey();
             opty = new HillClimbing();
             opty.Add(probTest1);
             opty.Add(new squaredExteriorPenalty(opty, 8));
@@ -115,8 +138,8 @@ namespace Example3_Using_XML_and_Comparison
              * at the same point it started. */
             opty.ConvergenceMethods.RemoveAll(a => a is DeltaXConvergence);
 
-            timer = Stopwatch.StartNew();
-            fStar = opty.Run(out xStar);
+            var timer = Stopwatch.StartNew();
+            var fStar = opty.Run(out xStar);
             printResults(opty, xStar, fStar, timer);
 
 
@@ -124,6 +147,7 @@ namespace Example3_Using_XML_and_Comparison
 
             /******************Exhaustive Hill Climbing ***********************/
             SearchIO.output("******************Exhaustive Hill Climbing ***********************");
+            Console.ReadKey();
             /* Everything else about the Random Hill Climbing stays the same. */
             opty.Add(new ExhaustiveNeighborGenerator(probTest1.SpaceDescriptor));
 
@@ -135,6 +159,7 @@ namespace Example3_Using_XML_and_Comparison
 
             /******************Simulated Annealing***********************/
             SearchIO.output("******************Simulated Annealing***********************");
+            Console.ReadKey();
             opty = new SimulatedAnnealing(optimize.minimize);
             opty.Add(probTest1);
             opty.Add(new squaredExteriorPenalty(opty, 10));
@@ -151,22 +176,6 @@ namespace Example3_Using_XML_and_Comparison
             printResults(opty, xStar, fStar, timer);
 
 
-            /******************Exhaustive Search ***********************/
-            // SearchIO.output("******************Exhaustive Search ***********************");
-            //opty = new ExhaustiveSearch(probTest1.SpaceDescriptor, optimize.minimize);
-            //opty.Add(probTest1);
-            /* No convergence criteria is needed as the process concludes when all
-             * states have been visited but for this problem that is 4 trillion states.*/
-            //opty.ConvergenceMethods.Clear();
-            /* if you DID KNOW the best, you can include a criteria like...*/
-            //opty.ConvergenceMethods.Add(new ToKnownBestXConvergence(new[] { 3.0, 3.0 }, 0.0000001));
-            //timer = Stopwatch.StartNew();
-            //fStar = opty.Run(out xStar);
-
-            /* you probably will never see this process complete. Even with the added
-             * convergence criteria (which is not factored into the estimated time of
-             * completion), you are probably looking at 1 to 2 years. */
-            //printResults(opty, xStar, fStar, timer);
 
         }
 
@@ -191,7 +200,7 @@ namespace Example3_Using_XML_and_Comparison
              * to 2 million steps in each of the 2 design variables. */
             var dsd = new DesignSpaceDescription(2);
             for (var i = 0; i < 2; i++)
-                dsd[i] = new VariableDescriptor(-5000, 5000, 1.0);
+                dsd[i] = new VariableDescriptor(-5000, 5000, 100.0);
             pd.Add(dsd);
 
             /* Add three convergence criteria */
