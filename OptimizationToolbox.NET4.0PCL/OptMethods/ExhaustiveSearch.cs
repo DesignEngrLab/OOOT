@@ -80,6 +80,9 @@ namespace OptimizationToolbox
             span /= timePreditionIndex;
             span *= spaceDescription.SizeOfSpace;
             var endTime = startTime + new TimeSpan((long)span);
+            SearchIO.output(timePreditionIndex+" states evaluated. "+ spaceDescription.SizeOfSpace + 
+                " total states ("+100*timePreditionIndex/spaceDescription.SizeOfSpace
+                +"% complete)");
             SearchIO.output("Predicted time for the process to end:\n" + endTime);
         }
 

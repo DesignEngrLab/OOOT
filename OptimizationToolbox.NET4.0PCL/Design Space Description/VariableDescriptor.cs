@@ -91,7 +91,8 @@ namespace OptimizationToolbox
             set
             {
                 delta = value;
-                defineRemainingDiscreteValues(1 + (long)((upperBound - lowerBound) / delta), delta);
+                if (!double.IsNaN(delta))
+                    defineRemainingDiscreteValues(1 + (long)((upperBound - lowerBound) / delta), delta);
             }
         }
 
