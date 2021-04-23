@@ -5,7 +5,7 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="StarMath" Version="2.0.17.1019" />
+    <PackageReference Include="StarMath" Version="2.0.20.204" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OptimizationToolbox\Object-Oriented Optimization Toolbox.csproj" />

@@ -5,15 +5,15 @@ VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{D92977F7-C1BA-48C3-BFC7-56D41CF05EC0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example2 Genetic Algorithm", "Examples\Example2 Genetic Algorithm\Example2 Genetic Algorithm.csproj", "{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example2 Genetic Algorithm", "Examples\Example2 Genetic Algorithm\Example2 Genetic Algorithm.csproj", "{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example1 Simple OneFunction", "Examples\Example1 Simple One Function\Example1 Simple OneFunction.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example1 Simple OneFunction", "Examples\Example1 Simple One Function\Example1 Simple OneFunction.csproj", "{21B926E3-326A-41E2-9DA8-03D537B73B86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example3 Using XML and Comparison", "Examples\Example3 Using XML and Comparison\Example3 Using XML and Comparison.csproj", "{763E9805-3D7C-493D-AEA3-C18978857408}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example3 Using XML and Comparison", "Examples\Example3 Using XML and Comparison\Example3 Using XML and Comparison.csproj", "{763E9805-3D7C-493D-AEA3-C18978857408}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example4 Using Dependent Analysis", "Examples\Example4 Using Dependent Analysis\Example4 Using Dependent Analysis.csproj", "{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example4 Using Dependent Analysis", "Examples\Example4 Using Dependent Analysis\Example4 Using Dependent Analysis.csproj", "{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example5 Multi-Objective Genetic Algorithm", "Examples\Example5 Multi-Objective Genetic Algorithm\Example5 Multi-Objective Genetic Algorithm.csproj", "{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Example5 Multi-Objective Genetic Algorithm", "Examples\Example5 Multi-Objective Genetic Algorithm\Example5 Multi-Objective Genetic Algorithm.csproj", "{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{5E7C5C6D-E426-4C1B-956A-A3E8B98AC671}"
 	ProjectSection(SolutionItems) = preProject
@@ -36,8 +36,8 @@ Global
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|x64.ActiveCfg = Debug|x64
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|x86.ActiveCfg = Debug|x86
 		{13DD432E-CBC6-4FC2-B1C0-B4FDB865BC1A}.Debug|x86.Build.0 = Debug|x86
@@ -93,8 +93,8 @@ Global
 		{C6A3CB42-D7F2-4D1B-881E-C646D3720DE6}.Release|x86.Build.0 = Release|x86
 		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|Mixed Platforms.ActiveCfg = Debug|x64
-		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|Mixed Platforms.Build.0 = Debug|x64
+		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|x64.ActiveCfg = Debug|x64
 		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|x64.Build.0 = Debug|x64
 		{6790DBCA-8A26-4FEC-B93F-17A9B65CF8CA}.Debug|x86.ActiveCfg = Debug|x86
