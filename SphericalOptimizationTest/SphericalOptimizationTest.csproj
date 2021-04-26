@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="StarMath" Version="2.0.20.204" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\TVGL\TessellationAndVoxelizationGeometryLibrary\TessellationAndVoxelizationGeometryLibrary.Standard.csproj" />
+    <ProjectReference Include="..\..\TVGL\TVGL Presenter\TVGL Presenter.csproj" />
+    <ProjectReference Include="..\SphericalOptimization\SphericalOptimization.csproj" />
+  </ItemGroup>
+
+</Project>
