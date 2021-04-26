@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="HillClimbing.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,6 +38,11 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class HillClimbing.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class HillClimbing : abstractOptMethod
     {
         /// <summary>
@@ -40,6 +58,9 @@ namespace OptimizationToolbox
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HillClimbing"/> class.
+        /// </summary>
         public HillClimbing()
         {
             RequiresObjectiveFunction = true;
@@ -55,6 +76,10 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Adds the specified object to the optimization routine.
+        /// </summary>
+        /// <param name="function">The object, function.</param>
         public override void Add(object function)
         {
             if (function is abstractGenerator)
@@ -64,6 +89,11 @@ namespace OptimizationToolbox
             else base.Add(function);
         }
 
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             var candidates = new List<ICandidate> { new Candidate(calc_f(x), x) };

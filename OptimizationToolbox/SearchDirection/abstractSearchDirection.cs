@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractSearchDirection.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,7 +38,7 @@ namespace OptimizationToolbox
 {
     /// <summary>
     /// The class that all search direction methods must inherit from. By search direction, we mean
-    /// the vector, d that the numerical method must search in. The simplest example being SteepestDescent - 
+    /// the vector, d that the numerical method must search in. The simplest example being SteepestDescent -
     /// in the opposite direction of the gradient.
     /// </summary>
     public abstract class abstractSearchDirection
@@ -38,7 +51,7 @@ namespace OptimizationToolbox
         /// <param name="f">The f.</param>
         /// <param name="initAlpha">The init alpha.</param>
         /// <param name="reset">if set to <c>true</c> [reset].</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         public abstract double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false);
 
         /// <summary>
@@ -48,7 +61,7 @@ namespace OptimizationToolbox
         /// <param name="gradf">The gradf.</param>
         /// <param name="f">The f.</param>
         /// <param name="reset">if set to <c>true</c> [reset].</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         public virtual double[] find(double[] x, double[] gradf, double f, Boolean reset = false)
         {
             var dummy = double.NaN;

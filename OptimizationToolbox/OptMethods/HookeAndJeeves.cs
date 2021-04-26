@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="HookeAndJeeves.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
@@ -26,20 +39,46 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class HookeAndJeeves.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class HookeAndJeeves : abstractOptMethod
     {
         #region Fields
 
+        /// <summary>
+        /// The alpha
+        /// </summary>
         private readonly double alpha = 2;
+        /// <summary>
+        /// The beta
+        /// </summary>
         private readonly double beta = -0.5;
+        /// <summary>
+        /// The step size
+        /// </summary>
         private double stepSize = 1.0;
+        /// <summary>
+        /// The minimum step size
+        /// </summary>
         private readonly double minimumStepSize = 1.0e-8;
+        /// <summary>
+        /// The step too small convergence
+        /// </summary>
         private readonly DirectSearchStepTooSmallConvergence stepTooSmallConvergence;
+        /// <summary>
+        /// The same candidate
+        /// </summary>
         private readonly sameCandidate _sameCandidate;
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HookeAndJeeves"/> class.
+        /// </summary>
         public HookeAndJeeves()
         {
             RequiresObjectiveFunction = true;
@@ -56,6 +95,13 @@ namespace OptimizationToolbox
             _sameCandidate = new sameCandidate(Parameters.ToleranceForSame);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HookeAndJeeves"/> class.
+        /// </summary>
+        /// <param name="alpha">The alpha.</param>
+        /// <param name="beta">The beta.</param>
+        /// <param name="initialStepSize">Initial size of the step.</param>
+        /// <param name="minimumStepSize">Minimum size of the step.</param>
         public HookeAndJeeves(double alpha, double beta, double initialStepSize, double minimumStepSize)
             : this()
         {
@@ -67,6 +113,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             fStar = calc_f(x);
@@ -112,6 +164,11 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Explores the specified this step size.
+        /// </summary>
+        /// <param name="thisStepSize">Size of the this step.</param>
+        /// <returns>Boolean.</returns>
         private Boolean explore(out double thisStepSize)
         {
             var success = false;

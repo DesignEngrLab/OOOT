@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="MaxAgeConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,11 +38,22 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class MaxAgeConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class MaxAgeConvergence : abstractConvergence
     {
         #region Fields
 
+        /// <summary>
+        /// The age
+        /// </summary>
         private int age;
+        /// <summary>
+        /// The xlast
+        /// </summary>
         private IList<double> xlast;
         /// <summary>
         /// Gets or sets the tolerance for same candidate (used to increment the internal age of best).
@@ -45,14 +69,14 @@ namespace OptimizationToolbox
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxAgeConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxAgeConvergence" /> class.
         /// </summary>
         public MaxAgeConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxAgeConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxAgeConvergence" /> class.
         /// </summary>
         /// <param name="maxAge">The max age.</param>
         /// <param name="toleranceForSame">The tolerance for same.</param>
@@ -63,8 +87,8 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Internally keeps track of the age of the best candidate. If it exceeds the given MaxAge value, 
-        /// the criteria will return true. This is to say, if no better candidate is found in MaxAge 
+        /// Internally keeps track of the age of the best candidate. If it exceeds the given MaxAge value,
+        /// the criteria will return true. This is to say, if no better candidate is found in MaxAge
         /// iterations, return true.
         /// </summary>
         /// <param name="iteration">The number of iterations (not used).</param>
@@ -73,9 +97,8 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x.</param>
         /// <param name="population">The population of candidates (not used).</param>
         /// <param name="gradF">The gradient of F (not used).</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">MaxAgeConvergence expected a 1-D array of doubles representing the decision vector, x.</exception>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
             IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
@@ -87,6 +110,10 @@ namespace OptimizationToolbox
             return (age >= maxAge);
         }
 
+        /// <summary>
+        /// Finds the age of best.
+        /// </summary>
+        /// <param name="x">The x.</param>
         private void findAgeOfBest(IList<double> x)
         {
             if ((xlast != null) && (x.norm1(xlast) <= toleranceForSame)) age++;

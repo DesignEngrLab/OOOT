@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="DeltaGradFConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,17 +38,22 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class DeltaGradFConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class DeltaGradFConvergence : abstractConvergence
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeltaGradFConvergence"/> class.
+        /// Initializes a new instance of the <see cref="DeltaGradFConvergence" /> class.
         /// </summary>
         public DeltaGradFConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeltaGradFConvergence"/> class.
+        /// Initializes a new instance of the <see cref="DeltaGradFConvergence" /> class.
         /// </summary>
         /// <param name="minDifference">The min difference.</param>
         public DeltaGradFConvergence(double minDifference)
@@ -50,7 +68,7 @@ namespace OptimizationToolbox
         public double minDifference { get; set; }
 
         /// <summary>
-        /// Given a value D (minimum difference), this criteria will return true, if the norm 
+        /// Given a value D (minimum difference), this criteria will return true, if the norm
         /// (1-norm sum of absolute values) of the gradient less than or equal to D.
         /// </summary>
         /// <param name="iteration">The number of iterations (not used).</param>
@@ -59,9 +77,9 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x (not used).</param>
         /// <param name="population">The population of candidates (not used).</param>
         /// <param name="gradF">The gradient of F.</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">DeltaGradFConvergence expected a 1-D array of doubles (in the fourth argument, YDoubleArray2) "
+        ///                                     + " representing the last calculated gradient of f.</exception>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
             IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {

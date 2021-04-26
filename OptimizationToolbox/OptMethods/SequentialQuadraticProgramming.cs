@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="SequentialQuadraticProgramming.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -28,7 +41,10 @@ using StarMathLib;
 namespace OptimizationToolbox
 {
     /// <summary>
+    /// Class SequentialQuadraticProgramming. This class cannot be inherited.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
     /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public sealed class SequentialQuadraticProgramming : abstractOptMethod
     {
         #region Fields
@@ -39,22 +55,46 @@ namespace OptimizationToolbox
          * function is called. */
 
         /* A is the gradient of the active constraints as an m by n matrix. */
+        /// <summary>
+        /// a
+        /// </summary>
         private double[,] A;
+        /// <summary>
+        /// The active vals
+        /// </summary>
         private double[] activeVals;
+        /// <summary>
+        /// The alpha star
+        /// </summary>
         private double alphaStar;
+        /// <summary>
+        /// The dk
+        /// </summary>
         private double[] dk;
 
         /* fk is the value of f(xk). */
+        /// <summary>
+        /// The fk
+        /// </summary>
         private double fk;
+        /// <summary>
+        /// The grad f
+        /// </summary>
         private double[] gradF;
 
         /* Lagrange multipliers for active constraints. */
+        /// <summary>
+        /// The lambdas
+        /// </summary>
         private double[] lambdas;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SequentialQuadraticProgramming"/> class.
+        /// </summary>
         public SequentialQuadraticProgramming()
         {
             RequiresObjectiveFunction = true;
@@ -78,6 +118,12 @@ namespace OptimizationToolbox
 
         #region Main Function, run
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             //evaluate f(x0)
@@ -115,6 +161,10 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Adjusts the merit penalty.
+        /// </summary>
+        /// <returns>System.Double.</returns>
         private double adjustMeritPenalty()
         {
             var weight = lambdas.norm1();
@@ -126,6 +176,13 @@ namespace OptimizationToolbox
             return weight;
         }
 
+        /// <summary>
+        /// Prevents the negatives.
+        /// </summary>
+        /// <param name="xk">The xk.</param>
+        /// <param name="dk">The dk.</param>
+        /// <param name="initAlpha">The initialize alpha.</param>
+        /// <returns>System.Double.</returns>
         private static double preventNegatives(IList<double> xk, double[] dk, double initAlpha)
         {
             for (var i = 0; i < dk.GetLength(0); i++)
@@ -137,9 +194,9 @@ namespace OptimizationToolbox
         #endregion
 
         /// <summary>
-        ///   Formulates the active set and gradients.
+        /// Formulates the active set and gradients.
         /// </summary>
-        /// <param name = "xk">The xk.</param>
+        /// <param name="xk">The xk.</param>
         /// <returns>the gradient of the active constraints as an m by n matrix.</returns>
         private double[,] formulateActiveSetAndGradients(double[] xk)
         {
@@ -172,11 +229,11 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        ///   Calculates the SQP search direction.
+        /// Calculates the SQP search direction.
         /// </summary>
-        /// <param name = "xk">The xk.</param>
-        /// <param name = "initAlpha">The init alpha.</param>
-        /// <returns></returns>
+        /// <param name="xk">The xk.</param>
+        /// <param name="initAlpha">The init alpha.</param>
+        /// <returns>System.Double[].</returns>
         private double[] calculateSQPSearchDirection(double[] xk, out double initAlpha)
         {
             activeVals = calc_active_vector(xk);

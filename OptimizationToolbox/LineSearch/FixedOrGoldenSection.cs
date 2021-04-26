@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="FixedOrGoldenSection.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -23,12 +36,17 @@ using System;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class FixedOrGoldenSection.
+    /// Implements the <see cref="OptimizationToolbox.abstractLineSearch" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractLineSearch" />
     public class FixedOrGoldenSection : abstractLineSearch
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="GoldenSection"/> class.
+        /// Initializes a new instance of the <see cref="GoldenSection" /> class.
         /// Unlike other line search methods, there is no need to provide a kmax.
         /// This is determined directly from the epsilon in the body of the code
         /// </summary>
@@ -41,6 +59,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <returns>System.Double.</returns>
         public override double findAlphaStar(double[] x, double[] dir)
         {
             var alphaLow = 0.0;

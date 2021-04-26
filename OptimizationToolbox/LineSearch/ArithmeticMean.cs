@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ArithmeticMean.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -31,7 +44,7 @@ namespace OptimizationToolbox
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ArithmeticMean"/> class.
+        /// Initializes a new instance of the <see cref="ArithmeticMean" /> class.
         /// </summary>
         /// <param name="epsilon">The epsilon.</param>
         /// <param name="stepSize">Size of the step.</param>
@@ -48,7 +61,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="dir">The dir.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public override double findAlphaStar(double[] x, double[] dir)
         {
             var alphaLow = 0.0;

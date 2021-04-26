@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="GAMutationBitString.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,13 +37,35 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class GAMutationBitString.
+    /// Implements the <see cref="OptimizationToolbox.GeneticMutationGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.GeneticMutationGenerator" />
     public class GAMutationBitString : GeneticMutationGenerator
     {
+        /// <summary>
+        /// The bit string length
+        /// </summary>
         private readonly int bitStringLength;
+        /// <summary>
+        /// The limits
+        /// </summary>
         private readonly BitByteHexLimits[] limits;
+        /// <summary>
+        /// The m rate per bit
+        /// </summary>
         private readonly double mRatePerBit;
+        /// <summary>
+        /// The random
+        /// </summary>
         private readonly Random rnd;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GAMutationBitString"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <param name="mutationRate">The mutation rate.</param>
         public GAMutationBitString(DesignSpaceDescription discreteSpaceDescriptor, double mutationRate = 0.1)
             : base(discreteSpaceDescriptor)
         {
@@ -40,6 +75,11 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="control">The control.</param>
         public override void GenerateCandidates(ref List<ICandidate> candidates, int control = -1)
         {
             for (var i = candidates.Count - 1; i >= 0; i--)

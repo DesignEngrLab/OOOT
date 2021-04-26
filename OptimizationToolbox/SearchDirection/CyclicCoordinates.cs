@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="CyclicCoordinates.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,11 +37,31 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class CyclicCoordinates.
+    /// Implements the <see cref="OptimizationToolbox.abstractSearchDirection" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSearchDirection" />
     public class CyclicCoordinates : abstractSearchDirection
     {
+        /// <summary>
+        /// The counter
+        /// </summary>
         private int counter;
+        /// <summary>
+        /// The x last
+        /// </summary>
         private double[] xLast;
 
+        /// <summary>
+        /// Finds the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="gradf">The gradf.</param>
+        /// <param name="f">The f.</param>
+        /// <param name="initAlpha">The initialize alpha.</param>
+        /// <param name="reset">The reset.</param>
+        /// <returns>System.Double[].</returns>
         public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, Boolean reset = false)
         {
             if (counter == x.GetLength(0))

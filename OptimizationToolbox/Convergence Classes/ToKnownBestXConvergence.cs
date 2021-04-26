@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ToKnownBestXConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,6 +38,11 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class ToKnownBestXConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class ToKnownBestXConvergence : abstractConvergence
     {
         /// <summary>
@@ -41,14 +59,14 @@ namespace OptimizationToolbox
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ToKnownBestXConvergence"/> class.
+        /// Initializes a new instance of the <see cref="ToKnownBestXConvergence" /> class.
         /// </summary>
         public ToKnownBestXConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ToKnownBestXConvergence"/> class.
+        /// Initializes a new instance of the <see cref="ToKnownBestXConvergence" /> class.
         /// </summary>
         /// <param name="xBest">The x best.</param>
         /// <param name="minDifference">The min difference.</param>
@@ -71,9 +89,9 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x.</param>
         /// <param name="population">The population of candidates (not used).</param>
         /// <param name="gradF">The gradient of F (not used).</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">DeltaXConvergence expected a 1-D array of doubles (in the third argument, YDoubleArray1) "
+        ///                                     + " representing the current decision vector, x.</exception>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
             if (xBest == null)

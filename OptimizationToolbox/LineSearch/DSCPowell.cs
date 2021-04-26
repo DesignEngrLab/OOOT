@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="DSCPowell.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -26,10 +39,21 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class DSCPowell.
+    /// Implements the <see cref="OptimizationToolbox.abstractLineSearch" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractLineSearch" />
     public class DSCPowell : abstractLineSearch
     {
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DSCPowell"/> class.
+        /// </summary>
+        /// <param name="epsilon">The epsilon.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="kMax">The k maximum.</param>
         public DSCPowell(double epsilon, double stepSize, int kMax)
             : base(epsilon, stepSize, kMax)
         {
@@ -37,6 +61,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <returns>System.Double.</returns>
         public override double findAlphaStar(double[] x, double[] dir)
         {
             // include the first two points in this SortedList (essentially, the a, b and c).
@@ -137,6 +167,14 @@ namespace OptimizationToolbox
             return alphaAndF.Keys[minIndex];
         }
 
+        /// <summary>
+        /// Creates new pointisfarthest.
+        /// </summary>
+        /// <param name="alphaStar">The alpha star.</param>
+        /// <param name="alphas">The alphas.</param>
+        /// <param name="minIndex">The minimum index.</param>
+        /// <returns>Boolean.</returns>
+        /// <exception cref="Exception">All cases are accounted for. You should see this.</exception>
         private static Boolean NewPointIsFarthest(double alphaStar, IList<double> alphas, int minIndex)
         {
             var delta = Math.Abs(alphaStar - alphas[minIndex]);
@@ -150,6 +188,12 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Quadratics the approx.
+        /// </summary>
+        /// <param name="alphaNew">The alpha new.</param>
+        /// <param name="aFaP">a fa p.</param>
+        /// <returns>Boolean.</returns>
         static Boolean quadraticApprox(out double alphaNew, SortedList<double, double> aFaP)
         {
             var a = aFaP.Keys[0];
@@ -166,11 +210,26 @@ namespace OptimizationToolbox
             return (2 * term1 / term3 > 0.0);
         }
     }
+    /// <summary>
+    /// Enum DSCPowellLoopStatus
+    /// </summary>
     enum DSCPowellLoopStatus
     {
+        /// <summary>
+        /// The normal
+        /// </summary>
         Normal,
+        /// <summary>
+        /// The second deriv negative
+        /// </summary>
         SecondDerivNegative,
+        /// <summary>
+        /// Creates new pointisfarthest.
+        /// </summary>
         NewPointIsFarthest,
+        /// <summary>
+        /// Creates new pointalreadyfound.
+        /// </summary>
         NewPointAlreadyFound
     }
 

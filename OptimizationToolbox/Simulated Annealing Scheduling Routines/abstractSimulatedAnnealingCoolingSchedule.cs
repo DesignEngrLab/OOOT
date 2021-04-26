@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractSimulatedAnnealingCoolingSchedule.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -42,7 +55,7 @@ namespace OptimizationToolbox
         protected int samplesThusFar;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="abstractSimulatedAnnealingCoolingSchedule"/> class.
+        /// Initializes a new instance of the <see cref="abstractSimulatedAnnealingCoolingSchedule" /> class.
         /// </summary>
         /// <param name="samplesInGeneration">The samples in generation.</param>
         protected abstractSimulatedAnnealingCoolingSchedule(int samplesInGeneration)
@@ -59,7 +72,17 @@ namespace OptimizationToolbox
             this.optMethod = optMethod;
         }
 
+        /// <summary>
+        /// Sets the initial temperature.
+        /// </summary>
+        /// <returns>System.Double.</returns>
         internal abstract double SetInitialTemperature();
+        /// <summary>
+        /// Updates the temperature.
+        /// </summary>
+        /// <param name="temperature">The temperature.</param>
+        /// <param name="candidates">The candidates.</param>
+        /// <returns>System.Double.</returns>
         internal abstract double UpdateTemperature(double temperature, List<ICandidate> candidates);
     }
 }

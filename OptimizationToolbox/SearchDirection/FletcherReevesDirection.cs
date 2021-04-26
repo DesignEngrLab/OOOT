@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="FletcherReevesDirection.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -23,13 +36,39 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class FletcherReevesDirection.
+    /// Implements the <see cref="OptimizationToolbox.abstractSearchDirection" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSearchDirection" />
     public class FletcherReevesDirection : abstractSearchDirection
     {
+        /// <summary>
+        /// The dir
+        /// </summary>
         private double[] dir;
+        /// <summary>
+        /// The dir last
+        /// </summary>
         private double[] dirLast; //last search direction
+        /// <summary>
+        /// The mag grad f
+        /// </summary>
         private double magGradF; //the magnitude of the current gradient of f
+        /// <summary>
+        /// The mag grad f last
+        /// </summary>
         private double magGradFLast; //the magnitude of the last gradient of f
 
+        /// <summary>
+        /// Finds the direction for the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="gradf">The gradf.</param>
+        /// <param name="f">The f.</param>
+        /// <param name="initAlpha">The init alpha.</param>
+        /// <param name="reset">if set to <c>true</c> [reset].</param>
+        /// <returns>System.Double[].</returns>
         public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, bool reset = false)
         {
             /* if a TRUE is sent to reset, then we call a simple steepestDescent function. */
@@ -62,6 +101,11 @@ namespace OptimizationToolbox
             return dir;
         }
 
+        /// <summary>
+        /// Steepests the descent reset.
+        /// </summary>
+        /// <param name="gradf">The gradf.</param>
+        /// <returns>System.Double[].</returns>
         private double[] steepestDescentReset(double[] gradf)
         {
             magGradFLast = magGradF = gradf.norm2();

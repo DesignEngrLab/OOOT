@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="BitStringNeighborGenerator.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,12 +37,30 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class BitStringNeighborGenerator.
+    /// Implements the <see cref="OptimizationToolbox.abstractGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractGenerator" />
     public class BitStringNeighborGenerator : abstractGenerator
     {
+        /// <summary>
+        /// The bit string length
+        /// </summary>
         private readonly int bitStringLength;
+        /// <summary>
+        /// The limits
+        /// </summary>
         private readonly BitByteHexLimits[] limits;
+        /// <summary>
+        /// The random
+        /// </summary>
         private readonly Random rnd;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BitStringNeighborGenerator"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         public BitStringNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
@@ -38,6 +69,12 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="numToCreate">The number to create.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
         public override List<double[]> GenerateCandidates(double[] candidate, int numToCreate = -1)
         {
             var newCands = new List<double[]>();

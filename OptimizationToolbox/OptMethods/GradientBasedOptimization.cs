@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="GradientBasedOptimization.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -23,21 +36,41 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class GradientBasedOptimization.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class GradientBasedOptimization : abstractOptMethod
     {
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
+        /// <summary>
+        /// The alpha star
+        /// </summary>
         private double alphaStar;
+        /// <summary>
+        /// The dk
+        /// </summary>
         private double[] dk;
 
         /* fk is the value of f(xk). */
+        /// <summary>
+        /// The fk
+        /// </summary>
         private double fk;
+        /// <summary>
+        /// The grad f
+        /// </summary>
         private double[] gradF;
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GradientBasedOptimization"/> class.
+        /// </summary>
         public GradientBasedOptimization()
         {
             RequiresObjectiveFunction = true;
@@ -55,6 +88,11 @@ namespace OptimizationToolbox
 
         #region Main Function, run
 
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             /* this is just to overcome a small issue with the compiler. It thinks that xStar will

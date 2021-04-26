@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractGenerator.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -38,9 +51,9 @@ namespace OptimizationToolbox
         protected readonly DesignSpaceDescription discreteSpaceDescriptor;
 
         /// <summary>
-        ///   Initializes a new instance of the <see cref = "abstractGenerator" /> class.
+        /// Initializes a new instance of the <see cref="abstractGenerator" /> class.
         /// </summary>
-        /// <param name = "discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected abstractGenerator(DesignSpaceDescription discreteSpaceDescriptor)
         {
             this.discreteSpaceDescriptor = discreteSpaceDescriptor;
@@ -79,6 +92,8 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         /// <param name="control">The control.</param>
+        /// <exception cref="NotImplementedException">An override of GenerateOneCandidate (which takes a list of Candidates) was not created in class, " +
+        ///                 GetType()</exception>
         public virtual void GenerateCandidates(ref List<ICandidate> candidates, int control = -1)
         {
             throw new NotImplementedException(
@@ -91,7 +106,9 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="candidate">The candidate.</param>
         /// <param name="control">The control.</param>
-        /// <returns></returns>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
+        /// <exception cref="NotImplementedException">An override of GenerateCandidates (which takes a single  candidate's double array and return a list of candidates)" +
+        ///                 " was not created in class, " + GetType()</exception>
         public virtual List<double[]> GenerateCandidates(double[] candidate, int control = -1)
         {
             throw new NotImplementedException(
@@ -109,7 +126,7 @@ namespace OptimizationToolbox
     public abstract class SamplingGenerator : abstractGenerator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="SamplingGenerator"/> class.
+        /// Initializes a new instance of the <see cref="SamplingGenerator" /> class.
         /// </summary>
         /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected SamplingGenerator(DesignSpaceDescription discreteSpaceDescriptor)
@@ -126,7 +143,7 @@ namespace OptimizationToolbox
     public abstract class GeneticCrossoverGenerator : abstractGenerator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GeneticCrossoverGenerator"/> class.
+        /// Initializes a new instance of the <see cref="GeneticCrossoverGenerator" /> class.
         /// </summary>
         /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected GeneticCrossoverGenerator(DesignSpaceDescription discreteSpaceDescriptor)
@@ -137,12 +154,12 @@ namespace OptimizationToolbox
 
     /// <summary>
     /// The mutation abstract class is simply used by the genetic algorithm to recognize which generators are to be
-    /// used for mutation (as opposed to for initial sampling or crossover). 
+    /// used for mutation (as opposed to for initial sampling or crossover).
     /// </summary>
     public abstract class GeneticMutationGenerator : abstractGenerator
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="GeneticMutationGenerator"/> class.
+        /// Initializes a new instance of the <see cref="GeneticMutationGenerator" /> class.
         /// </summary>
         /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         protected GeneticMutationGenerator(DesignSpaceDescription discreteSpaceDescriptor)

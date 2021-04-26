@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="NelderMead.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
@@ -23,17 +36,43 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class NelderMead.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class NelderMead : abstractOptMethod
     {
         #region Fields
 
+        /// <summary>
+        /// The chi
+        /// </summary>
         private readonly double chi = 2;
+        /// <summary>
+        /// The initialize new point addition
+        /// </summary>
         private readonly double initNewPointAddition = 0.5;
+        /// <summary>
+        /// The initialize new point percentage
+        /// </summary>
         private readonly double initNewPointPercentage = 0.01;
+        /// <summary>
+        /// The psi
+        /// </summary>
         private readonly double psi = 0.5;
+        /// <summary>
+        /// The rho
+        /// </summary>
         private readonly double rho = 1;
+        /// <summary>
+        /// The sigma
+        /// </summary>
         private readonly double sigma = 0.5;
 
+        /// <summary>
+        /// The vertices
+        /// </summary>
         private readonly SortedList<double, double[]> vertices =
             new SortedList<double, double[]>(new optimizeSort(optimize.minimize));
 
@@ -41,6 +80,9 @@ namespace OptimizationToolbox
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NelderMead"/> class.
+        /// </summary>
         public NelderMead()
         {
             RequiresObjectiveFunction = true;
@@ -54,6 +96,15 @@ namespace OptimizationToolbox
             RequiresDiscreteSpaceDescriptor = false;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NelderMead"/> class.
+        /// </summary>
+        /// <param name="rho">The rho.</param>
+        /// <param name="chi">The chi.</param>
+        /// <param name="psi">The psi.</param>
+        /// <param name="sigma">The sigma.</param>
+        /// <param name="initNewPointPercentage">The initialize new point percentage.</param>
+        /// <param name="initNewPointAddition">The initialize new point addition.</param>
         public NelderMead(double rho, double chi, double psi, double sigma, double initNewPointPercentage = double.NaN,
                           double initNewPointAddition = double.NaN)
             : this()
@@ -68,6 +119,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             vertices.Add(calc_f(x), x);
@@ -227,6 +284,11 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Clones the vertex.
+        /// </summary>
+        /// <param name="vertex">The vertex.</param>
+        /// <returns>System.Double[].</returns>
         private static double[] CloneVertex(double[] vertex)
         {
             return (double[])vertex.Clone();

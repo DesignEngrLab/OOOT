@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractConvergenceClasses.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -46,9 +59,7 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x.</param>
         /// <param name="population">The population of candidates.</param>
         /// <param name="gradF">The gradient of F.</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
         public abstract Boolean converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
                                           IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null);
     }

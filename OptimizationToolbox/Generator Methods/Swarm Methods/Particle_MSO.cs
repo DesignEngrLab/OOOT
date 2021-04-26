@@ -1,17 +1,55 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="Particle_MSO.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Linq;
 
 namespace OptimizationToolbox
 {
-	public class Particle_MSO
+    /// <summary>
+    /// Class Particle_MSO.
+    /// </summary>
+    public class Particle_MSO
 	{
-		static Random ran = new Random(0);
-		public double[] position;
-		public double[] velocity;
-		public double cost;
-		public  double[] bestPartPos;
-		public  double bestPartCost;
-		public Particle_MSO (double[] initPoints)
+        /// <summary>
+        /// The ran
+        /// </summary>
+        static Random ran = new Random(0);
+        /// <summary>
+        /// The position
+        /// </summary>
+        public double[] position;
+        /// <summary>
+        /// The velocity
+        /// </summary>
+        public double[] velocity;
+        /// <summary>
+        /// The cost
+        /// </summary>
+        public double cost;
+        /// <summary>
+        /// The best part position
+        /// </summary>
+        public double[] bestPartPos;
+        /// <summary>
+        /// The best part cost
+        /// </summary>
+        public double bestPartCost;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Particle_MSO"/> class.
+        /// </summary>
+        /// <param name="initPoints">The initialize points.</param>
+        public Particle_MSO (double[] initPoints)
 		{
 			this.position = new double[initPoints.GetLength(0)];
 			this.velocity = new double[initPoints.GetLength(0)];
@@ -28,7 +66,13 @@ namespace OptimizationToolbox
 
 
 		}
-		public Particle_MSO (int  dim, double min, double max)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Particle_MSO"/> class.
+        /// </summary>
+        /// <param name="dim">The dim.</param>
+        /// <param name="min">The minimum.</param>
+        /// <param name="max">The maximum.</param>
+        public Particle_MSO (int  dim, double min, double max)
 		{
 			this.position = new double[dim];
 			this.velocity = new double[dim];

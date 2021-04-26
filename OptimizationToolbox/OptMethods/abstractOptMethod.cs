@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractOptMethod.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -85,24 +98,17 @@ namespace OptimizationToolbox
         /// <summary>
         /// Gets or sets a value indicating whether [requires objective function].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires objective function]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires objective function]; otherwise, <c>false</c>.</value>
         public Boolean RequiresObjectiveFunction { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [constraints solved with penalties].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [constraints solved with penalties]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [constraints solved with penalties]; otherwise, <c>false</c>.</value>
         public Boolean ConstraintsSolvedWithPenalties { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires merit function].
-        /// 
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires merit function]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires merit function]; otherwise, <c>false</c>.</value>
         public Boolean RequiresMeritFunction
         {
             get
@@ -117,55 +123,44 @@ namespace OptimizationToolbox
         /* In most cases RequiresMeritFunction is the same as ConstraintsSolvedWithPenalties, so 
          * RequiresMeritFunction is rarely set. The only time it is needed is when the method
          * sometimes uses the penalty and sometimes does not. This is only the case in SQP and GRG.*/
+        /// <summary>
+        /// The requires merit function
+        /// </summary>
         private Boolean _requiresMeritFunction;
         /// <summary>
         /// Gets or sets a value indicating whether [inequalities converted to equalities].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [inequalities converted to equalities]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [inequalities converted to equalities]; otherwise, <c>false</c>.</value>
         public Boolean InequalitiesConvertedToEqualities { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires search direction method].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires search direction method]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires search direction method]; otherwise, <c>false</c>.</value>
         public Boolean RequiresSearchDirectionMethod { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires line search method].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires line search method]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires line search method]; otherwise, <c>false</c>.</value>
         public Boolean RequiresLineSearchMethod { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires an initial point].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires an initial point]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires an initial point]; otherwise, <c>false</c>.</value>
         public Boolean RequiresAnInitialPoint { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires convergence criteria].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires convergence criteria]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires convergence criteria]; otherwise, <c>false</c>.</value>
         public Boolean RequiresConvergenceCriteria { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires feasible start point].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires feasible start point]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires feasible start point]; otherwise, <c>false</c>.</value>
         public Boolean RequiresFeasibleStartPoint { get; protected set; }
         /// <summary>
         /// Gets or sets a value indicating whether [requires discrete space descriptor].
         /// </summary>
-        /// <value>
-        /// 	<c>true</c> if [requires discrete space descriptor]; otherwise, <c>false</c>.
-        /// </value>
+        /// <value><c>true</c> if [requires discrete space descriptor]; otherwise, <c>false</c>.</value>
         public Boolean RequiresDiscreteSpaceDescriptor { get; protected set; }
 
         /// <summary>
@@ -201,7 +196,7 @@ namespace OptimizationToolbox
         #region Set-up function, Add.
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="abstractOptMethod"/> class.
+        /// Initializes a new instance of the <see cref="abstractOptMethod" /> class.
         /// </summary>
         protected abstractOptMethod()
         {
@@ -218,6 +213,11 @@ namespace OptimizationToolbox
         /// Adds the specified object to the optimization routine.
         /// </summary>
         /// <param name="function">The object, function.</param>
+        /// <exception cref="Exception">You cannot add a convergence method of type " + function.GetType() +
+        ///                                         "to the optimization method since one already exists of this same type.</exception>
+        /// <exception cref="Exception">Function, " + function + ", not of known type (needs "
+        ///                                      + "to inherit from inequality, equality, objectiveFunction, abstractLineSearch, " +
+        ///                                      "or abstractSearchDirection).</exception>
         public virtual void Add(object function)
         {
             if (function is ProblemDefinition)
@@ -285,7 +285,7 @@ namespace OptimizationToolbox
         #region Initialize and Run funtions
 
         /// <summary>
-        /// Runs the optimization process and returns the optimal as xStar 
+        /// Runs the optimization process and returns the optimal as xStar
         /// and the value of fStar is return by the function.
         /// </summary>
         /// <param name="xStar">The optimizer, xStar.</param>
@@ -326,6 +326,12 @@ namespace OptimizationToolbox
             return run(out xStar, null);
         }
 
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <param name="xInit">The x initialize.</param>
+        /// <returns>System.Double.</returns>
         private double run(out double[] xStar, double[] xInit)
         {
             xStar = null;
@@ -446,10 +452,14 @@ namespace OptimizationToolbox
         /// of the optimization method.
         /// </summary>
         /// <param name="xStar">The x star.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         protected abstract double run(out double[] xStar);
 
 
+        /// <summary>
+        /// Finds the feasible start point.
+        /// </summary>
+        /// <returns>Boolean.</returns>
         private Boolean findFeasibleStartPoint()
         {
             var average = x.norm1() / x.GetLength(0);
@@ -482,6 +492,10 @@ namespace OptimizationToolbox
 
         #region from/to Problem Definition
 
+        /// <summary>
+        /// Reads the in problem definition.
+        /// </summary>
+        /// <param name="pd">The pd.</param>
         private void readInProblemDefinition(ProblemDefinition pd)
         {
             foreach (var f0 in pd.f) Add(f0);
@@ -537,6 +551,9 @@ namespace OptimizationToolbox
 
         #region Convergence Main Function
 
+        /// <summary>
+        /// The number converge criteria needed
+        /// </summary>
         private int numConvergeCriteriaNeeded = 1;
 
         /// <summary>
@@ -578,7 +595,7 @@ namespace OptimizationToolbox
         /// <param name="xBest">The x best.</param>
         /// <param name="population">The population.</param>
         /// <param name="gradF">The grad F.</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
         protected Boolean notConverged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
                                           IList<double> xBest = null, IList<double[]> population = null,
             IList<double> gradF = null)

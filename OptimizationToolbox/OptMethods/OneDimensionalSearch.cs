@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="OneDimensionalSearch.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -17,16 +30,24 @@
  *     Please find further details and contact information on OOOT
  *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
- using StarMathLib;
+using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class OneDimensionalSearch.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class OneDimensionalSearch : abstractOptMethod
     {
+        /// <summary>
+        /// The step
+        /// </summary>
         private readonly double step;
         #region Constructor
         /// <summary>
-        /// Initializes a new instance of the <see cref="OneDimensionalSearch"/> class.
+        /// Initializes a new instance of the <see cref="OneDimensionalSearch" /> class.
         /// </summary>
         /// <param name="step">The step.</param>
         public OneDimensionalSearch(double step = double.NaN)

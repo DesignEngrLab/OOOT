@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="linearExteriorPenaltySum.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -23,10 +36,20 @@ using System;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class linearExteriorPenaltySum.
+    /// Implements the <see cref="OptimizationToolbox.abstractMeritFunction" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractMeritFunction" />
     public class linearExteriorPenaltySum : abstractMeritFunction
     {
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="linearExteriorPenaltySum"/> class.
+        /// </summary>
+        /// <param name="optMethod">The opt method.</param>
+        /// <param name="penaltyWeight">The penalty weight.</param>
         public linearExteriorPenaltySum(abstractOptMethod optMethod, double penaltyWeight)
             : base(optMethod, penaltyWeight)
         {
@@ -34,6 +57,11 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Calcs the penalty.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns>System.Double.</returns>
         public override double calcPenalty(double[] point)
         {
             var sum = 0.0;
@@ -53,6 +81,11 @@ namespace OptimizationToolbox
             return sum;
         }
 
+        /// <summary>
+        /// Calculates the gradient of penalty.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <returns>System.Double[].</returns>
         public override double[] calcGradientOfPenalty(double[] point)
         {
             var n = point.GetLength(0);

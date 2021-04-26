@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="GeneralizedReducedGradientSlack.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -27,26 +40,70 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class GeneralizedReducedGradientSlack. This class cannot be inherited.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public sealed class GeneralizedReducedGradientSlack : abstractOptMethod
     {
+        /// <summary>
+        /// The epsilon
+        /// </summary>
         private readonly double epsilon;
+        /// <summary>
+        /// The alpha star
+        /// </summary>
         private double alphaStar;
+        /// <summary>
+        /// The dk
+        /// </summary>
         private double[] dk;
+        /// <summary>
+        /// The fk
+        /// </summary>
         private double fk;
+        /// <summary>
+        /// The grad f
+        /// </summary>
         private double[] gradF;
 
+        /// <summary>
+        /// The grad h
+        /// </summary>
         private double[,] gradH, gradHWRT_xc, gradHWRT_xd;
+        /// <summary>
+        /// The inv grad HWRT xc
+        /// </summary>
         private double[,] invGradHWRT_xc;
 
         //inner loop counters and limits
+        /// <summary>
+        /// The xc attempts
+        /// </summary>
         private int xcAttempts;
+        /// <summary>
+        /// The xc indices
+        /// </summary>
         private List<int> xcIndices;
+        /// <summary>
+        /// The xd indices
+        /// </summary>
         private List<int> xdIndices;
 
+        /// <summary>
+        /// The xk last
+        /// </summary>
         private double[] xkLast;
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneralizedReducedGradientSlack"/> class.
+        /// </summary>
+        /// <param name="epsilon">The epsilon.</param>
+        /// <param name="innerMax">The inner maximum.</param>
+        /// <param name="outerMax">The outer maximum.</param>
         public GeneralizedReducedGradientSlack(double epsilon = 0.00001, int innerMax = 500, int outerMax = 5)
         {
             this.epsilon = epsilon;
@@ -71,6 +128,10 @@ namespace OptimizationToolbox
 
         #region Xd and Xc properties
 
+        /// <summary>
+        /// Gets or sets the xc.
+        /// </summary>
+        /// <value>The xc.</value>
         public double[] xc
         {
             get
@@ -90,6 +151,10 @@ namespace OptimizationToolbox
         }
 
         // these properties will use the x*Indices
+        /// <summary>
+        /// Gets or sets the xd.
+        /// </summary>
+        /// <value>The xd.</value>
         public double[] xd
         {
             get
@@ -112,6 +177,12 @@ namespace OptimizationToolbox
 
         #region Main Function, run
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             fStar = fk = calc_f(x);
@@ -157,6 +228,10 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Divides the xinto decision and dependent vars.
+        /// </summary>
+        /// <returns>Boolean.</returns>
         private Boolean divideXintoDecisionAndDependentVars()
         {
             // divide x into xc and xd using automated Guassian eliminiation approach
@@ -195,6 +270,9 @@ namespace OptimizationToolbox
             return (xcOldices.Any(i => !xcIndices.Contains(i)));
         }
 
+        /// <summary>
+        /// Divides the grad h into xc and xd parts.
+        /// </summary>
         private void divideGradH_intoXcAndXdParts()
         {
             gradHWRT_xc = new double[m, m];
@@ -209,6 +287,9 @@ namespace OptimizationToolbox
                     gradHWRT_xd[j, i] = gradH[j, xdIndices[i]];
         }
 
+        /// <summary>
+        /// Calculates the reduced gradient search direction.
+        /// </summary>
         private void calculateReducedGradientSearchDirection()
         {
             var gradFXc = new double[m];
@@ -231,6 +312,10 @@ namespace OptimizationToolbox
             dk = searchDirMethod.find(x, dk, fk);
         }
 
+        /// <summary>
+        /// Updates the xc.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool updateXc()
         {
             var innerFeasibleK = 0;

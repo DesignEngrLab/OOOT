@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="MultiObjectiveGeneticAlgorithm.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,8 +38,19 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class MultiObjectiveGeneticAlgorithm.
+    /// Implements the <see cref="OptimizationToolbox.GeneticAlgorithm" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.GeneticAlgorithm" />
     public class MultiObjectiveGeneticAlgorithm : GeneticAlgorithm
     {
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             var population = new List<ICandidate>();
@@ -66,6 +90,11 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Calculates the population stats.
+        /// </summary>
+        /// <param name="population">The population.</param>
+        /// <returns>System.Double[].</returns>
         private double[,] CalcPopulationStats(IEnumerable<ICandidate> population)
         {
             var result = new double[3, f.Count];
@@ -79,6 +108,10 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Evaluates the specified population.
+        /// </summary>
+        /// <param name="population">The population.</param>
         private void evaluate(IList<ICandidate> population)
         {
             for (var i = population.Count - 1; i >= 0; i--)

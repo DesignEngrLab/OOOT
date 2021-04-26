@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractSelector.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -32,7 +45,7 @@ namespace OptimizationToolbox
         /// <summary>
         /// the direction of the search foreach object: maximizing or minimizing
         /// </summary>
-        protected  readonly optimize[] optDirections;
+        protected readonly optimize[] optDirections;
         /// <summary>
         /// The direction comparer
         /// </summary>
@@ -83,7 +96,8 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="y">The y.</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
+        /// <exception cref="Exception">The default 'BetterThan' function can only function when there is a single objective function.</exception>
         /// <exception cref="System.Exception">The default 'BetterThan' function
         /// can only function when there is a single objective function.</exception>
         protected Boolean BetterThan(double x, double y)

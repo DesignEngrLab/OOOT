@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractMeritFunction.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -33,7 +46,7 @@ namespace OptimizationToolbox
         protected abstractOptMethod optMethod;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="abstractMeritFunction"/> class.
+        /// Initializes a new instance of the <see cref="abstractMeritFunction" /> class.
         /// </summary>
         /// <param name="optMethod">The opt method.</param>
         /// <param name="penaltyWeight">The penalty weight.</param>
@@ -53,13 +66,13 @@ namespace OptimizationToolbox
         /// Calcs the gradient of penalty.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         public abstract double[] calcGradientOfPenalty(double[] point);
         /// <summary>
         /// Calcs the penalty.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public abstract double calcPenalty(double[] point);
     }
 }

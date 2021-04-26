@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="MaxTimeConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -26,21 +39,26 @@ using System.Collections.Generic;
 namespace OptimizationToolbox
 {
     /// <summary>
-    /// 
+    /// Class MaxTimeConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
     /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class MaxTimeConvergence : abstractConvergence
     {
+        /// <summary>
+        /// The timer
+        /// </summary>
         private readonly DateTime timer;
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxTimeConvergence" /> class.
         /// </summary>
         public MaxTimeConvergence() { }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxTimeConvergence" /> class.
         /// </summary>
         /// <param name="maxTime">The max time.</param>
         public MaxTimeConvergence(TimeSpan maxTime)
@@ -51,7 +69,7 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxTimeConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxTimeConvergence" /> class.
         /// </summary>
         /// <param name="timeToStop">The time to stop.</param>
         public MaxTimeConvergence(DateTime timeToStop)
@@ -79,9 +97,7 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x.</param>
         /// <param name="population">The population of candidates.</param>
         /// <param name="gradF">The gradient of F.</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
             return (-timer.Subtract(DateTime.Now) >= maxTime);

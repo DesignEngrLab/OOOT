@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="BitByteHexFunctions.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,15 +38,35 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Struct BitByteHexLimits
+    /// </summary>
     internal struct BitByteHexLimits
     {
+        /// <summary>
+        /// The end index
+        /// </summary>
         public int EndIndex;
+        /// <summary>
+        /// The maximum value
+        /// </summary>
         public long MaxValue;
+        /// <summary>
+        /// The start index
+        /// </summary>
         public int StartIndex;
     }
 
+    /// <summary>
+    /// Class BitByteHexFunctions.
+    /// </summary>
     internal static class BitByteHexFunctions
     {
+        /// <summary>
+        /// Initializes the bit string.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <returns>BitByteHexLimits[].</returns>
         internal static BitByteHexLimits[] InitializeBitString(DesignSpaceDescription discreteSpaceDescriptor)
         {
             var result = new BitByteHexLimits[discreteSpaceDescriptor.n];
@@ -58,6 +91,12 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Finds the index of the variable.
+        /// </summary>
+        /// <param name="limits">The limits.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Int32.</returns>
         internal static int FindVariableIndex(BitByteHexLimits[] limits, int i)
         {
             for (int index = 0; index < limits.GetLength(0); index++)
@@ -66,6 +105,12 @@ namespace OptimizationToolbox
             return -1;
         }
 
+        /// <summary>
+        /// Encodes the specified value.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <param name="length">The length.</param>
+        /// <returns>BitArray.</returns>
         internal static BitArray Encode(long value, int length)
         {
             var result = new BitArray(length);
@@ -83,6 +128,12 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Decodes the specified b.
+        /// </summary>
+        /// <param name="b">The b.</param>
+        /// <param name="maxValue">The maximum value.</param>
+        /// <returns>System.Int64.</returns>
         internal static long Decode(BitArray b, long maxValue)
         {
             long result = 0;
@@ -97,6 +148,13 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Flips the bit.
+        /// </summary>
+        /// <param name="initValue">The initialize value.</param>
+        /// <param name="limits">The limits.</param>
+        /// <param name="bitIndex">Index of the bit.</param>
+        /// <returns>System.Int64.</returns>
         internal static long FlipBit(long initValue, BitByteHexLimits limits, int bitIndex)
         {
             bitIndex -= limits.StartIndex;
@@ -106,6 +164,15 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Crossovers the bit string.
+        /// </summary>
+        /// <param name="c1BitArray">The c1 bit array.</param>
+        /// <param name="c2BitArray">The c2 bit array.</param>
+        /// <param name="position">The position.</param>
+        /// <param name="maxValue">The maximum value.</param>
+        /// <param name="c1Value">The c1 value.</param>
+        /// <param name="c2Value">The c2 value.</param>
         internal static void CrossoverBitString(BitArray c1BitArray, BitArray c2BitArray, int position,
                                                 long maxValue, out long c1Value, out long c2Value)
         {

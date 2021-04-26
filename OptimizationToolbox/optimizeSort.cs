@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="optimizeSort.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,16 +37,32 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class optimizeSort.
+    /// Implements the <see cref="System.Collections.Generic.IComparer{System.Double}" />
+    /// </summary>
+    /// <seealso cref="System.Collections.Generic.IComparer{System.Double}" />
     public class optimizeSort : IComparer<double>
     {
         /* an internal integer equal to the required sort direction. */
+        /// <summary>
+        /// The allow equal in sort
+        /// </summary>
         private readonly Boolean AllowEqualInSort;
+        /// <summary>
+        /// The direction
+        /// </summary>
         private readonly int direction;
         /* if using with SortedList, set AllowEqualInSorting to false, otherwise
          * it will crash when equal values are encountered. If using in Linq's 
          * OrderBy then the equal is need (AllowEqualInSorting = true) otherwise
          * the program will hang. */
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="optimizeSort"/> class.
+        /// </summary>
+        /// <param name="direction">The direction.</param>
+        /// <param name="AllowEqualInSort">The allow equal in sort.</param>
         public optimizeSort(optimize direction, Boolean AllowEqualInSort = false)
         {
             this.direction = (int)direction;
@@ -42,6 +71,20 @@ namespace OptimizationToolbox
 
         #region IComparer<double> Members
 
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether one is less than, equal to, or greater than the other.
+        /// </summary>
+        /// <param name="x">The first object to compare.</param>
+        /// <param name="y">The second object to compare.</param>
+        /// <returns>A signed integer that indicates the relative values of <paramref name="x" /> and <paramref name="y" />, as shown in the following table.
+        /// Value
+        /// Meaning
+        /// Less than zero
+        /// <paramref name="x" /> is less than <paramref name="y" />.
+        /// Zero
+        /// <paramref name="x" /> equals <paramref name="y" />.
+        /// Greater than zero
+        /// <paramref name="x" /> is greater than <paramref name="y" />.</returns>
         public int Compare(double x, double y)
         {
             if (AllowEqualInSort && (x == y)) return 0;
@@ -56,6 +99,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Betters the than.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="y">The y.</param>
+        /// <returns>Boolean.</returns>
         public Boolean BetterThan(double x, double y)
         {
             return (-1 == Compare(x, y));

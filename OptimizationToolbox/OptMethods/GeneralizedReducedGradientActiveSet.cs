@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="GeneralizedReducedGradientActiveSet.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,6 +38,11 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class GeneralizedReducedGradientActiveSet. This class cannot be inherited.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public sealed class GeneralizedReducedGradientActiveSet : abstractOptMethod
     {
         #region Fields
@@ -33,12 +51,27 @@ namespace OptimizationToolbox
          * Xd and which are constrained or dependent variables, Xc. These are created
          * in the function "divideXintoDecisionAndDependentVars", and can be accessed
          * and changed by the properties: xc and xd. */
+        /// <summary>
+        /// The epsilon
+        /// </summary>
         private readonly double epsilon;
+        /// <summary>
+        /// The alpha star
+        /// </summary>
         private double alphaStar;
+        /// <summary>
+        /// The divide x
+        /// </summary>
         private Boolean divideX;
+        /// <summary>
+        /// The dk
+        /// </summary>
         private double[] dk;
 
         /* fk is the value of f(xk). */
+        /// <summary>
+        /// The fk
+        /// </summary>
         private double fk;
 
         /* alphaStar is what is returned by the line search (1-D) search method. It is used
@@ -48,16 +81,34 @@ namespace OptimizationToolbox
          * divided into two subsets: the gradient with respect to (wrt) xc which would be a
          * square m-by-m matrix, and the grade w.r.t. xd which is m-by-n-m. The inverse of the
          * former is required to solve for xc. */
+        /// <summary>
+        /// The grad a
+        /// </summary>
         private double[,] gradA, gradA_wrt_xc, gradA_wrt_xd;
+        /// <summary>
+        /// The grad f
+        /// </summary>
         private double[] gradF;
+        /// <summary>
+        /// The inv grad a WRT xc
+        /// </summary>
         private double[,] invGradA_wrt_xc;
+        /// <summary>
+        /// The xc indices
+        /// </summary>
         private List<int> xcIndices;
+        /// <summary>
+        /// The xd indices
+        /// </summary>
         private List<int> xdIndices;
 
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
+        /// <summary>
+        /// The xk last
+        /// </summary>
         private double[] xkLast;
 
         /* divideX is used to schedule when x should be divided into Xc and Xd. This needs to 
@@ -68,6 +119,12 @@ namespace OptimizationToolbox
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneralizedReducedGradientActiveSet"/> class.
+        /// </summary>
+        /// <param name="epsilon">The epsilon.</param>
+        /// <param name="innerMax">The inner maximum.</param>
+        /// <param name="outerMax">The outer maximum.</param>
         public GeneralizedReducedGradientActiveSet(double epsilon = 0.00001, int innerMax = 500, int outerMax = 5)
         {
             this.epsilon = epsilon;
@@ -97,6 +154,10 @@ namespace OptimizationToolbox
          * They do not change what variables are in each, but they can be used
          * to access (get) and change (set) the values of Xc and Xd. */
 
+        /// <summary>
+        /// Gets or sets the xc.
+        /// </summary>
+        /// <value>The xc.</value>
         public double[] xc
         {
             get
@@ -116,6 +177,10 @@ namespace OptimizationToolbox
         }
 
         // these properties will use the x*Indices
+        /// <summary>
+        /// Gets or sets the xd.
+        /// </summary>
+        /// <value>The xd.</value>
         public double[] xd
         {
             get
@@ -138,6 +203,12 @@ namespace OptimizationToolbox
 
         #region Main Function, run
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             //evaluate f(x0)
@@ -188,6 +259,11 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Formulates the active set and gradients.
+        /// </summary>
+        /// <param name="xk">The xk.</param>
+        /// <param name="divideBool">The divide bool.</param>
         private void formulateActiveSetAndGradients(double[] xk, Boolean divideBool)
         {
             /* this list is ordered from largest to smallest. We only want to introduce ONE new member 
@@ -233,6 +309,10 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Divides the xinto decision and dependent vars.
+        /// </summary>
+        /// <returns>Boolean.</returns>
         private Boolean divideXintoDecisionAndDependentVars()
         {
             // divide x into xc and xd using automated Guassian eliminiation approach
@@ -274,6 +354,9 @@ namespace OptimizationToolbox
             return differentFromBefore;
         }
 
+        /// <summary>
+        /// Divides the grad a into xc and xd parts.
+        /// </summary>
         private void divideGradA_intoXcAndXdParts()
         {
             gradA_wrt_xc = new double[m, m];
@@ -288,6 +371,9 @@ namespace OptimizationToolbox
                     gradA_wrt_xd[j, i] = gradA[j, xdIndices[i]];
         }
 
+        /// <summary>
+        /// Calculates the reduced gradient search direction.
+        /// </summary>
         private void 
             calculateReducedGradientSearchDirection()
         {
@@ -311,6 +397,10 @@ namespace OptimizationToolbox
             dk = searchDirMethod.find(x, dk, fk, divideX);
         }
 
+        /// <summary>
+        /// Updates the xc.
+        /// </summary>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool updateXc()
         {
             var innerFeasibleK = 0;

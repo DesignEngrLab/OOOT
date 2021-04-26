@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ExhaustiveSearch.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -23,12 +36,26 @@ using System;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class ExhaustiveSearch.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class ExhaustiveSearch : abstractOptMethod
     {
+        /// <summary>
+        /// The time predition index
+        /// </summary>
         public static int timePreditionIndex = 1000;
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ExhaustiveSearch"/> class.
+        /// </summary>
+        /// <param name="SpaceDescription">The space description.</param>
+        /// <param name="direction">The direction.</param>
+        /// <exception cref="Exception">Exhaustive Search can only be used when Space is all discrete</exception>
         public ExhaustiveSearch(DesignSpaceDescription SpaceDescription, optimize direction)
         {
             spaceDescription = SpaceDescription;
@@ -48,10 +75,25 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// The comparer
+        /// </summary>
         private readonly optimizeSort comparer;
+        /// <summary>
+        /// The space description
+        /// </summary>
         private readonly DesignSpaceDescription spaceDescription;
+        /// <summary>
+        /// The current indices
+        /// </summary>
         private long[] CurrentIndices;
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             var startTime = DateTime.Now;
@@ -74,6 +116,10 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Performs the time prediction.
+        /// </summary>
+        /// <param name="startTime">The start time.</param>
         private void performTimePrediction(DateTime startTime)
         {
             double span = (DateTime.Now - startTime).Ticks;
@@ -87,6 +133,11 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Increments the indices.
+        /// </summary>
+        /// <param name="IndicesIndex">Index of the indices.</param>
+        /// <returns>Boolean.</returns>
         private Boolean IncrementIndices(int IndicesIndex = 0)
         {
             if (IndicesIndex == n) return false;

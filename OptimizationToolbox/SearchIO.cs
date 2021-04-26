@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="SearchIO.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
@@ -24,6 +37,9 @@ using System.Diagnostics;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class SearchIO.
+    /// </summary>
     public static class SearchIO
     {
 
@@ -48,13 +64,14 @@ namespace OptimizationToolbox
 
 
         /// <summary>
-        ///  Calling SearchIO.output will output the string, message, to the 
-        ///  text display on the right of GraphSynth, but ONLY if the verbosity (see
-        ///  below) is greater than or equal to your specified limit for this message.
-        ///  the verbosity limit must be 0, 1, 2, 3, or 4.
+        /// Calling SearchIO.output will output the string, message, to the
+        /// text display on the right of GraphSynth, but ONLY if the verbosity (see
+        /// below) is greater than or equal to your specified limit for this message.
+        /// the verbosity limit must be 0, 1, 2, 3, or 4.
         /// </summary>
         /// <param name="message">The message.</param>
         /// <param name="verbosityLimit">The verbosity limit.</param>
+        /// <returns>Boolean.</returns>
         public static Boolean output(object message, int verbosityLimit = 0)
         {
             if ((verbosityLimit > (int)Parameters.Verbosity)
@@ -67,7 +84,7 @@ namespace OptimizationToolbox
         /// Outputs the one item of the specified list corresponding to the particular verbosity.
         /// </summary>
         /// <param name="list">The list.</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
         public static Boolean output(params object[] list)
         {
             if (((int)Parameters.Verbosity >= list.Length)

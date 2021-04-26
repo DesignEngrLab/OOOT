@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="DesignSpaceDescription.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -27,18 +40,29 @@ using System.Xml.Serialization;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class DesignSpaceDescription.
+    /// Implements the <see cref="System.Collections.Generic.IList{OptimizationToolbox.VariableDescriptor}" />
+    /// </summary>
+    /// <seealso cref="System.Collections.Generic.IList{OptimizationToolbox.VariableDescriptor}" />
     public class DesignSpaceDescription : IList<VariableDescriptor>
     {
+        /// <summary>
+        /// The variable descriptors
+        /// </summary>
         private readonly List<VariableDescriptor> variableDescriptors;
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DesignSpaceDescription"/> class.
+        /// </summary>
         public DesignSpaceDescription()
         {
             variableDescriptors = new List<VariableDescriptor>();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DesignSpaceDescription"/> class.
+        /// Initializes a new instance of the <see cref="DesignSpaceDescription" /> class.
         /// </summary>
         /// <param name="VariableDescriptors">The variable descriptors.</param>
         public DesignSpaceDescription(IEnumerable<VariableDescriptor> VariableDescriptors)
@@ -47,6 +71,10 @@ namespace OptimizationToolbox
             UpdateCharacteristics();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DesignSpaceDescription"/> class.
+        /// </summary>
+        /// <param name="n">The n.</param>
         public DesignSpaceDescription(int n)
         {
             variableDescriptors = new List<VariableDescriptor>(n);
@@ -55,6 +83,9 @@ namespace OptimizationToolbox
             UpdateCharacteristics();
         }
 
+        /// <summary>
+        /// Updates the characteristics.
+        /// </summary>
         void UpdateCharacteristics()
         {
             AllDiscrete = true;
@@ -84,28 +115,28 @@ namespace OptimizationToolbox
 
         #region Properties
         /// <summary>
-        ///   Gets a value indicating whether [all discrete].
+        /// Gets a value indicating whether [all discrete].
         /// </summary>
         /// <value><c>true</c> if [all discrete]; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public Boolean AllDiscrete { get; private set; }
 
         /// <summary>
-        ///   Gets the discrete var indices.
+        /// Gets the discrete var indices.
         /// </summary>
         /// <value>The discrete var indices.</value>
         [XmlIgnore]
         public List<int> DiscreteVarIndices { get; private set; }
 
         /// <summary>
-        ///   Gets the size of space.
+        /// Gets the size of space.
         /// </summary>
         /// <value>The size of space.</value>
         [XmlIgnore]
         public long SizeOfSpace { get; private set; }
 
         /// <summary>
-        ///   Gets the max variable sizes.
+        /// Gets the max variable sizes.
         /// </summary>
         /// <value>The max variable sizes.</value>
         [XmlIgnore]
@@ -115,6 +146,11 @@ namespace OptimizationToolbox
 
         #region Getting Discrete Vectors with Indices
 
+        /// <summary>
+        /// Gets the variable vector.
+        /// </summary>
+        /// <param name="Indices">The indices.</param>
+        /// <returns>System.Double[].</returns>
         public double[] GetVariableVector(IList<long> Indices)
         {
             var result = new double[n];
@@ -123,6 +159,11 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Creates the neighbor change vectors hack.
+        /// </summary>
+        /// <param name="minimumNeighbors">The minimum neighbors.</param>
+        /// <returns>System.Int32[][].</returns>
         public int[][] CreateNeighborChangeVectorsHack(int minimumNeighbors)
         {
             /* the main data structure here is a List of Lists of Lists of arrays.
@@ -142,26 +183,26 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        ///   Creates the neighbor change vectors. There will at least the minimum specified, 
-        ///   and the process will stop after this max is reached although there may be significantly
-        ///   more which are created to keep the changes symmetric. This is probably one of the
-        ///   craziest little functions I've ever written but there is a method to it madness.
-        ///   As opposed to the simplest approach which is +/-1 step in each direction, it seems
-        ///   beneficial to have more transitions that can be made. And as opposed to increasing
-        ///   these sizes linearly (e.g. +/-1, +/-2, +/-3, ...), it seems better to have them
-        ///   increase logarithmically. Here the steps are 1,3,7,20,55,etc. The idea is to move
-        ///   in the closest integers to the natural log. As if in base-e. This is shown to
-        ///   be optimal from a simple paper I read in science some years ago:
-        ///   http://www.americanscientist.org/issues/pub/third-base/3
-        ///   The function starts at points e^0 (or 1) away and makes the primary changes,
-        ///   {(-1,0), (+1,0), (0,-1), (0,+1)}, and then goes on to e^1 rounded to the closest
-        ///   integer {(-3,0), (+3,0), (0,-3), (0,+3)}. But then it goes back to fill out the 
-        ///   higher order changes at the lower levels {(-1,-1), (+1,-1), (-1,+1), (+1,+1)}.
-        ///   It then jumps to the next exponent for a new set of primary changes, and then
-        ///   again drops back to populate the higher level changes of lower levels.
+        /// Creates the neighbor change vectors. There will at least the minimum specified,
+        /// and the process will stop after this max is reached although there may be significantly
+        /// more which are created to keep the changes symmetric. This is probably one of the
+        /// craziest little functions I've ever written but there is a method to it madness.
+        /// As opposed to the simplest approach which is +/-1 step in each direction, it seems
+        /// beneficial to have more transitions that can be made. And as opposed to increasing
+        /// these sizes linearly (e.g. +/-1, +/-2, +/-3, ...), it seems better to have them
+        /// increase logarithmically. Here the steps are 1,3,7,20,55,etc. The idea is to move
+        /// in the closest integers to the natural log. As if in base-e. This is shown to
+        /// be optimal from a simple paper I read in science some years ago:
+        /// http://www.americanscientist.org/issues/pub/third-base/3
+        /// The function starts at points e^0 (or 1) away and makes the primary changes,
+        /// {(-1,0), (+1,0), (0,-1), (0,+1)}, and then goes on to e^1 rounded to the closest
+        /// integer {(-3,0), (+3,0), (0,-3), (0,+3)}. But then it goes back to fill out the
+        /// higher order changes at the lower levels {(-1,-1), (+1,-1), (-1,+1), (+1,+1)}.
+        /// It then jumps to the next exponent for a new set of primary changes, and then
+        /// again drops back to populate the higher level changes of lower levels.
         /// </summary>
-        /// <param name = "minimumNeighbors">The minimum neighbors.</param>
-        /// <returns></returns>
+        /// <param name="minimumNeighbors">The minimum neighbors.</param>
+        /// <returns>System.Int32[][].</returns>
         public int[][] CreateNeighborChangeVectors(int minimumNeighbors)
         {
             /* the main data structure here is a List of Lists of Lists of arrays.
@@ -200,6 +241,12 @@ namespace OptimizationToolbox
             return transitionsCombined.ToArray();
         }
 
+        /// <summary>
+        /// Creates the new change vectors based on last.
+        /// </summary>
+        /// <param name="lastChanges">The last changes.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <returns>List&lt;System.Int32[]&gt;.</returns>
         private List<int[]> CreateNewChangeVectorsBasedOnLast(IEnumerable<int[]> lastChanges, int stepSize)
         {
             var changes = new List<int[]>();
@@ -223,6 +270,11 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Creates the new change vectors based on last.
+        /// </summary>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <returns>List&lt;System.Int32[]&gt;.</returns>
         private List<int[]> CreateNewChangeVectorsBasedOnLast(int stepSize)
         {
             var changes = new List<int[]>();
@@ -239,6 +291,12 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Finds the valid changes.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="changeVectors">The change vectors.</param>
+        /// <returns>List&lt;System.Int32&gt;.</returns>
         public List<int> FindValidChanges(double[] candidate, int[][] changeVectors)
         {
             var result = Enumerable.Range(0, changeVectors.GetLength(0)).ToList();
@@ -256,10 +314,7 @@ namespace OptimizationToolbox
         /// <summary>
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
-        /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
-        /// </returns>
-        /// <filterpriority>1</filterpriority>
+        /// <returns>A <see cref="T:System.Collections.Generic.IEnumerator`1" /> that can be used to iterate through the collection.</returns>
         public IEnumerator<VariableDescriptor> GetEnumerator()
         {
             return new VariableDescriptorEnum(variableDescriptors.ToArray());
@@ -268,10 +323,7 @@ namespace OptimizationToolbox
         /// <summary>
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
-        /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate through the collection.
-        /// </returns>
-        /// <filterpriority>2</filterpriority>
+        /// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
@@ -282,11 +334,10 @@ namespace OptimizationToolbox
         #region Implementation of ICollection<VariableDescriptor>
 
         /// <summary>
-        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// Adds an item to the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
-        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        ///                 </param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
-        ///                 </exception>
+        /// <param name="item">The object to add to the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
         public void Add(VariableDescriptor item)
         {
             variableDescriptors.Add(item);
@@ -294,10 +345,9 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
-        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only. 
-        ///                 </exception>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
         public void Clear()
         {
             variableDescriptors.Clear();
@@ -305,37 +355,32 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1"/> contains a specific value.
+        /// Determines whether the <see cref="T:System.Collections.Generic.ICollection`1" /> contains a specific value.
         /// </summary>
-        /// <returns>
-        /// true if <paramref name="item"/> is found in the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
-        /// </returns>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        ///                 </param>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        /// <returns>true if <paramref name="item" /> is found in the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false.</returns>
         public bool Contains(VariableDescriptor item)
         {
             return variableDescriptors.Contains(item);
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+        /// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1" /> to an <see cref="T:System.Array" />, starting at a particular <see cref="T:System.Array" /> index.
         /// </summary>
-        /// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
-        /// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
+        /// <param name="array">The one-dimensional <see cref="T:System.Array" /> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1" />. The <see cref="T:System.Array" /> must have zero-based indexing.</param>
+        /// <param name="arrayIndex">The zero-based index in <paramref name="array" /> at which copying begins.</param>
+        /// <exception cref="NotImplementedException"></exception>
         public void CopyTo(VariableDescriptor[] array, int arrayIndex)
         {
             throw new NotImplementedException();
         }
 
         /// <summary>
-        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// Removes the first occurrence of a specific object from the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
-        /// <returns>
-        /// true if <paramref name="item"/> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false. This method also returns false if <paramref name="item"/> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// </returns>
-        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        ///                 </param><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
-        ///                 </exception>
+        /// <param name="item">The object to remove from the <see cref="T:System.Collections.Generic.ICollection`1" />.</param>
+        /// <returns>true if <paramref name="item" /> was successfully removed from the <see cref="T:System.Collections.Generic.ICollection`1" />; otherwise, false. This method also returns false if <paramref name="item" /> is not found in the original <see cref="T:System.Collections.Generic.ICollection`1" />.</returns>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.</exception>
         public bool Remove(VariableDescriptor item)
         {
             var result = variableDescriptors.Remove(item);
@@ -344,11 +389,9 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+        /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1" />.
         /// </summary>
-        /// <returns>
-        /// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
-        /// </returns>
+        /// <value>The count.</value>
         public int Count { get { return variableDescriptors.Count; } }
 
         /// <summary>
@@ -358,37 +401,31 @@ namespace OptimizationToolbox
         public int n { get { return variableDescriptors.Count; } }
 
         /// <summary>
-        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+        /// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1" /> is read-only.
         /// </summary>
-        /// <returns>
-        /// true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
-        /// </returns>
+        /// <value><c>true</c> if this instance is read only; otherwise, <c>false</c>.</value>
         public bool IsReadOnly { get { return false; } }
 
         #endregion
 
         #region Implementation of IList<VariableDescriptor>
         /// <summary>
-        /// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1"/>.
+        /// Determines the index of a specific item in the <see cref="T:System.Collections.Generic.IList`1" />.
         /// </summary>
-        /// <returns>
-        /// The index of <paramref name="item"/> if found in the list; otherwise, -1.
-        /// </returns>
-        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.
-        ///                 </param>
+        /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+        /// <returns>The index of <paramref name="item" /> if found in the list; otherwise, -1.</returns>
         public int IndexOf(VariableDescriptor item)
         {
             return variableDescriptors.IndexOf(item);
         }
 
         /// <summary>
-        /// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1"/> at the specified index.
+        /// Inserts an item to the <see cref="T:System.Collections.Generic.IList`1" /> at the specified index.
         /// </summary>
-        /// <param name="index">The zero-based index at which <paramref name="item"/> should be inserted.
-        ///                 </param><param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1"/>.
-        ///                 </param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.
-        ///                 </exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
-        ///                 </exception>
+        /// <param name="index">The zero-based index at which <paramref name="item" /> should be inserted.</param>
+        /// <param name="item">The object to insert into the <see cref="T:System.Collections.Generic.IList`1" />.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
         public void Insert(int index, VariableDescriptor item)
         {
             variableDescriptors.Insert(index, item);
@@ -396,12 +433,11 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Removes the <see cref="T:System.Collections.Generic.IList`1"/> item at the specified index.
+        /// Removes the <see cref="T:System.Collections.Generic.IList`1" /> item at the specified index.
         /// </summary>
-        /// <param name="index">The zero-based index of the item to remove.
-        ///                 </param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.
-        ///                 </exception><exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
-        ///                 </exception>
+        /// <param name="index">The zero-based index of the item to remove.</param>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
         public void RemoveAt(int index)
         {
             variableDescriptors.RemoveAt(index);
@@ -411,13 +447,10 @@ namespace OptimizationToolbox
         /// <summary>
         /// Gets or sets the element at the specified index.
         /// </summary>
-        /// <returns>
-        /// The element at the specified index.
-        /// </returns>
-        /// <param name="index">The zero-based index of the element to get or set.
-        ///                 </param><exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index"/> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1"/>.
-        ///                 </exception><exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1"/> is read-only.
-        ///                 </exception>
+        /// <param name="index">The zero-based index of the element to get or set.</param>
+        /// <returns>The element at the specified index.</returns>
+        /// <exception cref="T:System.ArgumentOutOfRangeException"><paramref name="index" /> is not a valid index in the <see cref="T:System.Collections.Generic.IList`1" />.</exception>
+        /// <exception cref="T:System.NotSupportedException">The property is set and the <see cref="T:System.Collections.Generic.IList`1" /> is read-only.</exception>
         public VariableDescriptor this[int index]
         {
             get { return variableDescriptors[index]; }

@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="DeltaXConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,21 +38,29 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class DeltaXConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class DeltaXConvergence : abstractConvergence
     {
+        /// <summary>
+        /// The xlast
+        /// </summary>
         private IList<double> xlast;
 
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeltaXConvergence"/> class.
+        /// Initializes a new instance of the <see cref="DeltaXConvergence" /> class.
         /// </summary>
         public DeltaXConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DeltaXConvergence"/> class.
+        /// Initializes a new instance of the <see cref="DeltaXConvergence" /> class.
         /// </summary>
         /// <param name="minDifference">The min difference.</param>
         public DeltaXConvergence(double minDifference)
@@ -56,7 +77,7 @@ namespace OptimizationToolbox
         public double minDifference { get; set; }
 
         /// <summary>
-        /// Given a value D (minimum difference), this criteria will return true, if the norm of 
+        /// Given a value D (minimum difference), this criteria will return true, if the norm of
         /// the difference between xBest and xlast is less than or equal to D.
         /// </summary>
         /// <param name="iteration">The number of iterations (not used).</param>
@@ -65,9 +86,9 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x.</param>
         /// <param name="population">The population of candidates (not used).</param>
         /// <param name="gradF">The gradient of F (not used).</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">DeltaXConvergence expected a 1-D array of doubles (in the third argument, YDoubleArray1) "
+        ///                                     + " representing the current decision vector, x.</exception>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN,
             IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {

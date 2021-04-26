@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractOptMethod.Evaluation.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -17,13 +30,16 @@
  *     Please find further details and contact information on OOOT
  *     at http://designengrlab.github.io/OOOT/.
  *************************************************************************/
- using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class abstractOptMethod.
+    /// </summary>
     public abstract partial class abstractOptMethod
     {
 
@@ -59,17 +75,50 @@ namespace OptimizationToolbox
                 return numEvalList.Max();
             }
         }
+        /// <summary>
+        /// Gets the dependent analyses.
+        /// </summary>
+        /// <value>The dependent analyses.</value>
         public List<IDependentAnalysis> dependentAnalyses { get; private set; }
+        /// <summary>
+        /// Gets the f.
+        /// </summary>
+        /// <value>The f.</value>
         public List<IObjectiveFunction> f { get; private set; }
+        /// <summary>
+        /// Gets the h.
+        /// </summary>
+        /// <value>The h.</value>
         public List<IEquality> h { get; private set; }
+        /// <summary>
+        /// Gets the g.
+        /// </summary>
+        /// <value>The g.</value>
         public List<IInequality> g { get; private set; }
+        /// <summary>
+        /// Gets the active.
+        /// </summary>
+        /// <value>The active.</value>
         internal List<IConstraint> active { get; private set; }
+        /// <summary>
+        /// The function data
+        /// </summary>
         private readonly Dictionary<IOptFunction, RecentFunctionEvalStore> functionData;
+        /// <summary>
+        /// The same cand comparer
+        /// </summary>
         private readonly sameCandidate sameCandComparer = new sameCandidate(Parameters.ToleranceForSame);
 
+        /// <summary>
+        /// The last dependent analysis point
+        /// </summary>
         private double[] lastDependentAnalysisPoint;
 
 
+        /// <summary>
+        /// Calculates the dependent analysis.
+        /// </summary>
+        /// <param name="point">The point.</param>
         private void calc_dependent_Analysis(double[] point)
         {
             if (dependentAnalyses == null || !dependentAnalyses.Any()) return;
@@ -90,6 +139,12 @@ namespace OptimizationToolbox
 
 
         #region Calculate f, g, h helper functions
+        /// <summary>
+        /// Calculates the specified function.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="point">The point.</param>
+        /// <returns>System.Double.</returns>
         internal double calculate(IOptFunction function, double[] point)
         {
             double fValue;
@@ -121,7 +176,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="includeMeritPenalty">if set to <c>true</c> [include merit penalty].</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public double calc_f(double[] point, Boolean includeMeritPenalty = false)
         {
             var penalty = ((g.Count + h.Count > 0) && (ConstraintsSolvedWithPenalties || includeMeritPenalty))
@@ -135,28 +190,28 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="includeMeritPenalty">if set to <c>true</c> [include merit penalty].</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         public double[] calc_f_vector(double[] point, Boolean includeMeritPenalty = false)
         { return f.Select(fi => calculate(fi, point)).ToArray(); }
         /// <summary>
         /// Calculates the h vector at the specified point.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[] calc_h_vector(double[] point)
         { return h.Select(h0 => calculate(h0, point)).ToArray(); }
         /// <summary>
         /// Calculates the g vector at the specified point.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[] calc_g_vector(double[] point)
         { return g.Select(g0 => calculate(g0, point)).ToArray(); }
         /// <summary>
         /// Calculates the active vector at the specified point.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[] calc_active_vector(double[] point)
         { return active.Select(a => calculate(a, point)).ToArray(); }
 
@@ -165,7 +220,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="includeMeritPenalty">if set to <c>true</c> [include merit penalty].</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[] calc_f_gradient(double[] point, Boolean includeMeritPenalty = false)
         {
             var grad = new double[n];
@@ -180,10 +235,10 @@ namespace OptimizationToolbox
 
 
         /// <summary>
-        ///Calculates the gradient of h vector at the specified point.
+        /// Calculates the gradient of h vector at the specified point.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[,] calc_h_gradient(double[] point)
         {
             var result = new double[p, n];
@@ -197,7 +252,7 @@ namespace OptimizationToolbox
         /// Calculates the gradient of g vector at the specified point.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[,] calc_g_gradient(double[] point)
         {
             var result = new double[q, n];
@@ -211,7 +266,7 @@ namespace OptimizationToolbox
         /// Calculates the gradient of active vector at  the specified point.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[,] calc_active_gradient(double[] point)
         {
             var result = new double[m, n];
@@ -227,7 +282,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="Indices">The indices.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[,] calc_h_gradient(double[] point, List<int> Indices)
         {
             var size = Indices.Count;
@@ -243,7 +298,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="Indices">The indices.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[,] calc_g_gradient(double[] point, List<int> Indices)
         {
             var size = Indices.Count;
@@ -259,7 +314,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="point">The point.</param>
         /// <param name="Indices">The indices.</param>
-        /// <returns></returns>
+        /// <returns>System.Double[].</returns>
         protected double[,] calc_active_gradient(double[] point, List<int> Indices)
         {
             var size = Indices.Count;
@@ -277,7 +332,7 @@ namespace OptimizationToolbox
         /// Determines if the specified point is feasible.
         /// </summary>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
         public Boolean feasible(double[] point)
         {
             if (h.Any(a => !feasible(a, point)))
@@ -294,7 +349,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="c">The c.</param>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool feasible(IInequality c, double[] point)
         {
             return (calculate(c, point) <= 0);
@@ -305,7 +360,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="c">The c.</param>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
         private bool feasible(IEquality c, double[] point)
         {
             return (calculate(c, point) == 0);
@@ -316,7 +371,8 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="c">The c.</param>
         /// <param name="point">The point.</param>
-        /// <returns></returns>
+        /// <returns><c>true</c> if XXXX, <c>false</c> otherwise.</returns>
+        /// <exception cref="Exception">IConstraint is neither IInequality or IEquality?!?</exception>
         public bool feasible(IConstraint c, double[] point)
         {
             if (c is IEquality)
@@ -334,7 +390,7 @@ namespace OptimizationToolbox
         /// <param name="function">The function.</param>
         /// <param name="point">The point.</param>
         /// <param name="i">The index of the variable in x.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public double deriv_wrt_xi(IOptFunction function, double[] point, int i)
         {
             switch (functionData[function].findDerivBy)
@@ -360,18 +416,42 @@ namespace OptimizationToolbox
 
         #region finite difference
 
+        /// <summary>
+        /// Calculates the back1.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         private double calcBack1(IOptFunction function, double stepSize, double[] point, int i)
         {
             var backStep = (double[])point.Clone();
             backStep[i] -= stepSize;
             return (calculate(function, point) - calculate(function, backStep)) / stepSize;
         }
+        /// <summary>
+        /// Calculates the forward1.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         private double calcForward1(IOptFunction function, double stepSize, double[] point, int i)
         {
             var forStep = (double[])point.Clone();
             forStep[i] += stepSize;
             return (calculate(function, forStep) - calculate(function, point)) / stepSize;
         }
+        /// <summary>
+        /// Calculates the central2.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         private double calcCentral2(IOptFunction function, double stepSize, double[] point, int i)
         {
             var forStep = (double[])point.Clone();
@@ -383,6 +463,14 @@ namespace OptimizationToolbox
 
 
 
+        /// <summary>
+        /// Calculates the back2.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         private double calcBack2(IOptFunction function, double stepSize, double[] point, int i)
         {
             var backStep1 = (double[])point.Clone();
@@ -394,6 +482,14 @@ namespace OptimizationToolbox
                 / (2 * stepSize);
         }
 
+        /// <summary>
+        /// Calculates the forward2.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         private double calcForward2(IOptFunction function, double stepSize, double[] point, int i)
         {
             var forStep1 = (double[])point.Clone();
@@ -405,6 +501,14 @@ namespace OptimizationToolbox
                 / (2 * stepSize);
         }
 
+        /// <summary>
+        /// Calculates the central4.
+        /// </summary>
+        /// <param name="function">The function.</param>
+        /// <param name="stepSize">Size of the step.</param>
+        /// <param name="point">The point.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         private double calcCentral4(IOptFunction function, double stepSize, double[] point, int i)
         {
             var forStep1 = (double[])point.Clone();

@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="MaxSpanInPopulationConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,6 +38,11 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class MaxSpanInPopulationConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class MaxSpanInPopulationConvergence : abstractConvergence
     {
         #region Properties
@@ -39,14 +57,14 @@ namespace OptimizationToolbox
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxSpanInPopulationConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxSpanInPopulationConvergence" /> class.
         /// </summary>
         public MaxSpanInPopulationConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxSpanInPopulationConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxSpanInPopulationConvergence" /> class.
         /// </summary>
         /// <param name="MinimumSpan">The minimum span.</param>
         public MaxSpanInPopulationConvergence(double MinimumSpan)
@@ -55,9 +73,9 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        /// Given a minimum span, S, this criteria returns true when the span is equal to 
+        /// Given a minimum span, S, this criteria returns true when the span is equal to
         /// or less than S. This is probably the slowest criteria (p*log(p)) given that it must
-        /// check the distance between every pair of solutions in the population. But, probably 
+        /// check the distance between every pair of solutions in the population. But, probably
         /// not an significant increase  for p less than 1000.
         /// </summary>
         /// <param name="iteration">The number of iterations (not used).</param>
@@ -66,9 +84,9 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x (not used).</param>
         /// <param name="population">The population of candidates.</param>
         /// <param name="gradF">The gradient of F (not used).</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">MaxSpanInPopulationConvergence expected an array of arrays of doubles (in the last argument, YJaggedDoubleArray) "
+        ///                                     + " representing the current simplex of solutions.</exception>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
             if (population == null)

@@ -1,16 +1,47 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ParetoFunctions.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using OptimizationToolbox;
 
 namespace Skewboid
 {
+    /// <summary>
+    /// Class ParetoFunctions.
+    /// </summary>
     internal static class ParetoFunctions
     {
+        /// <summary>
+        /// The number objectives
+        /// </summary>
         private static int numObjectives;
+        /// <summary>
+        /// The alpha
+        /// </summary>
         private static double alpha;
+        /// <summary>
+        /// The weights
+        /// </summary>
         private static double[] weights;
+        /// <summary>
+        /// The opt directions
+        /// </summary>
         private static optimize[] optDirections;
+        /// <summary>
+        /// The skewboid alpha tolerance
+        /// </summary>
         public static double SkewboidAlphaTolerance = 0.0001; // tolerance
 
 
@@ -22,7 +53,8 @@ namespace Skewboid
         /// <param name="alphaTarget">The alpha target.</param>
         /// <param name="_weights">The _weights.</param>
         /// <param name="_optDirections">The _opt directions.</param>
-        /// <returns></returns>
+        /// <returns>List&lt;ICandidate&gt;.</returns>
+        /// <exception cref="Exception">Somehow the while loop was passed over.</exception>
         public static List<ICandidate> FindGivenNumCandidates(List<ICandidate> candidates, int numKeep, out double alphaTarget,
                                                               double[] _weights, optimize[] _optDirections = null)
         {
@@ -89,6 +121,14 @@ namespace Skewboid
             return paretoSet;
         }
 
+        /// <summary>
+        /// Finds the pareto candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="_alpha">The alpha.</param>
+        /// <param name="_weights">The weights.</param>
+        /// <param name="_optDirections">The opt directions.</param>
+        /// <returns>List&lt;ICandidate&gt;.</returns>
         public static List<ICandidate> FindParetoCandidates(IEnumerable<ICandidate> candidates, double _alpha,
                                                               double[] _weights, optimize[] _optDirections = null)
         {
@@ -100,7 +140,7 @@ namespace Skewboid
         /// </summary>
         /// <param name="candidates">The candidates.</param>
         /// <param name="_optDirections">The _opt directions.</param>
-        /// <returns></returns>
+        /// <returns>List&lt;ICandidate&gt;.</returns>
         public static List<ICandidate> FindParetoCandidates(IEnumerable<ICandidate> candidates, optimize[] _optDirections = null)
         {
             var paretoSet = new List<ICandidate>();
@@ -124,6 +164,12 @@ namespace Skewboid
         }
 
 
+        /// <summary>
+        /// Finds the pareto candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="_alpha">The alpha.</param>
+        /// <returns>List&lt;ICandidate&gt;.</returns>
         private static List<ICandidate> FindParetoCandidates(IEnumerable<ICandidate> candidates, double _alpha)
         {
             alpha = _alpha;
@@ -139,6 +185,12 @@ namespace Skewboid
         }
 
 
+        /// <summary>
+        /// Initializes the weights and directions.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="_weights">The weights.</param>
+        /// <param name="_optDirections">The opt directions.</param>
         private static void initializeWeightsAndDirections(IEnumerable<ICandidate> candidates, double[] _weights, optimize[] _optDirections)
         {
             numObjectives = candidates.First().objectives.GetLength(0);
@@ -154,6 +206,11 @@ namespace Skewboid
         }
 
 
+        /// <summary>
+        /// Updates the pareto diversity.
+        /// </summary>
+        /// <param name="paretoSet">The pareto set.</param>
+        /// <param name="c">The c.</param>
         private static void UpdateParetoDiversity(List<ICandidate> paretoSet, ICandidate c)
         {
             for (int i = paretoSet.Count - 1; i >= 0; i--)
@@ -166,6 +223,11 @@ namespace Skewboid
             paretoSet.Add(c);
         }
 
+        /// <summary>
+        /// Updates the pareto with weights.
+        /// </summary>
+        /// <param name="paretoSet">The pareto set.</param>
+        /// <param name="c">The c.</param>
         private static void UpdateParetoWithWeights(List<ICandidate> paretoSet, ICandidate c)
         {
             for (int i = paretoSet.Count - 1; i >= 0; i--)
@@ -183,7 +245,7 @@ namespace Skewboid
         /// </summary>
         /// <param name="c1">the subject candidate, c1 (does this dominate...).</param>
         /// <param name="c2">the object candidate, c2 (is dominated by).</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
         private static Boolean dominatesWithWeights(ICandidate c1, ICandidate c2)
         {
             var Dominates = false;
@@ -214,7 +276,7 @@ namespace Skewboid
         /// </summary>
         /// <param name="c1">the subject candidate, c1 (does this dominate...).</param>
         /// <param name="c2">the object candidate, c2 (is dominated by).</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
         private static Boolean dominatesDiversity(ICandidate c1, ICandidate c2)
         {
             var Dominates = false;
@@ -245,7 +307,7 @@ namespace Skewboid
         /// </summary>
         /// <param name="c1">The c1.</param>
         /// <param name="c2">The c2.</param>
-        /// <returns></returns>
+        /// <returns>Boolean.</returns>
         private static Boolean dominates(ICandidate c1, ICandidate c2)
         {
             for (var i = 0; i < numObjectives; i++)

@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ImplicitEnumeration.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,13 +38,22 @@ namespace OptimizationToolbox
 {
     /// <summary>
     /// Implicit Enumeration is a catch-all for Composite Decision Process (as
-    /// deemed by Kanal and Kumar, 1988) for methods like Branch-and-Bound, 
+    /// deemed by Kanal and Kumar, 1988) for methods like Branch-and-Bound,
     /// best first search, and A*.
     /// </summary>
     public class ImplicitEnueration : abstractOptMethod
     {
+        /// <summary>
+        /// The comparer
+        /// </summary>
         private readonly optimizeSort comparer;
+        /// <summary>
+        /// The direction
+        /// </summary>
         private readonly optimize direction;
+        /// <summary>
+        /// The space description
+        /// </summary>
         private readonly DesignSpaceDescription spaceDescription;
         /// <summary>
         /// Gets the neighbor generator method class.
@@ -42,7 +64,7 @@ namespace OptimizationToolbox
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ImplicitEnueration"/> class.
+        /// Initializes a new instance of the <see cref="ImplicitEnueration" /> class.
         /// </summary>
         /// <param name="SpaceDescription">The space description.</param>
         /// <param name="direction">The direction.</param>
@@ -64,6 +86,10 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Adds the specified object to the optimization routine.
+        /// </summary>
+        /// <param name="function">The object, function.</param>
         public override void Add(object function)
         {
             if (function is abstractGenerator)
@@ -72,6 +98,11 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             var worstF = ((int)direction) * double.NegativeInfinity;

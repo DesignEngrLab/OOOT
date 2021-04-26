@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ParticleSwarm.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
@@ -26,16 +39,42 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class Particle.
+    /// </summary>
     public class Particle
     {
-        
-    public double[] position;
-    public double fitness;
-    public double[] velocity;
 
-    public double[] bestPosition;
-    public double bestFitness;
-    public Particle(double[] position, double fitness, double[] velocity, double[] bestPosition, double bestFitness)
+        /// <summary>
+        /// The position
+        /// </summary>
+        public double[] position;
+        /// <summary>
+        /// The fitness
+        /// </summary>
+        public double fitness;
+        /// <summary>
+        /// The velocity
+        /// </summary>
+        public double[] velocity;
+
+        /// <summary>
+        /// The best position
+        /// </summary>
+        public double[] bestPosition;
+        /// <summary>
+        /// The best fitness
+        /// </summary>
+        public double bestFitness;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Particle"/> class.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <param name="fitness">The fitness.</param>
+        /// <param name="velocity">The velocity.</param>
+        /// <param name="bestPosition">The best position.</param>
+        /// <param name="bestFitness">The best fitness.</param>
+        public Particle(double[] position, double fitness, double[] velocity, double[] bestPosition, double bestFitness)
             
         {
         this.position = new double[position.Length];
@@ -49,7 +88,11 @@ namespace OptimizationToolbox
 
     
         }
-public override string ToString()
+        /// <summary>
+        /// Returns a <see cref="System.String" /> that represents this instance.
+        /// </summary>
+        /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
+        public override string ToString()
     {
         string s = "";
         s += "==========================\n";

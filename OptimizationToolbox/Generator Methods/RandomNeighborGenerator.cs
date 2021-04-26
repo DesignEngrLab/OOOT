@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="RandomNeighborGenerator.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,12 +37,31 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class RandomNeighborGenerator.
+    /// Implements the <see cref="OptimizationToolbox.abstractGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractGenerator" />
     public class RandomNeighborGenerator : abstractGenerator
     {
+        /// <summary>
+        /// The change vectors
+        /// </summary>
         private readonly int[][] changeVectors;
+        /// <summary>
+        /// The r
+        /// </summary>
         private readonly Random r;
+        /// <summary>
+        /// The change vector index
+        /// </summary>
         private int changeVectorIndex;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RandomNeighborGenerator"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <param name="minNumNeighbors">The minimum number neighbors.</param>
         public RandomNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, int minNumNeighbors = 50)
             : base(discreteSpaceDescriptor)
         {
@@ -37,6 +69,12 @@ namespace OptimizationToolbox
             changeVectors = discreteSpaceDescriptor.CreateNeighborChangeVectors(minNumNeighbors);
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="control">The control.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
         public override List<double[]> GenerateCandidates(double[] candidate, int control = -1)
         {
             var neighbor = (double[])candidate.Clone();

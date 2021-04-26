@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="MaxIterationsConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -30,14 +43,14 @@ namespace OptimizationToolbox
     public class MaxIterationsConvergence : abstractConvergence
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxIterationsConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxIterationsConvergence" /> class.
         /// </summary>
         public MaxIterationsConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MaxIterationsConvergence"/> class.
+        /// Initializes a new instance of the <see cref="MaxIterationsConvergence" /> class.
         /// </summary>
         /// <param name="maxIterations">The max iterations.</param>
         public MaxIterationsConvergence(long maxIterations)
@@ -60,9 +73,8 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x (not used).</param>
         /// <param name="population">The population of candidates (not used).</param>
         /// <param name="gradF">The gradient of F (not used).</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">MaxIterationsConvergence expected a positive value for the first argument, YInteger</exception>
         public override bool converged(long iteration, long numFnEvals, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
             if (iteration < 0)

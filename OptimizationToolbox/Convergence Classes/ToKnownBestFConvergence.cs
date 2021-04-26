@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ToKnownBestFConvergence.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,9 +37,20 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class ToKnownBestFConvergence.
+    /// Implements the <see cref="OptimizationToolbox.abstractConvergence" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractConvergence" />
     public class ToKnownBestFConvergence : abstractConvergence
     {
+        /// <summary>
+        /// The neg tolerance
+        /// </summary>
         private double negTolerance = double.PositiveInfinity;
+        /// <summary>
+        /// The position tolerance
+        /// </summary>
         private double posTolerance = double.PositiveInfinity;
         /// <summary>
         /// Gets or sets the optimal f which the process should stop after reaching.
@@ -59,14 +83,14 @@ namespace OptimizationToolbox
         #region Constructor
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ToKnownBestFConvergence"/> class.
+        /// Initializes a new instance of the <see cref="ToKnownBestFConvergence" /> class.
         /// </summary>
         public ToKnownBestFConvergence()
         {
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ToKnownBestFConvergence"/> class.
+        /// Initializes a new instance of the <see cref="ToKnownBestFConvergence" /> class.
         /// </summary>
         /// <param name="fAtOptimal">The f at optimal.</param>
         /// <param name="positiveTolerance">The positive tolerance.</param>
@@ -93,9 +117,9 @@ namespace OptimizationToolbox
         /// <param name="xBest">The best x (not used).</param>
         /// <param name="population">The population of candidates (not used).</param>
         /// <param name="gradF">The gradient of F (not used).</param>
-        /// <returns>
-        /// true or false - has the process converged?
-        /// </returns>
+        /// <returns>true or false - has the process converged?</returns>
+        /// <exception cref="Exception">ToKnownBestConvergence expected a double (in the second argument, YDouble) "
+        ///                                     + " representing the objective function.</exception>
         public override bool converged(long iteration = -1, long numFnEvals = -1, double fBest = double.NaN, IList<double> xBest = null, IList<double[]> population = null, IList<double> gradF = null)
         {
             if (double.IsNaN(fBest))

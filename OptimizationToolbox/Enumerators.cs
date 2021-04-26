@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="Enumerators.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -29,8 +42,17 @@ namespace OptimizationToolbox
     /// </summary>
     public enum optimize
     {
+        /// <summary>
+        /// The minimize
+        /// </summary>
         minimize = -1,
+        /// <summary>
+        /// The neither
+        /// </summary>
         neither = 0,
+        /// <summary>
+        /// The maximize
+        /// </summary>
         maximize = 1
     } ;
 
@@ -43,12 +65,33 @@ namespace OptimizationToolbox
     /// </summary>
     public enum differentiate
     {
+        /// <summary>
+        /// The analytic
+        /// </summary>
         Analytic,
+        /// <summary>
+        /// The back1
+        /// </summary>
         Back1,
+        /// <summary>
+        /// The forward1
+        /// </summary>
         Forward1,
+        /// <summary>
+        /// The central2
+        /// </summary>
         Central2,
+        /// <summary>
+        /// The back2
+        /// </summary>
         Back2,
+        /// <summary>
+        /// The forward2
+        /// </summary>
         Forward2,
+        /// <summary>
+        /// The central4
+        /// </summary>
         Central4
     } ;
 
@@ -58,11 +101,29 @@ namespace OptimizationToolbox
     /// </summary>
     public enum VerbosityLevels
     {
+        /// <summary>
+        /// The only critical
+        /// </summary>
         OnlyCritical = 0,
+        /// <summary>
+        /// The low
+        /// </summary>
         Low = 1,
+        /// <summary>
+        /// The below normal
+        /// </summary>
         BelowNormal = 2,
+        /// <summary>
+        /// The normal
+        /// </summary>
         Normal = 3,
+        /// <summary>
+        /// The above normal
+        /// </summary>
         AboveNormal = 4,
+        /// <summary>
+        /// The everything
+        /// </summary>
         Everything = int.MaxValue
     };
 }

@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="Parameters.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -21,6 +34,9 @@
  *************************************************************************/
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class Parameters.
+    /// </summary>
     public static class Parameters
     {
         /// <summary>
@@ -49,10 +65,23 @@ namespace OptimizationToolbox
         /// </summary>
         public static int DiscreteVariableMaxToStoreImplicitly = 5000;
 
+        /// <summary>
+        /// Gets or sets the verbosity.
+        /// </summary>
+        /// <value>The verbosity.</value>
         public static VerbosityLevels Verbosity { get; set; }
 
+        /// <summary>
+        /// The tolerance for same
+        /// </summary>
         public static double ToleranceForSame = 1e-15;
+        /// <summary>
+        /// The default finite difference step size
+        /// </summary>
         public static double DefaultFiniteDifferenceStepSize = 0.1;
+        /// <summary>
+        /// The default finite difference mode
+        /// </summary>
         public static differentiate DefaultFiniteDifferenceMode = differentiate.Central2;
     } 
 }

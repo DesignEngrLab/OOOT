@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 04-21-2021
+// ***********************************************************************
+// <copyright file="partiswarm.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 using System;
 using System.Collections.Generic;
 using StarMathLib;
@@ -5,6 +18,11 @@ using StarMathLib;
 //Ref/Source: http://msdn.microsoft.com/en-us/magazine/hh335067.aspx
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class partiswarm.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class partiswarm : abstractOptMethod
     {
         //fields
@@ -20,28 +38,82 @@ namespace OptimizationToolbox
         public abstractSelector selector { get; private set; }
 
 
+        /// <summary>
+        /// The number particles
+        /// </summary>
         private readonly int numberParticles = 10;
+        /// <summary>
+        /// The number iterations
+        /// </summary>
         private readonly int numberIterations = 100;
+        /// <summary>
+        /// The minimum x
+        /// </summary>
         private readonly double minX = -25;
+        /// <summary>
+        /// The maximum x
+        /// </summary>
         private readonly double maxX = 25;
+        /// <summary>
+        /// The best global fitness
+        /// </summary>
         private double bestGlobalFitness = double.MaxValue;
+        /// <summary>
+        /// The x stars
+        /// </summary>
         private List<double[]> xStars = new List<double[]>();
+        /// <summary>
+        /// The trial values
+        /// </summary>
         private List<double[]> trialValues = new List<double[]>();
+        /// <summary>
+        /// The x d
+        /// </summary>
         private double x_d = 0.0;
+        /// <summary>
+        /// The y d
+        /// </summary>
         private double y_d = 0.0;
+        /// <summary>
+        /// The sliderindices
+        /// </summary>
         private List<int> sliderindices = new List<int>();
+        /// <summary>
+        /// The minimum alpha step ratio
+        /// </summary>
         private const double minAlphaStepRatio = 1e-6;
+        /// <summary>
+        /// The alpha star
+        /// </summary>
         private double alphaStar;
+        /// <summary>
+        /// The dk
+        /// </summary>
         private double[] dk;
 
         /*		 fk is the value of f(xk). */
+        /// <summary>
+        /// The fk
+        /// </summary>
         private double fk;
 
+        /// <summary>
+        /// The iteration
+        /// </summary>
         private int iteration = 0;
 
+        /// <summary>
+        /// The trial trial
+        /// </summary>
         private static SomeFunctions.Values trial_trial;
+        /// <summary>
+        /// The f value
+        /// </summary>
         private static SomeFunctions.Values f_val;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="partiswarm"/> class.
+        /// </summary>
         public partiswarm()
         {
             RequiresObjectiveFunction = true;
@@ -55,6 +127,16 @@ namespace OptimizationToolbox
             RequiresLineSearchMethod = true;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="partiswarm"/> class.
+        /// </summary>
+        /// <param name="numberParticles">The number particles.</param>
+        /// <param name="numberIterations">The number iterations.</param>
+        /// <param name="maxX">The maximum x.</param>
+        /// <param name="minX">The minimum x.</param>
+        /// <param name="xStars">The x stars.</param>
+        /// <param name="trialValues">The trial values.</param>
+        /// <param name="bestGlobalFitness">The best global fitness.</param>
         public partiswarm(int numberParticles, int numberIterations, double maxX, double minX, List<double[]> xStars, List<double[]> trialValues, double bestGlobalFitness = double.MaxValue)
             : this()
         {
@@ -65,6 +147,16 @@ namespace OptimizationToolbox
             this.bestGlobalFitness = bestGlobalFitness;
             this.xStars = xStars; this.trialValues = trialValues;
         }
+        /// <summary>
+        /// Initializes a new instance of the <see cref="partiswarm"/> class.
+        /// </summary>
+        /// <param name="numberParticles">The number particles.</param>
+        /// <param name="numberIterations">The number iterations.</param>
+        /// <param name="maxX">The maximum x.</param>
+        /// <param name="minX">The minimum x.</param>
+        /// <param name="x_d">The x d.</param>
+        /// <param name="y_d">The y d.</param>
+        /// <param name="sliderindices">The sliderindices.</param>
         public partiswarm(int numberParticles, int numberIterations, double maxX, double minX, double x_d, double y_d, List<int> sliderindices)
             : this()
         {
@@ -78,6 +170,12 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             Particle[] swarm = new Particle[numberParticles];
@@ -368,6 +466,14 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Finddesireds the pathrepeats.
+        /// </summary>
+        /// <param name="vector">The vector.</param>
+        /// <param name="x_d">The x d.</param>
+        /// <param name="y_d">The y d.</param>
+        /// <param name="sliderindices">The sliderindices.</param>
+        /// <returns>System.Double[].</returns>
         public double[] finddesiredPathrepeats(double[] vector, double x_d, double y_d, List<int> sliderindices)
         {
 
@@ -468,6 +574,10 @@ namespace OptimizationToolbox
 
         }
 
+        /// <summary>
+        /// Gets or sets the trials.
+        /// </summary>
+        /// <value>The trials.</value>
         public static SomeFunctions.Values Trials
         {
 
@@ -478,6 +588,10 @@ namespace OptimizationToolbox
 
 
 
+        /// <summary>
+        /// Gets or sets the f value.
+        /// </summary>
+        /// <value>The f value.</value>
         public static SomeFunctions.Values FVal
         {
 
@@ -493,28 +607,59 @@ namespace OptimizationToolbox
     /// </summary>
     public class SomeFunctions
         {
-            public class Values
+        /// <summary>
+        /// Class Values.
+        /// </summary>
+        public class Values
             {
-                private double fitness;
+            /// <summary>
+            /// The fitness
+            /// </summary>
+            private double fitness;
 
-                public Values(double fitness)
+            /// <summary>
+            /// Initializes a new instance of the <see cref="Values"/> class.
+            /// </summary>
+            /// <param name="fitness">The fitness.</param>
+            public Values(double fitness)
                 {
                     this.fitness = fitness;
                 }
 
-                internal void addtoValues(double[] newPosition)
+            /// <summary>
+            /// Addtoes the values.
+            /// </summary>
+            /// <param name="newPosition">The new position.</param>
+            /// <exception cref="NotImplementedException"></exception>
+            internal void addtoValues(double[] newPosition)
                 {
                     throw new NotImplementedException();
                 }
 
-                internal void addtoValues(double newFitness)
+            /// <summary>
+            /// Addtoes the values.
+            /// </summary>
+            /// <param name="newFitness">The new fitness.</param>
+            /// <exception cref="NotImplementedException"></exception>
+            internal void addtoValues(double newFitness)
                 {
                     throw new NotImplementedException();
                 }
             }
 
+        /// <summary>
+        /// Class MyClass.
+        /// </summary>
         internal class MyClass
         {
+            /// <summary>
+            /// Generates the neighbors.
+            /// </summary>
+            /// <param name="xCopy">The x copy.</param>
+            /// <param name="meshSize">Size of the mesh.</param>
+            /// <param name="stepsize">The stepsize.</param>
+            /// <returns>IList&lt;System.Double[]&gt;.</returns>
+            /// <exception cref="NotImplementedException"></exception>
             internal IList<double[]> generateNeighbors(double[] xCopy, double meshSize, double stepsize)
             {
                 throw new NotImplementedException();

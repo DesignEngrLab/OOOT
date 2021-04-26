@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="VariableDescriptorEnum.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,30 +38,56 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class VariableDescriptorEnum.
+    /// Implements the <see cref="System.Collections.Generic.IEnumerator{OptimizationToolbox.VariableDescriptor}" />
+    /// </summary>
+    /// <seealso cref="System.Collections.Generic.IEnumerator{OptimizationToolbox.VariableDescriptor}" />
     class VariableDescriptorEnum : IEnumerator<VariableDescriptor>
     {
+        /// <summary>
+        /// The variable descriptors
+        /// </summary>
         private readonly VariableDescriptor[] _variableDescriptors;
 
         // Enumerators are positioned before the first element
         // until the first MoveNext() call.
+        /// <summary>
+        /// The position
+        /// </summary>
         int position = -1;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableDescriptorEnum"/> class.
+        /// </summary>
+        /// <param name="list">The list.</param>
         public VariableDescriptorEnum(VariableDescriptor[] list)
         {
             _variableDescriptors = list;
         }
 
+        /// <summary>
+        /// Advances the enumerator to the next element of the collection.
+        /// </summary>
+        /// <returns><see langword="true" /> if the enumerator was successfully advanced to the next element; <see langword="false" /> if the enumerator has passed the end of the collection.</returns>
         public bool MoveNext()
         {
             position++;
             return (position < _variableDescriptors.Length);
         }
 
+        /// <summary>
+        /// Sets the enumerator to its initial position, which is before the first element in the collection.
+        /// </summary>
         public void Reset()
         {
             position = -1;
         }
 
+        /// <summary>
+        /// Gets the element in the collection at the current position of the enumerator.
+        /// </summary>
+        /// <value>The current.</value>
         object IEnumerator.Current
         {
             get
@@ -57,6 +96,11 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Gets the element in the collection at the current position of the enumerator.
+        /// </summary>
+        /// <value>The current.</value>
+        /// <exception cref="InvalidOperationException"></exception>
         public VariableDescriptor Current
         {
             get
@@ -77,7 +121,6 @@ namespace OptimizationToolbox
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
         /// </summary>
-        /// <filterpriority>2</filterpriority>
         public void Dispose()
         {
            // throw new NotImplementedException();

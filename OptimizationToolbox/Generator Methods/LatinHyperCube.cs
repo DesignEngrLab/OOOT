@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="LatinHyperCube.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,23 +38,56 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Enum VariablesInScope
+    /// </summary>
     public enum VariablesInScope
     {
+        /// <summary>
+        /// The only discrete
+        /// </summary>
         OnlyDiscrete,
+        /// <summary>
+        /// The only real
+        /// </summary>
         OnlyReal,
+        /// <summary>
+        /// The both discrete and real
+        /// </summary>
         BothDiscreteAndReal
     } ;
 
+    /// <summary>
+    /// Class LatinHyperCube.
+    /// Implements the <see cref="OptimizationToolbox.SamplingGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.SamplingGenerator" />
     public class LatinHyperCube : SamplingGenerator
     {
+        /// <summary>
+        /// The generate for
+        /// </summary>
         private readonly VariablesInScope generateFor;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LatinHyperCube"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <param name="GenerateFor">The generate for.</param>
         public LatinHyperCube(DesignSpaceDescription discreteSpaceDescriptor, VariablesInScope GenerateFor)
             : base(discreteSpaceDescriptor)
         {
             generateFor = GenerateFor;
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="numSamples">The number samples.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
+        /// <exception cref="Exception">The bounds on the " + j + "(th) variable must not be at infinity for" +
+        ///                                             "performing Latin Hypercube sampling.</exception>
         public override List<double[]> GenerateCandidates(double[] candidate, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
@@ -89,6 +135,11 @@ namespace OptimizationToolbox
             return candidates;
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="numSamples">The number samples.</param>
         public override void GenerateCandidates(ref List<ICandidate> candidates, int numSamples = -1)
         {
             var candVectors = GenerateCandidates(null, numSamples);

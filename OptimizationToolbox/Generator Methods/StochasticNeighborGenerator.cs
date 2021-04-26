@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="StochasticNeighborGenerator.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,16 +38,48 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class StochasticNeighborGenerator.
+    /// Implements the <see cref="OptimizationToolbox.abstractGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractGenerator" />
     public class StochasticNeighborGenerator : abstractGenerator
     {
+        /// <summary>
+        /// The minimum to maximum ratio
+        /// </summary>
         public static double MinToMaxRatio = 0.05;
+        /// <summary>
+        /// The change vectors
+        /// </summary>
         private readonly int[][] changeVectors;
+        /// <summary>
+        /// The direction
+        /// </summary>
         private readonly optimize direction;
+        /// <summary>
+        /// The r
+        /// </summary>
         private readonly Random r;
+        /// <summary>
+        /// The change vector index
+        /// </summary>
         private int changeVectorIndex;
+        /// <summary>
+        /// The performance
+        /// </summary>
         private double[] performance;
+        /// <summary>
+        /// The population
+        /// </summary>
         private int[] population;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StochasticNeighborGenerator"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <param name="direction">The direction.</param>
+        /// <param name="maxNumNeighbors">The maximum number neighbors.</param>
         public StochasticNeighborGenerator(DesignSpaceDescription discreteSpaceDescriptor, optimize direction,
                                            int maxNumNeighbors = 250)
             : base(discreteSpaceDescriptor)
@@ -45,8 +90,18 @@ namespace OptimizationToolbox
             ResetStats();
         }
 
+        /// <summary>
+        /// Gets the changes stored.
+        /// </summary>
+        /// <value>The changes stored.</value>
         public int changesStored { get; private set; }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="control">The control.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
         public override List<double[]> GenerateCandidates(double[] candidate, int control = -1)
         {
             var neighbor = (double[])candidate.Clone();
@@ -64,6 +119,12 @@ namespace OptimizationToolbox
             return new List<double[]> { neighbor };
         }
 
+        /// <summary>
+        /// Finds the index.
+        /// </summary>
+        /// <param name="p">The p.</param>
+        /// <param name="probabilities">The probabilities.</param>
+        /// <returns>System.Int32.</returns>
         private static int findIndex(double p, IList<double> probabilities)
         {
             var i = 0;
@@ -71,6 +132,11 @@ namespace OptimizationToolbox
             return i;
         }
 
+        /// <summary>
+        /// Makes the probabilites.
+        /// </summary>
+        /// <param name="changes">The changes.</param>
+        /// <returns>System.Double[].</returns>
         private double[] makeProbabilites(IList<int> changes)
         {
             var result = new double[changes.Count];
@@ -94,6 +160,9 @@ namespace OptimizationToolbox
             return result;
         }
 
+        /// <summary>
+        /// Resets the stats.
+        /// </summary>
         public void ResetStats()
         {
             performance = new double[changeVectors.GetLength(0)];
@@ -101,6 +170,10 @@ namespace OptimizationToolbox
             changesStored = 0;
         }
 
+        /// <summary>
+        /// Records the effect.
+        /// </summary>
+        /// <param name="delta">The delta.</param>
         public void RecordEffect(double delta)
         {
             switch (direction)

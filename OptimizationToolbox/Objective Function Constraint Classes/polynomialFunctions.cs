@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="polynomialFunctions.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -26,17 +39,38 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class polynomialInequality.
+    /// Implements the <see cref="OptimizationToolbox.IDifferentiable" />
+    /// Implements the <see cref="OptimizationToolbox.IInequality" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.IDifferentiable" />
+    /// <seealso cref="OptimizationToolbox.IInequality" />
     public class polynomialInequality : IDifferentiable, IInequality
     {
+        /// <summary>
+        /// The coeff exponents
+        /// </summary>
         private List<double[]> coeff_exponents;
+        /// <summary>
+        /// The terms
+        /// </summary>
         private List<string> terms;
 
+        /// <summary>
+        /// Gets or sets the terms.
+        /// </summary>
+        /// <value>The terms.</value>
         public List<string> Terms
         {
             get { return terms; }
             set { terms = value; }
         }
 
+        /// <summary>
+        /// Gets the coeff exponents.
+        /// </summary>
+        /// <value>The coeff exponents.</value>
         private IEnumerable<double[]> Coeff_Exponents
         {
             get
@@ -49,36 +83,59 @@ namespace OptimizationToolbox
 
         #region Constructing the Polynomial
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialInequality"/> class.
+        /// </summary>
         public polynomialInequality()
         {
             coeff_exponents = new List<double[]>();
             terms = new List<string>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialInequality"/> class.
+        /// </summary>
+        /// <param name="coeff_exponents">The coeff exponents.</param>
         public polynomialInequality(List<double[]> coeff_exponents)
         {
             this.coeff_exponents = coeff_exponents;
             terms = polynomialHelper.convert(coeff_exponents);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialInequality"/> class.
+        /// </summary>
+        /// <param name="matrixOfTerms">The matrix of terms.</param>
         public polynomialInequality(double[,] matrixOfTerms)
         {
             coeff_exponents = polynomialHelper.convert(matrixOfTerms);
             terms = polynomialHelper.convert(coeff_exponents);
         }
 
+        /// <summary>
+        /// Adds the specified new term.
+        /// </summary>
+        /// <param name="newTerm">The new term.</param>
         public void Add(double[] newTerm)
         {
             coeff_exponents.Add(newTerm);
             terms.Add(polynomialHelper.convert(newTerm));
         }
 
+        /// <summary>
+        /// Adds the specified new terms.
+        /// </summary>
+        /// <param name="newTerms">The new terms.</param>
         public void Add(List<string> newTerms)
         {
             foreach (string term in newTerms)
                 Add(term);
         }
 
+        /// <summary>
+        /// Adds the specified new term.
+        /// </summary>
+        /// <param name="newTerm">The new term.</param>
         public void Add(string newTerm)
         {
             coeff_exponents.Add(polynomialHelper.convert(newTerm));
@@ -90,6 +147,11 @@ namespace OptimizationToolbox
 
         #region Implementation of IOptFunction
 
+        /// <summary>
+        /// Calculates the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <returns>System.Double.</returns>
         public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
@@ -99,6 +161,12 @@ namespace OptimizationToolbox
 
         #region Implementation of IDifferentiable
 
+        /// <summary>
+        /// Derivs the WRT xi.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         public double deriv_wrt_xi(double[] x, int i)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, i));
@@ -107,17 +175,38 @@ namespace OptimizationToolbox
         #endregion
     }
 
+    /// <summary>
+    /// Class polynomialEquality.
+    /// Implements the <see cref="OptimizationToolbox.IDifferentiable" />
+    /// Implements the <see cref="OptimizationToolbox.IEquality" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.IDifferentiable" />
+    /// <seealso cref="OptimizationToolbox.IEquality" />
     public class polynomialEquality : IDifferentiable, IEquality
     {
+        /// <summary>
+        /// The coeff exponents
+        /// </summary>
         private List<double[]> coeff_exponents;
+        /// <summary>
+        /// The terms
+        /// </summary>
         private List<string> terms;
 
+        /// <summary>
+        /// Gets or sets the terms.
+        /// </summary>
+        /// <value>The terms.</value>
         public List<string> Terms
         {
             get { return terms; }
             set { terms = value; }
         }
 
+        /// <summary>
+        /// Gets the coeff exponents.
+        /// </summary>
+        /// <value>The coeff exponents.</value>
         private IEnumerable<double[]> Coeff_Exponents
         {
             get
@@ -130,36 +219,59 @@ namespace OptimizationToolbox
 
         #region Constructing the Polynomial
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialEquality"/> class.
+        /// </summary>
         public polynomialEquality()
         {
             coeff_exponents = new List<double[]>();
             terms = new List<string>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialEquality"/> class.
+        /// </summary>
+        /// <param name="coeff_exponents">The coeff exponents.</param>
         public polynomialEquality(List<double[]> coeff_exponents)
         {
             this.coeff_exponents = coeff_exponents;
             terms = polynomialHelper.convert(coeff_exponents);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialEquality"/> class.
+        /// </summary>
+        /// <param name="matrixOfTerms">The matrix of terms.</param>
         public polynomialEquality(double[,] matrixOfTerms)
         {
             coeff_exponents = polynomialHelper.convert(matrixOfTerms);
             terms = polynomialHelper.convert(coeff_exponents);
         }
 
+        /// <summary>
+        /// Adds the specified new term.
+        /// </summary>
+        /// <param name="newTerm">The new term.</param>
         public void Add(double[] newTerm)
         {
             coeff_exponents.Add(newTerm);
             terms.Add(polynomialHelper.convert(newTerm));
         }
 
+        /// <summary>
+        /// Adds the specified new terms.
+        /// </summary>
+        /// <param name="newTerms">The new terms.</param>
         public void Add(List<string> newTerms)
         {
             foreach (string term in newTerms)
                 Add(term);
         }
 
+        /// <summary>
+        /// Adds the specified new term.
+        /// </summary>
+        /// <param name="newTerm">The new term.</param>
         public void Add(string newTerm)
         {
             coeff_exponents.Add(polynomialHelper.convert(newTerm));
@@ -170,6 +282,12 @@ namespace OptimizationToolbox
 
         #region Implementation of IDifferentiable
 
+        /// <summary>
+        /// Derivs the WRT xi.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         public double deriv_wrt_xi(double[] x, int i)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, i));
@@ -178,6 +296,11 @@ namespace OptimizationToolbox
 
         #region Implementation of IOptFunction
 
+        /// <summary>
+        /// Calculates the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <returns>System.Double.</returns>
         public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
@@ -186,17 +309,38 @@ namespace OptimizationToolbox
         #endregion
     }
 
+    /// <summary>
+    /// Class polynomialObjFn.
+    /// Implements the <see cref="OptimizationToolbox.IDifferentiable" />
+    /// Implements the <see cref="OptimizationToolbox.IObjectiveFunction" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.IDifferentiable" />
+    /// <seealso cref="OptimizationToolbox.IObjectiveFunction" />
     public class polynomialObjFn : IDifferentiable, IObjectiveFunction
     {
+        /// <summary>
+        /// The coeff exponents
+        /// </summary>
         private List<double[]> coeff_exponents;
+        /// <summary>
+        /// The terms
+        /// </summary>
         private List<string> terms;
 
+        /// <summary>
+        /// Gets or sets the terms.
+        /// </summary>
+        /// <value>The terms.</value>
         public List<string> Terms
         {
             get { return terms; }
             set { terms = value; }
         }
 
+        /// <summary>
+        /// Gets the coeff exponents.
+        /// </summary>
+        /// <value>The coeff exponents.</value>
         private IEnumerable<double[]> Coeff_Exponents
         {
             get
@@ -209,36 +353,59 @@ namespace OptimizationToolbox
 
         #region Constructing the Polynomial
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialObjFn"/> class.
+        /// </summary>
         public polynomialObjFn()
         {
             coeff_exponents = new List<double[]>();
             terms = new List<string>();
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialObjFn"/> class.
+        /// </summary>
+        /// <param name="coeff_exponents">The coeff exponents.</param>
         public polynomialObjFn(List<double[]> coeff_exponents)
         {
             this.coeff_exponents = coeff_exponents;
             terms = polynomialHelper.convert(coeff_exponents);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="polynomialObjFn"/> class.
+        /// </summary>
+        /// <param name="matrixOfTerms">The matrix of terms.</param>
         public polynomialObjFn(double[,] matrixOfTerms)
         {
             coeff_exponents = polynomialHelper.convert(matrixOfTerms);
             terms = polynomialHelper.convert(coeff_exponents);
         }
 
+        /// <summary>
+        /// Adds the specified new term.
+        /// </summary>
+        /// <param name="newTerm">The new term.</param>
         public void Add(double[] newTerm)
         {
             coeff_exponents.Add(newTerm);
             terms.Add(polynomialHelper.convert(newTerm));
         }
 
+        /// <summary>
+        /// Adds the specified new terms.
+        /// </summary>
+        /// <param name="newTerms">The new terms.</param>
         public void Add(List<string> newTerms)
         {
             foreach (string term in newTerms)
                 Add(term);
         }
 
+        /// <summary>
+        /// Adds the specified new term.
+        /// </summary>
+        /// <param name="newTerm">The new term.</param>
         public void Add(string newTerm)
         {
             coeff_exponents.Add(polynomialHelper.convert(newTerm));
@@ -249,6 +416,12 @@ namespace OptimizationToolbox
 
         #region Implementation of IDifferentiable
 
+        /// <summary>
+        /// Derivs the WRT xi.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="i">The i.</param>
+        /// <returns>System.Double.</returns>
         public double deriv_wrt_xi(double[] x, int i)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateDeriv(x, c_e_term, i));
@@ -256,6 +429,11 @@ namespace OptimizationToolbox
         #endregion
 
         #region Implementation of IOptFunction
+        /// <summary>
+        /// Calculates the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <returns>System.Double.</returns>
         public double calculate(double[] x)
         {
             return Coeff_Exponents.Sum(c_e_term => polynomialHelper.calculateTerm(x, c_e_term));
@@ -264,10 +442,18 @@ namespace OptimizationToolbox
         #endregion
     }
 
+    /// <summary>
+    /// Class polynomialHelper.
+    /// </summary>
     internal static class polynomialHelper
     {
         #region Converters
 
+        /// <summary>
+        /// Converts the specified term.
+        /// </summary>
+        /// <param name="term">The term.</param>
+        /// <returns>System.String.</returns>
         internal static string convert(double[] term)
         {
             var sTerm = "";
@@ -286,6 +472,14 @@ namespace OptimizationToolbox
             return sTerm.TrimEnd(new[] { '*' });
         }
 
+        /// <summary>
+        /// Converts the specified s term.
+        /// </summary>
+        /// <param name="sTerm">The s term.</param>
+        /// <returns>System.Double[].</returns>
+        /// <exception cref="Exception">Contains illegal character :" + sTerm[pos]</exception>
+        /// <exception cref="Exception">Error in syntax of polynomial subterm: " + subTerms[j]</exception>
+        /// <exception cref="Exception">Error in syntax of polynomial subterm: " + subTerms[j]</exception>
         internal static double[] convert(string sTerm)
         {
             var positions = new List<int>();
@@ -357,6 +551,11 @@ namespace OptimizationToolbox
             return term;
         }
 
+        /// <summary>
+        /// Converts the specified s terms.
+        /// </summary>
+        /// <param name="sTerms">The s terms.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
         internal static List<double[]> convert(List<string> sTerms)
         {
             var terms = new List<double[]>(sTerms.Count);
@@ -365,11 +564,21 @@ namespace OptimizationToolbox
             return terms;
         }
 
+        /// <summary>
+        /// Converts the specified terms.
+        /// </summary>
+        /// <param name="terms">The terms.</param>
+        /// <returns>List&lt;System.String&gt;.</returns>
         internal static List<string> convert(List<double[]> terms)
         {
             return new List<string>(terms.Select(convert));
         }
 
+        /// <summary>
+        /// Converts the specified matrix of terms.
+        /// </summary>
+        /// <param name="matrixOfTerms">The matrix of terms.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
         internal static List<double[]> convert(double[,] matrixOfTerms)
         {
             var numTerms = matrixOfTerms.GetLength(0);
@@ -389,6 +598,12 @@ namespace OptimizationToolbox
 
         #region Calculating Helpers
 
+        /// <summary>
+        /// Calculates the term.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="term">The term.</param>
+        /// <returns>System.Double.</returns>
         internal static double calculateTerm(double[] x, double[] term)
         {
             /* the first term is always the coefficient. We can start the product with that. */
@@ -399,6 +614,13 @@ namespace OptimizationToolbox
             return product;
         }
 
+        /// <summary>
+        /// Calculates the deriv.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="term">The term.</param>
+        /// <param name="position">The position.</param>
+        /// <returns>System.Double.</returns>
         internal static double calculateDeriv(double[] x, double[] term, int position)
         {
             /* the first term is always the coefficient. We can start the product with that. */

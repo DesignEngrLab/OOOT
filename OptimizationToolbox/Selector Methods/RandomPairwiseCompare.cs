@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="RandomPairwiseCompare.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,16 +38,33 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class RandomPairwiseCompare.
+    /// Implements the <see cref="OptimizationToolbox.abstractSelector" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSelector" />
     public class RandomPairwiseCompare : abstractSelector
     {
+        /// <summary>
+        /// The random
+        /// </summary>
         private readonly Random rnd;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RandomPairwiseCompare"/> class.
+        /// </summary>
+        /// <param name="direction">The direction.</param>
         public RandomPairwiseCompare(optimize direction)
             : base(new[] { direction })
         {
             rnd = new Random();
         }
 
+        /// <summary>
+        /// Selects the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="fractionToKeep">The fraction to keep.</param>
         public override void SelectCandidates(ref List<ICandidate> candidates, double fractionToKeep = double.NaN)
         {
             if (double.IsNaN(fractionToKeep)) fractionToKeep = 0.5;

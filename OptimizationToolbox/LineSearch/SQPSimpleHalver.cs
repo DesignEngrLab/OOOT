@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="SQPSimpleHalver.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -23,12 +36,25 @@ using System;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class SQPSimpleHalver.
+    /// Implements the <see cref="OptimizationToolbox.abstractLineSearch" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractLineSearch" />
     public class SQPSimpleHalver : abstractLineSearch
     {
+        /// <summary>
+        /// The gamma
+        /// </summary>
         private readonly double gamma;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SQPSimpleHalver"/> class.
+        /// </summary>
+        /// <param name="gamma">The gamma.</param>
+        /// <param name="kMax">The k maximum.</param>
         public SQPSimpleHalver(double gamma, int kMax)
             : base(double.NaN, double.NaN, kMax)
         {
@@ -37,6 +63,12 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Finds the alpha star.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="dir">The dir.</param>
+        /// <returns>System.Double.</returns>
         public override double findAlphaStar(double[] x, double[] dir)
         {
             var f_at_current = calcF(x, 0, dir);

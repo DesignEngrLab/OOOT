@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="GACrossoverBitString.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,13 +37,35 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class GACrossoverBitString.
+    /// Implements the <see cref="OptimizationToolbox.GeneticCrossoverGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.GeneticCrossoverGenerator" />
     public class GACrossoverBitString : GeneticCrossoverGenerator
     {
+        /// <summary>
+        /// The bit string length
+        /// </summary>
         private readonly int bitStringLength;
+        /// <summary>
+        /// The limits
+        /// </summary>
         private readonly BitByteHexLimits[] limits;
+        /// <summary>
+        /// The random
+        /// </summary>
         private readonly Random rnd;
+        /// <summary>
+        /// The x rate per bit
+        /// </summary>
         private readonly double xRatePerBit;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GACrossoverBitString"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
+        /// <param name="crossoverRate">The crossover rate.</param>
         public GACrossoverBitString(DesignSpaceDescription discreteSpaceDescriptor, double crossoverRate = 1.7)
             : base(discreteSpaceDescriptor)
         {
@@ -40,6 +75,11 @@ namespace OptimizationToolbox
             rnd = new Random();
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="targetPopNumber">The target pop number.</param>
         public override void GenerateCandidates(ref List<ICandidate> candidates, int targetPopNumber = -1)
         {
             /* if no population size is provided, then it is assumed that the population should

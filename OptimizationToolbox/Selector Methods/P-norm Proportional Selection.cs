@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="P-norm Proportional Selection.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,11 +38,28 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class PNormProportionalSelection.
+    /// Implements the <see cref="OptimizationToolbox.abstractSelector" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSelector" />
     public class PNormProportionalSelection : abstractSelector
     {
+        /// <summary>
+        /// The always keep best
+        /// </summary>
         private readonly Boolean alwaysKeepBest;
+        /// <summary>
+        /// The random
+        /// </summary>
         private readonly Random rnd;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PNormProportionalSelection"/> class.
+        /// </summary>
+        /// <param name="direction">The direction.</param>
+        /// <param name="AlwaysKeepBest">The always keep best.</param>
+        /// <param name="Q">The q.</param>
         public PNormProportionalSelection(optimize direction, Boolean AlwaysKeepBest, double Q = 0.5)
             : base(new[] { direction })
         {
@@ -38,6 +68,11 @@ namespace OptimizationToolbox
             this.Q = Q;
         }
 
+        /// <summary>
+        /// Selects the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="fractionToKeep">The fraction to keep.</param>
         public override void SelectCandidates(ref List<ICandidate> candidates, double fractionToKeep = double.NaN)
         {
             var survivors = new List<ICandidate>();
@@ -63,6 +98,12 @@ namespace OptimizationToolbox
             candidates = survivors;
         }
 
+        /// <summary>
+        /// Finds the index.
+        /// </summary>
+        /// <param name="p">The p.</param>
+        /// <param name="probabilities">The probabilities.</param>
+        /// <returns>System.Int32.</returns>
         private static int findIndex(double p, double[] probabilities)
         {
             for (int index = 0; index < probabilities.GetLength(0); index++)
@@ -71,6 +112,11 @@ namespace OptimizationToolbox
             return -1;
         }
 
+        /// <summary>
+        /// Makes the probabilites.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <returns>System.Double[].</returns>
         private double[] makeProbabilites(IList<ICandidate> candidates)
         {
             var length = candidates.Count;
@@ -86,9 +132,21 @@ namespace OptimizationToolbox
 
         #region Converting Between Q and P
 
+        /// <summary>
+        /// The maximum p
+        /// </summary>
         private const double maxP = 40;
+        /// <summary>
+        /// The minimum p
+        /// </summary>
         private const double minP = 0.025;
+        /// <summary>
+        /// The maximum q
+        /// </summary>
         private const double maxQ = 1.0;
+        /// <summary>
+        /// The minimum q
+        /// </summary>
         private const double minQ = 0.0;
         /* after some empirical testing, I have settled on 40 and 1/40 as the highest and lowest
          * values for p. Since, on the generic level, the objective function may be any value, one
@@ -96,14 +154,24 @@ namespace OptimizationToolbox
          * For example, for an f0=1million, a p greater than 51 will  cause an error. */
 
         /// <summary>
-        ///   v is the power that q is raised to convert it to p.
+        /// v is the power that q is raised to convert it to p.
         /// </summary>
         private readonly double v = Math.Log((1 - minP) / (maxP - minP)) / -0.693147180559945;
 
+        /// <summary>
+        /// The p
+        /// </summary>
         private double p;
 
+        /// <summary>
+        /// The q
+        /// </summary>
         private double q;
 
+        /// <summary>
+        /// Gets or sets the p.
+        /// </summary>
+        /// <value>The p.</value>
         public double P
         {
             get { return p; }
@@ -116,6 +184,10 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Gets or sets the q.
+        /// </summary>
+        /// <value>The q.</value>
         public double Q
         {
             get { return q; }
@@ -128,6 +200,9 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Determines the pfrom q.
+        /// </summary>
         private void determinePfromQ()
         {
             if (q <= minQ)
@@ -142,6 +217,9 @@ namespace OptimizationToolbox
                             "q = " + q + " changed to p = " + p);
         }
 
+        /// <summary>
+        /// Determines the qfrom p.
+        /// </summary>
         private void determineQfromP()
         {
             if (Math.Abs(p) <= minP)

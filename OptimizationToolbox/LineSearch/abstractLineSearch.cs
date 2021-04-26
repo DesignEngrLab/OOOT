@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="abstractLineSearch.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -27,10 +40,17 @@ using StarMathLib;
 namespace OptimizationToolbox
 {
     /// <summary>
+    /// Class abstractLineSearch.
     /// </summary>
     public abstract class abstractLineSearch
     {
+        /// <summary>
+        /// The infeasibles
+        /// </summary>
         private readonly List<IConstraint> infeasibles;
+        /// <summary>
+        /// The track feasibility
+        /// </summary>
         private readonly Boolean trackFeasibility;
         /// <summary>
         /// the tolerance value, epsilon is used to distinguish values of alpha. It is part
@@ -45,8 +65,14 @@ namespace OptimizationToolbox
         /// Kmax is the maximum iterations to convergence.
         /// </summary>
         protected int  kMax;
+        /// <summary>
+        /// The last feas alpha
+        /// </summary>
         internal double lastFeasAlpha, lastFeasAlpha4G, lastFeasAlpha4H;
 
+        /// <summary>
+        /// The opt method
+        /// </summary>
         private abstractOptMethod optMethod;
         /// <summary>
         /// stepSize is the discretization step taken between values of alpha
@@ -56,7 +82,7 @@ namespace OptimizationToolbox
         #region Constructors
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="abstractLineSearch"/> class.
+        /// Initializes a new instance of the <see cref="abstractLineSearch" /> class.
         /// </summary>
         /// <param name="epsilon">The epsilon.</param>
         /// <param name="stepSize">Size of the step.</param>
@@ -79,7 +105,7 @@ namespace OptimizationToolbox
         /// </summary>
         /// <param name="x">The x.</param>
         /// <param name="dir">The dir.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public abstract double findAlphaStar(double[] x, double[] dir);
 
         /// <summary>
@@ -88,7 +114,7 @@ namespace OptimizationToolbox
         /// <param name="x">The x.</param>
         /// <param name="dir">The dir.</param>
         /// <param name="allowNegAlpha">if set to <c>true</c> [allow neg alpha].</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public double findAlphaStar(double[] x, double[] dir, Boolean allowNegAlpha)
         {
             return findAlphaStar(x, dir, allowNegAlpha, stepSize);
@@ -100,7 +126,7 @@ namespace OptimizationToolbox
         /// <param name="x">The x.</param>
         /// <param name="dir">The dir.</param>
         /// <param name="initAlpha">The init alpha.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public double findAlphaStar(double[] x, double[] dir, double initAlpha)
         {
             return findAlphaStar(x, dir, false, initAlpha);
@@ -117,7 +143,7 @@ namespace OptimizationToolbox
         /// <param name="dir">The dir.</param>
         /// <param name="allowNegAlpha">if set to <c>true</c> [allow neg alpha].</param>
         /// <param name="initAlpha">The init alpha.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         public double findAlphaStar(double[] x, double[] dir, Boolean allowNegAlpha, double initAlpha)
         {
             var tempStepSize = stepSize;
@@ -138,7 +164,7 @@ namespace OptimizationToolbox
         /// <param name="start">The start.</param>
         /// <param name="alpha">The alpha.</param>
         /// <param name="dir">The dir.</param>
-        /// <returns></returns>
+        /// <returns>System.Double.</returns>
         protected double calcF(double[] start, double alpha, double[] dir)
         {
             var point = start.add(StarMath.multiply(alpha, dir));
@@ -151,6 +177,11 @@ namespace OptimizationToolbox
             return optMethod.calc_f(point, true);
         }
 
+        /// <summary>
+        /// Tracks the last feasible.
+        /// </summary>
+        /// <param name="point">The point.</param>
+        /// <param name="alpha">The alpha.</param>
         private void trackLastFeasible(double[] point, double alpha)
         {
             var allConstraints = optMethod.h.Cast<IConstraint>().ToList();
@@ -167,6 +198,10 @@ namespace OptimizationToolbox
                 lastFeasAlpha4G = alpha;
         }
 
+        /// <summary>
+        /// Sets the optimization details.
+        /// </summary>
+        /// <param name="optmethod">The optmethod.</param>
         internal void SetOptimizationDetails(abstractOptMethod optmethod)
         {
             optMethod = optmethod;

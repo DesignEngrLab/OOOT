@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="BFGSDirection.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -24,26 +37,78 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class BFGSDirection.
+    /// Implements the <see cref="OptimizationToolbox.abstractSearchDirection" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSearchDirection" />
     public class BFGSDirection : abstractSearchDirection
     {
+        /// <summary>
+        /// The minimum alpha
+        /// </summary>
         private readonly double minimumAlpha;
+        /// <summary>
+        /// The i minus t
+        /// </summary>
         private double[,] IMinusT;
+        /// <summary>
+        /// The t
+        /// </summary>
         private double[,] T;
+        /// <summary>
+        /// The dir
+        /// </summary>
         private double[] dir;
+        /// <summary>
+        /// The grad f last
+        /// </summary>
         private double[] gradFLast;
+        /// <summary>
+        /// The inv h
+        /// </summary>
         private double[,] invH;
+        /// <summary>
+        /// The inv h last
+        /// </summary>
         private double[,] invHLast;
+        /// <summary>
+        /// The iters to reset
+        /// </summary>
         private int itersToReset;
+        /// <summary>
+        /// The mag dir
+        /// </summary>
         private double magDir;
+        /// <summary>
+        /// The u
+        /// </summary>
         private double[,] u;
+        /// <summary>
+        /// The x last
+        /// </summary>
         private double[] xLast;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BFGSDirection"/> class.
+        /// </summary>
+        /// <param name="minimumAlpha">The minimum alpha.</param>
+        /// <param name="itersToReset">The iters to reset.</param>
         public BFGSDirection(double minimumAlpha = 0.001, int itersToReset = -1)
         {
             this.minimumAlpha = minimumAlpha;
             this.itersToReset = itersToReset;
         }
 
+        /// <summary>
+        /// Finds the direction for the specified x.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="gradf">The gradf.</param>
+        /// <param name="f">The f.</param>
+        /// <param name="initAlpha">The init alpha.</param>
+        /// <param name="reset">if set to <c>true</c> [reset].</param>
+        /// <returns>System.Double[].</returns>
         public override double[] find(double[] x, double[] gradf, double f, ref double initAlpha, bool reset = false)
         {
             /* if a TRUE is sent to reset, then we call a simple steepestDescent function. */
@@ -80,6 +145,12 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Steepests the descent reset.
+        /// </summary>
+        /// <param name="x">The x.</param>
+        /// <param name="gradf">The gradf.</param>
+        /// <returns>System.Double[].</returns>
         private double[] steepestDescentReset(double[] x, double[] gradf)
         {
             gradFLast = (double[])gradf.Clone();

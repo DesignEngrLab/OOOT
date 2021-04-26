@@ -1,3 +1,16 @@
+// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="Rosenbrock.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
 /*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
@@ -26,20 +39,43 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class Rosenbrock.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class Rosenbrock : abstractOptMethod
     {
         #region Fields
 
+        /// <summary>
+        /// The alpha
+        /// </summary>
         private readonly double alpha = 2;
+        /// <summary>
+        /// The beta
+        /// </summary>
         private readonly double beta = -0.5;
+        /// <summary>
+        /// The initial step size
+        /// </summary>
         private double initialStepSize = 1.0;
+        /// <summary>
+        /// The minimum step size
+        /// </summary>
         private readonly double minimumStepSize = 1.0e-8;
+        /// <summary>
+        /// The step too small convergence
+        /// </summary>
         private readonly DirectSearchStepTooSmallConvergence stepTooSmallConvergence;
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rosenbrock"/> class.
+        /// </summary>
         public Rosenbrock()
         {
             RequiresObjectiveFunction = true;
@@ -55,6 +91,13 @@ namespace OptimizationToolbox
             ConvergenceMethods.Add(stepTooSmallConvergence);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Rosenbrock"/> class.
+        /// </summary>
+        /// <param name="alpha">The alpha.</param>
+        /// <param name="beta">The beta.</param>
+        /// <param name="initialStepSize">Initial size of the step.</param>
+        /// <param name="minimumStepSize">Minimum size of the step.</param>
         public Rosenbrock(double alpha, double beta, double initialStepSize, double minimumStepSize)
             : this()
         {
@@ -66,6 +109,11 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             fStar = calc_f(x);

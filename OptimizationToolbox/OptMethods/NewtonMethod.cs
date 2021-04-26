@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="NewtonMethod.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,21 +38,41 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class NewtonMethod.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class NewtonMethod : abstractOptMethod
     {
         /* xk is the value of x at a particular iteration, k. xkLast is the previous
          * value. gradF is the gradient of f and dk is the search direction at iteration
          * k. All of these vectors have the same length which is not set until the run
          * function is called. */
+        /// <summary>
+        /// The alpha star
+        /// </summary>
         private double alphaStar;
+        /// <summary>
+        /// The dk
+        /// </summary>
         private double[] dk;
 
         /* fk is the value of f(xk). */
+        /// <summary>
+        /// The fk
+        /// </summary>
         private double fk;
+        /// <summary>
+        /// The grad f
+        /// </summary>
         private double[] gradF;
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NewtonMethod"/> class.
+        /// </summary>
         public NewtonMethod()
         {
             RequiresObjectiveFunction = true;
@@ -57,6 +90,13 @@ namespace OptimizationToolbox
 
         #region Main Function, run
 
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
+        /// <exception cref="Exception">Newton's method requires that the objective function be twice differentiable"
+        ///                 + "\n(Must inherit from ITwiceDifferentiable).</exception>
         protected override double run(out double[] xStar)
         {
             if (!(f[0] is ITwiceDifferentiable))

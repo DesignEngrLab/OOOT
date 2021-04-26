@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="LundyMees.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,19 +38,45 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class SACoolingLundyMees.
+    /// Implements the <see cref="OptimizationToolbox.abstractSimulatedAnnealingCoolingSchedule" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSimulatedAnnealingCoolingSchedule" />
     public class SACoolingLundyMees : abstractSimulatedAnnealingCoolingSchedule
     {
+        /// <summary>
+        /// The initial samples
+        /// </summary>
         private const int initialSamples = 100;
+        /// <summary>
+        /// The initialize probability for three sigma
+        /// </summary>
         private const double initProbabilityForThreeSigma = 0.99;
+        /// <summary>
+        /// The beta
+        /// </summary>
         private readonly double beta;
+        /// <summary>
+        /// The objective values
+        /// </summary>
         private double[] objectiveValues;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SACoolingLundyMees"/> class.
+        /// </summary>
+        /// <param name="samplesInGeneration">The samples in generation.</param>
+        /// <param name="beta">The beta.</param>
         public SACoolingLundyMees(int samplesInGeneration, double beta = 0.7)
             : base(samplesInGeneration)
         {
             this.beta = beta;
         }
 
+        /// <summary>
+        /// Sets the initial temperature.
+        /// </summary>
+        /// <returns>System.Double.</returns>
         internal override double SetInitialTemperature()
         {
             var LHC = new LatinHyperCube(optMethod.spaceDescriptor, VariablesInScope.OnlyDiscrete);
@@ -56,6 +95,13 @@ namespace OptimizationToolbox
             return -3 * stdev / Math.Log(initProbabilityForThreeSigma);
         }
 
+        /// <summary>
+        /// Updates the temperature.
+        /// </summary>
+        /// <param name="temperature">The temperature.</param>
+        /// <param name="candidates">The candidates.</param>
+        /// <returns>System.Double.</returns>
+        /// <exception cref="NotImplementedException"></exception>
         internal override double UpdateTemperature(double temperature, List<ICandidate> candidates)
         {
             throw new NotImplementedException();

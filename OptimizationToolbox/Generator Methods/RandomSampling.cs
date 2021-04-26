@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="RandomSampling.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,17 +38,37 @@ using System.Linq;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class RandomSampling.
+    /// Implements the <see cref="OptimizationToolbox.SamplingGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.SamplingGenerator" />
     public class RandomSampling : SamplingGenerator
     {
+        /// <summary>
+        /// The default real bound
+        /// </summary>
         public static double DefaultRealBound = 10000;
+        /// <summary>
+        /// The random
+        /// </summary>
         private readonly Random rnd;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RandomSampling"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         public RandomSampling(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
             rnd = new Random();
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="numSamples">The number samples.</param>
         public override void GenerateCandidates(ref List<ICandidate> candidates, int numSamples = -1)
         {
             if (numSamples == -1) numSamples = (int)MaxVariableSizes.Min();
@@ -43,6 +76,12 @@ namespace OptimizationToolbox
                 candidates.Add(new Candidate(double.NaN, makeOneRandomCandidate()));
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidate">The candidate.</param>
+        /// <param name="numSamples">The number samples.</param>
+        /// <returns>List&lt;System.Double[]&gt;.</returns>
         public override List<double[]> GenerateCandidates(double[] candidate, int numSamples = -1)
         {
             var candidates = new List<double[]>();
@@ -52,6 +91,10 @@ namespace OptimizationToolbox
             return candidates;
         }
 
+        /// <summary>
+        /// Makes the one random candidate.
+        /// </summary>
+        /// <returns>System.Double[].</returns>
         private double[] makeOneRandomCandidate()
         {
             var x = new double[n];

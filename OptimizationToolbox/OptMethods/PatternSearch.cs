@@ -1,12 +1,33 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 04-21-2021
+// ***********************************************************************
+// <copyright file="PatternSearch.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using StarMathLib;
 
 namespace OptimizationToolbox
 {
-	public class PatternSearch:abstractOptMethod
+    /// <summary>
+    /// Class PatternSearch.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
+    public class PatternSearch:abstractOptMethod
 	{
-		public PatternSearch ()
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PatternSearch"/> class.
+        /// </summary>
+        public PatternSearch ()
 		{
 			RequiresObjectiveFunction = true;
 			ConstraintsSolvedWithPenalties = true;
@@ -18,16 +39,33 @@ namespace OptimizationToolbox
 			RequiresDiscreteSpaceDescriptor = false;
 			RequiresLineSearchMethod = true;
 		}
-		private readonly double max;
-		private readonly double min;
-		public PatternSearch(double max, double min)
+        /// <summary>
+        /// The maximum
+        /// </summary>
+        private readonly double max;
+        /// <summary>
+        /// The minimum
+        /// </summary>
+        private readonly double min;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PatternSearch"/> class.
+        /// </summary>
+        /// <param name="max">The maximum.</param>
+        /// <param name="min">The minimum.</param>
+        public PatternSearch(double max, double min)
 			: this()
 		{
 			this.max = max;
 			this.min = min;
 		}
 
-		protected override double run (out double[] xStar)
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
+        protected override double run (out double[] xStar)
 		{
 			var xCopy = x;
 			var meshSize = max-min;

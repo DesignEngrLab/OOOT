@@ -1,25 +1,79 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="MultiSwarm.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using StarMathLib;
 
 namespace OptimizationToolbox
 {
-	public class MultiSwarm: abstractOptMethod
+    /// <summary>
+    /// Class MultiSwarm.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
+    public class MultiSwarm: abstractOptMethod
 	{
 
-		private readonly double max=25.0;
-		private readonly double min=-25.0;
-		private readonly int numParticles = 10;
-		private readonly int numSwarms = 20;
-		private readonly int maxLoop = 150;
-		private readonly int dim = 8;
-		private readonly Random ran = new Random(0);
-		private readonly double minx=0.0;
-		private readonly double miny=0.0;
-		private readonly double maxx=0.0;
-		private readonly double maxy=0.0;
-		public MultiSwarm ()
+        /// <summary>
+        /// The maximum
+        /// </summary>
+        private readonly double max=25.0;
+        /// <summary>
+        /// The minimum
+        /// </summary>
+        private readonly double min=-25.0;
+        /// <summary>
+        /// The number particles
+        /// </summary>
+        private readonly int numParticles = 10;
+        /// <summary>
+        /// The number swarms
+        /// </summary>
+        private readonly int numSwarms = 20;
+        /// <summary>
+        /// The maximum loop
+        /// </summary>
+        private readonly int maxLoop = 150;
+        /// <summary>
+        /// The dim
+        /// </summary>
+        private readonly int dim = 8;
+        /// <summary>
+        /// The ran
+        /// </summary>
+        private readonly Random ran = new Random(0);
+        /// <summary>
+        /// The minx
+        /// </summary>
+        private readonly double minx=0.0;
+        /// <summary>
+        /// The miny
+        /// </summary>
+        private readonly double miny=0.0;
+        /// <summary>
+        /// The maxx
+        /// </summary>
+        private readonly double maxx=0.0;
+        /// <summary>
+        /// The maxy
+        /// </summary>
+        private readonly double maxy=0.0;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiSwarm"/> class.
+        /// </summary>
+        public MultiSwarm ()
 		{
 
 			RequiresObjectiveFunction = true;
@@ -34,7 +88,19 @@ namespace OptimizationToolbox
 
 		}
 
-		public MultiSwarm(int numberParticles, int numberIterations, double maxX, double minX,int dimension,double maxx,double maxy,
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MultiSwarm"/> class.
+        /// </summary>
+        /// <param name="numberParticles">The number particles.</param>
+        /// <param name="numberIterations">The number iterations.</param>
+        /// <param name="maxX">The maximum x.</param>
+        /// <param name="minX">The minimum x.</param>
+        /// <param name="dimension">The dimension.</param>
+        /// <param name="maxx">The maxx.</param>
+        /// <param name="maxy">The maxy.</param>
+        /// <param name="minx">The minx.</param>
+        /// <param name="miny">The miny.</param>
+        public MultiSwarm(int numberParticles, int numberIterations, double maxX, double minX,int dimension,double maxx,double maxy,
 			double minx,double miny)
 			: this()
 		{
@@ -52,7 +118,12 @@ namespace OptimizationToolbox
 
 
 
-		protected override double run (out double[] xStar)
+        /// <summary>
+        /// Runs the specified x star.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
+        protected override double run (out double[] xStar)
 		{
 			double[] bestMultiPos = new double[dim];
 			double bestMultiCost = double.MaxValue;

@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="SangiovanniVincentelli.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,19 +38,45 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class SACoolingSangiovanniVincentelli.
+    /// Implements the <see cref="OptimizationToolbox.abstractSimulatedAnnealingCoolingSchedule" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractSimulatedAnnealingCoolingSchedule" />
     public class SACoolingSangiovanniVincentelli : abstractSimulatedAnnealingCoolingSchedule
     {
+        /// <summary>
+        /// The initial samples
+        /// </summary>
         private const int initialSamples = 100;
+        /// <summary>
+        /// The initialize probability for three sigma
+        /// </summary>
         private const double initProbabilityForThreeSigma = 0.8;
+        /// <summary>
+        /// The lambda
+        /// </summary>
         private readonly double lambda;
+        /// <summary>
+        /// The objective values
+        /// </summary>
         private double[] objectiveValues;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SACoolingSangiovanniVincentelli"/> class.
+        /// </summary>
+        /// <param name="samplesInGeneration">The samples in generation.</param>
+        /// <param name="lambda">The lambda.</param>
         public SACoolingSangiovanniVincentelli(int samplesInGeneration, double lambda = 0.7)
             : base(samplesInGeneration)
         {
             this.lambda = lambda;
         }
 
+        /// <summary>
+        /// Sets the initial temperature.
+        /// </summary>
+        /// <returns>System.Double.</returns>
         internal override double SetInitialTemperature()
         {
             var randNeighbor = new RandomNeighborGenerator(optMethod.spaceDescriptor);
@@ -54,6 +93,12 @@ namespace OptimizationToolbox
             return -3 * stdev / Math.Log(initProbabilityForThreeSigma);
         }
 
+        /// <summary>
+        /// Updates the temperature.
+        /// </summary>
+        /// <param name="temperature">The temperature.</param>
+        /// <param name="candidates">The candidates.</param>
+        /// <returns>System.Double.</returns>
         internal override double UpdateTemperature(double temperature, List<ICandidate> candidates)
         {
             objectiveValues[samplesThusFar++] = candidates[0].objectives[0];

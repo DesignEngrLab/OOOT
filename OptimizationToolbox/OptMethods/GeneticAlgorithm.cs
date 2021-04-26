@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="GeneticAlgorithm.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,20 +38,48 @@ using StarMathLib;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class GeneticAlgorithm.
+    /// Implements the <see cref="OptimizationToolbox.abstractOptMethod" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractOptMethod" />
     public class GeneticAlgorithm : abstractOptMethod
     {
         #region Fields
 
+        /// <summary>
+        /// The population size
+        /// </summary>
         protected readonly int populationSize;
+        /// <summary>
+        /// Gets or sets the initialize generator.
+        /// </summary>
+        /// <value>The initialize generator.</value>
         public abstractGenerator initGenerator { get; set; }
+        /// <summary>
+        /// Gets or sets the crossover generator.
+        /// </summary>
+        /// <value>The crossover generator.</value>
         public abstractGenerator crossoverGenerator { get; set; }
+        /// <summary>
+        /// Gets or sets the mutation generator.
+        /// </summary>
+        /// <value>The mutation generator.</value>
         public abstractGenerator mutationGenerator { get; set; }
+        /// <summary>
+        /// Gets or sets the fitness selector.
+        /// </summary>
+        /// <value>The fitness selector.</value>
         public abstractSelector fitnessSelector { get; set; }
 
         #endregion
 
         #region Constructor
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="GeneticAlgorithm"/> class.
+        /// </summary>
+        /// <param name="populationSize">Size of the population.</param>
         public GeneticAlgorithm(int populationSize = 100)
         {
             this.populationSize = populationSize;
@@ -56,6 +97,10 @@ namespace OptimizationToolbox
 
         #endregion
 
+        /// <summary>
+        /// Adds the specified object to the optimization routine.
+        /// </summary>
+        /// <param name="function">The object, function.</param>
         public override void Add(object function)
         {
             if (function is SamplingGenerator)
@@ -69,6 +114,12 @@ namespace OptimizationToolbox
             else base.Add(function);
         }
 
+        /// <summary>
+        /// Runs the specified optimization method. This includes the details
+        /// of the optimization method.
+        /// </summary>
+        /// <param name="xStar">The x star.</param>
+        /// <returns>System.Double.</returns>
         protected override double run(out double[] xStar)
         {
             var population = new List<ICandidate>();
@@ -110,6 +161,11 @@ namespace OptimizationToolbox
             return fStar;
         }
 
+        /// <summary>
+        /// Calculates the population stats.
+        /// </summary>
+        /// <param name="population">The population.</param>
+        /// <returns>System.Double[].</returns>
         private static double[] CalcPopulationStats(IEnumerable<ICandidate> population)
         {
             return new[]
@@ -121,6 +177,10 @@ namespace OptimizationToolbox
         }
 
 
+        /// <summary>
+        /// Evaluates the specified population.
+        /// </summary>
+        /// <param name="population">The population.</param>
         private void evaluate(IList<ICandidate> population)
         {
             for (var i = population.Count - 1; i >= 0; i--)

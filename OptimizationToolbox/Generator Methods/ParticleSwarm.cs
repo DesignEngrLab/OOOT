@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="ParticleSwarm.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,13 +38,28 @@ using System.Collections.Generic;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class ParticleSwarm.
+    /// Implements the <see cref="OptimizationToolbox.abstractGenerator" />
+    /// </summary>
+    /// <seealso cref="OptimizationToolbox.abstractGenerator" />
     public class ParticleSwarm : abstractGenerator
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ParticleSwarm"/> class.
+        /// </summary>
+        /// <param name="discreteSpaceDescriptor">The discrete space descriptor.</param>
         public ParticleSwarm(DesignSpaceDescription discreteSpaceDescriptor)
             : base(discreteSpaceDescriptor)
         {
         }
 
+        /// <summary>
+        /// Generates the candidates.
+        /// </summary>
+        /// <param name="candidates">The candidates.</param>
+        /// <param name="number">The number.</param>
+        /// <exception cref="NotImplementedException"></exception>
         public override void GenerateCandidates(ref List<ICandidate> candidates, int number = -1)
         {
             throw new NotImplementedException();

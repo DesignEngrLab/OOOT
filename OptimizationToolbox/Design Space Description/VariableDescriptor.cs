@@ -1,4 +1,17 @@
-﻿/*************************************************************************
+﻿// ***********************************************************************
+// Assembly         : OptimizationToolbox
+// Author           : campmatt
+// Created          : 01-28-2021
+//
+// Last Modified By : campmatt
+// Last Modified On : 01-28-2021
+// ***********************************************************************
+// <copyright file="VariableDescriptor.cs" company="OptimizationToolbox">
+//     Copyright (c) . All rights reserved.
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+/*************************************************************************
  *     This file & class is part of the Object-Oriented Optimization
  *     Toolbox (or OOOT) Project
  *     Copyright 2010 Matthew Ira Campbell, PhD.
@@ -25,6 +38,9 @@ using System.Xml.Serialization;
 
 namespace OptimizationToolbox
 {
+    /// <summary>
+    /// Class VariableDescriptor.
+    /// </summary>
     public class VariableDescriptor
     {
 
@@ -32,22 +48,45 @@ namespace OptimizationToolbox
          * Discrete require values less than infinity, but for reals, it may be infinity. */
 
         /* the following three are only for discrete numbers. */
+        /// <summary>
+        /// The delta
+        /// </summary>
         private double delta = double.NaN;
+        /// <summary>
+        /// The lower bound
+        /// </summary>
         private double lowerBound = double.NegativeInfinity;
 
+        /// <summary>
+        /// The size
+        /// </summary>
         private long size = long.MinValue;
+        /// <summary>
+        /// The upper bound
+        /// </summary>
         private double upperBound = double.PositiveInfinity;
 
+        /// <summary>
+        /// The values
+        /// </summary>
         private double[] values;
 
         //private double realValue;
         //private long currentIndex;
 
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableDescriptor"/> class.
+        /// </summary>
         public VariableDescriptor()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableDescriptor"/> class.
+        /// </summary>
+        /// <param name="LowerBound">The lower bound.</param>
+        /// <param name="UpperBound">The upper bound.</param>
         public VariableDescriptor(double LowerBound, double UpperBound)
             : this()
         {
@@ -55,36 +94,64 @@ namespace OptimizationToolbox
             upperBound = UpperBound;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableDescriptor"/> class.
+        /// </summary>
+        /// <param name="LowerBound">The lower bound.</param>
+        /// <param name="UpperBound">The upper bound.</param>
+        /// <param name="Delta">The delta.</param>
         public VariableDescriptor(double LowerBound, double UpperBound, double Delta)
             : this(LowerBound, UpperBound)
         {
             defineRemainingDiscreteValues(1 + (long)((UpperBound - LowerBound) / Delta), Delta);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableDescriptor"/> class.
+        /// </summary>
+        /// <param name="LowerBound">The lower bound.</param>
+        /// <param name="UpperBound">The upper bound.</param>
+        /// <param name="Size">The size.</param>
         public VariableDescriptor(double LowerBound, double UpperBound, long Size)
             : this(LowerBound, UpperBound)
         {
             defineRemainingDiscreteValues(Size, (upperBound - lowerBound) / Size);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VariableDescriptor"/> class.
+        /// </summary>
+        /// <param name="Values">The values.</param>
         public VariableDescriptor(double[] Values)
         {
             values = Values;
             defineBasedOnValues();
         }
 
+        /// <summary>
+        /// Gets or sets the lower bound.
+        /// </summary>
+        /// <value>The lower bound.</value>
         public double LowerBound
         {
             get { return lowerBound; }
             set { lowerBound = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the upper bound.
+        /// </summary>
+        /// <value>The upper bound.</value>
         public double UpperBound
         {
             get { return upperBound; }
             set { upperBound = value; }
         }
 
+        /// <summary>
+        /// Gets or sets the delta.
+        /// </summary>
+        /// <value>The delta.</value>
         public double Delta
         {
             get { return delta; }
@@ -96,6 +163,10 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Gets or sets the size.
+        /// </summary>
+        /// <value>The size.</value>
         public long Size
         {
             get { return size; }
@@ -106,6 +177,10 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Gets or sets the values.
+        /// </summary>
+        /// <value>The values.</value>
         public double[] Values
         {
             get { return values; }
@@ -117,12 +192,17 @@ namespace OptimizationToolbox
         }
 
         /// <summary>
-        ///   Gets or sets a value indicating whether this <see cref = "VariableDescriptor" /> is discrete.
+        /// Gets or sets a value indicating whether this <see cref="VariableDescriptor" /> is discrete.
         /// </summary>
         /// <value><c>true</c> if discrete; otherwise, <c>false</c>.</value>
         [XmlIgnore]
         public Boolean Discrete { get; private set; }
 
+        /// <summary>
+        /// Gets the <see cref="System.Double"/> with the specified position.
+        /// </summary>
+        /// <param name="position">The position.</param>
+        /// <returns>System.Double.</returns>
         public double this[long position]
         {
             get
@@ -133,6 +213,11 @@ namespace OptimizationToolbox
             }
         }
 
+        /// <summary>
+        /// Defines the remaining discrete values.
+        /// </summary>
+        /// <param name="newSize">The new size.</param>
+        /// <param name="newDelta">The new delta.</param>
         private void defineRemainingDiscreteValues(long newSize, double newDelta)
         {
             size = newSize;
@@ -149,6 +234,9 @@ namespace OptimizationToolbox
             Discrete = true;
         }
 
+        /// <summary>
+        /// Defines the based on values.
+        /// </summary>
         private void defineBasedOnValues()
         {
             size = Values.GetLength(0);
@@ -158,6 +246,11 @@ namespace OptimizationToolbox
             Discrete = true;
         }
 
+        /// <summary>
+        /// Positions the of.
+        /// </summary>
+        /// <param name="value">The value.</param>
+        /// <returns>System.Int64.</returns>
         public long PositionOf(double value)
         {
             if (!Discrete) return -1;
