@@ -6,6 +6,7 @@ using OptimizationToolbox;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows.Media.Media3D;
 
 namespace SphericalOptimization
 {
@@ -18,10 +19,10 @@ namespace SphericalOptimization
             // this next line is to set the Debug statements from OOOT to the Console.
             Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
             var random = new Random();
-            foreach (var filename in Directory.GetFiles(@"C:\Users\campmatt\source\repos\medemaMVP\TestFiles", "*.stl", SearchOption.AllDirectories)
-                .OrderBy(x=>random.NextDouble()))
+            foreach (var filename in Directory.GetFiles(@"C:\Users\matth\OneDrive - medemalabs.com\Documents - Executive Team\PartAnalyzer\3mf", "*.3mf", SearchOption.AllDirectories)
+                .OrderBy(x => random.NextDouble()))
             {
-                TVGL.IOFunctions.IO.Open(filename, out TessellatedSolid ts);
+                TVGL.IO.Open(filename, out TessellatedSolid ts);
                 Console.WriteLine("optimizing...");
 
                 var optMethod = new SphericalOptimization();
@@ -63,9 +64,9 @@ namespace SphericalOptimization
             var colors = new List<TVGL.Color>();
             for (int i = 0; i < numToShow; i++)
             {
-                plotVertices.Add(new Vertex(0.03 * (19 + (keys[i] / max)) * (new TVGL.Numerics.Vector3(values[i]))));
+                plotVertices.Add(new Vertex(0.03 * (19 + (keys[i] / max)) * (new TVGL.Vector3(values[i]))));
                 //colors.Add(TVGL.Color.HSVtoRGB((float)rankFraction[i], 1, 1));
-                colors.Add(TVGL.Color.HSVtoRGB((float)(keys[i]/max), 1, 1));
+                colors.Add(TVGL.Color.HSVtoRGB((float)(keys[i] / max), 1, 1));
                 Console.WriteLine(keys[i]);
             }
             Presenter.ShowGaussSphereWithIntensity(plotVertices, colors, ts);

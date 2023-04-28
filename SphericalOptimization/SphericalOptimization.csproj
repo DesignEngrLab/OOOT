@@ -8,9 +8,4 @@
     <PackageReference Include="OOOT" Version="1.0.21.422" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\TVGL\TessellationAndVoxelizationGeometryLibrary\TessellationAndVoxelizationGeometryLibrary.csproj" />
-    <ProjectReference Include="..\..\TVGL\TVGL Presenter\TVGL Presenter.csproj" />
-  </ItemGroup>
-
 </Project>

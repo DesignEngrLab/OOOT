@@ -1,7 +1,6 @@
 ﻿using System;
 using OptimizationToolbox;
 using TVGL;
-using TVGL.Numerics;
 
 namespace SphericalOptimization
 {
