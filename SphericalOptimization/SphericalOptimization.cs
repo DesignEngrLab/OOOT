@@ -2,9 +2,9 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using OptimizationToolbox;
 using StarMathLib;
+using System.Threading.Tasks;
 
 namespace SphericalOptimization
 {
@@ -39,7 +39,6 @@ namespace SphericalOptimization
 
 
         public SortedList<double, double[]> sortedBest { get; private set; }
-
 
         #endregion
 
@@ -95,8 +94,18 @@ namespace SphericalOptimization
         {
             var icosaEdgeScores = new double[30];
             // first evaluate all the 30 faces of a triacontahedron
+#if RELEASE
+            Parallel.For(0, icosaEdgeScores.Length, i =>
+#else
             for (int i = 0; i < PlatonicConstants.TriacontahedronDirections.Length; i++)
+#endif
+            {
                 icosaEdgeScores[i] = calc_f(PlatonicConstants.TriacontahedronDirections[i]);
+
+            }
+#if RELEASE
+            );
+#endif
             // second, find icosahedron faces that are not worth pursuing
             var icosaFacesToIgnore = new HashSet<int>();
             for (int i = 0; i < PlatonicConstants.IcosaEdgeToFaces.Length; i++)
@@ -110,17 +119,29 @@ namespace SphericalOptimization
                 if (otherRightTriaContaIndices.Item1 >= otherLeftTriaContaIndices.Item2)
                     icosaFacesToIgnore.Add(rightFaceIndex);
             }
+            //icosaFacesToIgnore.Clear();
             //third, complete barycentric nelder mead for icosahedron faces that are not in the ignore list
             var bestResults = new ConcurrentBag<(double, double[], int)>();
+#if RELEASE
+            Parallel.For(0, 20, i =>
+#else
+
             for (int i = 0; i < 20; i++)
+#endif
             {
-                if (icosaFacesToIgnore.Contains(i)) continue;
-                var vertexNormals = PlatonicConstants.IcosaTriangleVertices[i]
-                    .Select(j => PlatonicConstants.DodechedronDirections[j]).ToArray();
-                var thisFStar = BarycentricSphericalNelderMead(vertexNormals, PlatonicConstants.IcosaTriangleEdges[i]
-                    .Select(v => icosaEdgeScores[v]).ToList(), out double[] thisXStar);
-                bestResults.Add((thisFStar, thisXStar, i));
+                if (!icosaFacesToIgnore.Contains(i))
+                {
+                    var vertexNormals = PlatonicConstants.IcosaTriangleVertices[i]
+                        .Select(j => PlatonicConstants.DodechedronDirections[j]).ToArray();
+                    var thisFStar = BarycentricSphericalNelderMead(vertexNormals, PlatonicConstants.IcosaTriangleEdges[i]
+                        .Select(v => icosaEdgeScores[v]).ToList(), out double[] thisXStar);
+                    bestResults.Add((thisFStar, thisXStar, i));
+                }
             }
+#if RELEASE
+            );
+#endif
+
             sortedBest = new SortedList<double, double[]>(new optimizeSort(optimize.minimize));
             foreach (var result in bestResults)
                 sortedBest.Add(result.Item1, ConvertTo3DUnitVector(result.Item2,
@@ -128,13 +149,14 @@ namespace SphericalOptimization
                     .Select(j => PlatonicConstants.DodechedronDirections[j]).ToArray()));
             for (int i = sortedBest.Count - 2; i >= 0; i--)
             {
-                if (sortedBest.Keys[i].IsPracticallySame(sortedBest.Keys[i + 1], 1e-10) && 
-                    sortedBest.Values[i].dotProduct(sortedBest.Values[i+1]).IsPracticallySame(1.0, 1e-3))
+                if (sortedBest.Keys[i].IsPracticallySame(sortedBest.Keys[i + 1], 1e-10) &&
+                    sortedBest.Values[i].dotProduct(sortedBest.Values[i + 1]).IsPracticallySame(1.0, 1e-3))
                     sortedBest.RemoveAt(i + 1);
             }
             xStar = sortedBest.Values[0];
             return sortedBest.Keys[0];
         }
+
         private double BarycentricSphericalNelderMead(double[][] vertexNormals, List<double> initialFValues, out double[] thisXStar)
         {
             var vertices = new SortedList<double, double[]>(new optimizeSort(optimize.minimize));
